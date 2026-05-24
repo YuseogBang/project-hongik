@@ -1,5 +1,4 @@
-[hongdae_platform.html](https://github.com/user-attachments/files/28194297/hongdae_platform.html)
-<!DOCTYPE html>
+
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
