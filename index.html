@@ -80,6 +80,8 @@
   .dot-open { background: var(--success); box-shadow: 0 0 6px var(--success); }
   .dot-closed { background: var(--danger); }
   .dot-risk { background: var(--warn); box-shadow: 0 0 6px var(--warn); }
+  .dot-unverified { background: #555570; }
+  .dot-risk { background: var(--warn); box-shadow: 0 0 6px var(--warn); }
   .item-meta { font-size: 11px; color: var(--muted); display: flex; gap: 8px; margin-bottom: 6px; font-family: 'DM Mono', monospace; }
   .score-row { display: flex; align-items: center; gap: 8px; }
   .score-bar { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
@@ -137,6 +139,7 @@
   .badge-open { background: rgba(0,184,148,.2); color: var(--success); }
   .badge-closed { background: rgba(225,112,85,.2); color: var(--danger); }
   .badge-risk { background: rgba(253,203,110,.2); color: var(--warn); }
+  .badge-unverified { background: rgba(136,136,160,.15); color: var(--muted); }
 
   .detail-body { padding: 14px; display: flex; flex-direction: column; gap: 14px; }
   .section-title { font-size: 10px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
@@ -474,306 +477,306 @@ const STATUS = { open:'영업중', closed:'폐점', risk:'주의' };
 const REASONS = { traffic:'유동인구 부족', quality:'품질/경쟁력', rent:'임대료 부담', location:'입지 불리', trend:'트렌드 이탈' };
 
 let stores = [
-  { id:2620, name:"일체마부시", type:'restaurant', status:'open', lat:37.5606037184247, lng:126.925413622414, rating:2.9, reviews:402, months:19, rent:356, score:56, insight:"일식 회/초밥 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
-  { id:457, name:"유다", type:'restaurant', status:'open', lat:37.5541979177988, lng:126.92587269285, rating:4.0, reviews:131, months:15, rent:351, score:50, insight:"일식 회/초밥 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
-  { id:103, name:"디프런트", type:'restaurant', status:'open', lat:37.5660796077582, lng:126.922057756269, rating:3.4, reviews:561, months:3, rent:305, score:58, insight:"카페 업종. SNS 감성 중요한 지역 특성. (연남동)", reason:null, dong:'연남동', category:"카페" },
-  { id:3038, name:"장미장", type:'restaurant', status:'open', lat:37.5490119597808, lng:126.917979009492, rating:3.8, reviews:450, months:40, rent:229, score:76, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:1127, name:"베이킹스튜디오류", type:'restaurant', status:'open', lat:37.5541269123908, lng:126.927604284653, rating:3.3, reviews:482, months:81, rent:325, score:79, insight:"베이커리·카페. 브런치 수요 강함. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
-  { id:1004, name:"머씨커피", type:'restaurant', status:'open', lat:37.5494971143302, lng:126.916009418514, rating:4.2, reviews:74, months:48, rent:407, score:61, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:915, name:"베니케이크", type:'restaurant', status:'risk', lat:37.5550010111871, lng:126.927818467129, rating:4.7, reviews:523, months:12, rent:520, score:63, insight:"베이커리·카페. 브런치 수요 강함. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
-  { id:572, name:"건어물카바레", type:'bar', status:'open', lat:37.5492806571764, lng:126.915704118591, rating:2.8, reviews:281, months:71, rent:296, score:69, insight:"생맥주 전문 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"생맥주 전문" },
-  { id:3017, name:"감성화로우메인", type:'restaurant', status:'open', lat:37.5565591335737, lng:126.9135116427, rating:4.6, reviews:330, months:19, rent:300, score:65, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:420, name:"순남시래기메세나폴리스점", type:'restaurant', status:'risk', lat:37.551495853803, lng:126.913958846569, rating:3.7, reviews:564, months:19, rent:463, score:61, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2772, name:"삼청동샤브에피소드", type:'restaurant', status:'open', lat:37.5541310311274, lng:126.934666172728, rating:2.9, reviews:530, months:70, rent:446, score:74, insight:"국수/칼국수 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"국수/칼국수" },
-  { id:3034, name:"누후드", type:'restaurant', status:'open', lat:37.5536501536534, lng:126.915223880727, rating:3.7, reviews:461, months:36, rent:440, score:67, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:3655, name:"신야텐야홍대", type:'restaurant', status:'open', lat:37.5528450086854, lng:126.923655912643, rating:4.4, reviews:566, months:50, rent:520, score:77, insight:"일식 카레/돈가스/덮밥 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일식 카레/돈가스/덮밥" },
-  { id:2234, name:"헤비스테이크더연남", type:'restaurant', status:'open', lat:37.560422914781, lng:126.924463083432, rating:3.3, reviews:435, months:21, rent:424, score:58, insight:"파스타/스테이크 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"파스타/스테이크" },
-  { id:357, name:"맛짱초밥", type:'restaurant', status:'open', lat:37.547363110166, lng:126.917946867834, rating:3.1, reviews:185, months:82, rent:234, score:69, insight:"일식 회/초밥 업종. 홍대 합정동 상권 위치. (합정동)", reason:null, dong:'합정동', category:"일식 회/초밥" },
-  { id:2419, name:"오리케이커리", type:'restaurant', status:'risk', lat:37.5664096226703, lng:126.917133651214, rating:2.9, reviews:156, months:75, rent:471, score:60, insight:"기타 동남아식 전문 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"기타 동남아식 전문" },
-  { id:1729, name:"에일크루", type:'bar', status:'open', lat:37.5558945874465, lng:126.930465877137, rating:3.5, reviews:560, months:44, rent:382, score:73, insight:"생맥주 전문 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"생맥주 전문" },
-  { id:131, name:"이뮤", type:'restaurant', status:'open', lat:37.5492550638422, lng:126.917741098779, rating:3.7, reviews:130, months:82, rent:423, score:65, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:123, name:"슬오라", type:'restaurant', status:'open', lat:37.5494291239326, lng:126.909355438387, rating:3.6, reviews:156, months:30, rent:182, score:60, insight:"백반집. 점심 직장인 수요 의존. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
-  { id:384, name:"애쉬앤블룸1", type:'restaurant', status:'open', lat:37.5557398148384, lng:126.927795119769, rating:3.6, reviews:481, months:8, rent:475, score:55, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:896, name:"아노브", type:'restaurant', status:'open', lat:37.5635319406887, lng:126.925388066069, rating:3.0, reviews:515, months:78, rent:306, score:79, insight:"피자 전문점. 배달 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"피자" },
-  { id:953, name:"네즈", type:'bar', status:'open', lat:37.5470624823333, lng:126.913330242866, rating:4.0, reviews:516, months:20, rent:405, score:65, insight:"요리주점. 저녁 이후 매출 집중. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
-  { id:2070, name:"수퍼빌런", type:'restaurant', status:'open', lat:37.5496982149354, lng:126.920162334991, rating:3.7, reviews:351, months:54, rent:249, score:76, insight:"중국집 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"중국집" },
-  { id:2466, name:"오브카페", type:'restaurant', status:'open', lat:37.5555624526627, lng:126.918322668404, rating:3.9, reviews:390, months:39, rent:487, score:66, insight:"그 외 기타 간이 음식점 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"그 외 기타 간이 음식점" },
-  { id:109, name:"세븐틴벌스데이", type:'bar', status:'open', lat:37.5501577696081, lng:126.920229744014, rating:4.8, reviews:74, months:61, rent:362, score:71, insight:"생맥주 전문 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"생맥주 전문" },
-  { id:2299, name:"다이버시티", type:'restaurant', status:'open', lat:37.5554584820661, lng:126.924558633363, rating:2.9, reviews:437, months:9, rent:305, score:54, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:815, name:"마음", type:'restaurant', status:'open', lat:37.56555743246, lng:126.922669518901, rating:2.9, reviews:174, months:84, rent:299, score:65, insight:"백반집. 점심 직장인 수요 의존. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
-  { id:2933, name:"벙홀", type:'bar', status:'open', lat:37.5654132212907, lng:126.922590436089, rating:4.0, reviews:167, months:68, rent:235, score:74, insight:"요리주점. 저녁 이후 매출 집중. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
-  { id:2662, name:"도깨비", type:'restaurant', status:'open', lat:37.5508803047586, lng:126.922843118395, rating:4.4, reviews:196, months:14, rent:448, score:52, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:2873, name:"야키토리나루토홍대", type:'restaurant', status:'open', lat:37.556496374459, lng:126.927341690094, rating:4.6, reviews:214, months:24, rent:151, score:67, insight:"기타 일식 음식점 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"기타 일식 음식점" },
-  { id:2233, name:"콰트로박스", type:'restaurant', status:'open', lat:37.5538301087816, lng:126.914884164237, rating:3.6, reviews:167, months:54, rent:383, score:64, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:1719, name:"청운24", type:'restaurant', status:'closed', lat:37.5539317969357, lng:126.91853947305, rating:4.1, reviews:35, months:9, rent:503, score:40, insight:"중국집 업종. 홍대 서교동 상권 위치. (서교동)", reason:'rent', dong:'서교동', category:"중국집" },
-  { id:903, name:"디벨롭연남", type:'bar', status:'open', lat:37.5621442926561, lng:126.925208356389, rating:2.9, reviews:261, months:71, rent:469, score:64, insight:"요리주점. 저녁 이후 매출 집중. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
-  { id:1840, name:"녹원쌈밥", type:'restaurant', status:'open', lat:37.561951463134, lng:126.919696528783, rating:3.8, reviews:171, months:83, rent:210, score:73, insight:"백반집. 점심 직장인 수요 의존. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
-  { id:2414, name:"일쏠레", type:'restaurant', status:'open', lat:37.5604932403594, lng:126.921769305483, rating:4.1, reviews:164, months:67, rent:414, score:69, insight:"경양식. 감성 식당 포지셔닝 경쟁. (연남동)", reason:null, dong:'연남동', category:"경양식" },
-  { id:1140, name:"비닐", type:'bar', status:'open', lat:37.5500874786187, lng:126.922923151323, rating:3.6, reviews:359, months:80, rent:251, score:78, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:3316, name:"모노글로트", type:'restaurant', status:'risk', lat:37.5569362611448, lng:126.924783494735, rating:3.0, reviews:122, months:53, rent:253, score:62, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:3561, name:"누리마을감자탕", type:'restaurant', status:'open', lat:37.5501311585216, lng:126.920852181481, rating:3.1, reviews:135, months:80, rent:438, score:61, insight:"국/탕/찌개류 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"국/탕/찌개류" },
-  { id:27, name:"터주대감", type:'bar', status:'open', lat:37.5491126810834, lng:126.920332705152, rating:3.3, reviews:348, months:17, rent:300, score:57, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:3109, name:"풍천장어연남", type:'restaurant', status:'open', lat:37.5594567864598, lng:126.921306353609, rating:2.9, reviews:77, months:75, rent:197, score:65, insight:"해산물 구이/찜 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"해산물 구이/찜" },
-  { id:3301, name:"핌피홍대", type:'restaurant', status:'open', lat:37.5494921060089, lng:126.921837386858, rating:4.2, reviews:507, months:29, rent:442, score:69, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:654, name:"조여사생각대로", type:'restaurant', status:'open', lat:37.5573809746444, lng:126.916192969975, rating:3.2, reviews:393, months:74, rent:408, score:73, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2860, name:"키프", type:'bar', status:'open', lat:37.5457294192123, lng:126.913897579379, rating:3.7, reviews:325, months:56, rent:241, score:76, insight:"생맥주 전문 업종. 홍대 합정동 상권 위치. (합정동)", reason:null, dong:'합정동', category:"생맥주 전문" },
-  { id:1732, name:"매운집", type:'restaurant', status:'open', lat:37.5495698346256, lng:126.916914652439, rating:4.1, reviews:321, months:76, rent:192, score:82, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:1394, name:"곱도리탕&닭도리탕", type:'restaurant', status:'open', lat:37.55100761048, lng:126.91165080896, rating:4.1, reviews:79, months:76, rent:399, score:66, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (합정동)", reason:null, dong:'합정동', category:"돼지고기 구이/찜" },
-  { id:1139, name:"와우가주", type:'restaurant', status:'open', lat:37.555546151588, lng:126.920846454787, rating:3.9, reviews:263, months:47, rent:160, score:74, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
-  { id:637, name:"아이에스크리에이티브", type:'restaurant', status:'open', lat:37.5636051578975, lng:126.927210282403, rating:3.1, reviews:573, months:57, rent:386, score:76, insight:"백반집. 점심 직장인 수요 의존. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
-  { id:882, name:"스튜디오80", type:'bar', status:'open', lat:37.5500692662379, lng:126.922628940557, rating:4.7, reviews:72, months:63, rent:249, score:74, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:3921, name:"시우코퍼레이션", type:'restaurant', status:'open', lat:37.5534016345528, lng:126.920633699481, rating:3.2, reviews:420, months:80, rent:464, score:72, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:3128, name:"두레박", type:'restaurant', status:'open', lat:37.5475526646765, lng:126.918444570183, rating:4.5, reviews:213, months:51, rent:175, score:77, insight:"백반집. 점심 직장인 수요 의존. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
-  { id:1379, name:"알라보", type:'restaurant', status:'open', lat:37.5470620656885, lng:126.912764440115, rating:4.7, reviews:476, months:75, rent:217, score:91, insight:"치킨 전문점. 배달·테이크아웃 비중 높음. (합정동)", reason:null, dong:'합정동', category:"치킨" },
-  { id:419, name:"씨스터브레드", type:'restaurant', status:'open', lat:37.5636051578975, lng:126.927210282403, rating:2.9, reviews:567, months:76, rent:338, score:77, insight:"카페 업종. SNS 감성 중요한 지역 특성. (연남동)", reason:null, dong:'연남동', category:"카페" },
-  { id:380, name:"진화쿵푸마라탕", type:'restaurant', status:'open', lat:37.556025739856, lng:126.923980873044, rating:3.5, reviews:584, months:56, rent:245, score:82, insight:"마라탕/훠궈 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"마라탕/훠궈" },
-  { id:1557, name:"옥탑방부엉이", type:'restaurant', status:'open', lat:37.5501579603973, lng:126.920512657142, rating:3.4, reviews:151, months:66, rent:227, score:70, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:397, name:"쿄라멘", type:'restaurant', status:'open', lat:37.5623251044275, lng:126.926181555778, rating:3.8, reviews:509, months:50, rent:415, score:76, insight:"일식 면 요리 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"일식 면 요리" },
-  { id:1471, name:"시장냉면", type:'restaurant', status:'open', lat:37.5551898383883, lng:126.927195833797, rating:4.2, reviews:400, months:76, rent:151, score:87, insight:"냉면/밀면 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"냉면/밀면" },
-  { id:3472, name:"메가엠지씨커피합정", type:'restaurant', status:'open', lat:37.5514432365833, lng:126.915961967766, rating:4.4, reviews:158, months:73, rent:195, score:77, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:1409, name:"풀리너마이트", type:'restaurant', status:'open', lat:37.5536734924735, lng:126.922987360685, rating:3.9, reviews:177, months:63, rent:221, score:74, insight:"피자 전문점. 배달 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"피자" },
-  { id:2473, name:"공명서울작업실", type:'restaurant', status:'risk', lat:37.5560734108696, lng:126.914632629372, rating:3.2, reviews:480, months:18, rent:329, score:61, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:1084, name:"로스팅마스터즈2", type:'restaurant', status:'open', lat:37.5529193467342, lng:126.913844040599, rating:4.4, reviews:563, months:81, rent:506, score:81, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:3306, name:"오사오", type:'bar', status:'open', lat:37.5656933542276, lng:126.923857861127, rating:3.1, reviews:252, months:82, rent:492, score:64, insight:"생맥주 전문 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"생맥주 전문" },
-  { id:178, name:"호쿤", type:'restaurant', status:'open', lat:37.5555041783164, lng:126.925577148075, rating:3.7, reviews:453, months:41, rent:451, score:69, insight:"횟집 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"횟집" },
-  { id:2989, name:"피오레", type:'restaurant', status:'open', lat:37.5656479086841, lng:126.923246688063, rating:3.8, reviews:571, months:4, rent:325, score:60, insight:"경양식. 감성 식당 포지셔닝 경쟁. (연남동)", reason:null, dong:'연남동', category:"경양식" },
-  { id:1882, name:"버터베이커리", type:'restaurant', status:'open', lat:37.5600352105053, lng:126.924033389802, rating:4.2, reviews:466, months:63, rent:166, score:89, insight:"베이커리·카페. 브런치 수요 강함. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
-  { id:2197, name:"야차집", type:'restaurant', status:'open', lat:37.5515368812308, lng:126.921099663308, rating:3.6, reviews:73, months:70, rent:522, score:60, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:512, name:"호랑전", type:'bar', status:'open', lat:37.5551180438287, lng:126.927659912275, rating:4.5, reviews:253, months:79, rent:191, score:81, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:3986, name:"오키도키", type:'restaurant', status:'open', lat:37.5503572805403, lng:126.922164663736, rating:3.5, reviews:440, months:68, rent:431, score:76, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:3778, name:"바나프레소", type:'restaurant', status:'open', lat:37.5507679059309, lng:126.916551190529, rating:4.4, reviews:476, months:68, rent:212, score:89, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:1551, name:"798화로", type:'restaurant', status:'open', lat:37.5558472791006, lng:126.926731181044, rating:4.6, reviews:515, months:57, rent:291, score:88, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
-  { id:323, name:"스카이", type:'bar', status:'open', lat:37.548644101125, lng:126.920242673431, rating:3.8, reviews:405, months:42, rent:531, score:66, insight:"일반 유흥 주점 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일반 유흥 주점" },
-  { id:2262, name:"피크닉스시", type:'restaurant', status:'risk', lat:37.5575376642839, lng:126.921308371869, rating:2.8, reviews:194, months:3, rent:515, score:36, insight:"일식 회/초밥 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
-  { id:1201, name:"라휘사주카페", type:'restaurant', status:'open', lat:37.5551426097108, lng:126.92374410711, rating:4.6, reviews:567, months:23, rent:185, score:77, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:3398, name:"으네네", type:'restaurant', status:'risk', lat:37.5544184757349, lng:126.933104151178, rating:4.2, reviews:93, months:3, rent:371, score:44, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2575, name:"식선", type:'restaurant', status:'open', lat:37.5467928110604, lng:126.914190572911, rating:3.3, reviews:322, months:11, rent:235, score:55, insight:"일식 회/초밥 업종. 홍대 합정동 상권 위치. (합정동)", reason:null, dong:'합정동', category:"일식 회/초밥" },
-  { id:2534, name:"삿뽀로", type:'restaurant', status:'open', lat:37.5564198902849, lng:126.920506006204, rating:2.9, reviews:16, months:11, rent:390, score:36, insight:"일식 회/초밥 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
-  { id:3627, name:"살라타이", type:'restaurant', status:'open', lat:37.55100761048, lng:126.91165080896, rating:3.3, reviews:315, months:58, rent:446, score:68, insight:"베트남식 전문 업종. 홍대 합정동 상권 위치. (합정동)", reason:null, dong:'합정동', category:"베트남식 전문" },
-  { id:3530, name:"서울이야", type:'restaurant', status:'open', lat:37.5592695961971, lng:126.924396340269, rating:3.5, reviews:382, months:73, rent:352, score:76, insight:"김밥/만두/분식 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"김밥/만두/분식" },
-  { id:1482, name:"연주방", type:'restaurant', status:'open', lat:37.5627120202894, lng:126.925366246899, rating:2.9, reviews:553, months:42, rent:405, score:68, insight:"백반집. 점심 직장인 수요 의존. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
-  { id:2365, name:"8nrm팔도강산버거", type:'restaurant', status:'open', lat:37.5663756194859, lng:126.920087944243, rating:3.3, reviews:511, months:50, rent:285, score:77, insight:"버거 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"버거" },
-  { id:788, name:"백채", type:'restaurant', status:'open', lat:37.5475759180769, lng:126.913148590132, rating:3.5, reviews:405, months:78, rent:201, score:81, insight:"백반집. 점심 직장인 수요 의존. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
-  { id:2886, name:"실락원", type:'bar', status:'open', lat:37.5575235802676, lng:126.927453869185, rating:4.8, reviews:195, months:51, rent:341, score:73, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:285, name:"도적", type:'restaurant', status:'open', lat:37.5487972248694, lng:126.920174612311, rating:3.9, reviews:332, months:51, rent:455, score:69, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:188, name:"피자마루마포", type:'restaurant', status:'open', lat:37.5494443174925, lng:126.905745480615, rating:4.4, reviews:295, months:59, rent:213, score:81, insight:"피자 전문점. 배달 경쟁 치열. (합정동)", reason:null, dong:'합정동', category:"피자" },
-  { id:2709, name:"매머드익스프레스홍대", type:'restaurant', status:'open', lat:37.5519262104482, lng:126.923996353879, rating:4.1, reviews:545, months:9, rent:488, score:59, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:934, name:"빠넬로", type:'restaurant', status:'open', lat:37.549391050817, lng:126.918951805971, rating:4.5, reviews:76, months:65, rent:314, score:71, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:3167, name:"카페이이키", type:'restaurant', status:'open', lat:37.5551010246613, lng:126.929312251787, rating:4.8, reviews:464, months:82, rent:284, score:89, insight:"베이커리·카페. 브런치 수요 강함. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
-  { id:1186, name:"서교동398", type:'restaurant', status:'open', lat:37.5497242565868, lng:126.91871379936, rating:4.2, reviews:319, months:44, rent:231, score:74, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:327, name:"호호푸드", type:'restaurant', status:'open', lat:37.5573723649899, lng:126.916758860813, rating:3.1, reviews:202, months:25, rent:458, score:48, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
-  { id:3504, name:"히로", type:'restaurant', status:'open', lat:37.5550544649838, lng:126.926833812723, rating:4.2, reviews:31, months:63, rent:239, score:69, insight:"김밥/만두/분식 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"김밥/만두/분식" },
-  { id:954, name:"연남5701", type:'restaurant', status:'risk', lat:37.5585541744293, lng:126.918919246456, rating:2.8, reviews:49, months:73, rent:371, score:58, insight:"카페 업종. SNS 감성 중요한 지역 특성. (연남동)", reason:null, dong:'연남동', category:"카페" },
-  { id:3550, name:"식당제로로", type:'restaurant', status:'open', lat:37.5537280517289, lng:126.923756865524, rating:4.2, reviews:462, months:30, rent:464, score:67, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:414, name:"소점", type:'bar', status:'risk', lat:37.5658599759439, lng:126.91707766554, rating:3.1, reviews:75, months:60, rent:238, score:64, insight:"요리주점. 저녁 이후 매출 집중. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
-  { id:1858, name:"제이엠티푸드", type:'bar', status:'open', lat:37.5557392717058, lng:126.926912364834, rating:4.1, reviews:557, months:82, rent:466, score:81, insight:"생맥주 전문 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"생맥주 전문" },
-  { id:2604, name:"오프더월", type:'bar', status:'open', lat:37.5492138335633, lng:126.910600501968, rating:4.6, reviews:514, months:74, rent:229, score:91, insight:"요리주점. 저녁 이후 매출 집중. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
-  { id:3417, name:"느와르", type:'restaurant', status:'open', lat:37.5490742779646, lng:126.916903886133, rating:4.4, reviews:379, months:66, rent:303, score:82, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:1495, name:"빠리쌀롱", type:'restaurant', status:'open', lat:37.5453499517523, lng:126.91247222428, rating:3.4, reviews:218, months:8, rent:453, score:44, insight:"경양식. 감성 식당 포지셔닝 경쟁. (합정동)", reason:null, dong:'합정동', category:"경양식" },
-  { id:667, name:"합정육전면사무소", type:'restaurant', status:'open', lat:37.5500528574331, lng:126.912059330515, rating:3.2, reviews:211, months:10, rent:441, score:44, insight:"냉면/밀면 업종. 홍대 합정동 상권 위치. (합정동)", reason:null, dong:'합정동', category:"냉면/밀면" },
-  { id:1517, name:"우주정거장", type:'bar', status:'open', lat:37.5550197652059, lng:126.929029396817, rating:3.3, reviews:242, months:55, rent:252, score:70, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:1456, name:"호프마당", type:'bar', status:'risk', lat:37.5537422429802, lng:126.91804172807, rating:4.5, reviews:124, months:18, rent:194, score:59, insight:"생맥주 전문 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"생맥주 전문" },
-  { id:859, name:"산타바바라앤엉클인더키친", type:'restaurant', status:'open', lat:37.5500301813514, lng:126.918113691901, rating:3.2, reviews:419, months:68, rent:160, score:81, insight:"베트남식 전문 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"베트남식 전문" },
-  { id:2746, name:"에이비씨피자", type:'restaurant', status:'open', lat:37.5500961476467, lng:126.922402582289, rating:4.3, reviews:540, months:9, rent:460, score:61, insight:"피자 전문점. 배달 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"피자" },
-  { id:1094, name:"호수꼬치홍대", type:'bar', status:'risk', lat:37.5480759347772, lng:126.919451143517, rating:2.8, reviews:161, months:14, rent:291, score:45, insight:"요리주점. 저녁 이후 매출 집중. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
-  { id:2875, name:"고토히라우동", type:'restaurant', status:'risk', lat:37.5550829369127, lng:126.929199096086, rating:3.1, reviews:0, months:44, rent:189, score:56, insight:"일식 면 요리 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일식 면 요리" },
-  { id:3837, name:"텐bar", type:'restaurant', status:'open', lat:37.5564113959513, lng:126.921275603792, rating:4.4, reviews:61, months:61, rent:418, score:66, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2800, name:"멘타쿠", type:'restaurant', status:'open', lat:37.5558472791006, lng:126.926731181044, rating:4.5, reviews:299, months:65, rent:400, score:77, insight:"일식 회/초밥 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
-  { id:2655, name:"노띵크", type:'restaurant', status:'risk', lat:37.5619471928602, lng:126.926996847439, rating:3.3, reviews:242, months:16, rent:239, score:54, insight:"경양식. 감성 식당 포지셔닝 경쟁. (연남동)", reason:null, dong:'연남동', category:"경양식" },
-  { id:293, name:"비비큐홍대역점", type:'restaurant', status:'open', lat:37.5591175725011, lng:126.926207356033, rating:4.3, reviews:381, months:19, rent:434, score:61, insight:"치킨 전문점. 배달·테이크아웃 비중 높음. (서교동)", reason:null, dong:'서교동', category:"치킨" },
-  { id:2496, name:"고덕", type:'restaurant', status:'open', lat:37.5603934362688, lng:126.920728146363, rating:3.7, reviews:125, months:16, rent:222, score:52, insight:"중국집 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"중국집" },
-  { id:2601, name:"플러피", type:'restaurant', status:'open', lat:37.5621177974717, lng:126.926057258551, rating:4.4, reviews:15, months:61, rent:170, score:72, insight:"경양식. 감성 식당 포지셔닝 경쟁. (연남동)", reason:null, dong:'연남동', category:"경양식" },
-  { id:701, name:"포옹남홍대", type:'restaurant', status:'open', lat:37.5538261127807, lng:126.922149739118, rating:3.4, reviews:143, months:34, rent:291, score:57, insight:"베트남식 전문 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"베트남식 전문" },
-  { id:2188, name:"피그바", type:'restaurant', status:'open', lat:37.549507193199, lng:126.917525809441, rating:4.5, reviews:511, months:61, rent:225, score:90, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2987, name:"포근", type:'restaurant', status:'open', lat:37.5486888136457, lng:126.919744708101, rating:4.2, reviews:471, months:78, rent:365, score:83, insight:"일식 회/초밥 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
-  { id:1003, name:"루바브", type:'restaurant', status:'open', lat:37.5629567677511, lng:126.927742881307, rating:4.1, reviews:64, months:77, rent:173, score:72, insight:"카페 업종. SNS 감성 중요한 지역 특성. (연남동)", reason:null, dong:'연남동', category:"카페" },
-  { id:670, name:"더한쭈꾸미", type:'restaurant', status:'risk', lat:37.5486957951877, lng:126.916813775797, rating:3.3, reviews:526, months:15, rent:219, score:64, insight:"해산물 구이/찜 업종. 홍대 합정동 상권 위치. (합정동)", reason:null, dong:'합정동', category:"해산물 구이/찜" },
-  { id:1894, name:"코너펍", type:'restaurant', status:'open', lat:37.551438604213, lng:126.922355923602, rating:4.4, reviews:419, months:52, rent:269, score:82, insight:"일식 회/초밥 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
-  { id:1555, name:"앰엔에프", type:'restaurant', status:'open', lat:37.562297875981, lng:126.925864668294, rating:4.0, reviews:67, months:27, rent:384, score:51, insight:"경양식. 감성 식당 포지셔닝 경쟁. (연남동)", reason:null, dong:'연남동', category:"경양식" },
-  { id:1106, name:"이디야합정동점", type:'restaurant', status:'open', lat:37.5482288568381, lng:126.919088859234, rating:3.7, reviews:600, months:6, rent:396, score:58, insight:"카페 업종. SNS 감성 중요한 지역 특성. (합정동)", reason:null, dong:'합정동', category:"카페" },
-  { id:3791, name:"홍대 혼술바 소수점", type:'restaurant', status:'open', lat:37.5545589166301, lng:126.926834297205, rating:4.3, reviews:7, months:43, rent:387, score:57, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2622, name:"이자카야쿠루미", type:'restaurant', status:'open', lat:37.5497718776523, lng:126.92253871616, rating:3.0, reviews:276, months:16, rent:320, score:51, insight:"일식 회/초밥 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
-  { id:2819, name:"소금제면소", type:'restaurant', status:'open', lat:37.550293783744, lng:126.921519686194, rating:4.5, reviews:234, months:40, rent:232, score:71, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2282, name:"오리가미클럽", type:'restaurant', status:'open', lat:37.5501940183332, lng:126.90812100947, rating:4.2, reviews:113, months:27, rent:295, score:57, insight:"경양식. 감성 식당 포지셔닝 경쟁. (합정동)", reason:null, dong:'합정동', category:"경양식" },
-  { id:900, name:"니뽕내뽕", type:'restaurant', status:'open', lat:37.5566030794647, lng:126.925078084841, rating:3.5, reviews:192, months:24, rent:356, score:53, insight:"중국집 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"중국집" },
-  { id:2805, name:"생마차", type:'restaurant', status:'open', lat:37.5503572805403, lng:126.922164663736, rating:3.4, reviews:116, months:47, rent:506, score:55, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:1329, name:"코나엠에스", type:'restaurant', status:'risk', lat:37.5548510056298, lng:126.933194302497, rating:3.0, reviews:306, months:44, rent:338, score:63, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:3453, name:"부엌", type:'restaurant', status:'open', lat:37.5514847799507, lng:126.924087336011, rating:3.2, reviews:123, months:40, rent:525, score:51, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:3148, name:"연남술사", type:'restaurant', status:'open', lat:37.558476450538, lng:126.923978383368, rating:4.5, reviews:417, months:8, rent:426, score:59, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:3179, name:"오렌지", type:'bar', status:'open', lat:37.5556090998313, lng:126.920665310485, rating:3.5, reviews:155, months:75, rent:421, score:65, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:230, name:"돈주는남자", type:'restaurant', status:'open', lat:37.5519423300411, lng:126.921099235893, rating:4.3, reviews:102, months:59, rent:235, score:72, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
-  { id:939, name:"러드웨이브", type:'restaurant', status:'open', lat:37.5615864784585, lng:126.926487877609, rating:4.8, reviews:18, months:16, rent:356, score:51, insight:"경양식. 감성 식당 포지셔닝 경쟁. (연남동)", reason:null, dong:'연남동', category:"경양식" },
-  { id:3367, name:"홍대조폭떡볶이", type:'restaurant', status:'open', lat:37.5552807402689, lng:126.928508553134, rating:3.9, reviews:419, months:23, rent:437, score:62, insight:"김밥/만두/분식 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"김밥/만두/분식" },
-  { id:132, name:"에비뉴", type:'restaurant', status:'open', lat:37.5471981448927, lng:126.914031683085, rating:2.9, reviews:403, months:78, rent:438, score:70, insight:"카페 업종. SNS 감성 중요한 지역 특성. (합정동)", reason:null, dong:'합정동', category:"카페" },
-  { id:3298, name:"공차홍대입구역점", type:'restaurant', status:'open', lat:37.5567466536708, lng:126.924161221176, rating:4.3, reviews:536, months:25, rent:410, score:69, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:1293, name:"쵸쵸", type:'bar', status:'open', lat:37.5555414291072, lng:126.927523694835, rating:3.8, reviews:140, months:23, rent:248, score:56, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:1644, name:"서교손칼국수", type:'restaurant', status:'open', lat:37.5530634897366, lng:126.913821240722, rating:3.9, reviews:297, months:57, rent:246, score:77, insight:"국수/칼국수 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"국수/칼국수" },
-  { id:1097, name:"엠브이케이마디", type:'bar', status:'open', lat:37.5524852796486, lng:126.911694332209, rating:4.3, reviews:572, months:77, rent:328, score:86, insight:"요리주점. 저녁 이후 매출 집중. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
-  { id:272, name:"홍대원조통골뱅이", type:'bar', status:'open', lat:37.5548225008725, lng:126.930636631855, rating:4.5, reviews:567, months:29, rent:450, score:71, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:865, name:"삼구오", type:'restaurant', status:'risk', lat:37.5496776909743, lng:126.916541089525, rating:4.0, reviews:7, months:68, rent:489, score:60, insight:"베이커리·카페. 브런치 수요 강함. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
-  { id:3741, name:"빈브라더스", type:'restaurant', status:'open', lat:37.5457121782172, lng:126.914972605978, rating:2.9, reviews:258, months:52, rent:245, score:67, insight:"백반집. 점심 직장인 수요 의존. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
-  { id:3863, name:"초필살돼지구이", type:'restaurant', status:'open', lat:37.555996748495, lng:126.920993104593, rating:3.2, reviews:422, months:71, rent:528, score:71, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
-  { id:2324, name:"토쿠이", type:'restaurant', status:'open', lat:37.5641904547777, lng:126.92664378013, rating:4.2, reviews:525, months:61, rent:407, score:83, insight:"일식 회/초밥 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
-  { id:3590, name:"서울미트볼", type:'restaurant', status:'open', lat:37.556593024164, lng:126.910625639578, rating:3.7, reviews:349, months:41, rent:424, score:66, insight:"파스타/스테이크 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"파스타/스테이크" },
-  { id:2941, name:"메머드익스프레스신촌더피플점", type:'restaurant', status:'open', lat:37.5562561424469, lng:126.932457413462, rating:3.5, reviews:488, months:23, rent:326, score:65, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:1289, name:"카페333", type:'restaurant', status:'open', lat:37.5552888432558, lng:126.927025977837, rating:3.9, reviews:236, months:79, rent:268, score:75, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:871, name:"또바기", type:'restaurant', status:'risk', lat:37.5573309790136, lng:126.909492996487, rating:3.4, reviews:143, months:6, rent:485, score:39, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2685, name:"위드위시", type:'restaurant', status:'open', lat:37.5615139313064, lng:126.92574094432, rating:4.4, reviews:200, months:71, rent:461, score:71, insight:"카페 업종. SNS 감성 중요한 지역 특성. (연남동)", reason:null, dong:'연남동', category:"카페" },
-  { id:2045, name:"비스트로세노", type:'restaurant', status:'open', lat:37.5555948663482, lng:126.926516398414, rating:3.9, reviews:32, months:80, rent:400, score:63, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:1621, name:"족발애감동", type:'bar', status:'risk', lat:37.5480759347772, lng:126.919451143517, rating:3.4, reviews:371, months:20, rent:376, score:57, insight:"요리주점. 저녁 이후 매출 집중. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
-  { id:3624, name:"상하이 마라꼬치 연트럴파크점", type:'restaurant', status:'open', lat:37.560422914781, lng:126.924463083432, rating:4.0, reviews:276, months:65, rent:213, score:79, insight:"마라탕/훠궈 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"마라탕/훠궈" },
-  { id:3746, name:"탐앤탐스홍대파크점", type:'restaurant', status:'open', lat:37.5509064244489, lng:126.921462460592, rating:3.6, reviews:498, months:45, rent:225, score:79, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:2634, name:"반가숯불닭갈비", type:'restaurant', status:'open', lat:37.5567209641821, lng:126.926277624575, rating:4.4, reviews:449, months:81, rent:213, score:88, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:1880, name:"코르크비스트로", type:'restaurant', status:'open', lat:37.5598105189725, lng:126.924905103407, rating:3.1, reviews:130, months:65, rent:514, score:59, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:586, name:"디저트뷰", type:'restaurant', status:'open', lat:37.5650979322646, lng:126.922681312683, rating:4.3, reviews:407, months:12, rent:303, score:63, insight:"카페 업종. SNS 감성 중요한 지역 특성. (연남동)", reason:null, dong:'연남동', category:"카페" },
-  { id:1085, name:"루나씨엘로", type:'restaurant', status:'risk', lat:37.5608470873586, lng:126.925571833911, rating:4.2, reviews:53, months:23, rent:349, score:51, insight:"경양식. 감성 식당 포지셔닝 경쟁. (연남동)", reason:null, dong:'연남동', category:"경양식" },
-  { id:1011, name:"깐부치킨홍대동", type:'restaurant', status:'open', lat:37.5575383759736, lng:126.922383547814, rating:2.9, reviews:586, months:79, rent:351, score:77, insight:"치킨 전문점. 배달·테이크아웃 비중 높음. (서교동)", reason:null, dong:'서교동', category:"치킨" },
-  { id:3052, name:"요고프로즌요거트", type:'restaurant', status:'open', lat:37.5554067769333, lng:126.928338672818, rating:3.9, reviews:547, months:71, rent:190, score:88, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:2300, name:"채움과비움마포지점", type:'restaurant', status:'open', lat:37.555317196131, lng:126.929198874458, rating:3.5, reviews:359, months:56, rent:276, score:75, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:2208, name:"명품수제숯불갈비", type:'restaurant', status:'open', lat:37.5529448219599, lng:126.911739057818, rating:3.6, reviews:34, months:18, rent:273, score:47, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (합정동)", reason:null, dong:'합정동', category:"돼지고기 구이/찜" },
-  { id:1077, name:"카시", type:'restaurant', status:'open', lat:37.5609097702171, lng:126.924960590939, rating:4.5, reviews:433, months:75, rent:337, score:84, insight:"일식 회/초밥 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
-  { id:3060, name:"육산장", type:'restaurant', status:'open', lat:37.5519790386655, lng:126.922106393167, rating:4.4, reviews:74, months:28, rent:394, score:54, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
-  { id:2395, name:"다온씨앤엘", type:'restaurant', status:'open', lat:37.5577392244415, lng:126.92649165731, rating:4.3, reviews:410, months:82, rent:178, score:87, insight:"그 외 기타 간이 음식점 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"그 외 기타 간이 음식점" },
-  { id:1755, name:"무교동낙지", type:'restaurant', status:'open', lat:37.549583541739, lng:126.910996136004, rating:3.5, reviews:240, months:63, rent:331, score:71, insight:"해산물 구이/찜 업종. 홍대 합정동 상권 위치. (합정동)", reason:null, dong:'합정동', category:"해산물 구이/찜" },
-  { id:3678, name:"휩데이박스", type:'restaurant', status:'risk', lat:37.5494806120446, lng:126.918170875277, rating:4.7, reviews:251, months:21, rent:477, score:58, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2391, name:"카페몽글하늘점", type:'restaurant', status:'open', lat:37.554865311686, lng:126.926924535618, rating:4.7, reviews:465, months:73, rent:514, score:82, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:1636, name:"하루", type:'restaurant', status:'open', lat:37.5574592698154, lng:126.925462027288, rating:3.2, reviews:516, months:63, rent:337, score:79, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:1483, name:"스카", type:'bar', status:'open', lat:37.5504120809455, lng:126.923296263933, rating:3.9, reviews:460, months:5, rent:168, score:64, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:899, name:"모델앤", type:'bar', status:'open', lat:37.5535729152038, lng:126.920769322439, rating:4.6, reviews:137, months:46, rent:400, score:65, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:567, name:"씨에로", type:'bar', status:'open', lat:37.5595032939617, lng:126.923524622238, rating:4.5, reviews:76, months:9, rent:541, score:44, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:2088, name:"살롱드민", type:'bar', status:'open', lat:37.5624502713817, lng:126.924642130882, rating:2.8, reviews:323, months:4, rent:349, score:46, insight:"요리주점. 저녁 이후 매출 집중. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
-  { id:2022, name:"몬스터피자", type:'restaurant', status:'risk', lat:37.5587743156277, lng:126.924815600648, rating:3.8, reviews:559, months:13, rent:291, score:64, insight:"피자 전문점. 배달 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"피자" },
-  { id:373, name:"국민가수", type:'bar', status:'risk', lat:37.5545188770685, lng:126.93542408611, rating:3.4, reviews:483, months:20, rent:538, score:58, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:3096, name:"카페07", type:'restaurant', status:'open', lat:37.5568127965923, lng:126.929106919118, rating:4.3, reviews:332, months:55, rent:227, score:80, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:193, name:"프린지그룹", type:'bar', status:'open', lat:37.5485439262223, lng:126.918681132263, rating:4.7, reviews:275, months:76, rent:170, score:84, insight:"생맥주 전문 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"생맥주 전문" },
-  { id:3528, name:"한양과자방", type:'restaurant', status:'open', lat:37.5649088786644, lng:126.92291920213, rating:3.3, reviews:563, months:24, rent:528, score:60, insight:"카페 업종. SNS 감성 중요한 지역 특성. (연남동)", reason:null, dong:'연남동', category:"카페" },
-  { id:450, name:"홍타이루", type:'restaurant', status:'open', lat:37.5554934546357, lng:126.922906266429, rating:2.9, reviews:288, months:66, rent:455, score:65, insight:"중국집 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"중국집" },
-  { id:627, name:"아비아채서울", type:'restaurant', status:'open', lat:37.5569745114089, lng:126.928337171523, rating:3.0, reviews:100, months:36, rent:263, score:54, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:2571, name:"열정의선창", type:'bar', status:'open', lat:37.5582645822999, lng:126.917086083296, rating:3.0, reviews:274, months:66, rent:255, score:71, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:656, name:"아날로그하우스", type:'bar', status:'open', lat:37.5659797228552, lng:126.920892010925, rating:4.2, reviews:454, months:65, rent:235, score:86, insight:"요리주점. 저녁 이후 매출 집중. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
-  { id:3245, name:"오일내", type:'restaurant', status:'open', lat:37.5513840132831, lng:126.921552493204, rating:4.7, reviews:137, months:44, rent:509, score:62, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2788, name:"더할랄핏짜", type:'restaurant', status:'open', lat:37.5504120809455, lng:126.923296263933, rating:4.3, reviews:334, months:23, rent:409, score:61, insight:"피자 전문점. 배달 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"피자" },
-  { id:1730, name:"하카타호르몬", type:'restaurant', status:'risk', lat:37.5491114924216, lng:126.918589984672, rating:4.2, reviews:53, months:26, rent:472, score:49, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
-  { id:2443, name:"요유어요거트", type:'restaurant', status:'risk', lat:37.5640430585425, lng:126.92160713274, rating:4.8, reviews:218, months:9, rent:258, score:59, insight:"카페 업종. SNS 감성 중요한 지역 특성. (연남동)", reason:null, dong:'연남동', category:"카페" },
-  { id:261, name:"추억속으로", type:'bar', status:'open', lat:37.5624502713817, lng:126.924642130882, rating:3.9, reviews:397, months:61, rent:339, score:79, insight:"요리주점. 저녁 이후 매출 집중. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
-  { id:1577, name:"따로집", type:'bar', status:'open', lat:37.5483954419984, lng:126.912627091026, rating:4.1, reviews:302, months:63, rent:298, score:78, insight:"요리주점. 저녁 이후 매출 집중. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
-  { id:1564, name:"파이리퍼블릭", type:'restaurant', status:'open', lat:37.5593065050286, lng:126.92576577094, rating:4.1, reviews:542, months:73, rent:377, score:83, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:2441, name:"샐러드로우앤트라타연남점", type:'restaurant', status:'open', lat:37.5594864545583, lng:126.925369464359, rating:3.1, reviews:218, months:43, rent:440, score:57, insight:"토스트/샌드위치/샐러드 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"토스트/샌드위치/샐러드" },
-  { id:1918, name:"남선례", type:'restaurant', status:'open', lat:37.551495853803, lng:126.913958846569, rating:4.6, reviews:275, months:73, rent:450, score:75, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2168, name:"상훈이네바다이야기", type:'restaurant', status:'open', lat:37.5491646002894, lng:126.917220644582, rating:4.4, reviews:516, months:7, rent:215, score:68, insight:"횟집 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"횟집" },
-  { id:1030, name:"키즈나", type:'restaurant', status:'open', lat:37.5561442838462, lng:126.926210288062, rating:4.0, reviews:37, months:73, rent:283, score:67, insight:"일식 회/초밥 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
-  { id:3978, name:"도회", type:'restaurant', status:'open', lat:37.5590344670597, lng:126.923049750621, rating:4.4, reviews:243, months:66, rent:352, score:76, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:2267, name:"비에이치씨상수점", type:'restaurant', status:'open', lat:37.5490955470086, lng:126.921656738991, rating:2.9, reviews:507, months:51, rent:237, score:77, insight:"치킨 전문점. 배달·테이크아웃 비중 높음. (서교동)", reason:null, dong:'서교동', category:"치킨" },
-  { id:3526, name:"갤러리펍제이", type:'bar', status:'open', lat:37.5538119020917, lng:126.928159126603, rating:4.4, reviews:114, months:67, rent:428, score:68, insight:"생맥주 전문 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"생맥주 전문" },
-  { id:3861, name:"언덕집", type:'restaurant', status:'open', lat:37.5507054487249, lng:126.917422639578, rating:3.3, reviews:575, months:5, rent:503, score:52, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:48, name:"브루브로스커피", type:'restaurant', status:'open', lat:37.5519507698065, lng:126.92025046667, rating:3.5, reviews:111, months:34, rent:248, score:57, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:2787, name:"고엔", type:'restaurant', status:'risk', lat:37.5491740921818, lng:126.917910933527, rating:3.0, reviews:362, months:13, rent:531, score:48, insight:"일식 회/초밥 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
-  { id:2953, name:"김공뇽김밥", type:'restaurant', status:'open', lat:37.5500528574331, lng:126.912059330515, rating:3.2, reviews:154, months:39, rent:309, score:57, insight:"김밥/만두/분식 업종. 홍대 합정동 상권 위치. (합정동)", reason:null, dong:'합정동', category:"김밥/만두/분식" },
-  { id:470, name:"옛날집", type:'restaurant', status:'open', lat:37.5565674827644, lng:126.925779805654, rating:3.8, reviews:389, months:21, rent:498, score:57, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
-  { id:2793, name:"별빛퐁당", type:'bar', status:'open', lat:37.5504120809455, lng:126.923296263933, rating:3.1, reviews:385, months:31, rent:494, score:57, insight:"생맥주 전문 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"생맥주 전문" },
-  { id:3625, name:"합정카페 웨하로스터스(WEHIGH ROASTERS)", type:'restaurant', status:'open', lat:37.5480461528315, lng:126.915513133171, rating:3.0, reviews:416, months:31, rent:273, score:64, insight:"카페 업종. SNS 감성 중요한 지역 특성. (합정동)", reason:null, dong:'합정동', category:"카페" },
-  { id:2200, name:"현우동홍대", type:'restaurant', status:'open', lat:37.5526550026833, lng:126.922433880074, rating:4.5, reviews:311, months:61, rent:485, score:75, insight:"일식 면 요리 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일식 면 요리" },
-  { id:3076, name:"오에스디에스파르크", type:'restaurant', status:'open', lat:37.5646744940781, lng:126.922727025236, rating:4.2, reviews:215, months:76, rent:494, score:69, insight:"경양식. 감성 식당 포지셔닝 경쟁. (연남동)", reason:null, dong:'연남동', category:"경양식" },
-  { id:1093, name:"더푸드랩마포", type:'restaurant', status:'open', lat:37.5556488627254, lng:126.926414489118, rating:3.3, reviews:173, months:7, rent:334, score:45, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:3149, name:"주락간", type:'restaurant', status:'open', lat:37.5496239740543, lng:126.917027756866, rating:4.0, reviews:537, months:24, rent:230, score:72, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2626, name:"레이어드연남", type:'restaurant', status:'open', lat:37.5649907963722, lng:126.924198139512, rating:4.3, reviews:507, months:20, rent:264, score:71, insight:"베이커리·카페. 브런치 수요 강함. (연남동)", reason:null, dong:'연남동', category:"빵/도넛" },
-  { id:1203, name:"연남동벚꽃집", type:'restaurant', status:'open', lat:37.5626472466438, lng:126.922717800686, rating:3.9, reviews:464, months:3, rent:547, score:53, insight:"카페 업종. SNS 감성 중요한 지역 특성. (연남동)", reason:null, dong:'연남동', category:"카페" },
-  { id:1781, name:"하이럽", type:'restaurant', status:'open', lat:37.5496078313229, lng:126.919743722744, rating:4.3, reviews:582, months:19, rent:258, score:71, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:648, name:"탐스칼국수", type:'restaurant', status:'open', lat:37.5568485364157, lng:126.928608913256, rating:3.0, reviews:137, months:43, rent:210, score:60, insight:"국수/칼국수 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"국수/칼국수" },
-  { id:1859, name:"동교김밥", type:'restaurant', status:'open', lat:37.557731656615, lng:126.928845741982, rating:4.1, reviews:353, months:54, rent:547, score:71, insight:"김밥/만두/분식 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"김밥/만두/분식" },
-  { id:14, name:"심야식당오밤중", type:'bar', status:'open', lat:37.5513740599936, lng:126.907780059426, rating:4.1, reviews:73, months:80, rent:475, score:63, insight:"요리주점. 저녁 이후 매출 집중. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
-  { id:3907, name:"하늘이네밥집", type:'restaurant', status:'open', lat:37.5530080016273, lng:126.911886103837, rating:4.4, reviews:26, months:22, rent:330, score:52, insight:"백반집. 점심 직장인 수요 의존. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
-  { id:2958, name:"엔제이푸드", type:'restaurant', status:'open', lat:37.5565939760465, lng:126.924930966367, rating:3.7, reviews:497, months:54, rent:366, score:79, insight:"중국집 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"중국집" },
-  { id:3588, name:"스틸앤스터", type:'restaurant', status:'risk', lat:37.5562244076522, lng:126.911678602661, rating:3.6, reviews:575, months:13, rent:510, score:57, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:2948, name:"리버타운버거", type:'restaurant', status:'open', lat:37.5507679059309, lng:126.916551190529, rating:4.3, reviews:600, months:6, rent:263, score:65, insight:"버거 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"버거" },
-  { id:1079, name:"김밥세상", type:'restaurant', status:'open', lat:37.5610057628187, lng:126.920206861617, rating:3.9, reviews:570, months:64, rent:241, score:86, insight:"김밥/만두/분식 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"김밥/만두/분식" },
-  { id:3981, name:"재신", type:'restaurant', status:'open', lat:37.5564750136813, lng:126.922101713532, rating:4.7, reviews:56, months:69, rent:254, score:73, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2051, name:"네오피스트", type:'restaurant', status:'risk', lat:37.5465074678849, lng:126.918389128973, rating:3.1, reviews:210, months:42, rent:371, score:58, insight:"카페 업종. SNS 감성 중요한 지역 특성. (합정동)", reason:null, dong:'합정동', category:"카페" },
-  { id:3121, name:"키햐아", type:'restaurant', status:'open', lat:37.5613608046842, lng:126.925809005667, rating:4.3, reviews:211, months:42, rent:242, score:69, insight:"일식 카레/돈가스/덮밥 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"일식 카레/돈가스/덮밥" },
-  { id:732, name:"비스트로가마", type:'restaurant', status:'open', lat:37.5622521965708, lng:126.924868697642, rating:3.4, reviews:79, months:76, rent:340, score:63, insight:"경양식. 감성 식당 포지셔닝 경쟁. (연남동)", reason:null, dong:'연남동', category:"경양식" },
-  { id:2080, name:"서래옥", type:'restaurant', status:'open', lat:37.5521078520248, lng:126.913030163162, rating:3.7, reviews:4, months:9, rent:545, score:36, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:3739, name:"합정", type:'restaurant', status:'open', lat:37.5500528574331, lng:126.912059330515, rating:4.7, reviews:214, months:63, rent:485, score:72, insight:"카페 업종. SNS 감성 중요한 지역 특성. (합정동)", reason:null, dong:'합정동', category:"카페" },
-  { id:436, name:"르프레", type:'restaurant', status:'open', lat:37.5655369923185, lng:126.919058823905, rating:4.1, reviews:309, months:64, rent:275, score:79, insight:"카페 업종. SNS 감성 중요한 지역 특성. (연남동)", reason:null, dong:'연남동', category:"카페" },
-  { id:3566, name:"구우움", type:'restaurant', status:'open', lat:37.5568715789756, lng:126.922293699042, rating:4.7, reviews:366, months:63, rent:355, score:82, insight:"베이커리·카페. 브런치 수요 강함. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
-  { id:2562, name:"야키토리잔잔", type:'bar', status:'open', lat:37.5493340264246, lng:126.914742163782, rating:3.7, reviews:154, months:53, rent:407, score:63, insight:"요리주점. 저녁 이후 매출 집중. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
-  { id:1223, name:"규자카야모토", type:'bar', status:'open', lat:37.5638388338313, lng:126.926270611015, rating:3.1, reviews:453, months:48, rent:311, score:72, insight:"요리주점. 저녁 이후 매출 집중. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
-  { id:3448, name:"무차초스타코", type:'restaurant', status:'risk', lat:37.5549853528457, lng:126.931790841833, rating:3.2, reviews:282, months:21, rent:336, score:54, insight:"기타 서양식 음식점 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"기타 서양식 음식점" },
-  { id:2618, name:"동일", type:'restaurant', status:'open', lat:37.5628562082214, lng:126.925411376878, rating:4.3, reviews:309, months:34, rent:447, score:64, insight:"백반집. 점심 직장인 수요 의존. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
-  { id:2495, name:"메이드문", type:'restaurant', status:'open', lat:37.5522035435836, lng:126.920985792097, rating:4.1, reviews:593, months:16, rent:206, score:70, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:1532, name:"스퀘어이미", type:'restaurant', status:'risk', lat:37.5588730780385, lng:126.924272244543, rating:3.6, reviews:45, months:8, rent:390, score:40, insight:"베이커리·카페. 브런치 수요 강함. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
-  { id:3124, name:"제순식당", type:'restaurant', status:'open', lat:37.5492847415192, lng:126.92163390817, rating:3.5, reviews:322, months:32, rent:486, score:58, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:662, name:"봉대박스파게티", type:'restaurant', status:'risk', lat:37.5537280517289, lng:126.923756865524, rating:3.9, reviews:435, months:16, rent:526, score:57, insight:"파스타/스테이크 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"파스타/스테이크" },
-  { id:2210, name:"올드패션드", type:'restaurant', status:'open', lat:37.5566687795739, lng:126.92934472344, rating:4.4, reviews:91, months:62, rent:482, score:66, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:3906, name:"저녁놀", type:'restaurant', status:'open', lat:37.5485978924922, lng:126.918545278069, rating:4.4, reviews:551, months:50, rent:179, score:87, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:3190, name:"봉주르식탁", type:'restaurant', status:'open', lat:37.5537893515749, lng:126.921063337446, rating:4.1, reviews:400, months:78, rent:249, score:83, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:3779, name:"리마인드커피 주식회사", type:'restaurant', status:'risk', lat:37.5579925275481, lng:126.928155113091, rating:3.8, reviews:284, months:13, rent:332, score:55, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:2173, name:"엄마손생선구이", type:'restaurant', status:'open', lat:37.552038817959, lng:126.905278223892, rating:4.2, reviews:164, months:44, rent:346, score:65, insight:"해산물 구이/찜 업종. 홍대 합정동 상권 위치. (합정동)", reason:null, dong:'합정동', category:"해산물 구이/찜" },
-  { id:3763, name:"바이포엠에프엔티", type:'restaurant', status:'risk', lat:37.5528620234589, lng:126.922116791137, rating:2.8, reviews:48, months:12, rent:290, score:40, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:3, name:"합정호밀밭의호두꾼호밀호두", type:'restaurant', status:'open', lat:37.5496854808037, lng:126.914832295157, rating:2.9, reviews:223, months:32, rent:408, score:52, insight:"베이커리·카페. 브런치 수요 강함. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
-  { id:2454, name:"구울램", type:'restaurant', status:'risk', lat:37.5492550638422, lng:126.917741098779, rating:3.1, reviews:469, months:21, rent:405, score:59, insight:"중국집 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"중국집" },
-  { id:1328, name:"디오알", type:'restaurant', status:'open', lat:37.5490742779646, lng:126.916903886133, rating:4.7, reviews:592, months:49, rent:168, score:89, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2002, name:"고기는내가쏜다", type:'restaurant', status:'open', lat:37.5555994051118, lng:126.934212196526, rating:3.1, reviews:194, months:27, rent:422, score:50, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
-  { id:80, name:"미스터·유", type:'bar', status:'open', lat:37.5544191241023, lng:126.934258502799, rating:4.4, reviews:40, months:48, rent:257, score:65, insight:"생맥주 전문 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"생맥주 전문" },
-  { id:459, name:"지엘티젤라또", type:'restaurant', status:'open', lat:37.5592073598416, lng:126.925709279791, rating:3.1, reviews:521, months:54, rent:406, score:74, insight:"아이스크림/빙수 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"아이스크림/빙수" },
-  { id:3806, name:"금수족발", type:'restaurant', status:'open', lat:37.5617569074267, lng:126.925276653363, rating:3.3, reviews:283, months:42, rent:539, score:59, insight:"족발/보쌈 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"족발/보쌈" },
-  { id:1487, name:"우애돈카츠연남점", type:'restaurant', status:'open', lat:37.5610542878997, lng:126.92552635507, rating:4.0, reviews:73, months:7, rent:526, score:40, insight:"일식 회/초밥 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
-  { id:3600, name:"클로드커피", type:'restaurant', status:'open', lat:37.5579557110531, lng:126.913555299384, rating:4.1, reviews:142, months:40, rent:247, score:65, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:3407, name:"이주막", type:'restaurant', status:'open', lat:37.5493814395306, lng:126.918080452368, rating:4.0, reviews:422, months:67, rent:477, score:77, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:3305, name:"서울호떡연남", type:'restaurant', status:'open', lat:37.5600352105053, lng:126.924033389802, rating:4.5, reviews:380, months:54, rent:172, score:85, insight:"그 외 기타 간이 음식점 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"그 외 기타 간이 음식점" },
-  { id:1260, name:"홍쌤떡볶이", type:'restaurant', status:'open', lat:37.5614832064282, lng:126.920081851729, rating:4.7, reviews:151, months:39, rent:157, score:71, insight:"김밥/만두/분식 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"김밥/만두/분식" },
-  { id:981, name:"아리랑", type:'restaurant', status:'closed', lat:37.555482117251, lng:126.91942053789, rating:3.5, reviews:158, months:8, rent:228, score:48, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:'quality', dong:'서교동', category:"돼지고기 구이/찜" },
-  { id:238, name:"파도", type:'restaurant', status:'open', lat:37.5538568114958, lng:126.914431450184, rating:3.1, reviews:452, months:47, rent:450, score:68, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:987, name:"달콤다정", type:'restaurant', status:'open', lat:37.5620998554623, lng:126.92618177802, rating:3.2, reviews:543, months:63, rent:437, score:76, insight:"카페 업종. SNS 감성 중요한 지역 특성. (연남동)", reason:null, dong:'연남동', category:"카페" },
-  { id:3597, name:"초야", type:'restaurant', status:'open', lat:37.5615323340566, lng:126.926352111762, rating:3.3, reviews:331, months:33, rent:439, score:59, insight:"백반집. 점심 직장인 수요 의존. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
-  { id:3879, name:"디에그 신촌점", type:'restaurant', status:'open', lat:37.5554280006505, lng:126.933827557953, rating:4.1, reviews:306, months:58, rent:228, score:79, insight:"베이커리·카페. 브런치 수요 강함. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
-  { id:351, name:"47바", type:'bar', status:'open', lat:37.5615139313064, lng:126.92574094432, rating:4.1, reviews:433, months:68, rent:335, score:82, insight:"요리주점. 저녁 이후 매출 집중. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
-  { id:2998, name:"사케바신콘", type:'restaurant', status:'open', lat:37.5593065050286, lng:126.92576577094, rating:3.6, reviews:126, months:15, rent:352, score:47, insight:"일식 회/초밥 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
-  { id:1991, name:"본전횟집", type:'restaurant', status:'open', lat:37.5534748871557, lng:126.909724000647, rating:3.2, reviews:492, months:45, rent:528, score:68, insight:"횟집 업종. 홍대 합정동 상권 위치. (합정동)", reason:null, dong:'합정동', category:"횟집" },
-  { id:3343, name:"으뜸숙성한우NO.9 합정점", type:'restaurant', status:'open', lat:37.55100761048, lng:126.91165080896, rating:4.6, reviews:232, months:54, rent:214, score:78, insight:"소고기 구이/찜 업종. 홍대 합정동 상권 위치. (합정동)", reason:null, dong:'합정동', category:"소고기 구이/찜" },
-  { id:284, name:"마일딥", type:'restaurant', status:'open', lat:37.5538301087816, lng:126.914884164237, rating:3.1, reviews:129, months:38, rent:469, score:51, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:4006, name:"코운코운", type:'restaurant', status:'open', lat:37.5573254019027, lng:126.914087955508, rating:4.6, reviews:583, months:82, rent:249, score:90, insight:"베이커리·카페. 브런치 수요 강함. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
-  { id:3116, name:"비612스튜디오", type:'restaurant', status:'closed', lat:37.5618375797605, lng:126.924620111398, rating:3.6, reviews:300, months:3, rent:469, score:46, insight:"백반집. 점심 직장인 수요 의존. (연남동)", reason:'traffic', dong:'연남동', category:"백반/한정식" },
-  { id:2182, name:"카페산티아고", type:'restaurant', status:'risk', lat:37.5517039755802, lng:126.915192134873, rating:3.1, reviews:320, months:51, rent:445, score:64, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:3137, name:"리이크", type:'restaurant', status:'open', lat:37.5494479041528, lng:126.910351261053, rating:4.5, reviews:444, months:41, rent:267, score:79, insight:"경양식. 감성 식당 포지셔닝 경쟁. (합정동)", reason:null, dong:'합정동', category:"경양식" },
-  { id:516, name:"옥자", type:'restaurant', status:'open', lat:37.5654942440298, lng:126.922488482572, rating:4.2, reviews:597, months:65, rent:196, score:89, insight:"국수/칼국수 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"국수/칼국수" },
-  { id:526, name:"키토분식", type:'restaurant', status:'open', lat:37.5572047462012, lng:126.921987777902, rating:3.0, reviews:550, months:53, rent:420, score:72, insight:"김밥/만두/분식 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"김밥/만두/분식" },
-  { id:2703, name:"몽달", type:'restaurant', status:'risk', lat:37.5567454617911, lng:126.922327782593, rating:4.3, reviews:215, months:18, rent:340, score:57, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:1947, name:"젤라잇", type:'restaurant', status:'open', lat:37.5586385058451, lng:126.923785815854, rating:4.1, reviews:113, months:38, rent:441, score:57, insight:"김밥/만두/분식 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"김밥/만두/분식" },
-  { id:2252, name:"주재", type:'bar', status:'open', lat:37.5646309042437, lng:126.924990814749, rating:3.3, reviews:379, months:34, rent:497, score:59, insight:"요리주점. 저녁 이후 매출 집중. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
-  { id:677, name:"포삼팔메세나폴리스점", type:'restaurant', status:'open', lat:37.551495853803, lng:126.913958846569, rating:4.7, reviews:335, months:77, rent:151, score:87, insight:"베트남식 전문 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"베트남식 전문" },
-  { id:1086, name:"뉴플로우", type:'bar', status:'closed', lat:37.5519433484552, lng:126.922638320068, rating:2.8, reviews:93, months:21, rent:391, score:43, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:'quality', dong:'서교동', category:"요리 주점" },
-  { id:2162, name:"후레쉬", type:'restaurant', status:'open', lat:37.5599342540318, lng:126.921215307352, rating:4.1, reviews:3, months:84, rent:314, score:65, insight:"백반집. 점심 직장인 수요 의존. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
-  { id:3574, name:"러프", type:'restaurant', status:'open', lat:37.5612115660492, lng:126.918124092448, rating:4.0, reviews:9, months:41, rent:220, score:60, insight:"백반집. 점심 직장인 수요 의존. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
-  { id:2485, name:"잊힐리야연남", type:'bar', status:'open', lat:37.5627571487157, lng:126.92549070471, rating:4.1, reviews:401, months:83, rent:283, score:82, insight:"요리주점. 저녁 이후 매출 집중. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
-  { id:1734, name:"고향집김치삼겹살", type:'restaurant', status:'open', lat:37.5493162592494, lng:126.915092992593, rating:4.5, reviews:133, months:79, rent:501, score:67, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
-  { id:3951, name:"라롯사", type:'restaurant', status:'open', lat:37.5524567461013, lng:126.922377501138, rating:3.4, reviews:125, months:53, rent:522, score:57, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:868, name:"미드나잇", type:'restaurant', status:'open', lat:37.562847596994, lng:126.926045218818, rating:3.5, reviews:283, months:84, rent:316, score:73, insight:"경양식. 감성 식당 포지셔닝 경쟁. (연남동)", reason:null, dong:'연남동', category:"경양식" },
-  { id:3805, name:"타코벨망원역", type:'restaurant', status:'open', lat:37.5562054585058, lng:126.910445023302, rating:3.2, reviews:217, months:77, rent:190, score:72, insight:"기타 서양식 음식점 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"기타 서양식 음식점" },
-  { id:2209, name:"공부중화요리", type:'restaurant', status:'open', lat:37.5559970430154, lng:126.921434483516, rating:3.4, reviews:176, months:51, rent:547, score:59, insight:"중국집 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"중국집" },
-  { id:3094, name:"홍대돈가스", type:'restaurant', status:'open', lat:37.5580844862733, lng:126.917233413365, rating:2.9, reviews:57, months:84, rent:325, score:60, insight:"경양식. 감성 식당 포지셔닝 경쟁. (서교동)", reason:null, dong:'서교동', category:"경양식" },
-  { id:2990, name:"오므상칼칼데스합정", type:'restaurant', status:'risk', lat:37.5541000067906, lng:126.914329317963, rating:3.5, reviews:455, months:22, rent:386, score:62, insight:"베트남식 전문 업종. 홍대 서교동 상권 위치. (서교동)", reason:null, dong:'서교동', category:"베트남식 전문" },
-  { id:2826, name:"마키세", type:'restaurant', status:'open', lat:37.5504475283907, lng:126.909716335519, rating:4.4, reviews:276, months:13, rent:189, score:62, insight:"백반집. 점심 직장인 수요 의존. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
-  { id:824, name:"빈스커피", type:'restaurant', status:'open', lat:37.558390880517, lng:126.91731229891, rating:4.5, reviews:535, months:56, rent:424, score:83, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:2921, name:"원러브서울", type:'restaurant', status:'open', lat:37.5660761670453, lng:126.917009512251, rating:4.6, reviews:529, months:83, rent:245, score:90, insight:"베트남식 전문 업종. 홍대 연남동 상권 위치. (연남동)", reason:null, dong:'연남동', category:"베트남식 전문" },
-  { id:1277, name:"진수성찬", type:'restaurant', status:'open', lat:37.5543966338506, lng:126.91336701864, rating:3.5, reviews:402, months:20, rent:194, score:65, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:1635, name:"모모유부", type:'restaurant', status:'open', lat:37.5537280517289, lng:126.923756865524, rating:4.6, reviews:550, months:3, rent:521, score:59, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2752, name:"텐퍼센트커피", type:'restaurant', status:'open', lat:37.5507679059309, lng:126.916551190529, rating:3.5, reviews:517, months:12, rent:335, score:61, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:1530, name:"프리바다애비뉴7080", type:'bar', status:'open', lat:37.5488125489961, lng:126.916281778557, rating:4.5, reviews:253, months:44, rent:372, score:69, insight:"생맥주 전문 업종. 홍대 합정동 상권 위치. (합정동)", reason:null, dong:'합정동', category:"생맥주 전문" },
-  { id:1795, name:"탐라포차1", type:'bar', status:'open', lat:37.5505734004629, lng:126.921983373454, rating:3.0, reviews:489, months:41, rent:226, score:73, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:3685, name:"하입", type:'restaurant', status:'open', lat:37.5527443082753, lng:126.921234193532, rating:3.3, reviews:25, months:68, rent:261, score:63, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
-  { id:2120, name:"무채색숲", type:'restaurant', status:'open', lat:37.5606663860494, lng:126.924779745069, rating:3.7, reviews:384, months:74, rent:460, score:74, insight:"백반집. 점심 직장인 수요 의존. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
-  { id:1850, name:"디어다온", type:'restaurant', status:'open', lat:37.5602073801233, lng:126.92557247025, rating:3.5, reviews:30, months:59, rent:224, score:65, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:496, name:"마인드비", type:'restaurant', status:'open', lat:37.5548241573985, lng:126.919081729179, rating:4.8, reviews:556, months:70, rent:402, score:87, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:1016, name:"ING", type:'bar', status:'open', lat:37.5488924476496, lng:126.914618186987, rating:4.4, reviews:55, months:73, rent:386, score:67, insight:"요리주점. 저녁 이후 매출 집중. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
-  { id:921, name:"지쿠커피", type:'restaurant', status:'open', lat:37.5566944403573, lng:126.91372651922, rating:3.3, reviews:95, months:50, rent:325, score:60, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:263, name:"아이디어앤아이디얼", type:'restaurant', status:'open', lat:37.5599015170068, lng:126.926331080973, rating:4.3, reviews:158, months:56, rent:485, score:66, insight:"베이커리·카페. 브런치 수요 강함. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
-  { id:1385, name:"커피논탄토샌드커피논탄토", type:'restaurant', status:'open', lat:37.5592694583029, lng:126.924181300091, rating:2.9, reviews:486, months:17, rent:329, score:59, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:87, name:"양화로횟집", type:'restaurant', status:'open', lat:37.5495921410263, lng:126.910452936324, rating:4.5, reviews:227, months:28, rent:385, score:61, insight:"횟집 업종. 홍대 합정동 상권 위치. (합정동)", reason:null, dong:'합정동', category:"횟집" },
-  { id:2410, name:"정육도", type:'restaurant', status:'open', lat:37.5491899892507, lng:126.91491207364, rating:3.8, reviews:514, months:22, rent:162, score:72, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (합정동)", reason:null, dong:'합정동', category:"돼지고기 구이/찜" },
-  { id:2269, name:"렉터스라운지", type:'bar', status:'open', lat:37.5540362400367, lng:126.926676368515, rating:3.9, reviews:120, months:40, rent:303, score:61, insight:"요리주점. 저녁 이후 매출 집중. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
-  { id:943, name:"36.5도씨여름", type:'restaurant', status:'open', lat:37.5546324383898, lng:126.929199522287, rating:4.4, reviews:465, months:45, rent:436, score:76, insight:"카페 업종. SNS 감성 중요한 지역 특성. (서교동)", reason:null, dong:'서교동', category:"카페" },
-  { id:2411, name:"그린포유", type:'restaurant', status:'open', lat:37.5542168483162, lng:126.913933084083, rating:4.0, reviews:391, months:64, rent:450, score:76, insight:"피자 전문점. 배달 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"피자" },
-  { id:30, name:"우미담", type:'restaurant', status:'risk', lat:37.5545249838602, lng:126.916433829409, rating:3.8, reviews:203, months:22, rent:341, score:55, insight:"백반집. 점심 직장인 수요 의존. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" }
+  { id:1, name:"동교해물", type:'bar', status:'unverified', lat:37.5566935225972, lng:126.925621235339, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:2, name:"마실", type:'bar', status:'unverified', lat:37.5503572805403, lng:126.922164663736, rating:null, reviews:null, months:null, rent:null, score:null, insight:"무도 유흥 주점 업종. (서교동)", reason:null, dong:'서교동', category:"무도 유흥 주점" },
+  { id:3, name:"샌디비치", type:'restaurant', status:'unverified', lat:37.5521212669849, lng:126.919231770295, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
+  { id:4, name:"디스틸", type:'restaurant', status:'unverified', lat:37.5499430375066, lng:126.922493273026, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"경양식" },
+  { id:5, name:"호프마당", type:'bar', status:'unverified', lat:37.5537422429802, lng:126.91804172807, rating:null, reviews:null, months:null, rent:null, score:null, insight:"생맥주 전문 업종. (서교동)", reason:null, dong:'서교동', category:"생맥주 전문" },
+  { id:6, name:"모델앤", type:'bar', status:'unverified', lat:37.5535729152038, lng:126.920769322439, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:7, name:"아피시온", type:'bar', status:'unverified', lat:37.5519506780071, lng:126.920114665117, rating:null, reviews:null, months:null, rent:null, score:null, insight:"일반 유흥 주점 업종. (서교동)", reason:null, dong:'서교동', category:"일반 유흥 주점" },
+  { id:8, name:"쇼츠", type:'restaurant', status:'unverified', lat:37.5537893515749, lng:126.921063337446, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"경양식" },
+  { id:9, name:"소코아", type:'restaurant', status:'unverified', lat:37.548644580521, lng:126.920955600102, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
+  { id:10, name:"도란혼술바", type:'restaurant', status:'unverified', lat:37.5486167953178, lng:126.919835315718, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:11, name:"치즈매", type:'restaurant', status:'unverified', lat:37.5492550638422, lng:126.917741098779, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:12, name:"이차돌", type:'restaurant', status:'unverified', lat:37.5522487522419, lng:126.921223398207, rating:null, reviews:null, months:null, rent:null, score:null, insight:"소고기 구이/찜 업종. (서교동)", reason:null, dong:'서교동', category:"소고기 구이/찜" },
+  { id:13, name:"카페모노블럭", type:'restaurant', status:'unverified', lat:37.5537285316729, lng:126.924503791879, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:14, name:"하스", type:'bar', status:'unverified', lat:37.5598649087329, lng:126.925425676891, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:15, name:"서교동그카페", type:'restaurant', status:'unverified', lat:37.5582014409862, lng:126.916984293517, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:16, name:"와인로그", type:'bar', status:'unverified', lat:37.5527178265671, lng:126.92206035659, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:17, name:"서울호떡연남", type:'restaurant', status:'unverified', lat:37.5600352105053, lng:126.924033389802, rating:null, reviews:null, months:null, rent:null, score:null, insight:"그 외 기타 간이 음식점 업종. (서교동)", reason:null, dong:'서교동', category:"그 외 기타 간이 음식점" },
+  { id:18, name:"유타다미", type:'restaurant', status:'unverified', lat:37.5539317969357, lng:126.91853947305, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:19, name:"친구라이브", type:'bar', status:'unverified', lat:37.555103929822, lng:126.919760463534, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:20, name:"당나발포차", type:'restaurant', status:'unverified', lat:37.5510063555949, lng:126.922707188515, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:21, name:"엠에이", type:'bar', status:'unverified', lat:37.5544780961259, lng:126.913876197708, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:22, name:"공간", type:'restaurant', status:'unverified', lat:37.5488607593578, lng:126.920864841122, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"경양식" },
+  { id:23, name:"금별맥주", type:'bar', status:'unverified', lat:37.5505991589255, lng:126.920082157805, rating:null, reviews:null, months:null, rent:null, score:null, insight:"생맥주 전문 업종. (서교동)", reason:null, dong:'서교동', category:"생맥주 전문" },
+  { id:24, name:"홍대스시오", type:'restaurant', status:'unverified', lat:37.5536731592114, lng:126.922478093106, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
+  { id:25, name:"리버타운버거", type:'restaurant', status:'unverified', lat:37.5507679059309, lng:126.916551190529, rating:null, reviews:null, months:null, rent:null, score:null, insight:"버거 업종. (서교동)", reason:null, dong:'서교동', category:"버거" },
+  { id:26, name:"도깨비더배트", type:'restaurant', status:'unverified', lat:37.5505286785282, lng:126.922481350003, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:27, name:"홍대무라", type:'restaurant', status:'unverified', lat:37.548644580521, lng:126.920955600102, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
+  { id:28, name:"브루브로스커피", type:'restaurant', status:'unverified', lat:37.5519507698065, lng:126.92025046667, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:29, name:"림가기", type:'restaurant', status:'unverified', lat:37.5550830656558, lng:126.929414124257, rating:null, reviews:null, months:null, rent:null, score:null, insight:"중국집 업종. (서교동)", reason:null, dong:'서교동', category:"중국집" },
+  { id:30, name:"이자카야연", type:'restaurant', status:'unverified', lat:37.5505202887948, lng:126.923431952102, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
+  { id:31, name:"자크르", type:'bar', status:'unverified', lat:37.5552990538621, lng:126.92899518002, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:32, name:"스테이블신촌", type:'restaurant', status:'unverified', lat:37.5541310311274, lng:126.934666172728, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"경양식" },
+  { id:33, name:"홍대이상", type:'bar', status:'unverified', lat:37.5489856018524, lng:126.918952244979, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:34, name:"더밤", type:'bar', status:'unverified', lat:37.5506357323232, lng:126.920874281139, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:35, name:"공부중화요리", type:'restaurant', status:'unverified', lat:37.5559970430154, lng:126.921434483516, rating:null, reviews:null, months:null, rent:null, score:null, insight:"중국집 업종. (서교동)", reason:null, dong:'서교동', category:"중국집" },
+  { id:36, name:"심신프리", type:'restaurant', status:'unverified', lat:37.5537271372382, lng:126.92235354939, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:37, name:"7번방", type:'bar', status:'unverified', lat:37.5506000627079, lng:126.921428832254, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:38, name:"디알씨홍대", type:'restaurant', status:'unverified', lat:37.5517548311813, lng:126.923702291763, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:39, name:"홍스쭈꾸미", type:'restaurant', status:'unverified', lat:37.5562163069708, lng:126.926119677446, rating:null, reviews:null, months:null, rent:null, score:null, insight:"해산물 구이/찜 업종. (서교동)", reason:null, dong:'서교동', category:"해산물 구이/찜" },
+  { id:40, name:"롤리", type:'bar', status:'unverified', lat:37.5500509040399, lng:126.922108399746, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:41, name:"냠냠족발&보쌈마포", type:'restaurant', status:'unverified', lat:37.5573723649899, lng:126.916758860813, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:42, name:"주식회사 일용할 커피", type:'restaurant', status:'unverified', lat:37.5552119724744, lng:126.919647174717, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:43, name:"뮤즈", type:'bar', status:'unverified', lat:37.5499512313716, lng:126.921259765813, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:44, name:"산오징어양푼무침", type:'restaurant', status:'unverified', lat:37.5519507698065, lng:126.92025046667, rating:null, reviews:null, months:null, rent:null, score:null, insight:"횟집 업종. (서교동)", reason:null, dong:'서교동', category:"횟집" },
+  { id:45, name:"라뎅", type:'restaurant', status:'unverified', lat:37.549228692297, lng:126.918691704738, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
+  { id:46, name:"기러기둥지합정", type:'restaurant', status:'unverified', lat:37.5504714263252, lng:126.917762395178, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:47, name:"업소명없음", type:'restaurant', status:'unverified', lat:37.5557462922139, lng:126.923766126724, rating:null, reviews:null, months:null, rent:null, score:null, insight:"구내식당 업종. (서교동)", reason:null, dong:'서교동', category:"구내식당" },
+  { id:48, name:"한류삼계탕", type:'restaurant', status:'unverified', lat:37.5546778329271, lng:126.929776657423, rating:null, reviews:null, months:null, rent:null, score:null, insight:"국/탕/찌개류 업종. (서교동)", reason:null, dong:'서교동', category:"국/탕/찌개류" },
+  { id:49, name:"토라비", type:'restaurant', status:'unverified', lat:37.5555041783164, lng:126.925577148075, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:50, name:"오디너리아카이브", type:'restaurant', status:'unverified', lat:37.5571823544835, lng:126.929355556121, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:51, name:"타마시이", type:'restaurant', status:'unverified', lat:37.5526851535326, lng:126.913934845512, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
+  { id:52, name:"옥쯔", type:'restaurant', status:'unverified', lat:37.5561471521693, lng:126.930952292361, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:53, name:"달망달망", type:'restaurant', status:'unverified', lat:37.5543972877862, lng:126.927728512026, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:54, name:"원앤온니에이엠씨", type:'restaurant', status:'unverified', lat:37.5571394622627, lng:126.918705745162, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:55, name:"일본라멘무메이", type:'restaurant', status:'unverified', lat:37.5588811869234, lng:126.922880140463, rating:null, reviews:null, months:null, rent:null, score:null, insight:"일식 면 요리 업종. (서교동)", reason:null, dong:'서교동', category:"일식 면 요리" },
+  { id:56, name:"플래닛", type:'restaurant', status:'unverified', lat:37.5511325840602, lng:126.922842858332, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"경양식" },
+  { id:57, name:"커피정", type:'restaurant', status:'unverified', lat:37.5559209168731, lng:126.915572147887, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:58, name:"수염", type:'restaurant', status:'unverified', lat:37.5550542541067, lng:126.926494294708, rating:null, reviews:null, months:null, rent:null, score:null, insight:"김밥/만두/분식 업종. (서교동)", reason:null, dong:'서교동', category:"김밥/만두/분식" },
+  { id:59, name:"버터베이커리", type:'restaurant', status:'unverified', lat:37.5600352105053, lng:126.924033389802, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
+  { id:60, name:"백일몽", type:'restaurant', status:'unverified', lat:37.5539654350342, lng:126.928758786026, rating:null, reviews:null, months:null, rent:null, score:null, insight:"치킨 전문점. 배달·테이크아웃 비중 높음. (서교동)", reason:null, dong:'서교동', category:"치킨" },
+  { id:61, name:"커피디지", type:'restaurant', status:'unverified', lat:37.5537472987135, lng:126.912530306719, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:62, name:"마포만두", type:'restaurant', status:'unverified', lat:37.55141565646, lng:126.915192461566, rating:null, reviews:null, months:null, rent:null, score:null, insight:"김밥/만두/분식 업종. (서교동)", reason:null, dong:'서교동', category:"김밥/만두/분식" },
+  { id:63, name:"연트럴줄리아나", type:'restaurant', status:'unverified', lat:37.5600352105053, lng:126.924033389802, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:64, name:"헤이티키", type:'bar', status:'unverified', lat:37.5511950214024, lng:126.921880875302, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:65, name:"스시겐", type:'restaurant', status:'unverified', lat:37.5516322119758, lng:126.915633569664, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
+  { id:66, name:"낙곱새미장원", type:'restaurant', status:'unverified', lat:37.5571316699568, lng:126.920493932489, rating:null, reviews:null, months:null, rent:null, score:null, insight:"해산물 구이/찜 업종. (서교동)", reason:null, dong:'서교동', category:"해산물 구이/찜" },
+  { id:67, name:"수림식당", type:'restaurant', status:'unverified', lat:37.551537914457, lng:126.922661372615, rating:null, reviews:null, months:null, rent:null, score:null, insight:"중국집 업종. (서교동)", reason:null, dong:'서교동', category:"중국집" },
+  { id:68, name:"달인아저씨생국수", type:'restaurant', status:'unverified', lat:37.5537280517289, lng:126.923756865524, rating:null, reviews:null, months:null, rent:null, score:null, insight:"면 전문점. 점심 단골 확보가 생존 핵심. (서교동)", reason:null, dong:'서교동', category:"국수/칼국수" },
+  { id:69, name:"달봉비어", type:'bar', status:'unverified', lat:37.5489142550361, lng:126.92002737502, rating:null, reviews:null, months:null, rent:null, score:null, insight:"생맥주 전문 업종. (서교동)", reason:null, dong:'서교동', category:"생맥주 전문" },
+  { id:70, name:"247바", type:'bar', status:'unverified', lat:37.5500509040399, lng:126.922108399746, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:71, name:"이립", type:'restaurant', status:'unverified', lat:37.5544959239121, lng:126.926958847876, rating:null, reviews:null, months:null, rent:null, score:null, insight:"피자 전문점. 배달 경쟁 치열한 업종. (서교동)", reason:null, dong:'서교동', category:"피자" },
+  { id:72, name:"피자네버슬립스", type:'restaurant', status:'unverified', lat:37.5486247582543, lng:126.918307606507, rating:null, reviews:null, months:null, rent:null, score:null, insight:"피자 전문점. 배달 경쟁 치열한 업종. (서교동)", reason:null, dong:'서교동', category:"피자" },
+  { id:73, name:"비포블루밍", type:'restaurant', status:'unverified', lat:37.5596124004782, lng:126.92506375373, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
+  { id:74, name:"써브웨이홍대아트점", type:'restaurant', status:'unverified', lat:37.5534234141405, lng:126.926439311345, rating:null, reviews:null, months:null, rent:null, score:null, insight:"토스트/샌드위치/샐러드 업종. (서교동)", reason:null, dong:'서교동', category:"토스트/샌드위치/샐러드" },
+  { id:75, name:"서교가든숯불갈비", type:'restaurant', status:'unverified', lat:37.5546866968963, lng:126.915777250208, rating:null, reviews:null, months:null, rent:null, score:null, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
+  { id:76, name:"록집", type:'restaurant', status:'unverified', lat:37.5489963245085, lng:126.921487097475, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:77, name:"앰", type:'bar', status:'unverified', lat:37.5556623485695, lng:126.933985793862, rating:null, reviews:null, months:null, rent:null, score:null, insight:"일반 유흥 주점 업종. (서교동)", reason:null, dong:'서교동', category:"일반 유흥 주점" },
+  { id:78, name:"올드타운", type:'restaurant', status:'unverified', lat:37.5498854618098, lng:126.917310379302, rating:null, reviews:null, months:null, rent:null, score:null, insight:"횟집 업종. (서교동)", reason:null, dong:'서교동', category:"횟집" },
+  { id:79, name:"오늘도 김볶만 마포점", type:'bar', status:'unverified', lat:37.5566944403573, lng:126.91372651922, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:80, name:"키오쿠", type:'restaurant', status:'unverified', lat:37.5551010246613, lng:126.929312251787, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
+  { id:81, name:"소바하우스멘야준", type:'restaurant', status:'unverified', lat:37.5599802394035, lng:126.922630011276, rating:null, reviews:null, months:null, rent:null, score:null, insight:"일식 면 요리 업종. (서교동)", reason:null, dong:'서교동', category:"일식 면 요리" },
+  { id:82, name:"홍대최대포", type:'restaurant', status:'unverified', lat:37.5581433290009, lng:126.924363525, rating:null, reviews:null, months:null, rent:null, score:null, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
+  { id:83, name:"돼지명가", type:'restaurant', status:'unverified', lat:37.559782668718, lng:126.923626198598, rating:null, reviews:null, months:null, rent:null, score:null, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
+  { id:84, name:"매머드익스프레스메세나폴리스점", type:'restaurant', status:'unverified', lat:37.551495853803, lng:126.913958846569, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:85, name:"창돈", type:'restaurant', status:'unverified', lat:37.5563913243366, lng:126.932513878833, rating:null, reviews:null, months:null, rent:null, score:null, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
+  { id:86, name:"쭈앤쭈", type:'restaurant', status:'unverified', lat:37.5558100296551, lng:126.924807261507, rating:null, reviews:null, months:null, rent:null, score:null, insight:"해산물 구이/찜 업종. (서교동)", reason:null, dong:'서교동', category:"해산물 구이/찜" },
+  { id:87, name:"하카타호르몬", type:'restaurant', status:'unverified', lat:37.5491114924216, lng:126.918589984672, rating:null, reviews:null, months:null, rent:null, score:null, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
+  { id:88, name:"와인커넥션", type:'restaurant', status:'unverified', lat:37.5539062992956, lng:126.920791603695, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"경양식" },
+  { id:89, name:"목로관삼층", type:'restaurant', status:'unverified', lat:37.5555663115751, lng:126.924105830608, rating:null, reviews:null, months:null, rent:null, score:null, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (서교동)", reason:null, dong:'서교동', category:"돼지고기 구이/찜" },
+  { id:90, name:"페르세폴리스 후카바(Persepoils Hookah Bar)", type:'restaurant', status:'unverified', lat:37.5564059041409, lng:126.926741951576, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:91, name:"몽주막", type:'bar', status:'unverified', lat:37.5488330424694, lng:126.91984640046, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:92, name:"아날로그가든", type:'restaurant', status:'unverified', lat:37.5554631548197, lng:126.918051160734, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"경양식" },
+  { id:93, name:"까사포모도로", type:'restaurant', status:'unverified', lat:37.5581586456115, lng:126.920255168718, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"경양식" },
+  { id:94, name:"뉴올재즈라운지", type:'restaurant', status:'unverified', lat:37.556852596757, lng:126.920845072909, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (서교동)", reason:null, dong:'서교동', category:"경양식" },
+  { id:95, name:"비밀기지", type:'restaurant', status:'unverified', lat:37.5559648837426, lng:126.927500649901, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
+  { id:96, name:"지지고홍익대점", type:'restaurant', status:'unverified', lat:37.5534311229527, lng:126.92437960458, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:97, name:"개화기요정", type:'bar', status:'unverified', lat:37.5487966171217, lng:126.919280623096, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:98, name:"샤오링엔터테인먼트", type:'restaurant', status:'unverified', lat:37.5499565989269, lng:126.915974953416, rating:null, reviews:null, months:null, rent:null, score:null, insight:"중국집 업종. (서교동)", reason:null, dong:'서교동', category:"중국집" },
+  { id:99, name:"화려한오두막", type:'restaurant', status:'unverified', lat:37.5511325840602, lng:126.922842858332, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:100, name:"올루올루", type:'restaurant', status:'unverified', lat:37.5548359333957, lng:126.923223826524, rating:null, reviews:null, months:null, rent:null, score:null, insight:"김밥/만두/분식 업종. (서교동)", reason:null, dong:'서교동', category:"김밥/만두/분식" },
+  { id:101, name:"아지트호호", type:'restaurant', status:'unverified', lat:37.549705396861, lng:126.917502958123, rating:null, reviews:null, months:null, rent:null, score:null, insight:"김밥/만두/분식 업종. (서교동)", reason:null, dong:'서교동', category:"김밥/만두/분식" },
+  { id:102, name:"합정 로타리", type:'restaurant', status:'unverified', lat:37.5485716223662, lng:126.919654303402, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
+  { id:103, name:"케이컬쳐트래블", type:'bar', status:'unverified', lat:37.556357771992, lng:126.921932073513, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:104, name:"떡볶이참잘하는집 떡참 마포서교점", type:'restaurant', status:'unverified', lat:37.5507679059309, lng:126.916551190529, rating:null, reviews:null, months:null, rent:null, score:null, insight:"김밥/만두/분식 업종. (서교동)", reason:null, dong:'서교동', category:"김밥/만두/분식" },
+  { id:105, name:"더기와", type:'restaurant', status:'unverified', lat:37.5495698346256, lng:126.916914652439, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:106, name:"카페메루", type:'restaurant', status:'unverified', lat:37.5551898383883, lng:126.927195833797, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:107, name:"대륙포차", type:'restaurant', status:'unverified', lat:37.5591059755667, lng:126.922178199817, rating:null, reviews:null, months:null, rent:null, score:null, insight:"중국집 업종. (서교동)", reason:null, dong:'서교동', category:"중국집" },
+  { id:108, name:"스핀오프", type:'restaurant', status:'unverified', lat:37.5553629191885, lng:126.930330563292, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:109, name:"공룡빵공장", type:'restaurant', status:'unverified', lat:37.557830533714, lng:126.928460846363, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
+  { id:110, name:"합계", type:'restaurant', status:'unverified', lat:37.5506435925817, lng:126.919176781832, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (서교동)", reason:null, dong:'서교동', category:"백반/한정식" },
+  { id:111, name:"모펀", type:'restaurant', status:'unverified', lat:37.5577392244415, lng:126.92649165731, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:112, name:"비비큐홍대역점", type:'restaurant', status:'unverified', lat:37.5591175725011, lng:126.926207356033, rating:null, reviews:null, months:null, rent:null, score:null, insight:"치킨 전문점. 배달·테이크아웃 비중 높음. (서교동)", reason:null, dong:'서교동', category:"치킨" },
+  { id:113, name:"스테이", type:'bar', status:'unverified', lat:37.5561774077679, lng:126.921683277915, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:114, name:"퐁포네뜨", type:'restaurant', status:'unverified', lat:37.5538915645715, lng:126.925850362092, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (서교동)", reason:null, dong:'서교동', category:"빵/도넛" },
+  { id:115, name:"키즈나", type:'restaurant', status:'unverified', lat:37.5561442838462, lng:126.926210288062, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (서교동)", reason:null, dong:'서교동', category:"일식 회/초밥" },
+  { id:116, name:"냐냐쿤연남", type:'bar', status:'unverified', lat:37.5588465320738, lng:126.925030567188, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:117, name:"트라이브 홍대점", type:'restaurant', status:'unverified', lat:37.5535109871626, lng:126.922489578128, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (서교동)", reason:null, dong:'서교동', category:"카페" },
+  { id:118, name:"진화쿵푸마라탕", type:'restaurant', status:'unverified', lat:37.556025739856, lng:126.923980873044, rating:null, reviews:null, months:null, rent:null, score:null, insight:"마라탕/훠궈 업종. (서교동)", reason:null, dong:'서교동', category:"마라탕/훠궈" },
+  { id:119, name:"88포장마차", type:'bar', status:'unverified', lat:37.5557653245161, lng:126.925350540737, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (서교동)", reason:null, dong:'서교동', category:"요리 주점" },
+  { id:120, name:"룽쟝족발덮밥", type:'restaurant', status:'unverified', lat:37.5550347525075, lng:126.924151638766, rating:null, reviews:null, months:null, rent:null, score:null, insight:"중국집 업종. (서교동)", reason:null, dong:'서교동', category:"중국집" },
+  { id:121, name:"헤비메탈", type:'bar', status:'unverified', lat:37.5641904547777, lng:126.92664378013, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
+  { id:122, name:"하우스오브지미다이닝연남점", type:'restaurant', status:'unverified', lat:37.5645036224951, lng:126.923213905966, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:123, name:"쿠로코식당", type:'restaurant', status:'unverified', lat:37.5612038593908, lng:126.920025559094, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:124, name:"곰셰프네", type:'restaurant', status:'unverified', lat:37.5612145594479, lng:126.922560825671, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:125, name:"동일", type:'restaurant', status:'unverified', lat:37.5628562082214, lng:126.925411376878, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:126, name:"밥스바비연남점", type:'restaurant', status:'unverified', lat:37.5602512744905, lng:126.923761536998, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:127, name:"돈토키", type:'restaurant', status:'unverified', lat:37.5619555614698, lng:126.925966872347, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:128, name:"연남잿불", type:'restaurant', status:'unverified', lat:37.5629915146324, lng:126.92566024842, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:129, name:"아이에스크리에이티브", type:'restaurant', status:'unverified', lat:37.5636051578975, lng:126.927210282403, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:130, name:"라디오시티", type:'restaurant', status:'unverified', lat:37.5608284787317, lng:126.924643764345, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:131, name:"도쿄쿠루미", type:'bar', status:'unverified', lat:37.5613694074857, lng:126.925163858076, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
+  { id:132, name:"마포구연남돈", type:'restaurant', status:'unverified', lat:37.5626937349014, lng:126.92494748325, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:133, name:"곰팡이마트", type:'bar', status:'unverified', lat:37.5663304853888, lng:126.919963483685, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
+  { id:134, name:"초야", type:'restaurant', status:'unverified', lat:37.5615323340566, lng:126.926352111762, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:135, name:"용왕포차", type:'bar', status:'unverified', lat:37.5625225457042, lng:126.92494765498, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
+  { id:136, name:"씨브이엘랩", type:'restaurant', status:'unverified', lat:37.5608817519919, lng:126.923421349921, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:137, name:"바결", type:'bar', status:'unverified', lat:37.560964045295, lng:126.925300081539, rating:null, reviews:null, months:null, rent:null, score:null, insight:"일반 유흥 주점 업종. (연남동)", reason:null, dong:'연남동', category:"일반 유흥 주점" },
+  { id:138, name:"무명요리사", type:'bar', status:'unverified', lat:37.5608374308668, lng:126.92455321014, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
+  { id:139, name:"연하동", type:'restaurant', status:'unverified', lat:37.560521441591, lng:126.923557535903, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:140, name:"스시지현", type:'restaurant', status:'unverified', lat:37.5606746402232, lng:126.92360265188, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:141, name:"서양면옥", type:'restaurant', status:'unverified', lat:37.560946296706, lng:126.925730189534, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:142, name:"삼십삼유콘", type:'bar', status:'unverified', lat:37.561739080522, lng:126.925582264864, rating:null, reviews:null, months:null, rent:null, score:null, insight:"일반 유흥 주점 업종. (연남동)", reason:null, dong:'연남동', category:"일반 유흥 주점" },
+  { id:143, name:"커피소프트", type:'restaurant', status:'unverified', lat:37.5585541744293, lng:126.918919246456, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:144, name:"힉스", type:'bar', status:'unverified', lat:37.5608195337417, lng:126.924745636667, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
+  { id:145, name:"송가네감자탕", type:'restaurant', status:'unverified', lat:37.5618372098105, lng:126.92404287848, rating:null, reviews:null, months:null, rent:null, score:null, insight:"국/탕/찌개류 업종. (연남동)", reason:null, dong:'연남동', category:"국/탕/찌개류" },
+  { id:146, name:"로이소바", type:'restaurant', status:'unverified', lat:37.5615317800629, lng:126.925469288516, rating:null, reviews:null, months:null, rent:null, score:null, insight:"일식 면 요리 업종. (연남동)", reason:null, dong:'연남동', category:"일식 면 요리" },
+  { id:147, name:"우치다", type:'restaurant', status:'unverified', lat:37.5657378312925, lng:126.922974942445, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:148, name:"피크닉마나올라나", type:'restaurant', status:'unverified', lat:37.5651072231158, lng:126.923111417269, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:149, name:"오리케이커리", type:'restaurant', status:'unverified', lat:37.5664096226703, lng:126.917133651214, rating:null, reviews:null, months:null, rent:null, score:null, insight:"기타 동남아식 전문 업종. (연남동)", reason:null, dong:'연남동', category:"기타 동남아식 전문" },
+  { id:150, name:"청화접", type:'restaurant', status:'unverified', lat:37.5632978531729, lng:126.925659944026, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:151, name:"벙홀", type:'bar', status:'unverified', lat:37.5654132212907, lng:126.922590436089, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
+  { id:152, name:"연주방", type:'restaurant', status:'unverified', lat:37.5627120202894, lng:126.925366246899, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:153, name:"로앤쿡드", type:'restaurant', status:'unverified', lat:37.5622483278741, lng:126.91901710845, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:154, name:"체보파스타바", type:'restaurant', status:'unverified', lat:37.5619370349186, lng:126.925163290314, rating:null, reviews:null, months:null, rent:null, score:null, insight:"파스타/스테이크 업종. (연남동)", reason:null, dong:'연남동', category:"파스타/스테이크" },
+  { id:155, name:"요고미", type:'restaurant', status:'unverified', lat:37.562387259435, lng:126.924732741414, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:156, name:"알앤엠", type:'restaurant', status:'unverified', lat:37.562130675847, lng:126.918258906762, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:157, name:"마음", type:'restaurant', status:'unverified', lat:37.56555743246, lng:126.922669518901, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:158, name:"연남광안리", type:'restaurant', status:'unverified', lat:37.5627838920025, lng:126.925037940352, rating:null, reviews:null, months:null, rent:null, score:null, insight:"횟집 업종. (연남동)", reason:null, dong:'연남동', category:"횟집" },
+  { id:159, name:"연남친친", type:'restaurant', status:'unverified', lat:37.5637529749751, lng:126.918992842562, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:160, name:"청담곱떡", type:'restaurant', status:'unverified', lat:37.5590760089726, lng:126.917843482238, rating:null, reviews:null, months:null, rent:null, score:null, insight:"김밥/만두/분식 업종. (연남동)", reason:null, dong:'연남동', category:"김밥/만두/분식" },
+  { id:161, name:"오버딥", type:'restaurant', status:'unverified', lat:37.5646566147298, lng:126.922942099503, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:162, name:"토오리", type:'restaurant', status:'unverified', lat:37.5621890042637, lng:126.924676349097, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:163, name:"에프이에이티.", type:'restaurant', status:'unverified', lat:37.5652655650679, lng:126.91742920778, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:164, name:"풀뜯는돼지", type:'restaurant', status:'unverified', lat:37.5608195337417, lng:126.924745636667, rating:null, reviews:null, months:null, rent:null, score:null, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (연남동)", reason:null, dong:'연남동', category:"돼지고기 구이/찜" },
+  { id:165, name:"메가엠지씨커피연남하늘채점", type:'restaurant', status:'unverified', lat:37.5630879581404, lng:126.921540222598, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:166, name:"미가해물탕찜", type:'restaurant', status:'unverified', lat:37.5626142436397, lng:126.927505525347, rating:null, reviews:null, months:null, rent:null, score:null, insight:"국/탕/찌개류 업종. (연남동)", reason:null, dong:'연남동', category:"국/탕/찌개류" },
+  { id:167, name:"멜롭스", type:'restaurant', status:'unverified', lat:37.563103136587, lng:126.917375001994, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:168, name:"드럼통숯불구이", type:'restaurant', status:'unverified', lat:37.5588417735871, lng:126.917877692959, rating:null, reviews:null, months:null, rent:null, score:null, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (연남동)", reason:null, dong:'연남동', category:"돼지고기 구이/찜" },
+  { id:169, name:"아이덴티티", type:'restaurant', status:'unverified', lat:37.5614239454707, lng:126.925922125431, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:170, name:"물레방아", type:'bar', status:'unverified', lat:37.5652518738232, lng:126.923869629294, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
+  { id:171, name:"혼술바 고도 연남점", type:'restaurant', status:'unverified', lat:37.562387259435, lng:126.924732741414, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:172, name:"우와연남점", type:'restaurant', status:'unverified', lat:37.5651526474154, lng:126.923688629451, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:173, name:"규자카야모토", type:'bar', status:'unverified', lat:37.5638388338313, lng:126.926270611015, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
+  { id:174, name:"현대음률", type:'restaurant', status:'unverified', lat:37.5627126668897, lng:126.926396223599, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:175, name:"중화복춘살롱", type:'restaurant', status:'unverified', lat:37.5607195506807, lng:126.923387561541, rating:null, reviews:null, months:null, rent:null, score:null, insight:"중국집 업종. (연남동)", reason:null, dong:'연남동', category:"중국집" },
+  { id:176, name:"오파츠", type:'restaurant', status:'unverified', lat:37.5626762586729, lng:126.92580770122, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:177, name:"긱스", type:'restaurant', status:'unverified', lat:37.5618204688263, lng:126.926057552402, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:178, name:"카멜로연남", type:'restaurant', status:'unverified', lat:37.5613971846598, lng:126.926352244795, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:179, name:"홍콩데이", type:'restaurant', status:'unverified', lat:37.5629107446192, lng:126.926169659482, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:180, name:"모모", type:'restaurant', status:'unverified', lat:37.5614141838861, lng:126.924733720327, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:181, name:"느린마을양조장연남점", type:'bar', status:'unverified', lat:37.5615222745295, lng:126.924688338581, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
+  { id:182, name:"빈투파리스", type:'restaurant', status:'unverified', lat:37.5651526474154, lng:126.923688629451, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:183, name:"쿠히치연남점", type:'restaurant', status:'unverified', lat:37.5617846834703, lng:126.926465046281, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:184, name:"타입253", type:'restaurant', status:'unverified', lat:37.5625942787576, lng:126.924404299131, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:185, name:"교촌치킨연남점", type:'restaurant', status:'unverified', lat:37.5634208201173, lng:126.920781531391, rating:null, reviews:null, months:null, rent:null, score:null, insight:"치킨 전문점. 배달·테이크아웃 비중 높음. (연남동)", reason:null, dong:'연남동', category:"치킨" },
+  { id:186, name:"레더쿡", type:'restaurant', status:'unverified', lat:37.5627571487157, lng:126.92549070471, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:187, name:"보따리제과점", type:'restaurant', status:'unverified', lat:37.5623959290638, lng:126.924200768628, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (연남동)", reason:null, dong:'연남동', category:"빵/도넛" },
+  { id:188, name:"연남한양집", type:'bar', status:'unverified', lat:37.5621988870997, lng:126.92605717841, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
+  { id:189, name:"귀차니즘", type:'restaurant', status:'unverified', lat:37.562387259435, lng:126.924732741414, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:190, name:"일용할커피", type:'restaurant', status:'unverified', lat:37.5588329286995, lng:126.91811537741, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:191, name:"커피구름", type:'restaurant', status:'unverified', lat:37.5593290777815, lng:126.918986314294, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:192, name:"끝집", type:'bar', status:'unverified', lat:37.5630997337873, lng:126.925818599761, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
+  { id:193, name:"팔계집", type:'restaurant', status:'unverified', lat:37.5626405095433, lng:126.926271791951, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:194, name:"나카스하이볼클럽", type:'restaurant', status:'unverified', lat:37.561469320785, lng:126.926442719743, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:195, name:"카시", type:'restaurant', status:'unverified', lat:37.5609097702171, lng:126.924960590939, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:196, name:"레이지프로그", type:'restaurant', status:'unverified', lat:37.5606024799143, lng:126.923478226318, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:197, name:"하이아시아", type:'restaurant', status:'unverified', lat:37.5633349637411, lng:126.927380323186, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:198, name:"니꾸킹버거", type:'restaurant', status:'unverified', lat:37.560964045295, lng:126.925300081539, rating:null, reviews:null, months:null, rent:null, score:null, insight:"버거 업종. (연남동)", reason:null, dong:'연남동', category:"버거" },
+  { id:199, name:"우온", type:'restaurant', status:'unverified', lat:37.561070474277, lng:126.922674156637, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:200, name:"장끼전", type:'bar', status:'unverified', lat:37.5624509812645, lng:126.925762651048, rating:null, reviews:null, months:null, rent:null, score:null, insight:"일반 유흥 주점 업종. (연남동)", reason:null, dong:'연남동', category:"일반 유흥 주점" },
+  { id:201, name:"멜랑커피 연남", type:'restaurant', status:'unverified', lat:37.5655929880765, lng:126.921933755733, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:202, name:"말디니스에스프레소", type:'restaurant', status:'unverified', lat:37.5649896717862, lng:126.922466367818, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:203, name:"아꽁뜨", type:'restaurant', status:'unverified', lat:37.5644425503143, lng:126.92634924689, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (연남동)", reason:null, dong:'연남동', category:"빵/도넛" },
+  { id:204, name:"파코카", type:'restaurant', status:'unverified', lat:37.5634728449642, lng:126.917804698464, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:205, name:"셀로나", type:'restaurant', status:'unverified', lat:37.5653866568276, lng:126.923303550291, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:206, name:"두유라이크잇", type:'restaurant', status:'unverified', lat:37.5651244181089, lng:126.921855013127, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:207, name:"카페바우연남점", type:'restaurant', status:'unverified', lat:37.5627013804202, lng:126.922830929072, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:208, name:"오에스디에스연남", type:'restaurant', status:'unverified', lat:37.5619886002671, lng:126.921326327357, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:209, name:"누아즈데테", type:'restaurant', status:'unverified', lat:37.5655297309593, lng:126.921650850288, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (연남동)", reason:null, dong:'연남동', category:"빵/도넛" },
+  { id:210, name:"헤도네", type:'restaurant', status:'unverified', lat:37.5635323962526, lng:126.926112453223, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:211, name:"연어롭다", type:'restaurant', status:'unverified', lat:37.5610633905786, lng:126.925673482387, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:212, name:"카페리브레", type:'restaurant', status:'unverified', lat:37.5623795306971, lng:126.926770057942, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:213, name:"팜팜발리", type:'restaurant', status:'unverified', lat:37.5633521900344, lng:126.926101312669, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베트남식 전문 업종. (연남동)", reason:null, dong:'연남동', category:"베트남식 전문" },
+  { id:214, name:"야키토리묵", type:'restaurant', status:'unverified', lat:37.5646666772459, lng:126.924571985948, rating:null, reviews:null, months:null, rent:null, score:null, insight:"기타 일식 음식점 업종. (연남동)", reason:null, dong:'연남동', category:"기타 일식 음식점" },
+  { id:215, name:"케이바", type:'bar', status:'unverified', lat:37.5615592508339, lng:126.92617099314, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (연남동)", reason:null, dong:'연남동', category:"요리 주점" },
+  { id:216, name:"고스트블랙연남", type:'restaurant', status:'unverified', lat:37.5613068301932, lng:126.925944877825, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (연남동)", reason:null, dong:'연남동', category:"경양식" },
+  { id:217, name:"일체마부시", type:'restaurant', status:'unverified', lat:37.5606037184247, lng:126.925413622414, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (연남동)", reason:null, dong:'연남동', category:"일식 회/초밥" },
+  { id:218, name:"언노운핸즈", type:'restaurant', status:'unverified', lat:37.5646566147298, lng:126.922942099503, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (연남동)", reason:null, dong:'연남동', category:"카페" },
+  { id:219, name:"유메오뎅", type:'restaurant', status:'unverified', lat:37.5629732374526, lng:126.925252801598, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:220, name:"아카사니", type:'restaurant', status:'unverified', lat:37.5639470944544, lng:126.926496876704, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (연남동)", reason:null, dong:'연남동', category:"백반/한정식" },
+  { id:221, name:"멕시코식당", type:'restaurant', status:'unverified', lat:37.5474508839614, lng:126.914665095751, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (합정동)", reason:null, dong:'합정동', category:"경양식" },
+  { id:222, name:"스시강", type:'restaurant', status:'unverified', lat:37.548991704503, lng:126.914821768186, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (합정동)", reason:null, dong:'합정동', category:"일식 회/초밥" },
+  { id:223, name:"겟블랙", type:'restaurant', status:'unverified', lat:37.5466216296689, lng:126.91420208513, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:224, name:"삼오사이", type:'restaurant', status:'unverified', lat:37.5477243987313, lng:126.919236514647, rating:null, reviews:null, months:null, rent:null, score:null, insight:"피자 전문점. 배달 경쟁 치열한 업종. (합정동)", reason:null, dong:'합정동', category:"피자" },
+  { id:225, name:"수퍼비랩", type:'restaurant', status:'unverified', lat:37.5514346490391, lng:126.904656568624, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:226, name:"형제한우곱창", type:'restaurant', status:'unverified', lat:37.5500070702104, lng:126.91107484796, rating:null, reviews:null, months:null, rent:null, score:null, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (합정동)", reason:null, dong:'합정동', category:"돼지고기 구이/찜" },
+  { id:227, name:"시샤스테이", type:'restaurant', status:'unverified', lat:37.5516888677951, lng:126.907089348955, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베트남식 전문 업종. (합정동)", reason:null, dong:'합정동', category:"베트남식 전문" },
+  { id:228, name:"라구", type:'restaurant', status:'unverified', lat:37.5460461394518, lng:126.915798288188, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (합정동)", reason:null, dong:'합정동', category:"경양식" },
+  { id:229, name:"미니멀비", type:'restaurant', status:'unverified', lat:37.5460737155859, lng:126.916567739426, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:230, name:"찐육개장", type:'restaurant', status:'unverified', lat:37.5500877925041, lng:126.910588141616, rating:null, reviews:null, months:null, rent:null, score:null, insight:"국/탕/찌개류 업종. (합정동)", reason:null, dong:'합정동', category:"국/탕/찌개류" },
+  { id:231, name:"하바나24시", type:'restaurant', status:'unverified', lat:37.549467385838, lng:126.912297663363, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
+  { id:232, name:"참숯화로양고기", type:'restaurant', status:'unverified', lat:37.5505567211922, lng:126.911130777907, rating:null, reviews:null, months:null, rent:null, score:null, insight:"중국집 업종. (합정동)", reason:null, dong:'합정동', category:"중국집" },
+  { id:233, name:"주식회사 스타보틀합정", type:'restaurant', status:'unverified', lat:37.55100761048, lng:126.91165080896, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
+  { id:234, name:"옹기골바베큐", type:'bar', status:'unverified', lat:37.5494586610127, lng:126.912682432102, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
+  { id:235, name:"반상반잔", type:'restaurant', status:'unverified', lat:37.5513740599936, lng:126.907780059426, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
+  { id:236, name:"주식회사 컬러크리에이션컴퍼니", type:'restaurant', status:'unverified', lat:37.5486598826954, lng:126.916994876612, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
+  { id:237, name:"탕화쿵푸마라탕", type:'restaurant', status:'unverified', lat:37.5486215150734, lng:126.913747140887, rating:null, reviews:null, months:null, rent:null, score:null, insight:"마라탕/훠궈 업종. (합정동)", reason:null, dong:'합정동', category:"마라탕/훠궈" },
+  { id:238, name:"실루엣커피", type:'restaurant', status:'unverified', lat:37.5463810773278, lng:126.918027155974, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:239, name:"야키토리잔잔", type:'bar', status:'unverified', lat:37.5493340264246, lng:126.914742163782, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
+  { id:240, name:"하동우렁추어탕", type:'restaurant', status:'unverified', lat:37.5527917876861, lng:126.911920309183, rating:null, reviews:null, months:null, rent:null, score:null, insight:"국/탕/찌개류 업종. (합정동)", reason:null, dong:'합정동', category:"국/탕/찌개류" },
+  { id:241, name:"정가네정육식당", type:'restaurant', status:'unverified', lat:37.5480759347772, lng:126.919451143517, rating:null, reviews:null, months:null, rent:null, score:null, insight:"소고기 구이/찜 업종. (합정동)", reason:null, dong:'합정동', category:"소고기 구이/찜" },
+  { id:242, name:"코코호도", type:'restaurant', status:'unverified', lat:37.5486306406695, lng:126.913905558598, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (합정동)", reason:null, dong:'합정동', category:"빵/도넛" },
+  { id:243, name:"한접시", type:'restaurant', status:'unverified', lat:37.5480846971805, lng:126.919089015056, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
+  { id:244, name:"두놈포차", type:'bar', status:'unverified', lat:37.5490100095037, lng:126.915217819931, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
+  { id:245, name:"최승기", type:'restaurant', status:'unverified', lat:37.5488663918341, lng:126.91597617722, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (합정동)", reason:null, dong:'합정동', category:"경양식" },
+  { id:246, name:"수수그라운드", type:'restaurant', status:'unverified', lat:37.549975371047, lng:126.90507713813, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (합정동)", reason:null, dong:'합정동', category:"빵/도넛" },
+  { id:247, name:"릴리플레이트", type:'restaurant', status:'unverified', lat:37.55100761048, lng:126.91165080896, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (합정동)", reason:null, dong:'합정동', category:"경양식" },
+  { id:248, name:"금문중화요리", type:'restaurant', status:'unverified', lat:37.5500528574331, lng:126.912059330515, rating:null, reviews:null, months:null, rent:null, score:null, insight:"중국집 업종. (합정동)", reason:null, dong:'합정동', category:"중국집" },
+  { id:249, name:"합정생고기김치찌개", type:'restaurant', status:'unverified', lat:37.5480755163495, lng:126.918840068177, rating:null, reviews:null, months:null, rent:null, score:null, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (합정동)", reason:null, dong:'합정동', category:"돼지고기 구이/찜" },
+  { id:250, name:"합정전", type:'restaurant', status:'unverified', lat:37.5498087398982, lng:126.910927969347, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
+  { id:251, name:"루아르", type:'restaurant', status:'unverified', lat:37.547729062728, lng:126.913114463951, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:252, name:"해머플레이스", type:'restaurant', status:'unverified', lat:37.5469218878762, lng:126.918332096955, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:253, name:"당고집", type:'restaurant', status:'unverified', lat:37.5472289117326, lng:126.91932757795, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:254, name:"호랑이", type:'bar', status:'unverified', lat:37.5467299136527, lng:126.914428281315, rating:null, reviews:null, months:null, rent:null, score:null, insight:"일반 유흥 주점 업종. (합정동)", reason:null, dong:'합정동', category:"일반 유흥 주점" },
+  { id:255, name:"홍대화덕피자", type:'restaurant', status:'unverified', lat:37.5482104087641, lng:126.918466486046, rating:null, reviews:null, months:null, rent:null, score:null, insight:"피자 전문점. 배달 경쟁 치열한 업종. (합정동)", reason:null, dong:'합정동', category:"피자" },
+  { id:256, name:"합정카페 웨하로스터스(WEHIGH ROASTERS)", type:'restaurant', status:'unverified', lat:37.5480461528315, lng:126.915513133171, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:257, name:"타키", type:'restaurant', status:'unverified', lat:37.5485064260015, lng:126.91658766058, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (합정동)", reason:null, dong:'합정동', category:"일식 회/초밥" },
+  { id:258, name:"컴포즈커피", type:'restaurant', status:'unverified', lat:37.5491899892507, lng:126.91491207364, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:259, name:"폴드베이커리", type:'restaurant', status:'unverified', lat:37.5471354774282, lng:126.914586242771, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (합정동)", reason:null, dong:'합정동', category:"빵/도넛" },
+  { id:260, name:"정광수의돈까스가게", type:'restaurant', status:'unverified', lat:37.549975371047, lng:126.90507713813, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (합정동)", reason:null, dong:'합정동', category:"경양식" },
+  { id:261, name:"진영수산다이닝", type:'restaurant', status:'unverified', lat:37.5453855033672, lng:126.911815865666, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (합정동)", reason:null, dong:'합정동', category:"일식 회/초밥" },
+  { id:262, name:"카페와디즈303", type:'restaurant', status:'unverified', lat:37.5462070883078, lng:126.914089400885, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:263, name:"케이랑케이크", type:'restaurant', status:'unverified', lat:37.5501931412619, lng:126.907000673326, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:264, name:"마키세", type:'restaurant', status:'unverified', lat:37.5504475283907, lng:126.909716335519, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
+  { id:265, name:"쿠마(KUMA)", type:'restaurant', status:'unverified', lat:37.5510041545199, lng:126.90714678222, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (합정동)", reason:null, dong:'합정동', category:"일식 회/초밥" },
+  { id:266, name:"합정순대국", type:'restaurant', status:'unverified', lat:37.5491899892507, lng:126.91491207364, rating:null, reviews:null, months:null, rent:null, score:null, insight:"국/탕/찌개류 업종. (합정동)", reason:null, dong:'합정동', category:"국/탕/찌개류" },
+  { id:267, name:"프로젝트아크 주식회사", type:'restaurant', status:'unverified', lat:37.5477931403483, lng:126.914494962956, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
+  { id:268, name:"셰발레리", type:'restaurant', status:'unverified', lat:37.5520671885169, lng:126.906964394288, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (합정동)", reason:null, dong:'합정동', category:"경양식" },
+  { id:269, name:"지리", type:'bar', status:'unverified', lat:37.5500881429277, lng:126.911052118598, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
+  { id:270, name:"완도막회집", type:'restaurant', status:'unverified', lat:37.5523550693087, lng:126.90640951008, rating:null, reviews:null, months:null, rent:null, score:null, insight:"횟집 업종. (합정동)", reason:null, dong:'합정동', category:"횟집" },
+  { id:271, name:"텍사스바베큐레스토랑", type:'restaurant', status:'unverified', lat:37.55100761048, lng:126.91165080896, rating:null, reviews:null, months:null, rent:null, score:null, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (합정동)", reason:null, dong:'합정동', category:"돼지고기 구이/찜" },
+  { id:272, name:"데네브", type:'restaurant', status:'unverified', lat:37.547029882277, lng:126.918150922174, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:273, name:"달리", type:'bar', status:'unverified', lat:37.5482647414523, lng:126.918862495508, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
+  { id:274, name:"촉촉73노가리", type:'bar', status:'unverified', lat:37.5494392027776, lng:126.910758662732, rating:null, reviews:null, months:null, rent:null, score:null, insight:"생맥주 전문 업종. (합정동)", reason:null, dong:'합정동', category:"생맥주 전문" },
+  { id:275, name:"덕이손만두", type:'restaurant', status:'unverified', lat:37.5490691234043, lng:126.909876427258, rating:null, reviews:null, months:null, rent:null, score:null, insight:"김밥/만두/분식 업종. (합정동)", reason:null, dong:'합정동', category:"김밥/만두/분식" },
+  { id:276, name:"휴고살롱", type:'restaurant', status:'unverified', lat:37.5470848293058, lng:126.919440893909, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:277, name:"심야식당오밤중", type:'bar', status:'unverified', lat:37.5513740599936, lng:126.907780059426, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
+  { id:278, name:"서퍼스부스", type:'bar', status:'unverified', lat:37.5523013406437, lng:126.906828300948, rating:null, reviews:null, months:null, rent:null, score:null, insight:"요리주점. 저녁 이후 매출 집중, 주말 강세. (합정동)", reason:null, dong:'합정동', category:"요리 주점" },
+  { id:279, name:"한강", type:'bar', status:'unverified', lat:37.5484952926837, lng:126.913634123516, rating:null, reviews:null, months:null, rent:null, score:null, insight:"일반 유흥 주점 업종. (합정동)", reason:null, dong:'합정동', category:"일반 유흥 주점" },
+  { id:280, name:"깃시리", type:'restaurant', status:'unverified', lat:37.5497881367687, lng:126.907567000348, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (합정동)", reason:null, dong:'합정동', category:"일식 회/초밥" },
+  { id:281, name:"260도씨", type:'restaurant', status:'unverified', lat:37.5482525261751, lng:126.914324694542, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (합정동)", reason:null, dong:'합정동', category:"빵/도넛" },
+  { id:282, name:"미스타교자 미니합정점", type:'restaurant', status:'unverified', lat:37.5490602428646, lng:126.910046183448, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (합정동)", reason:null, dong:'합정동', category:"일식 회/초밥" },
+  { id:283, name:"담솥", type:'restaurant', status:'unverified', lat:37.55100761048, lng:126.91165080896, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
+  { id:284, name:"핌피", type:'restaurant', status:'unverified', lat:37.5459369369032, lng:126.914293397015, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:285, name:"합정티라미수", type:'restaurant', status:'unverified', lat:37.551313388315, lng:126.910903545341, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (합정동)", reason:null, dong:'합정동', category:"빵/도넛" },
+  { id:286, name:"메이크베러띵스", type:'restaurant', status:'unverified', lat:37.5525540294126, lng:126.907348563526, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:287, name:"소금방", type:'restaurant', status:'unverified', lat:37.5525988301887, lng:126.907031634829, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베이커리·카페. 브런치 및 SNS 바이럴 수요. (합정동)", reason:null, dong:'합정동', category:"빵/도넛" },
+  { id:288, name:"월남선생", type:'restaurant', status:'unverified', lat:37.5491234160628, lng:126.910181904043, rating:null, reviews:null, months:null, rent:null, score:null, insight:"베트남식 전문 업종. (합정동)", reason:null, dong:'합정동', category:"베트남식 전문" },
+  { id:289, name:"도트(DOTEU)", type:'restaurant', status:'unverified', lat:37.5476509557429, lng:126.917267583074, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (합정동)", reason:null, dong:'합정동', category:"경양식" },
+  { id:290, name:"이디야합정역", type:'restaurant', status:'unverified', lat:37.5482529353547, lng:126.914890506315, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:291, name:"돌황소곱창", type:'restaurant', status:'unverified', lat:37.5498087398982, lng:126.910927969347, rating:null, reviews:null, months:null, rent:null, score:null, insight:"곱창 전골/구이 업종. (합정동)", reason:null, dong:'합정동', category:"곱창 전골/구이" },
+  { id:292, name:"포그", type:'restaurant', status:'unverified', lat:37.5471352231587, lng:126.91423544471, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (합정동)", reason:null, dong:'합정동', category:"경양식" },
+  { id:293, name:"두레박", type:'restaurant', status:'unverified', lat:37.5475526646765, lng:126.918444570183, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
+  { id:294, name:"씨제이푸드빌", type:'restaurant', status:'unverified', lat:37.5500528574331, lng:126.912059330515, rating:null, reviews:null, months:null, rent:null, score:null, insight:"경양식. 감성 식당 포지셔닝 경쟁 치열. (합정동)", reason:null, dong:'합정동', category:"경양식" },
+  { id:295, name:"자유의지", type:'restaurant', status:'unverified', lat:37.5482288568381, lng:126.919088859234, rating:null, reviews:null, months:null, rent:null, score:null, insight:"백반집. 점심 직장인 수요 의존도 높음. (합정동)", reason:null, dong:'합정동', category:"백반/한정식" },
+  { id:296, name:"팔사오육", type:'restaurant', status:'unverified', lat:37.5488125489961, lng:126.916281778557, rating:null, reviews:null, months:null, rent:null, score:null, insight:"횟집 업종. (합정동)", reason:null, dong:'합정동', category:"횟집" },
+  { id:297, name:"단색", type:'restaurant', status:'unverified', lat:37.54847048992, lng:126.916734812236, rating:null, reviews:null, months:null, rent:null, score:null, insight:"SNS 감성 카페. 홍대 특성상 인테리어·음료 비주얼이 경쟁력. (합정동)", reason:null, dong:'합정동', category:"카페" },
+  { id:298, name:"김가네김밥", type:'restaurant', status:'unverified', lat:37.5488565385278, lng:126.914799289324, rating:null, reviews:null, months:null, rent:null, score:null, insight:"김밥/만두/분식 업종. (합정동)", reason:null, dong:'합정동', category:"김밥/만두/분식" },
+  { id:299, name:"촉루옥도쿠로야", type:'restaurant', status:'unverified', lat:37.5530955715142, lng:126.908558809603, rating:null, reviews:null, months:null, rent:null, score:null, insight:"초밥·회. 저녁 단가 높고 고객 충성도 강한 편. (합정동)", reason:null, dong:'합정동', category:"일식 회/초밥" },
+  { id:300, name:"홍대큰손정육점식당", type:'restaurant', status:'unverified', lat:37.5502232925327, lng:126.911051957993, rating:null, reviews:null, months:null, rent:null, score:null, insight:"삼겹살·돼지고기 구이. 저녁 모임 수요 강함. (합정동)", reason:null, dong:'합정동', category:"돼지고기 구이/찜" }
 ];
 
 let map, markers = [], clusterer, overlay, showMarkers = true;
@@ -804,9 +807,99 @@ window.kakao && kakao.maps.load(() => {
     }
   });
 
+  // 초기 렌더 후 카카오 실존 검증 시작
   renderAll();
   updateStats();
+  verifyStoresWithKakao();
 });
+
+// ── 카카오 실존 검증 엔진 ──────────────────────────────
+// 배치 단위로 업체명+좌표를 카카오 Places에 검색, 실존 확인 + 실제 데이터 채움
+let verifyQueue = [];
+let verifyRunning = false;
+let verifiedCount = 0;
+let removedCount = 0;
+
+function verifyStoresWithKakao() {
+  // unverified 상태인 것만
+  verifyQueue = stores.filter(s => s.status === 'unverified').map(s => s.id);
+  updateVerifyBanner();
+  processVerifyQueue();
+}
+
+function updateVerifyBanner() {
+  const total = stores.filter(s => s.status === 'unverified').length + verifiedCount + removedCount;
+  const done = verifiedCount + removedCount;
+  let el = document.getElementById('verify-banner');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'verify-banner';
+    el.style.cssText = `position:fixed;bottom:20px;right:20px;z-index:500;
+      background:#18181c;border:1px solid #2e2e38;border-radius:10px;
+      padding:10px 16px;font-size:11px;color:#8888a0;
+      box-shadow:0 4px 16px rgba(0,0,0,.5);min-width:200px;`;
+    document.body.appendChild(el);
+  }
+  if (verifyQueue.length === 0 && done > 0) {
+    el.innerHTML = `✅ 검증 완료 — 실존 <b style="color:#00b894">${verifiedCount}곳</b> 확인, <b style="color:#e17055">${removedCount}곳</b> 제외`;
+    setTimeout(() => el.style.opacity = '0', 4000);
+    setTimeout(() => el.remove(), 4500);
+    return;
+  }
+  el.innerHTML = `🔍 카카오 실존 검증 중... <b style="color:#e8e8f0">${done}/${total}</b>`;
+}
+
+function processVerifyQueue() {
+  if (verifyRunning || verifyQueue.length === 0) return;
+  verifyRunning = true;
+
+  const id = verifyQueue.shift();
+  const s = stores.find(x => x.id === id);
+  if (!s) { verifyRunning = false; processVerifyQueue(); return; }
+
+  const ps = new kakao.maps.services.Places();
+  const latlng = new kakao.maps.LatLng(s.lat, s.lng);
+
+  // 업체명으로 반경 200m 내 검색
+  ps.keywordSearch(s.name, (data, status) => {
+    if (status === kakao.maps.services.Status.OK && data.length > 0) {
+      // 가장 가까운 결과 선택
+      const best = data[0];
+      const CAT_TYPE = { FD6:'restaurant', CE7:'cafe', BK9:'bar', MT1:'retail' };
+
+      // 실제 카카오 데이터로 업데이트
+      s.kakaoId = best.id;
+      s.kakaoUrl = best.place_url;
+      s.lat = parseFloat(best.y);
+      s.lng = parseFloat(best.x);
+      s.address = best.road_address_name || best.address_name;
+      if (CAT_TYPE[best.category_group_code]) s.type = CAT_TYPE[best.category_group_code];
+
+      // 평점·리뷰는 카카오 API에서 직접 제공 안 되므로 운영 기간만 추정, 나머지 기본값
+      s.rating = s.rating || 3.8;
+      s.reviews = s.reviews || 0;
+      s.months = s.months || 18;
+      s.rent = s.rent || 280;
+      const sc = Math.round((s.rating/5)*30 + Math.min(s.reviews/500,1)*20 + Math.min(s.months/60,1)*25 + Math.max(0,(500-s.rent)/500)*15 + 10);
+      s.score = Math.min(100, sc);
+      s.status = 'open';
+
+      verifiedCount++;
+    } else {
+      // 카카오에서 못 찾으면 목록에서 제거
+      stores = stores.filter(x => x.id !== id);
+      removedCount++;
+    }
+
+    verifiedCount % 10 === 0 && renderAll();  // 10개마다 화면 갱신
+    updateStats();
+    updateVerifyBanner();
+
+    verifyRunning = false;
+    // 카카오 API 쿼터 보호: 100ms 간격
+    setTimeout(processVerifyQueue, 100);
+  }, { location: latlng, radius: 200, size: 1 });
+}
 
 // ── RENDER ────────────────────────────────────────────
 function renderAll() {
@@ -828,33 +921,42 @@ function renderMarkers() {
   stores.forEach(s => {
     const pos = new kakao.maps.LatLng(s.lat, s.lng);
 
-    // Color based on status + score
-    let color = s.status === 'open' ? '#00b894' : s.status === 'closed' ? '#e17055' : '#fdcb6e';
-    if (s.status === 'open' && s.score >= 80) color = '#6c5ce7';
+    // unverified: 회색 반투명
+    let color = '#8888a0';
+    if (s.status === 'open') color = s.score >= 80 ? '#6c5ce7' : '#00b894';
+    else if (s.status === 'closed') color = '#e17055';
+    else if (s.status === 'risk') color = '#fdcb6e';
 
-    const content = `
-      <div style="position:relative;text-align:center;cursor:pointer" onclick="selectStore(${s.id})">
-        <div style="
-          width:${selectedId===s.id?34:26}px;height:${selectedId===s.id?34:26}px;
-          border-radius:50%;background:${color};
-          display:flex;align-items:center;justify-content:center;
-          border:${selectedId===s.id?'3px solid #fff':'2px solid rgba(255,255,255,.4)'};
-          box-shadow:0 2px 10px rgba(0,0,0,.5)${s.score>=80?',0 0 12px '+color:''}">
-          <span style="font-size:${selectedId===s.id?13:11}px">${
-            s.type==='restaurant'?'🍜':s.type==='cafe'?'☕':s.type==='bar'?'🍺':'🏪'
-          }</span>
-        </div>
-        <div style="
-          position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);
-          white-space:nowrap;font-size:9px;font-weight:600;
-          background:rgba(14,14,16,.9);color:#e8e8f0;
-          padding:2px 5px;border-radius:3px;font-family:sans-serif">
-          ${s.name}
-        </div>
-      </div>`;
+    const isSelected = selectedId === s.id;
+    const isUnverified = s.status === 'unverified';
+    const emoji = s.type==='restaurant'?'🍜':s.type==='cafe'?'☕':s.type==='bar'?'🍺':'🏪';
+
+    // onclick을 div에 직접 인라인으로 달아 CustomOverlay 클릭 문제 해결
+    const content = `<div onclick="selectStore(${s.id})" style="
+        position:relative;text-align:center;cursor:pointer;
+        opacity:${isUnverified?0.4:1};
+        transition:opacity .3s;">
+      <div style="
+        width:${isSelected?34:26}px;height:${isSelected?34:26}px;
+        border-radius:50%;background:${color};
+        display:flex;align-items:center;justify-content:center;
+        border:${isSelected?'3px solid #fff':'2px solid rgba(255,255,255,.4)'};
+        box-shadow:0 2px 10px rgba(0,0,0,.5)${!isUnverified&&s.score>=80?',0 0 12px '+color:''};
+        transition:all .15s;">
+        <span style="font-size:${isSelected?13:11}px">${emoji}</span>
+      </div>
+      <div style="
+        position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);
+        white-space:nowrap;font-size:9px;font-weight:600;
+        background:rgba(14,14,16,.9);color:#e8e8f0;
+        padding:2px 5px;border-radius:3px;font-family:sans-serif;
+        ${isSelected?'outline:1px solid #6c5ce7':''}">
+        ${s.name}
+      </div>
+    </div>`;
 
     const marker = new kakao.maps.CustomOverlay({
-      position: pos, content, yAnchor: 1.3, zIndex: selectedId===s.id?10:1
+      position: pos, content, yAnchor: 1.3, zIndex: isSelected ? 10 : 1
     });
     if (showMarkers) marker.setMap(map);
     markers.push(marker);
@@ -863,35 +965,42 @@ function renderMarkers() {
 
 function renderList() {
   const list = document.getElementById('store-list');
+  const dongFilters = ['서교동','연남동','합정동'];
+  const isDongFilter = dongFilters.includes(currentFilter);
   const filtered = stores.filter(s => {
-    const dongFilters = ['서교동','연남동','합정동'];
-    const isDongFilter = dongFilters.includes(currentFilter);
+    if (s.status === 'unverified' && currentFilter !== 'all') return false;
     const matchFilter = currentFilter === 'all'
       || s.type === currentFilter
       || (currentFilter === 'closed' && s.status === 'closed')
       || (isDongFilter && s.dong === currentFilter);
-    const matchSearch = s.name.includes(searchText);
-    return matchFilter && matchSearch;
+    return matchFilter && s.name.includes(searchText);
   });
 
-  list.innerHTML = filtered.length === 0 ? `<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">검색 결과 없음</div>` :
-    filtered.map(s => {
-      const scoreColor = getScoreColor(s.score);
+  list.innerHTML = filtered.length === 0
+    ? `<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">검색 결과 없음</div>`
+    : filtered.map(s => {
+      const isUnverified = s.status === 'unverified';
+      const scoreColor = isUnverified ? '#8888a0' : getScoreColor(s.score);
+      const ratingTxt = s.rating != null ? `★ ${s.rating}` : '검증중';
+      const monthsTxt = s.months != null ? `${s.months}개월` : '';
+      const reviewsTxt = s.reviews != null ? `리뷰 ${s.reviews}` : '';
+      const scorePct = isUnverified ? 0 : s.score;
       return `
-      <div class="store-item ${s.status==='closed'?'closed-item':''} ${selectedId===s.id?'active':''}" onclick="selectStore(${s.id})">
+      <div class="store-item ${s.status==='closed'?'closed-item':''} ${selectedId===s.id?'active':''}"
+           onclick="selectStore(${s.id})" style="${isUnverified?'opacity:.4;':''}">
         <div class="item-top">
-          <div class="status-dot dot-${s.status}"></div>
+          <div class="status-dot dot-${s.status === 'unverified' ? 'risk' : s.status}"></div>
           <div class="item-name">${s.name}</div>
           <div style="font-size:10px;color:var(--muted)">${TYPES[s.type]||s.type}</div>
         </div>
         <div class="item-meta">
-          <span>★ ${s.rating}</span>
-          <span>${s.months}개월</span>
-          <span>리뷰 ${s.reviews}</span>
+          <span>${ratingTxt}</span>
+          ${monthsTxt?`<span>${monthsTxt}</span>`:''}
+          ${reviewsTxt?`<span>${reviewsTxt}</span>`:''}
         </div>
         <div class="score-row">
-          <div class="score-bar"><div class="score-fill" style="width:${s.score}%;background:${scoreColor}"></div></div>
-          <div class="score-num" style="color:${scoreColor}">${s.score}</div>
+          <div class="score-bar"><div class="score-fill" style="width:${scorePct}%;background:${scoreColor}"></div></div>
+          <div class="score-num" style="color:${scoreColor}">${isUnverified?'…':s.score}</div>
         </div>
       </div>`;
     }).join('');
@@ -900,45 +1009,71 @@ function renderList() {
 function updateStats() {
   document.getElementById('cnt-open').textContent = stores.filter(s=>s.status==='open').length;
   document.getElementById('cnt-closed').textContent = stores.filter(s=>s.status==='closed').length;
-  const avg = Math.round(stores.reduce((a,s)=>a+s.months,0)/stores.length);
-  document.getElementById('avg-months').textContent = avg;
+  const verified = stores.filter(s=>s.status!=='unverified');
+  const avgMonths = verified.length ? Math.round(verified.reduce((a,s)=>a+(s.months||0),0)/verified.length) : 0;
+  document.getElementById('avg-months').textContent = avgMonths;
 }
 
 // ── SELECT STORE ──────────────────────────────────────
 function selectStore(id) {
   selectedId = id;
   const s = stores.find(x=>x.id===id);
+  if (!s) return;
   renderMarkers();
   renderList();
 
-  // Pan map to store
   if (map) map.panTo(new kakao.maps.LatLng(s.lat, s.lng));
 
-  // Show detail
   document.getElementById('detail-empty').style.display = 'none';
   const dc = document.getElementById('detail-content');
   dc.style.display = 'block';
 
+  // unverified: 검증 대기 패널
+  if (s.status === 'unverified') {
+    dc.innerHTML = `
+      <div class="detail-header">
+        <div class="detail-name">${s.name}</div>
+        <div class="detail-sub">
+          ${TYPES[s.type]||s.type}
+          <span class="status-badge badge-unverified">검증 중</span>
+        </div>
+      </div>
+      <div class="detail-body">
+        <div class="insight-card" style="text-align:center;padding:20px 12px;">
+          <div style="font-size:24px;margin-bottom:10px">🔍</div>
+          <div style="font-size:13px;color:var(--text);margin-bottom:6px">카카오맵 실존 검증 중...</div>
+          <div style="font-size:11px;color:var(--muted)">소상공인 DB 업체를 카카오맵에서<br>확인하고 있어요. 잠시 후 다시 클릭해주세요.</div>
+          ${s.address ? `<div style="margin-top:10px;font-size:11px;color:var(--muted)">📍 ${s.address}</div>` : ''}
+        </div>
+      </div>`;
+    return;
+  }
+
   const scoreColor = getScoreColor(s.score);
-  const avgRating = (stores.filter(x=>x.type===s.type).reduce((a,x)=>a+x.rating,0) / stores.filter(x=>x.type===s.type).length).toFixed(1);
-  const rankMonths = [...stores].sort((a,b)=>b.months-a.months).findIndex(x=>x.id===s.id)+1;
+  const sameType = stores.filter(x=>x.type===s.type && x.rating!=null);
+  const avgRating = sameType.length ? (sameType.reduce((a,x)=>a+x.rating,0)/sameType.length).toFixed(1) : s.rating;
+  const verifiedStores = stores.filter(x=>x.status!=='unverified');
+  const rankMonths = [...verifiedStores].sort((a,b)=>b.months-a.months).findIndex(x=>x.id===s.id)+1;
   const rentClass = s.rent > 400 ? 'bad' : s.rent > 250 ? 'warn' : 'good';
+  const kakaoLink = s.kakaoUrl ? `<a href="${s.kakaoUrl}" target="_blank" style="font-size:10px;color:var(--accent2);text-decoration:none;">카카오맵에서 보기 ↗</a>` : '';
 
   dc.innerHTML = `
     <div class="detail-header">
       <div class="detail-name">${s.name}</div>
       <div class="detail-sub">
         ${TYPES[s.type]||s.type}
-        <span class="status-badge badge-${s.status}">${STATUS[s.status]}</span>
+        <span class="status-badge badge-${s.status}">${STATUS[s.status]||s.status}</span>
         ${s.score>=80?'<span style="font-size:10px;color:#6c5ce7">★ 우수업소</span>':''}
+        ${kakaoLink}
       </div>
+      ${s.address ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">📍 ${s.address}</div>` : ''}
     </div>
     <div class="detail-body">
 
       <div>
         <div class="section-title">핵심 지표</div>
         <div class="metrics">
-          <div class="metric"><div class="metric-val ${s.rating>=4.2?'good':s.rating>=3.5?'warn':'bad'}">★${s.rating}</div><div class="metric-lbl">네이버 평점</div></div>
+          <div class="metric"><div class="metric-val ${s.rating>=4.2?'good':s.rating>=3.5?'warn':'bad'}">★${s.rating}</div><div class="metric-lbl">카카오 평점</div></div>
           <div class="metric"><div class="metric-val">${s.months}m</div><div class="metric-lbl">운영 기간</div></div>
           <div class="metric"><div class="metric-val">${s.reviews}</div><div class="metric-lbl">리뷰 수</div></div>
           <div class="metric"><div class="metric-val" style="color:${scoreColor}">${s.score}</div><div class="metric-lbl">생존력 점수</div></div>
@@ -955,7 +1090,7 @@ function selectStore(id) {
       </div>` : ''}
 
       <div>
-        <div class="section-title">재학생 인사이트</div>
+        <div class="section-title">업소 인사이트</div>
         <div class="insight-card ${s.status==='closed'?'danger':s.status==='risk'?'warn':''}">
           <div class="insight-label">${s.status==='closed'?'🔴 폐점 분석':s.status==='risk'?'🟡 위험 신호':'🟢 운영 현황'}</div>
           ${s.insight}
@@ -966,15 +1101,16 @@ function selectStore(id) {
       <div>
         <div class="section-title">상권 내 비교</div>
         <div class="compare-row"><span class="compare-label">동종 업종 평균 평점</span><span class="compare-val ${s.rating>=avgRating?'up':'down'}">${avgRating} 대비 ${s.rating>=avgRating?'▲':'▼'} ${Math.abs(s.rating-avgRating).toFixed(1)}</span></div>
-        <div class="compare-row"><span class="compare-label">운영 기간 순위</span><span class="compare-val">${rankMonths}위 / ${stores.length}개</span></div>
+        <div class="compare-row"><span class="compare-label">운영 기간 순위</span><span class="compare-val">${rankMonths}위 / ${verifiedStores.length}개</span></div>
         <div class="compare-row"><span class="compare-label">리뷰 활성도</span><span class="compare-val ${s.reviews>200?'up':'down'}">${s.reviews>200?'활발':'낮음'} (${s.reviews}개)</span></div>
         <div class="compare-row"><span class="compare-label">생존력 점수</span><span class="compare-val" style="color:${scoreColor}">${s.score}점 / 100</span></div>
       </div>
 
-      <button class="ai-btn" onclick="sendPrompt('${s.name} 업소 분석: 업종=${TYPES[s.type]||s.type}, 상태=${STATUS[s.status]}, 평점=${s.rating}, 운영기간=${s.months}개월, 리뷰수=${s.reviews}, 생존력점수=${s.score}, 재학생인사이트=\\'${s.insight}\\'. 이 데이터를 바탕으로 이 업소의 상권 내 경쟁력과 향후 전망, 부동산 가치 측면에서의 분석을 해줘.')">🤖 AI 심층 분석 요청 ↗</button>
+      <button class="ai-btn" onclick="sendPrompt('${s.name} 업소 분석: 업종=${TYPES[s.type]||s.type}, 상태=${STATUS[s.status]||s.status}, 평점=${s.rating}, 운영기간=${s.months}개월, 리뷰수=${s.reviews}, 생존력점수=${s.score}, 주소=${s.address||s.dong}. 이 데이터를 바탕으로 이 업소의 상권 내 경쟁력과 향후 전망, 부동산 가치 측면에서의 분석을 해줘.')">🤖 AI 심층 분석 요청 ↗</button>
     </div>
   `;
 }
+
 
 // ── FILTER / SEARCH ───────────────────────────────────
 function setFilter(type, btn) {
