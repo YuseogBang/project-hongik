@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -199,6 +199,76 @@
   .btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 6px; padding: 8px 16px; cursor: pointer; font-size: 12px; font-family: 'Noto Sans KR', sans-serif; }
   .btn-confirm { background: var(--accent); border: none; color: #fff; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-size: 12px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500; }
 
+  /* IMPORT MODE */
+  .import-mode-banner {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    z-index: 20; background: var(--accent); color: #fff;
+    font-size: 12px; font-weight: 500; padding: 8px 18px;
+    border-radius: 99px; white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(108,92,231,.5);
+    animation: bannerIn .2s ease;
+    display: none;
+  }
+  @keyframes bannerIn { from{opacity:0;transform:translateX(-50%) translateY(-8px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+  .btn-import-on { border-color: var(--accent) !important; color: var(--accent) !important; background: rgba(108,92,231,.15) !important; }
+
+  /* NEARBY PLACE PICKER */
+  .place-picker {
+    position: absolute; z-index: 30;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; width: 260px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.6);
+    overflow: hidden;
+    animation: pickerIn .15s ease;
+  }
+  @keyframes pickerIn { from{opacity:0;transform:scale(.95)} to{opacity:1;transform:scale(1)} }
+  .picker-header {
+    padding: 10px 14px; border-bottom: 1px solid var(--border);
+    font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: space-between;
+  }
+  .picker-close { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 16px; line-height: 1; }
+  .picker-list { max-height: 280px; overflow-y: auto; }
+  .picker-list::-webkit-scrollbar { width: 4px; }
+  .picker-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .picker-item {
+    padding: 10px 14px; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background .1s;
+  }
+  .picker-item:last-child { border: none; }
+  .picker-item:hover { background: var(--surface2); }
+  .picker-item-name { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+  .picker-item-meta { font-size: 11px; color: var(--muted); }
+  .picker-item-badge {
+    display: inline-block; font-size: 10px; padding: 1px 6px;
+    border-radius: 99px; margin-left: 6px; vertical-align: middle;
+  }
+  .picker-empty { padding: 20px; text-align: center; color: var(--muted); font-size: 12px; }
+  .picker-loading { padding: 20px; text-align: center; color: var(--muted); font-size: 12px; }
+  .picker-tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .picker-tab {
+    flex: 1; padding: 8px 0; font-size: 11px; font-weight: 500;
+    text-align: center; cursor: pointer; color: var(--muted);
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    transition: all .15s; background: none; border-top: none; border-left: none; border-right: none;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .picker-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .picker-search-box {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 10px; border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .picker-search-box input {
+    flex: 1; background: none; border: none; color: var(--text);
+    font-size: 12px; font-family: 'Noto Sans KR', sans-serif; outline: none;
+  }
+  .picker-search-box input::placeholder { color: var(--muted); }
+  .picker-search-btn {
+    background: var(--accent); border: none; color: #fff;
+    font-size: 11px; padding: 4px 10px; border-radius: 4px;
+    cursor: pointer; font-family: 'Noto Sans KR', sans-serif; white-space: nowrap;
+  }
+
   /* KAKAO MAP CUSTOM MARKER */
   .custom-marker {
     position: relative; cursor: pointer;
@@ -282,12 +352,13 @@
       </div>
       <p>카카오맵 불러오는 중...</p>
     </div>
+    <div class="import-mode-banner" id="import-banner">📌 지도를 클릭하면 주변 업체를 불러옵니다</div>
     <div id="map"></div>
 
     <div class="map-controls">
       <button class="map-btn on" id="btn-markers" onclick="toggleMarkers()">📍 마커 표시</button>
       <button class="map-btn" id="btn-heatmap" onclick="toggleHeatmap()">🔥 밀도 보기</button>
-      <button class="map-btn" onclick="searchNearby()">🔍 주변 음식점 검색</button>
+      <button class="map-btn" id="btn-import" onclick="toggleImportMode()">📌 지도에서 불러오기</button>
       <button class="map-btn" onclick="resetView()">⌂ 홍대 중심</button>
     </div>
 
@@ -421,6 +492,9 @@ let stores = [
 let map, markers = [], clusterer, overlay, showMarkers = true;
 let currentFilter = 'all', searchText = '', selectedId = null;
 let addingMode = false;
+let importMode = false;
+let pickerEl = null;
+let pickerLatlng = null;
 
 // ── MAP INIT ──────────────────────────────────────────
 window.kakao && kakao.maps.load(() => {
@@ -430,11 +504,16 @@ window.kakao && kakao.maps.load(() => {
 
   document.getElementById('loading').style.display = 'none';
 
-  // Click on map to set location when modal is open
+  // Click on map
   kakao.maps.event.addListener(map, 'click', e => {
     if (document.getElementById('modal').style.display !== 'none') {
       document.getElementById('f-lat').value = e.latLng.getLat().toFixed(6);
       document.getElementById('f-lng').value = e.latLng.getLng().toFixed(6);
+      return;
+    }
+    if (importMode) {
+      pickerLatlng = e.latLng;
+      showNearbyPicker(e.latLng, e.point);
     }
   });
 
@@ -631,6 +710,206 @@ function toggleHeatmap() {
   if (btn.classList.contains('on')) {
     alert('💡 실제 서비스에서는 카카오 히트맵 API로 업소 밀도를 시각화합니다.\n현재는 마커 밀집도로 확인하세요.');
   }
+}
+
+function toggleImportMode() {
+  importMode = !importMode;
+  const btn = document.getElementById('btn-import');
+  const banner = document.getElementById('import-banner');
+  btn.classList.toggle('btn-import-on', importMode);
+  banner.style.display = importMode ? 'block' : 'none';
+  if (!importMode) closePicker();
+  document.getElementById('map').style.cursor = importMode ? 'crosshair' : '';
+}
+
+function closePicker() {
+  if (pickerEl) { pickerEl.remove(); pickerEl = null; }
+}
+
+function showNearbyPicker(latlng, point) {
+  closePicker();
+
+  // Create picker positioned near click
+  const mapWrap = document.querySelector('.map-wrap');
+  const rect = mapWrap.getBoundingClientRect();
+
+  pickerEl = document.createElement('div');
+  pickerEl.className = 'place-picker';
+
+  // Position: prefer right of click, flip left if near edge
+  let left = point.x + 16;
+  let top = point.y - 20;
+  if (left + 270 > mapWrap.offsetWidth) left = point.x - 276;
+  if (top + 320 > mapWrap.offsetHeight) top = mapWrap.offsetHeight - 320;
+  if (top < 8) top = 8;
+
+  pickerEl.style.left = left + 'px';
+  pickerEl.style.top = top + 'px';
+  pickerEl.innerHTML = `
+    <div class="picker-header">
+      <span>📍 업체 불러오기</span>
+      <button class="picker-close" onclick="closePicker()">×</button>
+    </div>
+    <div class="picker-tabs">
+      <button class="picker-tab active" id="ptab-nearby" onclick="switchPickerTab('nearby')">📡 주변 자동검색</button>
+      <button class="picker-tab" id="ptab-search" onclick="switchPickerTab('search')">🔍 이름으로 검색</button>
+    </div>
+    <div id="picker-search-area" style="display:none">
+      <div class="picker-search-box">
+        <input type="text" id="picker-search-input" placeholder="업체명 입력 후 Enter"
+          onkeydown="if(event.key==='Enter') runPickerSearch(pickerLatlng)">
+        <button class="picker-search-btn" onclick="runPickerSearch(pickerLatlng)">검색</button>
+      </div>
+    </div>
+    <div class="picker-list" id="picker-list">
+      <div class="picker-loading">🔍 주변 검색 중...</div>
+    </div>`;
+  mapWrap.appendChild(pickerEl);
+  pickerEl._latlng = latlng; // store for search tab
+
+  // Search nearby with Kakao Places
+  const ps = new kakao.maps.services.Places();
+  const categories = ['FD6','CE7','BK9','MT1'];
+  let allResults = [];
+  let done = 0;
+
+  categories.forEach(cat => {
+    ps.categorySearch(cat, (data, status) => {
+      done++;
+      if (status === kakao.maps.services.Status.OK) allResults.push(...data);
+      if (done === categories.length) renderPickerResults(allResults, latlng);
+    }, { location: latlng, radius: 300, size: 10 });
+  });
+}
+
+// 탭 전환
+function switchPickerTab(tab) {
+  document.getElementById('ptab-nearby').classList.toggle('active', tab === 'nearby');
+  document.getElementById('ptab-search').classList.toggle('active', tab === 'search');
+  document.getElementById('picker-search-area').style.display = tab === 'search' ? 'block' : 'none';
+  if (tab === 'search') {
+    document.getElementById('picker-list').innerHTML = '<div class="picker-empty">업체명을 입력하고 검색하세요</div>';
+    setTimeout(() => document.getElementById('picker-search-input')?.focus(), 50);
+  } else {
+    // 다시 주변 검색
+    document.getElementById('picker-list').innerHTML = '<div class="picker-loading">🔍 주변 검색 중...</div>';
+    const latlng = pickerEl?._latlng;
+    if (!latlng) return;
+    const ps = new kakao.maps.services.Places();
+    const categories = ['FD6','CE7','BK9','MT1'];
+    let allResults = [], done = 0;
+    categories.forEach(cat => {
+      ps.categorySearch(cat, (data, status) => {
+        done++;
+        if (status === kakao.maps.services.Status.OK) allResults.push(...data);
+        if (done === categories.length) renderPickerResults(allResults, latlng);
+      }, { location: latlng, radius: 300, size: 10 });
+    });
+  }
+}
+
+function runPickerSearch(latlng) {
+  const q = document.getElementById('picker-search-input')?.value.trim();
+  if (!q) return;
+  document.getElementById('picker-list').innerHTML = '<div class="picker-loading">🔍 검색 중...</div>';
+  const ps = new kakao.maps.services.Places();
+  ps.keywordSearch(q, (data, status) => {
+    if (status !== kakao.maps.services.Status.OK || data.length === 0) {
+      document.getElementById('picker-list').innerHTML = `<div class="picker-empty">"${q}" 검색 결과가 없어요</div>`;
+      return;
+    }
+    renderPickerResults(data, latlng);
+  }, { location: latlng, radius: 2000, size: 15 });
+}
+
+function renderPickerResults(data, latlng) {
+  if (!pickerEl) return;
+  const list = pickerEl.querySelector('#picker-list');
+
+  // Deduplicate by place_id, sort by distance
+  const seen = new Set();
+  const unique = data.filter(p => { if (seen.has(p.id)) return false; seen.add(p.id); return true; });
+  unique.sort((a,b) => parseFloat(a.distance||999) - parseFloat(b.distance||999));
+
+  if (unique.length === 0) {
+    list.innerHTML = '<div class="picker-empty">주변 업체를 찾지 못했어요.<br>다른 위치를 클릭해보세요.</div>';
+    return;
+  }
+
+  const CAT_LABEL = { FD6:'음식점', CE7:'카페', BK9:'주점', MT1:'소매', SW8:'지하철' };
+  const CAT_TYPE  = { FD6:'restaurant', CE7:'cafe', BK9:'bar', MT1:'retail' };
+  const CAT_COLOR = { FD6:'#00b894', CE7:'#6c5ce7', BK9:'#fdcb6e', MT1:'#00cec9' };
+
+  list.innerHTML = unique.slice(0, 12).map(p => {
+    const alreadyAdded = stores.some(s => s.kakaoId === p.id);
+    const catLabel = CAT_LABEL[p.category_group_code] || p.category_group_name || '기타';
+    const catColor = CAT_COLOR[p.category_group_code] || '#8888a0';
+    const dist = p.distance ? p.distance + 'm' : '';
+    return `
+    <div class="picker-item ${alreadyAdded ? 'opacity-50' : ''}" onclick="${alreadyAdded ? '' : `importPlace(${JSON.stringify(p).replace(/"/g,"'")})`}">
+      <div class="picker-item-name">
+        ${p.place_name}
+        ${alreadyAdded ? '<span class="picker-item-badge" style="background:rgba(136,136,160,.2);color:#8888a0">이미 추가됨</span>' : ''}
+      </div>
+      <div class="picker-item-meta">
+        <span class="picker-item-badge" style="background:${catColor}22;color:${catColor}">${catLabel}</span>
+        ${dist ? `<span style="margin-left:4px">${dist}</span>` : ''}
+        ${p.road_address_name ? `<span style="margin-left:4px;opacity:.7">${p.road_address_name}</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function importPlace(p) {
+  // Determine type from category
+  const CAT_TYPE = { FD6:'restaurant', CE7:'cafe', BK9:'bar', MT1:'retail' };
+  const type = CAT_TYPE[p.category_group_code] || 'restaurant';
+
+  // Auto-calc a base score (no real data yet, moderate default)
+  const score = 50;
+
+  const newStore = {
+    id: Date.now(),
+    kakaoId: p.id,
+    name: p.place_name,
+    type,
+    status: 'open',
+    lat: parseFloat(p.y),
+    lng: parseFloat(p.x),
+    rating: 3.5,
+    reviews: 0,
+    months: 12,
+    rent: 300,
+    score,
+    insight: `카카오맵에서 불러온 업체입니다. 주소: ${p.road_address_name || p.address_name}`,
+    reason: null,
+  };
+
+  stores.push(newStore);
+  closePicker();
+  renderAll();
+  updateStats();
+  selectStore(newStore.id);
+
+  // Show toast
+  showToast(`✅ "${p.place_name}" 추가됨 — 상세 정보를 수정해보세요`);
+}
+
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = `position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+      background:#18181c;border:1px solid #2e2e38;color:#e8e8f0;
+      font-size:12px;padding:10px 18px;border-radius:99px;z-index:999;
+      box-shadow:0 4px 16px rgba(0,0,0,.5);transition:opacity .3s;white-space:nowrap;`;
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.style.opacity = '0', 3000);
 }
 
 function searchNearby() {
