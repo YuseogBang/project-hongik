@@ -989,7 +989,7 @@ function renderList() {
       <div class="store-item ${s.status==='closed'?'closed-item':''} ${selectedId===s.id?'active':''}"
            onclick="selectStore(${s.id})" style="${isUnverified?'opacity:.4;':''}">
         <div class="item-top">
-          <div class="status-dot dot-${s.status === 'unverified' ? 'risk' : s.status}"></div>
+          <div class="status-dot dot-${s.status}"></div>
           <div class="item-name">${s.name}</div>
           <div style="font-size:10px;color:var(--muted)">${TYPES[s.type]||s.type}</div>
         </div>
@@ -1030,20 +1030,33 @@ function selectStore(id) {
 
   // unverified: 검증 대기 패널
   if (s.status === 'unverified') {
+    // 카카오/네이버 지도 API는 실시간 영업 여부·영업시간 필드를 제공하지 않으므로,
+    // 자동 판정 대신 사람이 링크를 눌러 직접 확인 후 상태를 반영하는 방식으로 처리한다.
+    const kakaoUrl = s.kakaoUrl || `https://map.kakao.com/?q=${encodeURIComponent(s.name + ' ' + (s.address||s.dong||''))}`;
+    const naverUrl = s.naverUrl || `https://map.naver.com/p/search/${encodeURIComponent(s.name + ' ' + (s.address||s.dong||''))}`;
     dc.innerHTML = `
       <div class="detail-header">
         <div class="detail-name">${s.name}</div>
         <div class="detail-sub">
           ${TYPES[s.type]||s.type}
-          <span class="status-badge badge-unverified">검증 중</span>
+          <span class="status-badge badge-unverified">영업 여부 미확인</span>
         </div>
       </div>
       <div class="detail-body">
         <div class="insight-card" style="text-align:center;padding:20px 12px;">
           <div style="font-size:24px;margin-bottom:10px">🔍</div>
-          <div style="font-size:13px;color:var(--text);margin-bottom:6px">카카오맵 실존 검증 중...</div>
-          <div style="font-size:11px;color:var(--muted)">소상공인 DB 업체를 카카오맵에서<br>확인하고 있어요. 잠시 후 다시 클릭해주세요.</div>
+          <div style="font-size:13px;color:var(--text);margin-bottom:6px">실시간 영업 상태는 카카오/네이버 지도 API로<br>자동 확인이 불가능해요</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.6">지도 검색 API에는 영업시간·영업중 여부 정보가<br>포함되어 있지 않습니다. 아래 링크에서 직접 확인 후<br>상태를 눌러 반영해주세요.</div>
           ${s.address ? `<div style="margin-top:10px;font-size:11px;color:var(--muted)">📍 ${s.address}</div>` : ''}
+        </div>
+        <div style="display:flex;gap:8px">
+          <a href="${kakaoUrl}" target="_blank" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">카카오맵에서 확인 ↗</a>
+          <a href="${naverUrl}" target="_blank" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">네이버지도에서 확인 ↗</a>
+        </div>
+        <div class="section-title" style="margin-top:4px">확인 결과 반영</div>
+        <div style="display:flex;gap:8px">
+          <button class="map-btn" style="flex:1;border-color:var(--success);color:var(--success)" onclick="markVerified(${s.id},'open')">✅ 영업중</button>
+          <button class="map-btn" style="flex:1;border-color:var(--danger);color:var(--danger)" onclick="markVerified(${s.id},'closed')">🚫 폐업/휴업</button>
         </div>
       </div>`;
     return;
@@ -1073,10 +1086,10 @@ function selectStore(id) {
       <div>
         <div class="section-title">핵심 지표</div>
         <div class="metrics">
-          <div class="metric"><div class="metric-val ${s.rating>=4.2?'good':s.rating>=3.5?'warn':'bad'}">★${s.rating}</div><div class="metric-lbl">카카오 평점</div></div>
-          <div class="metric"><div class="metric-val">${s.months}m</div><div class="metric-lbl">운영 기간</div></div>
-          <div class="metric"><div class="metric-val">${s.reviews}</div><div class="metric-lbl">리뷰 수</div></div>
-          <div class="metric"><div class="metric-val" style="color:${scoreColor}">${s.score}</div><div class="metric-lbl">생존력 점수</div></div>
+          <div class="metric"><div class="metric-val ${s.rating==null?'':(s.rating>=4.2?'good':s.rating>=3.5?'warn':'bad')}">${s.rating!=null?'★'+s.rating:'정보 없음'}</div><div class="metric-lbl">카카오 평점</div></div>
+          <div class="metric"><div class="metric-val">${s.months!=null?s.months+'m':'정보 없음'}</div><div class="metric-lbl">운영 기간</div></div>
+          <div class="metric"><div class="metric-val">${s.reviews!=null?s.reviews:'정보 없음'}</div><div class="metric-lbl">리뷰 수</div></div>
+          <div class="metric"><div class="metric-val" style="color:${scoreColor}">${s.score!=null?s.score:'-'}</div><div class="metric-lbl">생존력 점수(참고용)</div></div>
         </div>
       </div>
 
@@ -1100,7 +1113,7 @@ function selectStore(id) {
 
       <div>
         <div class="section-title">상권 내 비교</div>
-        <div class="compare-row"><span class="compare-label">동종 업종 평균 평점</span><span class="compare-val ${s.rating>=avgRating?'up':'down'}">${avgRating} 대비 ${s.rating>=avgRating?'▲':'▼'} ${Math.abs(s.rating-avgRating).toFixed(1)}</span></div>
+        <div class="compare-row"><span class="compare-label">동종 업종 평균 평점</span><span class="compare-val ${s.rating!=null && s.rating>=avgRating?'up':'down'}">${s.rating!=null ? `${avgRating} 대비 ${s.rating>=avgRating?'▲':'▼'} ${Math.abs(s.rating-avgRating).toFixed(1)}` : '정보 없음'}</span></div>
         <div class="compare-row"><span class="compare-label">운영 기간 순위</span><span class="compare-val">${rankMonths}위 / ${verifiedStores.length}개</span></div>
         <div class="compare-row"><span class="compare-label">리뷰 활성도</span><span class="compare-val ${s.reviews>200?'up':'down'}">${s.reviews>200?'활발':'낮음'} (${s.reviews}개)</span></div>
         <div class="compare-row"><span class="compare-label">생존력 점수</span><span class="compare-val" style="color:${scoreColor}">${s.score}점 / 100</span></div>
@@ -1288,28 +1301,50 @@ function renderPickerResults(data, latlng) {
   }).join('');
 }
 
+// 사람이 카카오맵/네이버지도 링크를 눌러 직접 확인한 뒤 결과를 반영.
+// API가 주지 않는 정보를 자동으로 지어내지 않고, 사용자의 확인 행위에만 의존한다.
+function markVerified(id, status) {
+  const s = stores.find(x => x.id === id);
+  if (!s) return;
+  s.status = status;
+  // 평점/리뷰/운영기간/임대료 등은 여전히 미상이므로 null로 남겨두고,
+  // 화면에서는 '정보 없음'으로 표시한다(있지도 않은 값을 추정해 넣지 않음).
+  if (s.score == null) s.score = status === 'closed' ? 30 : 50; // 표시용 최소값, 실측 아님을 UI에 명시
+  renderAll();
+  updateStats();
+  selectStore(id);
+  showToast(status === 'open' ? `✅ "${s.name}" 영업중으로 반영됨` : `🚫 "${s.name}" 폐업/휴업으로 반영됨`);
+}
+
 function importPlace(p) {
   // Determine type from category
   const CAT_TYPE = { FD6:'restaurant', CE7:'cafe', BK9:'bar', MT1:'retail' };
   const type = CAT_TYPE[p.category_group_code] || 'restaurant';
 
-  // Auto-calc a base score (no real data yet, moderate default)
-  const score = 50;
+  const address = p.road_address_name || p.address_name || '';
 
+  // 주의: 카카오 로컬 API(keywordSearch/categorySearch)는 영업시간·실시간 영업 여부
+  // 필드를 제공하지 않는다 (공식문서: https://developers.kakao.com/docs/ko/local/dev-guide).
+  // 여기서 status를 'open'으로 임의 고정하면 실제로는 폐업/휴업인 곳도
+  // 무조건 '영업중'으로 뜨는 오류가 생긴다. 실제 영업 여부는 알 수 없으므로
+  // 정직하게 'unverified'(미확인)로 넣고, 카카오맵/네이버지도 링크로 사람이 직접 확인하게 한다.
   const newStore = {
     id: Date.now(),
     kakaoId: p.id,
     name: p.place_name,
     type,
-    status: 'open',
+    status: 'unverified',
     lat: parseFloat(p.y),
     lng: parseFloat(p.x),
-    rating: 3.5,
-    reviews: 0,
-    months: 12,
-    rent: 300,
-    score,
-    insight: `카카오맵에서 불러온 업체입니다. 주소: ${p.road_address_name || p.address_name}`,
+    rating: null,
+    reviews: null,
+    months: null,
+    rent: null,
+    score: null,
+    address,
+    kakaoUrl: p.place_url || null,
+    naverUrl: `https://map.naver.com/p/search/${encodeURIComponent(p.place_name + ' ' + address)}`,
+    insight: `카카오맵에서 불러온 업체입니다. 주소: ${address}. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.`,
     reason: null,
   };
 
@@ -1320,7 +1355,7 @@ function importPlace(p) {
   selectStore(newStore.id);
 
   // Show toast
-  showToast(`✅ "${p.place_name}" 추가됨 — 상세 정보를 수정해보세요`);
+  showToast(`✅ "${p.place_name}" 추가됨 — 영업 여부는 직접 확인해주세요`);
 }
 
 function showToast(msg) {
