@@ -890,6 +890,31 @@ function cuisineLabel(s) {
   return '한식';
 }
 
+// 출처가 있는 운영 정보만 취향 태그로 표시한다. 값이 없는 경우 태그를 만들어내지 않는다.
+function objectiveTasteTags(s) {
+  const tags = [`#${s.dong || '홍대'}`];
+  if (s.type === 'restaurant') tags.push(`#${cuisineLabel(s)}`);
+
+  (s.certifications || []).forEach(tag => tags.push(`#${tag}`));
+  if (Number.isFinite(s.operatingMonths)) {
+    if (s.operatingMonths >= 360) tags.push('#30년 노포');
+    else if (s.operatingMonths >= 120) tags.push('#10년 이상');
+  }
+
+  const reviewTotal = (Number.isFinite(s.kakaoReviews) ? s.kakaoReviews : 0)
+    + (Number.isFinite(s.naverReviews) ? s.naverReviews : 0);
+  if (reviewTotal >= 1000) tags.push('#리뷰 1,000+');
+  else if (reviewTotal >= 300) tags.push('#리뷰 300+');
+
+  const serviceTags = {
+    reservation:'예약 가능', takeout:'포장 가능', delivery:'배달 가능', parking:'주차 가능',
+    wheelchair:'휠체어 접근', petFriendly:'반려동물 동반', lateNight:'심야 영업',
+    dailyOpen:'매일 영업', noBreak:'브레이크타임 없음'
+  };
+  (s.services || []).forEach(key => { if (serviceTags[key]) tags.push(`#${serviceTags[key]}`); });
+  return tags;
+}
+
 // 홍익대 정문 기준 실거리(m) — 실제 좌표로 계산, 임의값 아님
 const HONGIK = { lat: 37.5511, lng: 126.9256 };
 const HONGDAE_ENTRANCE = { name:'홍대입구역', lat:37.557192, lng:126.924903 };
@@ -1289,12 +1314,9 @@ function selectStore(id) {
     const info = catInfo(s);
     const dist = distToCampus(s);
     const walk = Math.max(1, Math.round(dist / 70)); // 도보 약 70m/분 기준 추정치
-    const tags = [`#${s.dong || '홍대'}`];
-    if (s.type === 'restaurant') tags.push(`#${cuisineLabel(s)}`);
-    // 카드 B는 취향 태그와 별도로, 큐레이터가 쌓아가는 인증·스토리 태그를 보여준다.
-    // 사실 확인이 필요한 공식 인증은 데이터에 명시적으로 들어온 경우에만 표시한다.
+    const tags = objectiveTasteTags(s);
+    // 카드 B는 큐레이터 스토리만 보여주고, 공식 인증은 취향 태그(A)에서만 표시한다.
     const storyTags = s.storyTags || ['재학생 추천', `${s.dong} 골목 스토리`];
-    const certificationTags = s.certifications || [];
     const reviewSources = [
       { name:'카카오맵', rating:s.kakaoRating, reviews:s.kakaoReviews, color:'#f5b400' },
       { name:'네이버지도', rating:s.naverRating, reviews:s.naverReviews, color:'#03c75a' }
@@ -1355,7 +1377,6 @@ function selectStore(id) {
             <div style="font-size:10px;font-weight:900;color:#a43a2d;letter-spacing:.06em;margin-bottom:6px">STORY &amp; CERTIFICATION</div>
             <div style="display:flex;gap:5px;flex-wrap:wrap">
               ${storyTags.map(t=>`<span style="background:#fff;border:1.5px solid #f2b8ae;color:#c1382c;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px">✦ ${t}</span>`).join('')}
-              ${certificationTags.map(t=>`<span style="background:#6b1510;color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px">✓ ${t}</span>`).join('')}
             </div>
           </div>
         </div>
