@@ -599,6 +599,10 @@
       <textarea id="f-insight" placeholder="예: 점심엔 줄 서지만 평일 저녁은 한산함. 회전율 낮아 보임."></textarea>
     </div>
     <div class="form-group">
+      <label>대표 메뉴</label>
+      <input type="text" id="f-signature-menu" placeholder="예: 들기름 막국수, 수육">
+    </div>
+    <div class="form-group">
       <label>폐점 추정 원인</label>
       <select id="f-reason">
         <option value="">해당없음</option>
@@ -1317,23 +1321,15 @@ function selectStore(id) {
     const tags = objectiveTasteTags(s);
     // 카드 B는 큐레이터 스토리만 보여주고, 공식 인증은 취향 태그(A)에서만 표시한다.
     const storyTags = s.storyTags || ['재학생 추천', `${s.dong} 골목 스토리`];
-    const reviewSources = [
-      { name:'카카오맵', rating:s.kakaoRating, reviews:s.kakaoReviews, color:'#f5b400' },
-      { name:'네이버지도', rating:s.naverRating, reviews:s.naverReviews, color:'#03c75a' }
-    ];
-    const ratedSources = reviewSources.filter(source => Number.isFinite(source.rating));
-    const reviewedSources = reviewSources.filter(source => Number.isFinite(source.reviews));
-    const combinedRating = ratedSources.length ? (ratedSources.reduce((sum, source) => sum + source.rating, 0) / ratedSources.length).toFixed(1) : null;
-    const combinedReviews = reviewedSources.length ? reviewedSources.reduce((sum, source) => sum + source.reviews, 0) : null;
-    const reviewSummary = `
+    const signatureMenus = Array.isArray(s.signatureMenu)
+      ? s.signatureMenu
+      : (s.signatureMenu || '').split(',').map(menu => menu.trim()).filter(Boolean);
+    const signatureMenuSection = `
       <div style="margin-top:10px;padding:11px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-          <span style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.06em">MAP REVIEW SUMMARY</span>
-          <span style="font-size:11px;font-weight:800;color:var(--text)">${combinedRating ? `★ ${combinedRating} · 리뷰 ${combinedReviews ?? 0}개` : '평점·리뷰 연동 전'}</span>
-        </div>
-        <div style="display:flex;gap:6px">
-          ${reviewSources.map(source => `<div style="flex:1;background:var(--surface);border-radius:7px;padding:7px 8px"><div style="font-size:10px;color:${source.color};font-weight:800">${source.name}</div><div style="font-size:11px;color:var(--text);margin-top:3px">${Number.isFinite(source.rating) ? `★ ${source.rating} · ${source.reviews ?? 0}개` : '데이터 없음'}</div></div>`).join('')}
-        </div>
+        <div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.06em;margin-bottom:7px">SIGNATURE MENU</div>
+        ${signatureMenus.length
+          ? `<div style="display:flex;flex-wrap:wrap;gap:6px">${signatureMenus.map(menu => `<span style="background:#fdf0e4;color:#8a5a3a;font-size:11px;font-weight:700;padding:4px 8px;border-radius:999px">${menu}</span>`).join('')}</div>`
+          : '<div style="font-size:11px;color:var(--muted)">대표 메뉴 정보가 아직 없어요.</div>'}
       </div>`;
     const bm = !!bookmarks[s.id];
 
@@ -1391,7 +1387,7 @@ function selectStore(id) {
             <a href="${kakaoUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">카카오맵 확인 ↗</a>
             <a href="${naverUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">네이버지도 확인 ↗</a>
           </div>
-          ${reviewSummary}` : ''}
+          ${signatureMenuSection}` : ''}
       </div>`;
     return;
   }
@@ -1820,6 +1816,7 @@ function addStore() {
     status, lat, lng, rating, reviews, months, rent,
     score: status === 'closed' ? Math.min(score, 50) : score,
     insight: document.getElementById('f-insight').value || '아직 인사이트 없음',
+    signatureMenu: document.getElementById('f-signature-menu').value || '',
     reason: document.getElementById('f-reason').value || null,
   };
   stores.push(newStore);
