@@ -517,8 +517,8 @@
 
     <div class="legend">
       <div class="legend-title">범례</div>
-      <div class="legend-row"><div class="legend-dot" style="background:#ff1493"></div>등록된 매장</div>
-      <div class="legend-row" style="opacity:.6"><div class="legend-dot" style="background:#ff1493;opacity:.5"></div>옅은 색 = 영업 여부 미확인</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#00e5ff"></div>등록된 매장</div>
+      <div class="legend-row" style="opacity:.6"><div class="legend-dot" style="background:#00e5ff;opacity:.5"></div>옅은 색 = 영업 여부 미확인</div>
     </div>
   </div>
 
@@ -1046,7 +1046,7 @@ function renderMarkers() {
 
     // 카테고리(맛집/카페/술집) 기준 색상 — 카드 디자인과 통일
     const info = catInfo(s);
-    const color = '#ff1493'; // 카테고리별 색 대신, 지도 위에서 눈에 잘 띄도록 핫핑크로 통일
+    const color = '#00e5ff'; // 지도(빨강/주황/노랑/초록 위주)에서 거의 안 쓰이는 시안색으로 최대한 튀게
     const emoji = info.icon;
 
     const isSelected = selectedId === s.id;
@@ -1095,7 +1095,7 @@ function renderList() {
   const isGoneMode = currentFilter === 'gone';
   const isHallOfFameMode = currentFilter === 'hallOfFame';
   const isRepresentativeMode = currentFilter === 'representative'; // 태그가 붙은 프로토타입 대표 맛집 ~40곳
-  const isCardMode = isTasteMode || isGoneMode || isHallOfFameMode || isRepresentativeMode; // 카드형(태그 중심) 레이아웃을 쓰는 모드들
+  const isCardMode = true; // 이제 모든 필터(전체 포함)가 태그 중심 카드 레이아웃을 씀 — 실제 평점/점수 없는 unverified 매장뿐이라 예전 점수바 레이아웃이 의미가 없었음
 
   let filtered = stores.filter(s => {
     if (isTasteMode) return s.tags && matchScore(s) > 0; // 취향 모드는 unverified 여부와 무관하게 태그 매칭만 봄
@@ -1117,7 +1117,7 @@ function renderList() {
   if (showSortBar) {
     if (listSort === 'name') filtered.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
     else if (listSort === 'category') {
-      const order = ['한식','일식','중식','양식','아시아식','카페·디저트','주점'];
+      const order = ['한식','중식','양식','일식','아시아식','카페·디저트','주점'];
       filtered.sort((a, b) => {
         const diff = order.indexOf(cuisineLabel(a)) - order.indexOf(cuisineLabel(b));
         return diff !== 0 ? diff : a.name.localeCompare(b.name, 'ko');
@@ -1180,7 +1180,7 @@ function renderList() {
             <div style="font-size:10px;color:var(--muted)">${info.label}</div>
           </div>
           <div class="item-meta">${badgeHtml}</div>
-          <div style="font-size:10px;color:var(--muted)">${cardTags.join(' · ')}</div>
+          <div style="font-size:10px;color:var(--text);opacity:.85">${cardTags.join(' · ')}</div>
           ${memoryHtml}
         </div>`;
       }
