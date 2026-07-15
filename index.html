@@ -62,10 +62,20 @@
   }
   .btn-bookmarks:hover { border-color:var(--accent); color:#fff; }
   .topbar-search-row {
-    padding: 10px 16px; border-bottom: 1px solid var(--border);
+    position:relative; padding: 10px 16px; border-bottom: 1px solid var(--border);
     background: var(--surface);
   }
   .topbar-search-row .search-box { margin-bottom: 0; max-width: 480px; }
+  .search-results {
+    display:none; position:absolute; top:48px; left:16px; width:min(480px, calc(100vw - 32px));
+    background:var(--surface); border:1px solid var(--border); border-radius:0 0 10px 10px;
+    box-shadow:0 10px 22px rgba(0,0,0,.35); overflow:hidden; z-index:350;
+  }
+  .search-result { width:100%; display:flex; align-items:center; gap:8px; padding:10px 12px; border:none; border-bottom:1px solid var(--border); background:transparent; color:var(--text); text-align:left; cursor:pointer; font-family:'Pretendard', 'Noto Sans KR', sans-serif; }
+  .search-result:last-child { border-bottom:none; }
+  .search-result:hover { background:var(--surface2); }
+  .search-result-type { margin-left:auto; color:var(--muted); font-size:11px; }
+  .search-empty { padding:12px; color:var(--muted); font-size:12px; }
 
   /* LAYOUT */
   .layout { display: flex; flex: 1; overflow: hidden; }
@@ -458,6 +468,7 @@
     <svg width="14" height="14" fill="none" stroke="#93a8a2" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="search-input" placeholder="업소명 검색..." oninput="filterList()">
   </div>
+  <div class="search-results" id="search-results"></div>
 </div>
 
 <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeSidebar()"></div>
@@ -868,6 +879,17 @@ function catInfo(s) {
   return { icon:'🍜', color:'#e8362a', label:'맛집', labelEn:'Eat' };
 }
 
+function cuisineLabel(s) {
+  const category = s.category || '';
+  if (/중식|중국|마라탕|훠궈/.test(category)) return '중식';
+  if (/일식|초밥|회|라멘|소바|야키토리/.test(category)) return '일식';
+  if (/양식|경양식|피자|버거|파스타/.test(category)) return '양식';
+  if (/베트남|태국|동남아/.test(category)) return '아시아식';
+  if (/카페|빵|도넛|베이커리/.test(category)) return '카페·디저트';
+  if (/주점|맥주|호프/.test(category) || s.type === 'bar') return '주점';
+  return '한식';
+}
+
 // 홍익대 정문 기준 실거리(m) — 실제 좌표로 계산, 임의값 아님
 const HONGIK = { lat: 37.5511, lng: 126.9256 };
 const HONGDAE_ENTRANCE = { name:'홍대입구역', lat:37.557192, lng:126.924903 };
@@ -885,7 +907,8 @@ function setCardStyle(style) {
 }
 
 function toggleBookmark(id) {
-  bookmarks[id] = !bookmarks[id];
+  if (bookmarks[id]) delete bookmarks[id];
+  else bookmarks[id] = true;
   localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
   if (selectedId != null) selectStore(selectedId);
 }
@@ -1266,11 +1289,30 @@ function selectStore(id) {
     const info = catInfo(s);
     const dist = distToCampus(s);
     const walk = Math.max(1, Math.round(dist / 70)); // 도보 약 70m/분 기준 추정치
-    const tags = s.tags && s.tags.length ? s.tags.map(t => `#${t}`) : [`#${s.dong}`];
+    const tags = [`#${s.dong || '홍대'}`];
+    if (s.type === 'restaurant') tags.push(`#${cuisineLabel(s)}`);
     // 카드 B는 취향 태그와 별도로, 큐레이터가 쌓아가는 인증·스토리 태그를 보여준다.
     // 사실 확인이 필요한 공식 인증은 데이터에 명시적으로 들어온 경우에만 표시한다.
     const storyTags = s.storyTags || ['재학생 추천', `${s.dong} 골목 스토리`];
     const certificationTags = s.certifications || [];
+    const reviewSources = [
+      { name:'카카오맵', rating:s.kakaoRating, reviews:s.kakaoReviews, color:'#f5b400' },
+      { name:'네이버지도', rating:s.naverRating, reviews:s.naverReviews, color:'#03c75a' }
+    ];
+    const ratedSources = reviewSources.filter(source => Number.isFinite(source.rating));
+    const reviewedSources = reviewSources.filter(source => Number.isFinite(source.reviews));
+    const combinedRating = ratedSources.length ? (ratedSources.reduce((sum, source) => sum + source.rating, 0) / ratedSources.length).toFixed(1) : null;
+    const combinedReviews = reviewedSources.length ? reviewedSources.reduce((sum, source) => sum + source.reviews, 0) : null;
+    const reviewSummary = `
+      <div style="margin-top:10px;padding:11px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.06em">MAP REVIEW SUMMARY</span>
+          <span style="font-size:11px;font-weight:800;color:var(--text)">${combinedRating ? `★ ${combinedRating} · 리뷰 ${combinedReviews ?? 0}개` : '평점·리뷰 연동 전'}</span>
+        </div>
+        <div style="display:flex;gap:6px">
+          ${reviewSources.map(source => `<div style="flex:1;background:var(--surface);border-radius:7px;padding:7px 8px"><div style="font-size:10px;color:${source.color};font-weight:800">${source.name}</div><div style="font-size:11px;color:var(--text);margin-top:3px">${Number.isFinite(source.rating) ? `★ ${source.rating} · ${source.reviews ?? 0}개` : '데이터 없음'}</div></div>`).join('')}
+        </div>
+      </div>`;
     const bm = !!bookmarks[s.id];
 
     const styleToggle = `
@@ -1327,7 +1369,8 @@ function selectStore(id) {
           <div style="display:flex;gap:8px;margin-top:12px">
             <a href="${kakaoUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">카카오맵 확인 ↗</a>
             <a href="${naverUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">네이버지도 확인 ↗</a>
-          </div>` : ''}
+          </div>
+          ${reviewSummary}` : ''}
       </div>`;
     return;
   }
@@ -1339,10 +1382,12 @@ function selectStore(id) {
   const rankMonths = [...verifiedStores].sort((a,b)=>b.months-a.months).findIndex(x=>x.id===s.id)+1;
   const rentClass = s.rent > 400 ? 'bad' : s.rent > 250 ? 'warn' : 'good';
   const kakaoLink = s.kakaoUrl ? `<a href="${s.kakaoUrl}" target="_blank" style="font-size:10px;color:var(--accent2);text-decoration:none;">카카오맵에서 보기 ↗</a>` : '';
+  const bm = !!bookmarks[s.id];
 
   dc.innerHTML = `
-    <div class="detail-header">
+    <div class="detail-header" style="position:relative">
       <div class="detail-name">${s.name}</div>
+      <button onclick="toggleBookmark(${s.id})" aria-label="저장한 장소에 추가" style="position:absolute;top:14px;right:42px;width:32px;height:32px;border-radius:50%;border:1px solid #e8362a;cursor:pointer;background:${bm?'#e8362a':'var(--surface2)'};color:#fff;font-size:15px">${bm?'♥':'♡'}</button>
       <div class="detail-sub">
         ${TYPES[s.type]||s.type}
         <span class="status-badge badge-${s.status}">${STATUS[s.status]||s.status}</span>
@@ -1405,11 +1450,23 @@ function setFilter(type, btn) {
 function filterList() {
   searchText = document.getElementById('search-input').value.trim();
   renderList();
-  // 검색어를 입력하면 결과를 바로 볼 수 있게 사이드바를 자동으로 열어줌
-  if (searchText) {
-    document.getElementById('sidebar').classList.add('open');
-    updateBackdrop();
-  }
+  const results = document.getElementById('search-results');
+  if (!searchText) { results.style.display = 'none'; results.innerHTML = ''; return; }
+  const matched = stores.filter(s => s.name.includes(searchText)).slice(0, 8);
+  results.style.display = 'block';
+  results.innerHTML = matched.length
+    ? matched.map(s => `<button class="search-result" onclick="selectSearchResult(${s.id})"><span>${s.name}</span><span class="search-result-type">${TYPES[s.type]||'기타'}</span></button>`).join('')
+    : '<div class="search-empty">등록된 업체에서 찾지 못했어요.</div>';
+}
+
+function selectSearchResult(id) {
+  const s = stores.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('search-input').value = s.name;
+  searchText = s.name;
+  document.getElementById('search-results').style.display = 'none';
+  renderList();
+  selectStore(id);
 }
 
 // 우측 상단 길찾기 — 선택된 매장이 있으면 그 매장까지의 카카오맵 길찾기를 새 탭으로 연다
