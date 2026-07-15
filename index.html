@@ -1026,7 +1026,7 @@ function renderMarkers() {
     clusterer = new kakao.maps.MarkerClusterer({
       map,
       averageCenter: true,
-      minLevel: 4,       // 이 레벨보다 축소하면 클러스터로 뭉침
+      minLevel: 3,       // 이 레벨보다 축소하면 클러스터로 뭉침 (기존 4 → 3, 더 적극적으로 뭉치게)
       minClusterSize: 3, // 3개 미만이면 굳이 안 뭉침
       styles: [{
         width: '38px', height: '38px', lineHeight: '38px',
@@ -1053,17 +1053,16 @@ function renderMarkers() {
 
     const isSelected = selectedId === s.id;
     const isUnverified = s.status === 'unverified';
-    const size = isSelected ? 34 : 26;
-    const strokeW = isSelected ? 3 : 2;
-    const strokeColor = isSelected ? '#ffffff' : 'rgba(255,255,255,.6)';
-    const fillOpacity = isUnverified ? 0.55 : 1; // 미검증이어도 카테고리색은 유지하되 살짝 옅게
+    // 카카오 기본 업체 아이콘/라벨과 겹칠 확률과 면적을 줄이기 위해, 이모지+큰 원 대신 작은 점(dot)으로 단순화
+    const size = isSelected ? 16 : 10;
+    const strokeW = isSelected ? 2.5 : 1.5;
+    const strokeColor = '#ffffff';
+    const fillOpacity = isUnverified ? 0.7 : 1; // 미검증이어도 카테고리색은 유지하되 살짝 옅게
 
     // 카카오 기본 라벨과 안 겹치게, 아이콘을 이미지 마커로 그려서 클러스터러가 관리하게 함
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
       <circle cx="${size/2}" cy="${size/2}" r="${size/2 - strokeW}" fill="${color}"
         fill-opacity="${fillOpacity}" stroke="${strokeColor}" stroke-width="${strokeW}"/>
-      <text x="${size/2}" y="${size/2 + 4}" font-size="${isSelected?13:11}"
-        text-anchor="middle">${emoji}</text>
     </svg>`;
     const markerImage = new kakao.maps.MarkerImage(
       'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
@@ -1105,7 +1104,8 @@ function renderList() {
     if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
     if (isHallOfFameMode) return (s.certifications || []).includes('홍대생 명예학식');
     if (isRepresentativeMode) return s.tags && s.tags.length > 0; // 취향 태그가 붙어있는 프로토타입 40곳
-    if (s.status === 'unverified' && currentFilter !== 'all' && !isBookmarkMode) return false;
+    // 예전엔 unverified 매장을 '전체' 필터 말고는 다 숨겼는데, 지금 매장이 전부 unverified 상태라
+    // 음식점/카페/주점/동네 필터를 눌러도 아무것도 안 뜨는 버그였음. 그 예외 규칙을 제거함.
     const matchFilter = currentFilter === 'all'
       || (isBookmarkMode && bookmarks[s.id])
       || s.type === currentFilter
