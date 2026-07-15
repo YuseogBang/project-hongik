@@ -1772,13 +1772,15 @@ function runPickerSearch(latlng) {
   if (!q) return;
   document.getElementById('picker-list').innerHTML = '<div class="picker-loading">🔍 검색 중...</div>';
   const ps = new kakao.maps.services.Places();
+  // 이름으로 직접 검색할 땐 거리 제한을 두지 않는다 (동네가 다르면 못 찾는 문제 방지).
+  // 결과는 renderPickerResults에서 클릭 지점 기준 거리순으로 정렬해서 보여준다.
   ps.keywordSearch(q, (data, status) => {
     if (status !== kakao.maps.services.Status.OK || data.length === 0) {
       document.getElementById('picker-list').innerHTML = `<div class="picker-empty">"${q}" 검색 결과가 없어요</div>`;
       return;
     }
     renderPickerResults(data, latlng);
-  }, { location: latlng, radius: 2000, size: 15 });
+  }, { size: 15 });
 }
 
 function renderPickerResults(data, latlng) {
