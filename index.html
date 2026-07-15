@@ -886,9 +886,9 @@ let stores = [
 
 let map, markers = [], storeMarkers = [], clusterer, overlay, hoverOverlay, showMarkers = true;
 let currentFilter = 'all', searchText = '', selectedId = null;
-let hallOfFameSort = 'default'; // 'default' | 'name' | 'distance'
-function setHallOfFameSort(key) {
-  hallOfFameSort = (hallOfFameSort === key) ? 'default' : key; // 같은 버튼 다시 누르면 기본 정렬로 해제
+let listSort = 'default'; // 'default' | 'name' | 'distance' | 'category' — 명예학식뿐 아니라 모든 필터에 공통 적용
+function setListSort(key) {
+  listSort = (listSort === key) ? 'default' : key; // 같은 버튼 다시 누르면 기본 정렬로 해제
   renderList();
 }
 
@@ -1316,16 +1316,17 @@ function renderList() {
   });
 
   if (isTasteMode) filtered.sort((a, b) => matchScore(b) - matchScore(a));
-  if (isHallOfFameMode) {
-    if (hallOfFameSort === 'name') filtered.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
-    else if (hallOfFameSort === 'category') {
+  const showSortBar = !isTasteMode; // 취향 매칭 모드만 자체 정렬(일치도순)을 쓰고, 나머지 필터는 전부 공통 정렬 버튼을 씀
+  if (showSortBar) {
+    if (listSort === 'name') filtered.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+    else if (listSort === 'category') {
       const order = ['한식','일식','중식','양식','아시아식','카페·디저트','주점'];
       filtered.sort((a, b) => {
         const diff = order.indexOf(cuisineLabel(a)) - order.indexOf(cuisineLabel(b));
         return diff !== 0 ? diff : a.name.localeCompare(b.name, 'ko');
       });
     }
-    else if (hallOfFameSort === 'distance') filtered.sort((a, b) => distToCampus(a) - distToCampus(b));
+    else if (listSort === 'distance') filtered.sort((a, b) => distToCampus(a) - distToCampus(b));
   }
 
   const emptyMsg = isTasteMode ? '취향에 맞는 매장이 아직 없어요 (프로토타입 40개 중에서만 찾아요)'
@@ -1340,16 +1341,16 @@ function renderList() {
     ? `<button class="map-btn" style="width:100%;margin-bottom:10px" onclick="openModal('closed')">+ 사라진 가게 등록하기</button>`
     : '';
 
-  // 명예학식 모드에서는 가나다순 / 거리순 정렬 버튼을 리스트 맨 위에 고정으로 띄운다.
+  // 취향 매칭 모드를 제외한 모든 필터에서, 리스트 맨 위에 공통 정렬 버튼을 띄운다.
   const sortBtn = (key, label) => {
-    const on = hallOfFameSort === key;
-    return `<button onclick="setHallOfFameSort('${key}')" style="flex:1;padding:6px 0;border-radius:8px;border:1px solid ${on ? 'var(--accent)' : 'var(--border)'};background:${on ? 'var(--accent)' : 'var(--surface2)'};color:${on ? '#fff' : 'var(--muted)'};font-size:11px;font-weight:${on ? '700' : '500'};cursor:pointer;font-family:'Pretendard','Noto Sans KR',sans-serif">${label}</button>`;
+    const on = listSort === key;
+    return `<button onclick="setListSort('${key}')" style="flex:1;padding:6px 0;border-radius:8px;border:1px solid ${on ? 'var(--accent)' : 'var(--border)'};background:${on ? 'var(--accent)' : 'var(--surface2)'};color:${on ? '#fff' : 'var(--muted)'};font-size:11px;font-weight:${on ? '700' : '500'};cursor:pointer;font-family:'Pretendard','Noto Sans KR',sans-serif">${label}</button>`;
   };
-  const hallOfFameSortHtml = isHallOfFameMode
+  const sortBarHtml = showSortBar
     ? `<div style="display:flex;gap:6px;margin-bottom:10px">${sortBtn('category','카테고리순')}${sortBtn('name','가나다순')}${sortBtn('distance','거리순')}</div>`
     : '';
 
-  list.innerHTML = (isGoneMode ? goneAddButtonHtml : '') + (isHallOfFameMode ? hallOfFameSortHtml : '') + (filtered.length === 0
+  list.innerHTML = (isGoneMode ? goneAddButtonHtml : '') + (showSortBar ? sortBarHtml : '') + (filtered.length === 0
     ? `<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">${emptyMsg}</div>`
     : filtered.map(s => {
       const isUnverified = s.status === 'unverified';
