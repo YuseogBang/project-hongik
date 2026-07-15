@@ -177,24 +177,43 @@
 
   /* LANDING */
   .landing-overlay {
-    position: fixed; inset: 0; background: var(--bg);
-    z-index: 500; display: flex; align-items: center; justify-content: center;
-    text-align: center; padding: 24px;
+    position: fixed; inset: 0; z-index: 500;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; text-align: center;
+    background: #3a0f0b url('hongdae-hero.jpg') center/cover no-repeat;
   }
-  .landing-card { max-width: 420px; }
-  .landing-emoji { font-size: 40px; margin-bottom: 12px; }
-  .landing-card h1 { font-size: 26px; font-weight: 700; line-height: 1.35; margin-bottom: 16px; }
-  .landing-card p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 8px; }
-  .landing-note { font-size: 11px; opacity: .7; margin-bottom: 24px; }
+  /* 레퍼런스와 같은 톤(붉은 벽돌색)으로 사진을 물들이는 오버레이 */
+  .landing-overlay::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(120% 120% at 50% 45%,
+      rgba(120,32,20,.4) 0%, rgba(58,15,11,.72) 55%, rgba(18,5,4,.94) 100%);
+  }
+  /* 그레인(노이즈) 텍스처 — 이미지 없이 SVG 필터로 생성 */
+  .landing-overlay::after {
+    content: ''; position: absolute; inset: 0; opacity: .35; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .landing-card {
+    position: relative; z-index: 1; padding: 0 24px; max-width: 560px;
+  }
+  .landing-card h1 {
+    font-family: 'Noto Sans KR', sans-serif; white-space: nowrap;
+    font-size: clamp(30px, 8.5vw, 78px); font-weight: 900; letter-spacing: -0.02em;
+    line-height: 1; color: #fdf8f2; margin: 0 0 20px; text-transform: uppercase;
+  }
+  .landing-card p {
+    font-size: 13px; color: rgba(253,248,242,.8); line-height: 1.6; margin: 0 auto 10px; max-width: 420px;
+  }
+  .landing-note { font-size: 11px; color: rgba(253,248,242,.5); margin: 4px 0 80px; }
+  .landing-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
   .landing-btn {
-    display: block; width: 100%; margin-top: 10px; padding: 12px;
-    border-radius: 10px; border: 1px solid var(--border); background: var(--surface2);
-    color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer;
+    padding: 13px 22px; border-radius: 99px; border: 1.5px solid rgba(253,248,242,.4);
+    background: transparent; color: #fdf8f2; font-size: 14px; font-weight: 600; cursor: pointer;
     font-family: 'Noto Sans KR', sans-serif; transition: all .15s;
   }
-  .landing-btn:hover { border-color: var(--muted); }
-  .landing-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .landing-btn.primary:hover { opacity: .9; }
+  .landing-btn:hover { border-color: #fdf8f2; background: rgba(253,248,242,.08); }
+  .landing-btn.primary { background: #ff3b3b; border-color: #ff3b3b; color: #fff; }
+  .landing-btn.primary:hover { background: #ff5555; }
 
   /* MODAL */
   .modal-overlay {
@@ -337,12 +356,13 @@
 <!-- LANDING -->
 <div class="landing-overlay" id="landing">
   <div class="landing-card">
-    <div class="landing-emoji">🎯</div>
-    <h1>취향대로 찾는<br>홍대 지도</h1>
-    <p>매운맛, 조용한 곳, 가성비, 데이트 코스…<br>취향을 고르면 나한테 맞는 홍대 매장만 골라볼 수 있어요.</p>
+    <h1>Hongdae Map</h1>
+    <p>취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.</p>
     <p class="landing-note">지금은 40개 매장에만 취향 태그가 붙어있는 프로토타입이에요.</p>
-    <button class="landing-btn primary" id="landing-primary" onclick="landingStart()">취향 고르고 시작하기</button>
-    <button class="landing-btn" onclick="landingSkip()">그냥 전체 지도 볼래요</button>
+    <div class="landing-btns">
+      <button class="landing-btn primary" id="landing-primary" onclick="landingStart()">취향 고르고 시작하기</button>
+      <button class="landing-btn" onclick="landingSkip()">그냥 전체 지도 볼래요</button>
+    </div>
   </div>
 </div>
 
