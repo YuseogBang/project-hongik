@@ -439,7 +439,7 @@
       <h1>Hongdae Map</h1>
     </div>
     <p>취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.</p>
-    <p class="landing-note">지금은 40개 매장에만 취향 태그가 붙어있는 프로토타입이에요.</p>
+    <p class="landing-note">홍대 대표 맛집 40곳을 기준으로 취향을 매칭해드려요.</p>
     <div class="landing-btns">
       <button class="landing-btn primary" id="landing-primary" onclick="landingStart()">취향 고르고 시작하기</button>
       <button class="landing-btn" onclick="landingSkip()">그냥 전체 지도 볼래요</button>
@@ -487,7 +487,6 @@
         <button class="chip" onclick="setFilter('restaurant',this)">음식점</button>
         <button class="chip" onclick="setFilter('cafe',this)">카페</button>
         <button class="chip" onclick="setFilter('bar',this)">주점</button>
-        <button class="chip" onclick="setFilter('closed',this)">폐점만</button>
         <button class="chip" onclick="setFilter('서교동',this)">서교동</button>
         <button class="chip" onclick="setFilter('연남동',this)">연남동</button>
         <button class="chip" onclick="setFilter('합정동',this)">합정동</button>
@@ -541,7 +540,7 @@
 <div class="modal-overlay" id="taste-modal" style="display:none">
   <div class="modal">
     <h4>🎯 내 취향은?</h4>
-    <p style="font-size:12px;color:var(--muted);margin:0 0 12px">좋아하는 걸 2개 이상 골라주세요. 아직 40개 매장에만 태그가 붙어있어요 (프로토타입).</p>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 12px">좋아하는 걸 2개 이상 골라주세요. 홍대 대표 맛집 40곳 중에서 골라드려요.</p>
     <div id="taste-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px"></div>
     <div style="display:flex;gap:8px">
       <button class="map-btn" onclick="closeTasteModal()" style="flex:1">닫기</button>
@@ -1002,7 +1001,7 @@ function submitComment(storeId) {
   selectStore(storeId); // 다시 그려서 새 코멘트 반영
 }
 
-// ── 취향 매칭 (프로토타입: 40개 매장만 tags 보유) ──────
+// ── 취향 매칭 (홍대 대표 맛집 40곳에 취향 태그 부여) ──────
 const TASTE_TAGS = ['매운맛','혼밥','데이트','인스타감성','조용한','시끌벅적','가성비','술안주','디저트','로컬단골'];
 let userTastes = JSON.parse(localStorage.getItem('userTastes') || '[]');
 
@@ -1300,12 +1299,14 @@ function renderList() {
   const isBookmarkMode = currentFilter === 'bookmarks';
   const isGoneMode = currentFilter === 'gone';
   const isHallOfFameMode = currentFilter === 'hallOfFame';
-  const isCardMode = isTasteMode || isGoneMode || isHallOfFameMode; // 카드형(태그 중심) 레이아웃을 쓰는 모드들
+  const isRepresentativeMode = currentFilter === 'representative'; // 태그가 붙은 프로토타입 대표 맛집 ~40곳
+  const isCardMode = isTasteMode || isGoneMode || isHallOfFameMode || isRepresentativeMode; // 카드형(태그 중심) 레이아웃을 쓰는 모드들
 
   let filtered = stores.filter(s => {
     if (isTasteMode) return s.tags && matchScore(s) > 0; // 취향 모드는 unverified 여부와 무관하게 태그 매칭만 봄
     if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
     if (isHallOfFameMode) return (s.certifications || []).includes('홍대생 명예학식');
+    if (isRepresentativeMode) return s.tags && s.tags.length > 0; // 취향 태그가 붙어있는 프로토타입 40곳
     if (s.status === 'unverified' && currentFilter !== 'all' && !isBookmarkMode) return false;
     const matchFilter = currentFilter === 'all'
       || (isBookmarkMode && bookmarks[s.id])
@@ -1329,10 +1330,11 @@ function renderList() {
     else if (listSort === 'distance') filtered.sort((a, b) => distToCampus(a) - distToCampus(b));
   }
 
-  const emptyMsg = isTasteMode ? '취향에 맞는 매장이 아직 없어요 (프로토타입 40개 중에서만 찾아요)'
+  const emptyMsg = isTasteMode ? '취향에 맞는 매장이 아직 없어요 (홍대 대표 맛집 40곳 중에서만 찾아요)'
     : isBookmarkMode ? '저장한 장소가 아직 없어요'
     : isGoneMode ? '아직 등록된 "사라진 가게"가 없어요.'
     : isHallOfFameMode ? '아직 등록된 명예학식이 없어요.'
+    : isRepresentativeMode ? '아직 등록된 대표 맛집이 없어요.'
     : '검색 결과 없음';
 
   // "사라진 가게" 모드에서는 몇 개가 등록돼 있든 상관없이 계속 추가할 수 있게,
@@ -1367,10 +1369,11 @@ function renderList() {
       if (isCardMode) {
         // 취향태그 카드와 같은 톤으로 통일된 큐레이션 카드 레이아웃
         const info = catInfo(s);
-        const cardTags = isTasteMode ? (s.tags || []).map(t => `#${t}`) : objectiveTasteTags(s);
+        const cardTags = (isTasteMode || isRepresentativeMode) ? (s.tags || []).map(t => `#${t}`) : objectiveTasteTags(s);
         const badgeHtml = isTasteMode ? matchBadge
           : isGoneMode ? '<span style="font-size:10px;color:#93a8a2;font-weight:600">👻 사라짐</span>'
-          : isHallOfFameMode ? '<span style="font-size:10px;color:#a9744f;font-weight:700">🏅 명예학식</span>' : '';
+          : isHallOfFameMode ? '<span style="font-size:10px;color:#a9744f;font-weight:700">🏅 명예학식</span>'
+          : isRepresentativeMode ? '<span style="font-size:10px;color:#a9744f;font-weight:700">⭐ 대표 맛집</span>' : '';
         const memoryHtml = (isGoneMode && s.memory)
           ? `<div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;font-style:italic">“${s.memory}”</div>` : '';
         return `
