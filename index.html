@@ -511,6 +511,7 @@
       <button class="map-btn on" id="btn-markers" onclick="toggleMarkers()">📍 마커 표시</button>
       <button class="map-btn" id="btn-import" onclick="toggleImportMode()">📌 지도에서 불러오기</button>
       <button class="map-btn" onclick="resetView()">⌂ 홍대 중심</button>
+      <button class="map-btn" id="btn-export" onclick="exportChanges()">💾 추가한 매장 내보내기 (<span id="export-count">0</span>)</button>
     </div>
 
     <div class="legend">
@@ -870,6 +871,29 @@ let stores = [
 
 let map, markers = [], storeMarkers = [], clusterer, overlay, hoverOverlay, showMarkers = true;
 let currentFilter = 'all', searchText = '', selectedId = null;
+
+// 이번 브라우저 세션에서 새로 추가한 매장만 따로 모아둠 (파일 자체엔 저장 안 됨 — 내보내기로 꺼내야 함)
+let sessionAdditions = [];
+function trackAddition(store) {
+  sessionAdditions.push(store);
+  const el = document.getElementById('export-count');
+  if (el) el.textContent = sessionAdditions.length;
+}
+
+function exportChanges() {
+  if (sessionAdditions.length === 0) {
+    alert('아직 추가한 매장이 없어요.\n지도에서 불러오기로 매장을 먼저 추가해주세요.');
+    return;
+  }
+  const blob = new Blob([JSON.stringify(sessionAdditions, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  const now = new Date();
+  const stamp = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
+  a.href = URL.createObjectURL(blob);
+  a.download = `new_stores_${stamp}.json`;
+  a.click();
+  showToast(`💾 매장 ${sessionAdditions.length}곳을 파일로 내보냈어요`);
+}
 
 // ── 매장 카드 디자인 (Claude Design 시안 반영) ──────────
 let cardStyle = localStorage.getItem('cardStyle') || 'A';
@@ -1734,6 +1758,7 @@ function importPlace(p) {
   };
 
   stores.push(newStore);
+  trackAddition(newStore);
   closePicker();
   renderAll();
   updateStats();
@@ -1820,6 +1845,7 @@ function addStore() {
     reason: document.getElementById('f-reason').value || null,
   };
   stores.push(newStore);
+  trackAddition(newStore);
   closeModal();
   renderAll();
   updateStats();
