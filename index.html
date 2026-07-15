@@ -968,6 +968,22 @@ function toggleBookmark(id) {
   if (selectedId != null) selectStore(selectedId);
 }
 
+// ── 사라진 가게 코멘트 (브라우저에 저장 — 북마크와 같은 방식) ──
+function loadComments(storeId) {
+  const all = JSON.parse(localStorage.getItem('storeComments') || '{}');
+  return all[storeId] || [];
+}
+function submitComment(storeId) {
+  const input = document.getElementById(`comment-input-${storeId}`);
+  const text = input.value.trim();
+  if (!text) return;
+  const all = JSON.parse(localStorage.getItem('storeComments') || '{}');
+  if (!all[storeId]) all[storeId] = [];
+  all[storeId].push({ text, date: new Date().toLocaleDateString('ko-KR') });
+  localStorage.setItem('storeComments', JSON.stringify(all));
+  selectStore(storeId); // 다시 그려서 새 코멘트 반영
+}
+
 // ── 취향 매칭 (프로토타입: 40개 매장만 tags 보유) ──────
 const TASTE_TAGS = ['매운맛','혼밥','데이트','인스타감성','조용한','시끌벅적','가성비','술안주','디저트','로컬단골'];
 let userTastes = JSON.parse(localStorage.getItem('userTastes') || '[]');
@@ -1285,11 +1301,17 @@ function renderList() {
 
   const emptyMsg = isTasteMode ? '취향에 맞는 매장이 아직 없어요 (프로토타입 40개 중에서만 찾아요)'
     : isBookmarkMode ? '저장한 장소가 아직 없어요'
-    : isGoneMode ? `아직 등록된 "사라진 가게"가 없어요.<br><button class="map-btn" style="margin-top:10px" onclick="openModal('closed')">+ 사라진 가게 등록하기</button>`
+    : isGoneMode ? '아직 등록된 "사라진 가게"가 없어요.'
     : isHallOfFameMode ? '아직 등록된 명예학식이 없어요.'
     : '검색 결과 없음';
 
-  list.innerHTML = filtered.length === 0
+  // "사라진 가게" 모드에서는 몇 개가 등록돼 있든 상관없이 계속 추가할 수 있게,
+  // 리스트 맨 위에 항상 등록 버튼을 띄워둔다 (예전엔 리스트가 비어있을 때만 보여서 1개 등록하면 사라지는 버그가 있었음).
+  const goneAddButtonHtml = isGoneMode
+    ? `<button class="map-btn" style="width:100%;margin-bottom:10px" onclick="openModal('closed')">+ 사라진 가게 등록하기</button>`
+    : '';
+
+  list.innerHTML = (isGoneMode ? goneAddButtonHtml : '') + (filtered.length === 0
     ? `<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">${emptyMsg}</div>`
     : filtered.map(s => {
       const isUnverified = s.status === 'unverified';
@@ -1344,7 +1366,7 @@ function renderList() {
           <div class="score-num" style="color:${scoreColor}">${isUnverified?'…':s.score}</div>
         </div>
       </div>`;
-    }).join('');
+    }).join(''));
 }
 
 function updateStats() {
@@ -1446,6 +1468,49 @@ function selectStore(id) {
             <a href="${naverUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">네이버지도 확인 ↗</a>
           </div>
           ${signatureMenuSection}` : ''}
+      </div>`;
+    return;
+  }
+
+  // 사라진 가게(폐업 확인됨): 상권분석 지표는 의미가 없으므로 다 빼고,
+  // 그 가게를 좋아했던 사람들의 코멘트를 모으는 추모/추억 카드로 대체한다.
+  if (s.status === 'closed') {
+    const info = catInfo(s);
+    const comments = loadComments(s.id);
+    const commentsHtml = comments.length
+      ? comments.map(c => `
+          <div style="background:var(--surface2);border-radius:10px;padding:10px 12px;margin-bottom:8px">
+            <div style="font-size:12px;color:var(--text);line-height:1.5">“${c.text}”</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:4px">${c.date}</div>
+          </div>`).join('')
+      : `<div style="font-size:12px;color:var(--muted);text-align:center;padding:14px 0">아직 남겨진 코멘트가 없어요.<br>이 가게를 좋아했다면 첫 코멘트를 남겨주세요.</div>`;
+
+    dc.innerHTML = `
+      <div class="detail-body" style="padding:14px">
+        <div style="background:#fff8f0;border-radius:22px;box-shadow:0 10px 32px rgba(140,30,20,.1);overflow:hidden;border:2px dashed #d8b8a8">
+          <div style="background:#4a4038;padding:10px 16px;display:flex;align-items:center;gap:8px">
+            <div style="font-family:'Pretendard',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:.7px">👻 사라진 가게</div>
+          </div>
+          <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:52px;height:52px;border-radius:14px;background:#e8e2da;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;filter:grayscale(60%)">${info.icon}</div>
+              <div style="flex:1">
+                <div style="font-size:17px;font-weight:900;color:#6b1510">${s.name}</div>
+                <div style="font-size:11px;color:var(--muted)">${s.dong || ''} · ${info.label}</div>
+              </div>
+            </div>
+            ${s.memory ? `<div style="background:#fff0e6;border-radius:12px;padding:10px 12px;font-size:12px;color:#6b1510;line-height:1.6;font-style:italic">“${s.memory}”</div>` : ''}
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top:14px">이 가게를 좋아했던 사람들의 코멘트</div>
+        <div>${commentsHtml}</div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <input type="text" id="comment-input-${s.id}" placeholder="여기서 자주 먹었던 메뉴, 추억을 남겨주세요"
+            style="flex:1;padding:9px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;font-family:'Pretendard','Noto Sans KR',sans-serif"
+            onkeydown="if(event.key==='Enter')submitComment(${s.id})">
+          <button class="map-btn" onclick="submitComment(${s.id})">등록</button>
+        </div>
       </div>`;
     return;
   }
