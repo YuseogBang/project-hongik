@@ -460,6 +460,7 @@
   </div>
   <div class="topbar-right">
     <button class="btn-bookmarks" onclick="showBookmarks()">♥ 저장한 장소</button>
+    <button class="btn-bookmarks" onclick="showGoneStores()">👻 사라진 가게</button>
     <button class="btn-directions" onclick="goDirections()">🧭 길찾기</button>
   </div>
 </div>
@@ -481,6 +482,7 @@
     <div class="sidebar-top">
       <div class="filter-chips">
         <button class="chip" id="btn-taste" onclick="openTasteModal()" style="background:#e8362a;border-color:#e8362a;color:#fff;font-weight:700;box-shadow:0 2px 6px rgba(232,54,42,.3)">🎯 내 취향 찾기</button>
+        <button class="chip" onclick="setFilter('hallOfFame',this)" style="background:#fdf0e4;border-color:#a9744f;color:#8a5a3a;font-weight:700">🏅 홍대생 명예학식</button>
         <button class="chip on" onclick="setFilter('all',this)">전체</button>
         <button class="chip" onclick="setFilter('restaurant',this)">음식점</button>
         <button class="chip" onclick="setFilter('cafe',this)">카페</button>
@@ -1262,9 +1264,14 @@ function renderList() {
   const isDongFilter = dongFilters.includes(currentFilter);
   const isTasteMode = currentFilter === 'taste';
   const isBookmarkMode = currentFilter === 'bookmarks';
+  const isGoneMode = currentFilter === 'gone';
+  const isHallOfFameMode = currentFilter === 'hallOfFame';
+  const isCardMode = isTasteMode || isGoneMode || isHallOfFameMode; // 카드형(태그 중심) 레이아웃을 쓰는 모드들
 
   let filtered = stores.filter(s => {
     if (isTasteMode) return s.tags && matchScore(s) > 0; // 취향 모드는 unverified 여부와 무관하게 태그 매칭만 봄
+    if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
+    if (isHallOfFameMode) return (s.certifications || []).includes('홍대생 명예학식');
     if (s.status === 'unverified' && currentFilter !== 'all' && !isBookmarkMode) return false;
     const matchFilter = currentFilter === 'all'
       || (isBookmarkMode && bookmarks[s.id])
@@ -1276,10 +1283,14 @@ function renderList() {
 
   if (isTasteMode) filtered.sort((a, b) => matchScore(b) - matchScore(a));
 
+  const emptyMsg = isTasteMode ? '취향에 맞는 매장이 아직 없어요 (프로토타입 40개 중에서만 찾아요)'
+    : isBookmarkMode ? '저장한 장소가 아직 없어요'
+    : isGoneMode ? `아직 등록된 "사라진 가게"가 없어요.<br><button class="map-btn" style="margin-top:10px" onclick="openModal('closed')">+ 사라진 가게 등록하기</button>`
+    : isHallOfFameMode ? '아직 등록된 명예학식이 없어요.'
+    : '검색 결과 없음';
+
   list.innerHTML = filtered.length === 0
-    ? `<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">
-        ${isTasteMode ? '취향에 맞는 매장이 아직 없어요 (프로토타입 40개 중에서만 찾아요)' : isBookmarkMode ? '저장한 장소가 아직 없어요' : '검색 결과 없음'}
-      </div>`
+    ? `<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">${emptyMsg}</div>`
     : filtered.map(s => {
       const isUnverified = s.status === 'unverified';
       const scoreColor = isUnverified ? '#93a8a2' : getScoreColor(s.score);
@@ -1291,24 +1302,47 @@ function renderList() {
       const matchBadge = isTasteMode
         ? `<span style="font-size:10px;color:#e8362a;font-weight:600">🎯 ${match}개 일치</span>`
         : '';
+
+      if (isCardMode) {
+        // 취향태그 카드와 같은 톤으로 통일된 큐레이션 카드 레이아웃
+        const info = catInfo(s);
+        const cardTags = isTasteMode ? (s.tags || []).map(t => `#${t}`) : objectiveTasteTags(s);
+        const badgeHtml = isTasteMode ? matchBadge
+          : isGoneMode ? '<span style="font-size:10px;color:#93a8a2;font-weight:600">👻 사라짐</span>'
+          : isHallOfFameMode ? '<span style="font-size:10px;color:#a9744f;font-weight:700">🏅 명예학식</span>' : '';
+        const memoryHtml = (isGoneMode && s.memory)
+          ? `<div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;font-style:italic">“${s.memory}”</div>` : '';
+        return `
+        <div class="store-item ${selectedId===s.id?'active':''}" onclick="selectStore(${s.id})"
+             style="${isGoneMode?'opacity:.75;':''}">
+          <div class="item-top">
+            <div style="width:8px;height:8px;border-radius:50%;background:${info.color};flex:none"></div>
+            <div class="item-name">${s.name}</div>
+            <div style="font-size:10px;color:var(--muted)">${info.label}</div>
+          </div>
+          <div class="item-meta">${badgeHtml}</div>
+          <div style="font-size:10px;color:var(--muted)">${cardTags.join(' · ')}</div>
+          ${memoryHtml}
+        </div>`;
+      }
+
       return `
       <div class="store-item ${s.status==='closed'?'closed-item':''} ${selectedId===s.id?'active':''}"
-           onclick="selectStore(${s.id})" style="${isUnverified && !isTasteMode?'opacity:.4;':''}">
+           onclick="selectStore(${s.id})" style="${isUnverified?'opacity:.4;':''}">
         <div class="item-top">
           <div class="status-dot dot-${s.status}"></div>
           <div class="item-name">${s.name}</div>
           <div style="font-size:10px;color:var(--muted)">${TYPES[s.type]||s.type}</div>
         </div>
         <div class="item-meta">
-          ${isTasteMode ? matchBadge : `<span>${ratingTxt}</span>`}
+          <span>${ratingTxt}</span>
           ${monthsTxt?`<span>${monthsTxt}</span>`:''}
           ${reviewsTxt?`<span>${reviewsTxt}</span>`:''}
         </div>
-        ${isTasteMode ? `<div style="font-size:10px;color:var(--muted)">${(s.tags||[]).join(' · ')}</div>` : `
         <div class="score-row">
           <div class="score-bar"><div class="score-fill" style="width:${scorePct}%;background:${scoreColor}"></div></div>
           <div class="score-num" style="color:${scoreColor}">${isUnverified?'…':s.score}</div>
-        </div>`}
+        </div>
       </div>`;
     }).join('');
 }
@@ -1521,6 +1555,15 @@ function goDirections() {
 
 function showBookmarks() {
   currentFilter = 'bookmarks';
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  renderList();
+  document.getElementById('sidebar').classList.add('open');
+  updateBackdrop();
+}
+
+// 폐업/사라진 가게 큐레이션 — 홍대에서 없어진, 추억의 장소를 모아 보여줌
+function showGoneStores() {
+  currentFilter = 'gone';
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
   renderList();
   document.getElementById('sidebar').classList.add('open');
@@ -1810,11 +1853,12 @@ function resetView() {
 }
 
 // ── MODAL ─────────────────────────────────────────────
-function openModal() {
+function openModal(defaultStatus) {
   document.getElementById('modal').style.display = 'flex';
   // Default to Hongdae center
   document.getElementById('f-lat').value = '37.5563';
   document.getElementById('f-lng').value = '126.9241';
+  if (defaultStatus) document.getElementById('f-status').value = defaultStatus;
 }
 function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
@@ -1843,6 +1887,8 @@ function addStore() {
     insight: document.getElementById('f-insight').value || '아직 인사이트 없음',
     signatureMenu: document.getElementById('f-signature-menu').value || '',
     reason: document.getElementById('f-reason').value || null,
+    // "사라진 가게" 큐레이션에서 보여줄 추억 텍스트 — insight 입력칸을 재사용
+    memory: status === 'closed' ? (document.getElementById('f-insight').value || null) : null,
   };
   stores.push(newStore);
   trackAddition(newStore);
