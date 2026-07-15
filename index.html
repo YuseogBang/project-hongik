@@ -40,6 +40,7 @@
   }
   .logo { font-weight: 700; font-size: 15px; letter-spacing: -0.3px; }
   .logo span { color: var(--accent); }
+  .brand-logo { display:block; flex:none; filter:drop-shadow(0 0 5px rgba(255,31,61,.45)); }
   .badge-live { font-size: 10px; background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 99px; font-family: 'DM Mono', monospace; }
   .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
   .stat-pill { font-size: 11px; font-family: 'DM Mono', monospace; background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; padding: 4px 12px; color: var(--muted); }
@@ -250,6 +251,13 @@
     font-size: clamp(30px, 8.5vw, 78px); font-weight: 900; letter-spacing: -0.02em;
     line-height: 1; color: #fdf8f2; margin: 0 0 20px; text-transform: uppercase;
   }
+  .landing-brand { display:flex; align-items:center; justify-content:center; gap:14px; margin:0 0 20px; }
+  .landing-brand h1 { margin:0; }
+  .landing-brand .brand-logo { width:64px; height:40px; }
+  @media (max-width:480px) {
+    .landing-brand { gap:9px; }
+    .landing-brand .brand-logo { width:48px; height:30px; }
+  }
   .landing-card p {
     font-size: 13px; color: rgba(253,248,242,.8); line-height: 1.6; margin: 0 auto 10px; max-width: 420px;
   }
@@ -406,7 +414,14 @@
 <!-- LANDING -->
 <div class="landing-overlay" id="landing">
   <div class="landing-card">
-    <h1>Hongdae Map</h1>
+    <div class="landing-brand">
+      <svg class="brand-logo" viewBox="0 0 180 100" aria-label="Hongdae Map logo" role="img">
+        <defs><linearGradient id="landing-logo-red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs>
+        <circle cx="55" cy="62" r="31" fill="none" stroke="url(#landing-logo-red)" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="url(#landing-logo-red)" stroke-width="16"/>
+        <path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="url(#landing-logo-red)"/>
+      </svg>
+      <h1>Hongdae Map</h1>
+    </div>
     <p>취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.</p>
     <p class="landing-note">지금은 40개 매장에만 취향 태그가 붙어있는 프로토타입이에요.</p>
     <div class="landing-btns">
@@ -420,11 +435,10 @@
 <div class="topbar">
   <button class="menu-btn" onclick="toggleSidebar()" title="메뉴">☰</button>
   <div class="logo" style="letter-spacing:0.5px;display:flex;align-items:center;gap:8px">
-    <svg width="22" height="22" viewBox="0 0 40 40" aria-hidden="true">
-      <circle cx="20" cy="20" r="18" fill="none" stroke="#e8362a" stroke-width="1.5" opacity=".5"/>
-      <path d="M20,4 A16,16 0 0,1 20,36 A8,8 0 0,1 20,20 A8,8 0 0,0 20,4 Z" fill="#e8362a"/>
-      <circle cx="20" cy="12" r="3.4" fill="#141010"/>
-      <circle cx="20" cy="28" r="3.4" fill="#e8362a"/>
+    <svg class="brand-logo" width="34" height="22" viewBox="0 0 180 100" aria-label="Hongdae Map logo" role="img">
+      <defs><linearGradient id="header-logo-red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs>
+      <circle cx="55" cy="62" r="31" fill="none" stroke="url(#header-logo-red)" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="url(#header-logo-red)" stroke-width="16"/>
+      <path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="url(#header-logo-red)"/>
     </svg>
     Hongdae Map
   </div>
@@ -1240,6 +1254,10 @@ function selectStore(id) {
     const dist = distToCampus(s);
     const walk = Math.max(1, Math.round(dist / 70)); // 도보 약 70m/분 기준 추정치
     const tags = s.tags && s.tags.length ? s.tags.map(t => `#${t}`) : [`#${s.dong}`];
+    // 카드 B는 취향 태그와 별도로, 큐레이터가 쌓아가는 인증·스토리 태그를 보여준다.
+    // 사실 확인이 필요한 공식 인증은 데이터에 명시적으로 들어온 경우에만 표시한다.
+    const storyTags = s.storyTags || ['재학생 추천', `${s.dong} 골목 스토리`];
+    const certificationTags = s.certifications || [];
     const bm = !!bookmarks[s.id];
 
     const styleToggle = `
@@ -1270,17 +1288,24 @@ function selectStore(id) {
     const cardB = `
       <div style="background:#fff8f0;border-radius:22px;box-shadow:0 10px 32px rgba(140,30,20,.18);overflow:hidden;border:3px solid #e8362a">
         <div style="background:#e8362a;padding:10px 16px;display:flex;align-items:center;gap:8px">
-          <div style="font-family:'Pretendard',sans-serif;font-size:16px;color:#fff;letter-spacing:1px">RED ROAD PICK</div>
-          <div style="margin-left:auto;background:#fff;color:#e8362a;font-size:11px;font-weight:900;padding:3px 10px;border-radius:999px;transform:rotate(-3deg)">${info.icon} ${info.label}</div>
+          <div style="font-family:'Pretendard',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:.7px">HONGDAE STORY PICK</div>
+          <div style="margin-left:auto;background:#fff;color:#e8362a;font-size:10px;font-weight:900;padding:3px 9px;border-radius:999px;transform:rotate(-3deg)">${info.icon} ${info.label}</div>
         </div>
-        <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px">
+        <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:11px">
           <div style="display:flex;align-items:center;gap:10px">
             <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#ffe3cf,#ffd0b5);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;border:2px dashed #f0a080">${info.icon}</div>
             <div style="font-size:17px;font-weight:900;color:#6b1510;flex:1">${s.name}</div>
-            <button onclick="toggleBookmark(${s.id})" style="width:36px;height:36px;border-radius:12px;border:2px solid #e8362a;cursor:pointer;background:${bm?'#e8362a':'#fff8f0'};color:${bm?'#fff':'#e8362a'};font-size:15px;flex:none">${bm?'♥':'♡'}</button>
+            <button onclick="toggleBookmark(${s.id})" aria-label="찜하기" style="width:36px;height:36px;border-radius:12px;border:2px solid #e8362a;cursor:pointer;background:${bm?'#e8362a':'#fff8f0'};color:${bm?'#fff':'#e8362a'};font-size:15px;flex:none">${bm?'♥':'♡'}</button>
+          </div>
+          <div style="background:#fff0e6;border-radius:12px;padding:9px 10px">
+            <div style="font-size:10px;font-weight:900;color:#a43a2d;letter-spacing:.06em;margin-bottom:6px">STORY &amp; CERTIFICATION</div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              ${storyTags.map(t=>`<span style="background:#fff;border:1.5px solid #f2b8ae;color:#c1382c;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px">✦ ${t}</span>`).join('')}
+              ${certificationTags.map(t=>`<span style="background:#6b1510;color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px">✓ ${t}</span>`).join('')}
+            </div>
           </div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            ${tags.map(t=>`<span style="background:#fff;border:1.5px solid #f2b8ae;color:#c1382c;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;transform:rotate(-1deg)">${t}</span>`).join('')}
+            ${tags.map(t=>`<span style="background:#fff;border:1px solid #f2d3c9;color:#a06a55;font-size:10px;font-weight:600;padding:3px 8px;border-radius:999px">${t}</span>`).join('')}
           </div>
           <div style="display:flex;align-items:center;gap:10px;border-top:2px dashed #f2c9b8;padding-top:10px">
             <div style="font-size:13px;font-weight:900;color:#00a878">📍 ${dist}m</div>
