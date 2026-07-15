@@ -255,18 +255,9 @@
     position: fixed; inset: 0; z-index: 500;
     display: flex; align-items: center; justify-content: center;
     overflow: hidden; text-align: center;
-    background: #3a0f0b url('hongdae-hero.jpg') center/cover no-repeat;
-  }
-  /* 레퍼런스와 같은 톤(붉은 벽돌색)으로 사진을 물들이는 오버레이 */
-  .landing-overlay::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(120% 120% at 50% 45%,
-      rgba(120,32,20,.4) 0%, rgba(58,15,11,.72) 55%, rgba(18,5,4,.94) 100%);
-  }
-  /* 그레인(노이즈) 텍스처 — 이미지 없이 SVG 필터로 생성 */
-  .landing-overlay::after {
-    content: ''; position: absolute; inset: 0; opacity: .35; mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background:
+      radial-gradient(60% 50% at 80% -10%, rgba(232,54,42,.28) 0%, rgba(232,54,42,0) 60%),
+      #141010; /* 지도 UI(var(--bg))와 동일한 검정 배경 */
   }
   .landing-card {
     position: relative; z-index: 1; padding: 0 24px; max-width: 560px;
@@ -274,7 +265,7 @@
   .landing-card h1 {
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif; white-space: nowrap;
     font-size: clamp(30px, 8.5vw, 78px); font-weight: 900; letter-spacing: -0.02em;
-    line-height: 1; color: #fdf8f2; margin: 0 0 20px; text-transform: uppercase;
+    line-height: 1; color: #f5ece7; margin: 0 0 20px; text-transform: uppercase;
   }
   .landing-brand { display:flex; align-items:center; justify-content:center; gap:14px; margin:0 0 20px; }
   .landing-brand h1 { margin:0; }
@@ -284,18 +275,27 @@
     .landing-brand .brand-logo { width:48px; height:30px; }
   }
   .landing-card p {
-    font-size: 13px; color: rgba(253,248,242,.8); line-height: 1.6; margin: 0 auto 10px; max-width: 420px;
+    font-size: 18px; color: rgba(245,236,231,.9); line-height: 1.6; margin: 0 auto 12px; max-width: 440px;
   }
-  .landing-note { font-size: 11px; color: rgba(253,248,242,.5); margin: 4px 0 80px; }
+  .landing-note { font-size: 13px; color: rgba(245,236,231,.55); margin: 4px 0 80px; }
   .landing-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
   .landing-btn {
-    padding: 13px 22px; border-radius: 99px; border: 1.5px solid rgba(253,248,242,.4);
-    background: transparent; color: #fdf8f2; font-size: 14px; font-weight: 600; cursor: pointer;
+    flex: 1 1 240px; max-width: 300px; padding: 13px 22px; border-radius: 99px;
+    border: 1.5px solid rgba(245,236,231,.4);
+    background: transparent; color: #f5ece7; font-size: 14px; font-weight: 600; cursor: pointer;
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif; transition: all .15s;
   }
-  .landing-btn:hover { border-color: #fdf8f2; background: rgba(253,248,242,.08); }
+  .landing-btn:hover { border-color: #f5ece7; background: rgba(245,236,231,.08); }
   .landing-btn.primary { background: #ff3b3b; border-color: #ff3b3b; color: #fff; }
   .landing-btn.primary:hover { background: #ff5555; }
+  .landing-beta {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 22px; font-size: 11px; color: rgba(245,236,231,.5);
+  }
+  .beta-badge {
+    background: rgba(232,54,42,.18); color: #ff8a75; border: 1px solid rgba(232,54,42,.4);
+    font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; letter-spacing: .04em;
+  }
 
   /* MODAL */
   .modal-overlay {
@@ -447,11 +447,15 @@
       </svg>
       <h1>Hongdae Map</h1>
     </div>
-    <p>취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.</p>
-    <p class="landing-note">홍대 대표 맛집 40곳을 기준으로 취향을 매칭해드려요.</p>
+    <p id="landing-desc">취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.</p>
+    <p class="landing-note" id="landing-note">홍대 대표 맛집 40곳을 기준으로 취향을 매칭해드려요.</p>
     <div class="landing-btns">
       <button class="landing-btn primary" id="landing-primary" onclick="landingStart()">취향 고르고 시작하기</button>
-      <button class="landing-btn" onclick="landingSkip()">그냥 전체 지도 볼래요</button>
+      <button class="landing-btn" id="landing-skip" onclick="landingSkip()">그냥 전체 지도 볼래요</button>
+    </div>
+    <div class="landing-beta">
+      <span class="beta-badge">BETA</span>
+      <span id="landing-beta-text">아직 베타 버전이에요. 매장 정보와 기능을 계속 업데이트하고 있어요.</span>
     </div>
   </div>
 </div>
@@ -468,8 +472,9 @@
     Hongdae Map
   </div>
   <div class="topbar-right">
-    <button class="btn-bookmarks" onclick="showGoneStores()">🪦 R.I.P</button>
-    <button class="btn-directions" onclick="showBookmarks()">♥ 저장</button>
+    <button class="btn-bookmarks" id="btn-lang" onclick="cycleLang()" title="Language / 语言">🌐 KO</button>
+    <button class="btn-bookmarks" id="btn-rip" onclick="showGoneStores()">🪦 R.I.P</button>
+    <button class="btn-directions" id="btn-save" onclick="showBookmarks()">♥ 저장</button>
   </div>
 </div>
 <div class="topbar-search-row">
@@ -490,14 +495,14 @@
     <div class="sidebar-top">
       <div class="filter-chips">
         <button class="chip" id="btn-taste" onclick="openTasteModal()" style="background:#e8362a;border-color:#e8362a;color:#fff;font-weight:700;box-shadow:0 2px 6px rgba(232,54,42,.3)">🎯 내 취향 찾기</button>
-        <button class="chip" onclick="setFilter('hallOfFame',this)" style="background:#fdf0e4;border-color:#a9744f;color:#8a5a3a;font-weight:700">🏅 홍대생 명예학식</button>
-        <button class="chip on" onclick="setFilter('all',this)">전체</button>
-        <button class="chip" onclick="setFilter('restaurant',this)">음식점</button>
-        <button class="chip" onclick="setFilter('cafe',this)">카페</button>
-        <button class="chip" onclick="setFilter('bar',this)">주점</button>
-        <button class="chip" onclick="setFilter('서교동',this)">서교동</button>
-        <button class="chip" onclick="setFilter('연남동',this)">연남동</button>
-        <button class="chip" onclick="setFilter('합정동',this)">합정동</button>
+        <button class="chip" id="chip-hof" onclick="setFilter('hallOfFame',this)" style="background:#fdf0e4;border-color:#a9744f;color:#8a5a3a;font-weight:700">🏅 홍대생 명예학식</button>
+        <button class="chip on" id="chip-all" onclick="setFilter('all',this)">전체</button>
+        <button class="chip" id="chip-restaurant" onclick="setFilter('restaurant',this)">음식점</button>
+        <button class="chip" id="chip-cafe" onclick="setFilter('cafe',this)">카페</button>
+        <button class="chip" id="chip-bar" onclick="setFilter('bar',this)">주점</button>
+        <button class="chip" id="chip-seogyo" onclick="setFilter('서교동',this)">서교동</button>
+        <button class="chip" id="chip-yeonnam" onclick="setFilter('연남동',this)">연남동</button>
+        <button class="chip" id="chip-hapjeong" onclick="setFilter('합정동',this)">합정동</button>
       </div>
     </div>
     <div class="store-list" id="store-list"></div>
@@ -685,6 +690,78 @@ let stores = [
 
 let map, markers = [], storeMarkers = [], clusterer, overlay, hoverOverlay, showMarkers = true;
 let currentFilter = 'all', searchText = '', selectedId = null;
+
+// ── 언어 전환 (정적 UI 텍스트만 — 매장명/태그/코멘트 같은 실제 데이터는 번역하지 않음) ──
+const LANG_ORDER = ['ko', 'en', 'zh'];
+let currentLang = localStorage.getItem('lang') || 'ko';
+const I18N = {
+  ko: {
+    langBtn: '🌐 KO', search: '업소명 검색...', taste: '🎯 내 취향 찾기', hof: '🏅 홍대생 명예학식',
+    all: '전체', restaurant: '음식점', cafe: '카페', bar: '주점',
+    seogyo: '서교동', yeonnam: '연남동', hapjeong: '합정동',
+    rip: '🪦 R.I.P', save: '♥ 저장', menuTitle: '메뉴',
+    landingDesc: '취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.',
+    landingNote: '홍대 대표 맛집 40곳을 기준으로 취향을 매칭해드려요.',
+    landingStart: '취향 고르고 시작하기', landingSkip: '그냥 전체 지도 볼래요',
+    landingBeta: '아직 베타 버전이에요. 매장 정보와 기능을 계속 업데이트하고 있어요.',
+  },
+  en: {
+    langBtn: '🌐 EN', search: 'Search places...', taste: '🎯 Find my taste', hof: '🏅 Student favorites',
+    all: 'All', restaurant: 'Restaurants', cafe: 'Cafes', bar: 'Bars',
+    seogyo: 'Seogyo-dong', yeonnam: 'Yeonnam-dong', hapjeong: 'Hapjeong-dong',
+    rip: '🪦 R.I.P', save: '♥ Saved', menuTitle: 'Menu',
+    landingDesc: 'Stop trusting reviews from people with different tastes.<br>We\'ll pick Hongdae spots that match yours.',
+    landingNote: 'Taste matching is based on 40 representative Hongdae spots.',
+    landingStart: 'Pick my taste & start', landingSkip: 'Just show the full map',
+    landingBeta: 'This is a beta version — places and features are still being updated.',
+  },
+  zh: {
+    langBtn: '🌐 中文', search: '搜索店铺...', taste: '🎯 寻找我的口味', hof: '🏅 学生推荐名店',
+    all: '全部', restaurant: '餐厅', cafe: '咖啡店', bar: '酒吧',
+    seogyo: '西桥洞', yeonnam: '延南洞', hapjeong: '合井洞',
+    rip: '🪦 R.I.P', save: '♥ 收藏', menuTitle: '菜单',
+    landingDesc: '别再因为别人的口味而失望了。<br>我们只为你挑选合你口味的弘大店铺。',
+    landingNote: '取向匹配基于40家弘大代表性店铺。',
+    landingStart: '选择口味并开始', landingSkip: '直接看全图',
+    landingBeta: '目前是测试版，店铺信息和功能仍在持续更新中。',
+  },
+};
+
+function cycleLang() {
+  const idx = LANG_ORDER.indexOf(currentLang);
+  currentLang = LANG_ORDER[(idx + 1) % LANG_ORDER.length];
+  localStorage.setItem('lang', currentLang);
+  applyLang();
+}
+
+function applyLang() {
+  const t = I18N[currentLang];
+  const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+
+  setText('btn-lang', t.langBtn);
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) searchInput.placeholder = t.search;
+  setText('btn-taste', t.taste);
+  setText('chip-hof', t.hof);
+  setText('chip-all', t.all);
+  setText('chip-restaurant', t.restaurant);
+  setText('chip-cafe', t.cafe);
+  setText('chip-bar', t.bar);
+  setText('chip-seogyo', t.seogyo);
+  setText('chip-yeonnam', t.yeonnam);
+  setText('chip-hapjeong', t.hapjeong);
+  setText('btn-rip', t.rip);
+  setText('btn-save', t.save);
+  setHtml('landing-desc', t.landingDesc);
+  setText('landing-note', t.landingNote);
+  setText('landing-skip', t.landingSkip);
+  setText('landing-beta-text', t.landingBeta);
+  // 취향 저장 여부에 따라 문구가 달라지는 시작 버튼은, 아직 취향을 안 골랐을 때만 번역 문구로 덮어씀
+  if (userTastes.length === 0) setText('landing-primary', t.landingStart);
+}
+
+
 let listSort = 'default'; // 'default' | 'name' | 'distance' | 'category' — 명예학식뿐 아니라 모든 필터에 공통 적용
 function setListSort(key) {
   listSort = (listSort === key) ? 'default' : key; // 같은 버튼 다시 누르면 기본 정렬로 해제
@@ -832,6 +909,8 @@ function submitComment(storeId) {
 // ── 취향 매칭 (홍대 대표 맛집 40곳에 취향 태그 부여) ──────
 const TASTE_TAGS = ['매운맛','혼밥','데이트','인스타감성','조용한','시끌벅적','가성비','술안주','디저트','로컬단골'];
 let userTastes = JSON.parse(localStorage.getItem('userTastes') || '[]');
+applyLang(); // 페이지 로드 즉시 적용 (카카오맵 로드를 기다리지 않아도 되게)
+
 
 function openTasteModal() {
   const wrap = document.getElementById('taste-tags');
@@ -918,6 +997,7 @@ window.kakao && kakao.maps.load(() => {
   });
 
   document.getElementById('loading').style.display = 'none';
+  applyLang(); // 저장된 언어 설정(있다면) 적용
 
   // Click on map
   kakao.maps.event.addListener(map, 'click', e => {
