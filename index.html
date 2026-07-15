@@ -792,7 +792,7 @@ function objectiveTasteTags(s) {
 
 // 홍익대 정문 기준 실거리(m) — 실제 좌표로 계산, 임의값 아님
 const HONGIK = { lat: 37.5511, lng: 126.9256 };
-const HONGDAE_ENTRANCE = { name:'홍대입구역', lat:37.5563, lng:126.9241 };
+const HONGDAE_ENTRANCE = { name:'홍대입구역', lat:37.556670, lng:126.923610 };
 function distToCampus(s) {
   const R = 6371000, toRad = d => d * Math.PI / 180;
   const dLat = toRad(HONGIK.lat - s.lat), dLng = toRad(HONGIK.lng - s.lng);
@@ -1795,7 +1795,7 @@ function searchNearby() {
 }
 
 function resetView() {
-  if (map) map.setCenter(new kakao.maps.LatLng(37.5563, 126.9241));
+  if (map) map.setCenter(new kakao.maps.LatLng(37.556670, 126.923610));
   if (map) map.setLevel(4);
 }
 
@@ -1803,8 +1803,8 @@ function resetView() {
 function openModal(defaultStatus) {
   document.getElementById('modal').style.display = 'flex';
   // Default to Hongdae center
-  document.getElementById('f-lat').value = '37.5563';
-  document.getElementById('f-lng').value = '126.9241';
+  document.getElementById('f-lat').value = '37.556670';
+  document.getElementById('f-lng').value = '126.923610';
   if (defaultStatus) document.getElementById('f-status').value = defaultStatus;
 }
 function closeModal() { document.getElementById('modal').style.display = 'none'; }
@@ -1812,8 +1812,8 @@ function closeModal() { document.getElementById('modal').style.display = 'none';
 function addStore() {
   const name = document.getElementById('f-name').value.trim();
   if (!name) return alert('상호명을 입력해주세요.');
-  const lat = parseFloat(document.getElementById('f-lat').value) || 37.5563;
-  const lng = parseFloat(document.getElementById('f-lng').value) || 126.9241;
+  const lat = parseFloat(document.getElementById('f-lat').value) || 37.556670;
+  const lng = parseFloat(document.getElementById('f-lng').value) || 126.923610;
   const months = parseInt(document.getElementById('f-months').value) || null;
   const status = document.getElementById('f-status').value;
   const closedYear = document.getElementById('f-closed-year').value.trim();
