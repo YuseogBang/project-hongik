@@ -175,6 +175,27 @@
   }
   .ai-btn:hover { background: rgba(108,92,231,.25); }
 
+  /* LANDING */
+  .landing-overlay {
+    position: fixed; inset: 0; background: var(--bg);
+    z-index: 500; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 24px;
+  }
+  .landing-card { max-width: 420px; }
+  .landing-emoji { font-size: 40px; margin-bottom: 12px; }
+  .landing-card h1 { font-size: 26px; font-weight: 700; line-height: 1.35; margin-bottom: 16px; }
+  .landing-card p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 8px; }
+  .landing-note { font-size: 11px; opacity: .7; margin-bottom: 24px; }
+  .landing-btn {
+    display: block; width: 100%; margin-top: 10px; padding: 12px;
+    border-radius: 10px; border: 1px solid var(--border); background: var(--surface2);
+    color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif; transition: all .15s;
+  }
+  .landing-btn:hover { border-color: var(--muted); }
+  .landing-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .landing-btn.primary:hover { opacity: .9; }
+
   /* MODAL */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,.7);
@@ -313,11 +334,24 @@
 </head>
 <body>
 
+<!-- LANDING -->
+<div class="landing-overlay" id="landing">
+  <div class="landing-card">
+    <div class="landing-emoji">🎯</div>
+    <h1>취향대로 찾는<br>홍대 지도</h1>
+    <p>매운맛, 조용한 곳, 가성비, 데이트 코스…<br>취향을 고르면 나한테 맞는 홍대 매장만 골라볼 수 있어요.</p>
+    <p class="landing-note">지금은 40개 매장에만 취향 태그가 붙어있는 프로토타입이에요.</p>
+    <button class="landing-btn primary" id="landing-primary" onclick="landingStart()">취향 고르고 시작하기</button>
+    <button class="landing-btn" onclick="landingSkip()">그냥 전체 지도 볼래요</button>
+  </div>
+</div>
+
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="logo"><span>홍대</span> 상권 분석</div>
   <div class="badge-live">LIVE</div>
   <div class="topbar-right">
+
     <div class="stat-pill">영업중 <b id="cnt-open">-</b></div>
     <div class="stat-pill">폐점 <b id="cnt-closed">-</b></div>
     <div class="stat-pill">평균 생존 <b id="avg-months">-</b>개월</div>
@@ -745,16 +779,44 @@ function applyTaste() {
   if (userTastes.length === 0) { alert('취향을 2개 이상 골라주세요.'); return; }
   localStorage.setItem('userTastes', JSON.stringify(userTastes));
   closeTasteModal();
-  currentFilter = 'taste';
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
-  document.getElementById('btn-taste').classList.add('on');
-  renderList();
+  showTasteView();
 }
 
 // store와 사용자 취향이 겹치는 개수 (tags 없는 매장은 0)
 function matchScore(s) {
   if (!s.tags) return 0;
   return s.tags.filter(t => userTastes.includes(t)).length;
+}
+
+// 취향 추천 화면으로 전환 (랜딩페이지 버튼 / 취향모달 둘 다 여기로 모임)
+function showTasteView() {
+  currentFilter = 'taste';
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  document.getElementById('btn-taste').classList.add('on');
+  renderList();
+}
+
+// ── 랜딩 페이지 ────────────────────────────────────────
+// 저장된 취향이 있으면 버튼 문구를 바꿔서, 매번 새로 고르지 않아도 되게 함
+if (userTastes.length > 0) {
+  document.getElementById('landing-primary').textContent = `내 취향으로 보기 (${userTastes.length}개 선택됨)`;
+}
+
+function hideLanding() {
+  document.getElementById('landing').style.display = 'none';
+}
+
+function landingStart() {
+  hideLanding();
+  if (userTastes.length > 0) {
+    showTasteView(); // 이미 취향이 저장돼 있으면 바로 추천 화면으로
+  } else {
+    openTasteModal(); // 처음이면 취향 고르는 팝업부터
+  }
+}
+
+function landingSkip() {
+  hideLanding(); // currentFilter는 기본값 'all' 그대로 — 전체 지도로 시작
 }
 let addingMode = false;
 let importMode = false;
