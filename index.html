@@ -498,7 +498,6 @@
 
     <div class="map-controls">
       <button class="map-btn on" id="btn-markers" onclick="toggleMarkers()">📍 마커 표시</button>
-      <button class="map-btn" id="btn-heatmap" onclick="toggleHeatmap()">🔥 밀도 보기</button>
       <button class="map-btn" id="btn-import" onclick="toggleImportMode()">📌 지도에서 불러오기</button>
       <button class="map-btn" onclick="resetView()">⌂ 홍대 중심</button>
     </div>
@@ -552,7 +551,7 @@
           <option value="restaurant">음식점</option>
           <option value="cafe">카페</option>
           <option value="bar">주점</option>
-          <option value="retail">소매</option>
+          <option value="retail">기타</option>
         </select>
       </div>
       <div class="form-group">
@@ -621,7 +620,7 @@
 
 <script>
 // ── DATA ──────────────────────────────────────────────
-const TYPES = { restaurant:'음식점', cafe:'카페', bar:'주점', retail:'소매' };
+const TYPES = { restaurant:'음식점', cafe:'카페', bar:'주점', retail:'기타' };
 const STATUS = { open:'영업중', closed:'폐점', risk:'주의' };
 const REASONS = { traffic:'유동인구 부족', quality:'품질/경쟁력', rent:'임대료 부담', location:'입지 불리', trend:'트렌드 이탈' };
 
@@ -865,11 +864,13 @@ let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '{}');
 function catInfo(s) {
   if (s.category && s.category.includes('카페')) return { icon:'☕', color:'#a9744f', label:'카페', labelEn:'Cafe' };
   if (s.type === 'bar' || (s.category && /주점|맥주|호프/.test(s.category))) return { icon:'🍺', color:'#f5a623', label:'술집', labelEn:'Bar' };
+  if (s.type === 'retail') return { icon:'📌', color:'#93a8a2', label:'기타', labelEn:'Other' };
   return { icon:'🍜', color:'#e8362a', label:'맛집', labelEn:'Eat' };
 }
 
 // 홍익대 정문 기준 실거리(m) — 실제 좌표로 계산, 임의값 아님
 const HONGIK = { lat: 37.5511, lng: 126.9256 };
+const HONGDAE_ENTRANCE = { name:'홍대입구역', lat:37.557192, lng:126.924903 };
 function distToCampus(s) {
   const R = 6371000, toRad = d => d * Math.PI / 180;
   const dLat = toRad(HONGIK.lat - s.lat), dLng = toRad(HONGIK.lng - s.lng);
@@ -959,8 +960,11 @@ let pickerLatlng = null;
 // ── MAP INIT ──────────────────────────────────────────
 window.kakao && kakao.maps.load(() => {
   const container = document.getElementById('map');
-  const HONGDAE = new kakao.maps.LatLng(37.5563, 126.9241);
-  map = new kakao.maps.Map(container, { center: HONGDAE, level: 4 });
+  const stationPosition = new kakao.maps.LatLng(HONGDAE_ENTRANCE.lat, HONGDAE_ENTRANCE.lng);
+  map = new kakao.maps.Map(container, { center: stationPosition, level: 4 });
+  const stationMarker = new kakao.maps.Marker({ map, position:stationPosition, title:HONGDAE_ENTRANCE.name });
+  const stationInfo = new kakao.maps.InfoWindow({ content:'<div style="padding:6px 9px;font-size:11px;font-weight:700;color:#3d1712">🚇 홍대입구역 · 길찾기 출발지</div>' });
+  stationInfo.open(map, stationMarker);
 
   document.getElementById('loading').style.display = 'none';
 
@@ -1319,10 +1323,11 @@ function selectStore(id) {
       <div class="detail-body" style="padding:14px">
         ${styleToggle}
         ${cardStyle === 'A' ? cardA : cardB}
-        <div style="display:flex;gap:8px;margin-top:12px">
-          <a href="${kakaoUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">카카오맵 확인 ↗</a>
-          <a href="${naverUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">네이버지도 확인 ↗</a>
-        </div>
+        ${cardStyle === 'A' ? `
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <a href="${kakaoUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">카카오맵 확인 ↗</a>
+            <a href="${naverUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">네이버지도 확인 ↗</a>
+          </div>` : ''}
       </div>`;
     return;
   }
@@ -1411,7 +1416,9 @@ function filterList() {
 function goDirections() {
   const s = stores.find(x => x.id === selectedId);
   if (!s) { showToast('먼저 지도에서 매장을 선택해주세요'); return; }
-  window.open(`https://map.kakao.com/link/to/${encodeURIComponent(s.name)},${s.lat},${s.lng}`, '_blank');
+  const origin = `${encodeURIComponent(HONGDAE_ENTRANCE.name)},${HONGDAE_ENTRANCE.lat},${HONGDAE_ENTRANCE.lng}`;
+  const destination = `${encodeURIComponent(s.name)},${s.lat},${s.lng}`;
+  window.open(`https://map.kakao.com/link/by/walk/${origin}/${destination}`, '_blank', 'noopener');
 }
 
 function showBookmarks() {
@@ -1456,15 +1463,6 @@ function toggleMarkers() {
     else clusterer.clear();
   }
   document.getElementById('btn-markers').classList.toggle('on', showMarkers);
-}
-
-function toggleHeatmap() {
-  const btn = document.getElementById('btn-heatmap');
-  btn.classList.toggle('on');
-  // Visual feedback — heatmap would need kakao heatmap library
-  if (btn.classList.contains('on')) {
-    alert('💡 실제 서비스에서는 카카오 히트맵 API로 업소 밀도를 시각화합니다.\n현재는 마커 밀집도로 확인하세요.');
-  }
 }
 
 function toggleImportMode() {
@@ -1591,13 +1589,12 @@ function renderPickerResults(data, latlng) {
     return;
   }
 
-  const CAT_LABEL = { FD6:'음식점', CE7:'카페', BK9:'주점', MT1:'소매', SW8:'지하철' };
-  const CAT_TYPE  = { FD6:'restaurant', CE7:'cafe', BK9:'bar', MT1:'retail' };
-  const CAT_COLOR = { FD6:'#e8362a', CE7:'#a9744f', BK9:'#f5a623', MT1:'#0091d5' };
+  const CAT_LABEL = { FD6:'음식점', CE7:'카페', BK9:'주점' };
+  const CAT_COLOR = { FD6:'#e8362a', CE7:'#a9744f', BK9:'#f5a623' };
 
   list.innerHTML = unique.slice(0, 12).map(p => {
     const alreadyAdded = stores.some(s => s.kakaoId === p.id);
-    const catLabel = CAT_LABEL[p.category_group_code] || p.category_group_name || '기타';
+    const catLabel = CAT_LABEL[p.category_group_code] || '기타';
     const catColor = CAT_COLOR[p.category_group_code] || '#93a8a2';
     const dist = p.distance ? p.distance + 'm' : '';
     return `
@@ -1632,8 +1629,8 @@ function markVerified(id, status) {
 
 function importPlace(p) {
   // Determine type from category
-  const CAT_TYPE = { FD6:'restaurant', CE7:'cafe', BK9:'bar', MT1:'retail' };
-  const type = CAT_TYPE[p.category_group_code] || 'restaurant';
+  const CAT_TYPE = { FD6:'restaurant', CE7:'cafe', BK9:'bar' };
+  const type = CAT_TYPE[p.category_group_code] || 'retail';
 
   const address = p.road_address_name || p.address_name || '';
 
