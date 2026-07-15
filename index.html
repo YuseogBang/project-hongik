@@ -156,7 +156,7 @@
     display: flex; flex-direction: column; gap: 6px;
   }
   .btn-home {
-    position: absolute; bottom: 16px; left: 16px; z-index: 10;
+    position: absolute; bottom: 16px; right: 16px; z-index: 10;
     width: 40px; height: 40px; border-radius: 50%;
     background: var(--surface); border: 1px solid var(--border);
     color: var(--text); font-size: 18px; cursor: pointer;
@@ -468,7 +468,7 @@
     Hongdae Map
   </div>
   <div class="topbar-right">
-    <button class="btn-bookmarks" onclick="showGoneStores()">👻 사라진 가게</button>
+    <button class="btn-bookmarks" onclick="showGoneStores()">🪦 R.I.P</button>
     <button class="btn-directions" onclick="showBookmarks()">♥ 저장</button>
   </div>
 </div>
@@ -559,7 +559,8 @@
 <!-- ADD MODAL -->
 <div class="modal-overlay" id="modal" style="display:none">
   <div class="modal">
-    <h4>✏️ 업소 정보 입력</h4>
+    <h4>📮 사라진 가게 제보하기</h4>
+    <p style="font-size:11px;color:var(--muted);margin:-6px 0 12px">이 가게에 대한 향수가 남아있다면, 알고 있는 만큼만 적어서 제보해주세요.</p>
     <div class="form-group">
       <label>상호명 *</label>
       <input type="text" id="f-name" placeholder="예: 홍대포차">
@@ -578,34 +579,28 @@
         <label>상태</label>
         <select id="f-status">
           <option value="open">영업중</option>
-          <option value="closed">폐점</option>
+          <option value="closed" selected>폐점</option>
           <option value="risk">주의</option>
         </select>
       </div>
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label>네이버 평점 (0~5)</label>
-        <input type="number" id="f-rating" min="0" max="5" step="0.1" placeholder="4.2">
-      </div>
-      <div class="form-group">
-        <label>영업 기간 (개월)</label>
+        <label>영업 기간 (개월, 아는 만큼만)</label>
         <input type="number" id="f-months" placeholder="24">
       </div>
-    </div>
-    <div class="form-row">
       <div class="form-group">
-        <label>리뷰 수</label>
-        <input type="number" id="f-reviews" placeholder="150">
-      </div>
-      <div class="form-group">
-        <label>월 임대료 추정 (만원)</label>
-        <input type="number" id="f-rent" placeholder="350">
+        <label>대략적인 폐업 시기 (선택)</label>
+        <input type="text" id="f-closed-year" placeholder="예: 2022년쯤">
       </div>
     </div>
     <div class="form-group">
-      <label>재학생 인사이트 메모</label>
-      <textarea id="f-insight" placeholder="예: 점심엔 줄 서지만 평일 저녁은 한산함. 회전율 낮아 보임."></textarea>
+      <label>제보자 닉네임 (선택)</label>
+      <input type="text" id="f-reporter" placeholder="예: 익명, 07학번 등">
+    </div>
+    <div class="form-group">
+      <label>기억에 남은 추억</label>
+      <textarea id="f-insight" placeholder="예: 시험 끝나고 항상 여기서 뒤풀이했었는데, 사장님이 서비스도 많이 주셨어요."></textarea>
     </div>
     <div class="form-group">
       <label>대표 메뉴</label>
@@ -797,7 +792,7 @@ function objectiveTasteTags(s) {
 
 // 홍익대 정문 기준 실거리(m) — 실제 좌표로 계산, 임의값 아님
 const HONGIK = { lat: 37.5511, lng: 126.9256 };
-const HONGDAE_ENTRANCE = { name:'홍대입구역', lat:37.557192, lng:126.924903 };
+const HONGDAE_ENTRANCE = { name:'홍대입구역', lat:37.5563, lng:126.9241 };
 function distToCampus(s) {
   const R = 6371000, toRad = d => d * Math.PI / 180;
   const dLat = toRad(HONGIK.lat - s.lat), dLng = toRad(HONGIK.lng - s.lng);
@@ -1185,7 +1180,7 @@ function renderList() {
   // "사라진 가게" 모드에서는 몇 개가 등록돼 있든 상관없이 계속 추가할 수 있게,
   // 리스트 맨 위에 항상 등록 버튼을 띄워둔다 (예전엔 리스트가 비어있을 때만 보여서 1개 등록하면 사라지는 버그가 있었음).
   const goneAddButtonHtml = isGoneMode
-    ? `<button class="map-btn" style="width:100%;margin-bottom:10px" onclick="openModal('closed')">+ 사라진 가게 등록하기</button>`
+    ? `<button class="map-btn" style="width:100%;margin-bottom:10px" onclick="openModal('closed')">+ 사라진 가게 제보하기</button>`
     : '';
 
   // 취향 매칭 모드를 제외한 모든 필터에서, 리스트 맨 위에 공통 정렬 버튼을 띄운다.
@@ -1215,7 +1210,7 @@ function renderList() {
         const info = catInfo(s);
         const cardTags = (isTasteMode || isRepresentativeMode) ? (s.tags || []).map(t => `#${t}`) : objectiveTasteTags(s);
         const badgeHtml = isTasteMode ? matchBadge
-          : isGoneMode ? '<span style="font-size:10px;color:#93a8a2;font-weight:600">👻 사라짐</span>'
+          : isGoneMode ? '<span style="font-size:10px;color:#93a8a2;font-weight:600">🪦 R.I.P</span>'
           : isHallOfFameMode ? '<span style="font-size:10px;color:#a9744f;font-weight:700">🏅 명예학식</span>'
           : isRepresentativeMode ? '<span style="font-size:10px;color:#a9744f;font-weight:700">⭐ 대표 맛집</span>' : '';
         const memoryHtml = (isGoneMode && s.memory)
@@ -1374,17 +1369,17 @@ function selectStore(id) {
       <div class="detail-body" style="padding:14px">
         <div style="background:#fff8f0;border-radius:22px;box-shadow:0 10px 32px rgba(140,30,20,.1);overflow:hidden;border:2px dashed #d8b8a8">
           <div style="background:#4a4038;padding:10px 16px;display:flex;align-items:center;gap:8px">
-            <div style="font-family:'Pretendard',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:.7px">👻 사라진 가게</div>
+            <div style="font-family:'Pretendard',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:.7px">🪦 R.I.P</div>
           </div>
           <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px">
             <div style="display:flex;align-items:center;gap:10px">
               <div style="width:52px;height:52px;border-radius:14px;background:#e8e2da;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;filter:grayscale(60%)">${menuEmoji(s)}</div>
               <div style="flex:1">
                 <div style="font-size:17px;font-weight:900;color:#6b1510">${s.name}</div>
-                <div style="font-size:11px;color:var(--muted)">${s.dong || ''} · ${info.label}</div>
+                <div style="font-size:11px;color:var(--muted)">${s.dong || ''} · ${info.label}${s.closedYear ? ` · ${s.closedYear} 폐업` : ''}</div>
               </div>
             </div>
-            ${s.memory ? `<div style="background:#fff0e6;border-radius:12px;padding:10px 12px;font-size:12px;color:#6b1510;line-height:1.6;font-style:italic">“${s.memory}”</div>` : ''}
+            ${s.memory ? `<div style="background:#fff0e6;border-radius:12px;padding:10px 12px;font-size:12px;color:#6b1510;line-height:1.6;font-style:italic">“${s.memory}”${s.reporter ? `<div style="margin-top:6px;font-size:10px;color:#a06a55;font-style:normal">— 제보: ${s.reporter}</div>` : ''}</div>` : ''}
           </div>
         </div>
 
@@ -1819,28 +1814,23 @@ function addStore() {
   if (!name) return alert('상호명을 입력해주세요.');
   const lat = parseFloat(document.getElementById('f-lat').value) || 37.5563;
   const lng = parseFloat(document.getElementById('f-lng').value) || 126.9241;
-  const rating = parseFloat(document.getElementById('f-rating').value) || 3.5;
-  const months = parseInt(document.getElementById('f-months').value) || 12;
-  const reviews = parseInt(document.getElementById('f-reviews').value) || 0;
-  const rent = parseInt(document.getElementById('f-rent').value) || 300;
+  const months = parseInt(document.getElementById('f-months').value) || null;
   const status = document.getElementById('f-status').value;
+  const closedYear = document.getElementById('f-closed-year').value.trim();
+  const reporter = document.getElementById('f-reporter').value.trim();
+  const memoText = document.getElementById('f-insight').value.trim();
 
-  // Auto-calculate score
-  const ratingScore = (rating / 5) * 30;
-  const reviewScore = Math.min(reviews / 500, 1) * 20;
-  const monthScore = Math.min(months / 60, 1) * 25;
-  const rentScore = Math.max(0, (500 - rent) / 500) * 15;
-  const score = Math.round(ratingScore + reviewScore + monthScore + rentScore + 10);
-
+  // 평점/리뷰/임대료 데이터가 없으니(실제로 알 수 없는 값), 억지로 점수를 만들어내지 않는다.
   const newStore = {
     id: Date.now(), name, type: document.getElementById('f-type').value,
-    status, lat, lng, rating, reviews, months, rent,
-    score: status === 'closed' ? Math.min(score, 50) : score,
-    insight: document.getElementById('f-insight').value || '아직 인사이트 없음',
+    status, lat, lng, rating: null, reviews: null, months, rent: null, score: null,
+    insight: memoText || '아직 제보된 내용이 없어요.',
     signatureMenu: document.getElementById('f-signature-menu').value || '',
     reason: document.getElementById('f-reason').value || null,
-    // "사라진 가게" 큐레이션에서 보여줄 추억 텍스트 — insight 입력칸을 재사용
-    memory: status === 'closed' ? (document.getElementById('f-insight').value || null) : null,
+    // "사라진 가게" 큐레이션에서 보여줄 추억 텍스트
+    memory: status === 'closed' ? (memoText || null) : null,
+    closedYear: closedYear || null,
+    reporter: reporter || null,
   };
   stores.push(newStore);
   trackAddition(newStore);
