@@ -55,6 +55,12 @@
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif; white-space: nowrap;
   }
   .btn-directions:hover { background: #c92b20; }
+  .btn-bookmarks {
+    font-size:12px; font-weight:700; color:var(--text); background:var(--surface2);
+    border:1px solid var(--border); border-radius:99px; padding:7px 13px; cursor:pointer;
+    font-family:'Pretendard', 'Noto Sans KR', sans-serif; white-space:nowrap;
+  }
+  .btn-bookmarks:hover { border-color:var(--accent); color:#fff; }
   .topbar-search-row {
     padding: 10px 16px; border-bottom: 1px solid var(--border);
     background: var(--surface);
@@ -443,6 +449,7 @@
     Hongdae Map
   </div>
   <div class="topbar-right">
+    <button class="btn-bookmarks" onclick="showBookmarks()">♥ 저장한 장소</button>
     <button class="btn-directions" onclick="goDirections()">🧭 길찾기</button>
   </div>
 </div>
@@ -1174,11 +1181,13 @@ function renderList() {
   const dongFilters = ['서교동','연남동','합정동'];
   const isDongFilter = dongFilters.includes(currentFilter);
   const isTasteMode = currentFilter === 'taste';
+  const isBookmarkMode = currentFilter === 'bookmarks';
 
   let filtered = stores.filter(s => {
     if (isTasteMode) return s.tags && matchScore(s) > 0; // 취향 모드는 unverified 여부와 무관하게 태그 매칭만 봄
-    if (s.status === 'unverified' && currentFilter !== 'all') return false;
+    if (s.status === 'unverified' && currentFilter !== 'all' && !isBookmarkMode) return false;
     const matchFilter = currentFilter === 'all'
+      || (isBookmarkMode && bookmarks[s.id])
       || s.type === currentFilter
       || (currentFilter === 'closed' && s.status === 'closed')
       || (isDongFilter && s.dong === currentFilter);
@@ -1189,7 +1198,7 @@ function renderList() {
 
   list.innerHTML = filtered.length === 0
     ? `<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">
-        ${isTasteMode ? '취향에 맞는 매장이 아직 없어요 (프로토타입 40개 중에서만 찾아요)' : '검색 결과 없음'}
+        ${isTasteMode ? '취향에 맞는 매장이 아직 없어요 (프로토타입 40개 중에서만 찾아요)' : isBookmarkMode ? '저장한 장소가 아직 없어요' : '검색 결과 없음'}
       </div>`
     : filtered.map(s => {
       const isUnverified = s.status === 'unverified';
@@ -1262,8 +1271,8 @@ function selectStore(id) {
 
     const styleToggle = `
       <div style="display:flex;gap:4px;background:#fff;border-radius:999px;padding:4px;box-shadow:0 2px 10px rgba(20,60,50,.1);width:fit-content;margin-bottom:10px">
-        <button onclick="setCardStyle('A')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Noto Sans KR',sans-serif;background:${cardStyle==='A'?'#e8362a':'transparent'};color:${cardStyle==='A'?'#fff':'#5c756d'}">취향 태그 카드</button>
-        <button onclick="setCardStyle('B')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Noto Sans KR',sans-serif;background:${cardStyle==='B'?'#e8362a':'transparent'};color:${cardStyle==='B'?'#fff':'#5c756d'}">홍대 스토리 카드</button>
+        <button onclick="setCardStyle('A')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Noto Sans KR',sans-serif;background:${cardStyle==='A'?'#e8362a':'transparent'};color:${cardStyle==='A'?'#fff':'#5c756d'}">취향 태그</button>
+        <button onclick="setCardStyle('B')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Noto Sans KR',sans-serif;background:${cardStyle==='B'?'#e8362a':'transparent'};color:${cardStyle==='B'?'#fff':'#5c756d'}">Story</button>
       </div>`;
 
     const cardA = `
@@ -1279,13 +1288,17 @@ function selectStore(id) {
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             ${tags.map(t=>`<span style="background:#fdf0e4;color:#8a5a3a;font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px">${t}</span>`).join('')}
           </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="font-size:12px;font-weight:700;color:#e8362a">📍 ${dist}m</div>
+            <div style="font-size:12px;color:#5c756d">🚶 도보 약 ${walk}분</div>
+          </div>
         </div>
       </div>`;
 
     const cardB = `
       <div style="background:#fff8f0;border-radius:22px;box-shadow:0 10px 32px rgba(140,30,20,.18);overflow:hidden;border:3px solid #e8362a">
         <div style="background:#e8362a;padding:10px 16px;display:flex;align-items:center;gap:8px">
-          <div style="font-family:'Pretendard',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:.7px">HONGDAE STORY PICK</div>
+          <div style="font-family:'Pretendard',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:.7px">HONGDAE STORY</div>
         </div>
         <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:11px">
           <div style="display:flex;align-items:center;gap:10px">
@@ -1298,10 +1311,6 @@ function selectStore(id) {
               ${storyTags.map(t=>`<span style="background:#fff;border:1.5px solid #f2b8ae;color:#c1382c;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px">✦ ${t}</span>`).join('')}
               ${certificationTags.map(t=>`<span style="background:#6b1510;color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px">✓ ${t}</span>`).join('')}
             </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;border-top:2px dashed #f2c9b8;padding-top:10px">
-            <div style="font-size:13px;font-weight:900;color:#00a878">📍 ${dist}m</div>
-            <div style="font-size:12px;color:#a06a55">🚶 도보 약 ${walk}분</div>
           </div>
         </div>
       </div>`;
@@ -1403,6 +1412,14 @@ function goDirections() {
   const s = stores.find(x => x.id === selectedId);
   if (!s) { showToast('먼저 지도에서 매장을 선택해주세요'); return; }
   window.open(`https://map.kakao.com/link/to/${encodeURIComponent(s.name)},${s.lat},${s.lng}`, '_blank');
+}
+
+function showBookmarks() {
+  currentFilter = 'bookmarks';
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  renderList();
+  document.getElementById('sidebar').classList.add('open');
+  updateBackdrop();
 }
 
 // ── MAP CONTROLS ──────────────────────────────────────
