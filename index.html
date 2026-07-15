@@ -733,6 +733,34 @@ function cuisineLabel(s) {
   return '한식';
 }
 
+// 시그니처 메뉴 텍스트에서 명확히 매칭되는 이모티콘이 있으면 그걸 쓰고,
+// 없으면 장르(cuisineLabel) 기준 대표 이모티콘으로 대체한다. 지어내지 않고 규칙 기반으로만 매칭.
+function menuEmoji(s) {
+  const menu = s.signatureMenu || '';
+  const MENU_RULES = [
+    [/피자/, '🍕'], [/버거/, '🍔'], [/타코/, '🌮'],
+    [/초밥|스시|사시미|가츠|카츠|돈까스|돈카츠/, '🍱'],
+    [/라멘|소바|우동|칼국수|국수|짬뽕|짜장|면요리|츠케멘/, '🍜'],
+    [/쌀국수|분짜/, '🍜'],
+    [/떡볶이/, '🌶️'], [/김밥|만두|분식/, '🍙'],
+    [/곱창|막창/, '🥘'], [/삼겹살|목살|갈비|생고기|구이|스테이크|함박/, '🥩'],
+    [/곰탕|국밥|탕|찌개|전골/, '🍲'],
+    [/회|생선|방어|연어/, '🐟'],
+    [/치킨/, '🍗'], [/맥주|호프/, '🍺'],
+    [/커피|라떼|아메리카노|모카|에스프레소/, '☕'],
+    [/케이크|디저트|도넛|스콘|크로플|타르트/, '🍰'],
+    [/짜장면|간짜장|깐풍기|볶음|탕수육/, '🥡'],
+  ];
+  for (const [re, emoji] of MENU_RULES) {
+    if (re.test(menu)) return emoji;
+  }
+  const GENRE_EMOJI = {
+    '한식':'🍚', '중식':'🥡', '양식':'🍝', '일식':'🍣',
+    '아시아식':'🌶️', '카페·디저트':'☕', '주점':'🍺'
+  };
+  return GENRE_EMOJI[cuisineLabel(s)] || '🍽️';
+}
+
 // 출처가 있는 운영 정보만 취향 태그로 표시한다. 값이 없는 경우 태그를 만들어내지 않는다.
 function objectiveTasteTags(s) {
   const tags = [`#${s.dong || '홍대'}`];
@@ -1175,7 +1203,7 @@ function renderList() {
         <div class="store-item ${selectedId===s.id?'active':''}" onclick="selectStore(${s.id})"
              style="${isGoneMode?'opacity:.75;':''}">
           <div class="item-top">
-            <div style="width:8px;height:8px;border-radius:50%;background:${info.color};flex:none"></div>
+            <span style="font-size:14px;flex:none">${menuEmoji(s)}</span>
             <div class="item-name">${s.name}</div>
             <div style="font-size:10px;color:var(--muted)">${info.label}</div>
           </div>
@@ -1258,9 +1286,9 @@ function selectStore(id) {
     const cardA = `
       <div style="background:#ffffff;border-radius:20px;box-shadow:0 10px 32px rgba(20,60,50,.14);overflow:hidden">
         <div style="position:relative;height:110px;background:linear-gradient(135deg,#ffe8d9,#ffd4b8);display:flex;align-items:center;justify-content:center">
-          <div style="font-size:28px">${info.icon}</div>
+          <div style="font-size:28px">${menuEmoji(s)}</div>
           <div style="position:absolute;bottom:10px;left:12px;font-size:10px;font-weight:900;letter-spacing:.08em;color:#8a5a3a">MY TASTE PICK</div>
-          <div style="position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:5px;background:#fff;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700;color:${info.color}">${info.icon} ${info.label} <span style="color:#93a8a2;font-weight:500">${info.labelEn}</span></div>
+          <div style="position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:5px;background:#fff;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700;color:${info.color}">${menuEmoji(s)} ${info.label} <span style="color:#93a8a2;font-weight:500">${info.labelEn}</span></div>
           <button onclick="toggleBookmark(${s.id})" style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;background:${bm?'#e8362a':'#fff'};color:${bm?'#fff':'#e8362a'};font-size:14px;box-shadow:0 3px 10px rgba(20,60,50,.15)">${bm?'♥':'♡'}</button>
         </div>
         <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px">
@@ -1282,7 +1310,7 @@ function selectStore(id) {
         </div>
         <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:11px">
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#ffe3cf,#ffd0b5);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;border:2px dashed #f0a080">${info.icon}</div>
+            <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#ffe3cf,#ffd0b5);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;border:2px dashed #f0a080">${menuEmoji(s)}</div>
             <div style="font-size:17px;font-weight:900;color:#6b1510;flex:1">${s.name}</div>
           </div>
           <div style="background:#fff0e6;border-radius:12px;padding:9px 10px">
@@ -1329,7 +1357,7 @@ function selectStore(id) {
           </div>
           <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px">
             <div style="display:flex;align-items:center;gap:10px">
-              <div style="width:52px;height:52px;border-radius:14px;background:#e8e2da;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;filter:grayscale(60%)">${info.icon}</div>
+              <div style="width:52px;height:52px;border-radius:14px;background:#e8e2da;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;filter:grayscale(60%)">${menuEmoji(s)}</div>
               <div style="flex:1">
                 <div style="font-size:17px;font-weight:900;color:#6b1510">${s.name}</div>
                 <div style="font-size:11px;color:var(--muted)">${s.dong || ''} · ${info.label}</div>
