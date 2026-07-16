@@ -137,6 +137,13 @@
   .search-box input::placeholder { color: var(--muted); }
   .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
   .filter-group { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .trivia-card {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: var(--card-r);
+    padding: 11px 13px; margin-bottom: 12px; cursor: pointer; transition: border-color .15s;
+  }
+  .trivia-card:hover { border-color: var(--accent); }
+  .trivia-label { font-size: 10px; font-weight: 700; color: var(--accent); margin-bottom: 5px; letter-spacing: .02em; }
+  .trivia-text { font-size: 12px; line-height: 1.55; color: var(--text); }
   .chip { font-size: 11px; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--border); color: var(--muted); background: transparent; cursor: pointer; transition: all .15s; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; }
   .chip.on {
     border-color: var(--accent); color: #ffffff;
@@ -550,6 +557,10 @@
   <div class="sidebar" id="sidebar">
     <button class="sidebar-close" onclick="closeSidebar()">✕</button>
     <div class="sidebar-top">
+      <div class="trivia-card" id="trivia-card" onclick="nextTrivia()">
+        <div class="trivia-label">💡 <span id="trivia-label-text">몰랐던 홍대 상식</span></div>
+        <div class="trivia-text" id="trivia-text"></div>
+      </div>
       <div class="filter-chips">
         <button class="chip" id="btn-taste" onclick="openTasteModal()" style="background:#e8362a;border-color:#e8362a;color:#fff;font-weight:700;box-shadow:0 2px 6px rgba(232,54,42,.3)">🎯 내 취향 찾기</button>
         <button class="chip on" id="chip-all" onclick="setFilter('all',this)">전체</button>
@@ -794,6 +805,46 @@ let stores = [
 let map, markers = [], storeMarkers = [], clusterer, overlay, hoverOverlay, showMarkers = true;
 let currentFilter = 'all', searchText = '', selectedId = null;
 
+// ── 몰랐던 홍대 상식 (전부 검증된 사실만) ────────────────
+const TRIVIA = [
+  {
+    ko: '"홍대"는 사실 지명이 아니라 홍익대학교의 줄임말이에요.',
+    en: '"Hongdae" isn\'t an official place name — it\'s short for Hongik University.',
+    zh: '"弘大"其实不是地名，而是弘益大学的简称。',
+  },
+  {
+    ko: '지금의 홍대 일대는 원래 "잔다리(細橋里)"라는 순우리말 지명으로 불렸어요. 세교천에 작은 다리가 많아서 붙은 이름이에요.',
+    en: 'Before "Hongdae," this area was called "Jandari" — named after the many small bridges over the old Segyo stream.',
+    zh: '在被称为"弘大"之前，这一带原本叫"棧橋里"，因过去细桥川上有很多小桥而得名。',
+  },
+  {
+    ko: '클럽 빵(Club Bbang)은 1994년부터 이어져 온, 홍대에서 가장 오래된 라이브클럽 중 하나예요.',
+    en: 'Club Bbang has been running since 1994 — one of the oldest live clubs in Hongdae.',
+    zh: 'Club Bbang自1994年至今，是弘大历史最悠久的livehouse之一。',
+  },
+  {
+    ko: '크라잉넛, 노브레인 같은 1세대 인디밴드들이 홍대에서 활동하며 지금의 "홍대 인디씬"을 만들었어요.',
+    en: 'First-gen indie bands like Crying Nut and No Brain built Hongdae\'s indie music scene from the ground up.',
+    zh: 'Crying Nut、No Brain等第一代独立乐队正是在弘大活动，奠定了如今的"弘大indie"文化。',
+  },
+  {
+    ko: '코로나19로 약 1년 4개월간 금지됐던 홍대 버스킹은 2022년 3월 30일에 다시 시작됐어요.',
+    en: 'Hongdae street busking, banned for about 16 months during COVID-19, resumed on March 30, 2022.',
+    zh: '因新冠疫情被禁演约16个月的弘大街头表演，于2022年3月30日重新恢复。',
+  },
+];
+let triviaIdx = Math.floor(Math.random() * TRIVIA.length);
+function renderTrivia() {
+  const t = TRIVIA[triviaIdx];
+  const el = document.getElementById('trivia-text');
+  if (el) el.textContent = t[currentLang] || t.ko;
+}
+function nextTrivia() {
+  triviaIdx = (triviaIdx + 1) % TRIVIA.length;
+  renderTrivia();
+}
+
+
 // ── 언어 전환 (정적 UI 텍스트만 — 매장명/태그/코멘트 같은 실제 데이터는 번역하지 않음) ──
 const LANG_ORDER = ['ko', 'en', 'zh'];
 let currentLang = localStorage.getItem('lang') || 'ko';
@@ -807,6 +858,7 @@ const I18N = {
     landingNote: '홍대 대표 맛집 40곳을 기준으로 취향을 매칭해드려요.',
     landingStart: '취향 고르고 시작하기', landingSkip: '그냥 전체 지도 볼래요',
     landingBeta: '아직 베타 버전이에요. 매장 정보와 기능을 계속 업데이트하고 있어요.',
+    triviaLabel: '몰랐던 홍대 상식',
   },
   en: {
     langBtn: '🌐 English', search: 'Search places...', taste: '🎯 Find my taste', hof: '🏅 Student favorites', michelin: '🍽️ Michelin Guide',
@@ -817,6 +869,7 @@ const I18N = {
     landingNote: 'Taste matching is based on 40 representative Hongdae spots.',
     landingStart: 'Pick my taste & start', landingSkip: 'Just show the full map',
     landingBeta: 'This is a beta version — places and features are still being updated.',
+    triviaLabel: 'Did you know?',
   },
   zh: {
     langBtn: '🌐 中文', search: '搜索店铺...', taste: '🎯 寻找我的口味', hof: '🏅 学生推荐名店', michelin: '🍽️ 米其林指南',
@@ -827,6 +880,7 @@ const I18N = {
     landingNote: '取向匹配基于40家弘大代表性店铺。',
     landingStart: '选择口味并开始', landingSkip: '直接看全图',
     landingBeta: '目前是测试版，店铺信息和功能仍在持续更新中。',
+    triviaLabel: '你知道吗？',
   },
 };
 
@@ -867,6 +921,8 @@ function applyLang() {
   setText('landing-beta-text', t.landingBeta);
   // 취향 저장 여부에 따라 문구가 달라지는 시작 버튼은, 아직 취향을 안 골랐을 때만 번역 문구로 덮어씀
   if (userTastes.length === 0) setText('landing-primary', t.landingStart);
+  setText('trivia-label-text', t.triviaLabel);
+  renderTrivia();
 }
 
 
