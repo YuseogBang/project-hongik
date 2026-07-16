@@ -62,7 +62,14 @@
     font-family:'Pretendard', 'Noto Sans KR', sans-serif; white-space:nowrap;
   }
   .btn-bookmarks:hover { border-color:var(--accent); color:#fff; }
-  #btn-lang { display:inline-flex; align-items:center; justify-content:center; width:104px; }
+  #btn-lang {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:128px; flex-shrink:0; flex-grow:0;
+  }
+  #btn-save {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:150px; flex-shrink:0; flex-grow:0;
+  }
   .topbar-search-row {
     position:relative; padding: 10px 16px; border-bottom: 1px solid var(--border);
     background: var(--surface);
@@ -445,6 +452,7 @@
     }
     #btn-lang { min-width: 0; width: 40px; padding: 6px 0; }
     #btn-lang .lang-code { display: none; }
+    #btn-save { width: 76px; padding: 6px 8px; font-size: 11px; }
 
     .topbar-search-row { padding: 8px 10px; }
 
@@ -769,7 +777,7 @@ function applyLang() {
   const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
 
   const langCode = t.langBtn.replace('🌐 ', '');
-  setHtml('btn-lang', `🌐 <span class="lang-code">${langCode}</span>`);
+  setHtml('btn-lang', `🌐<span class="lang-code" style="margin-left:7px">${langCode}</span>`);
   const searchInput = document.getElementById('search-input');
   if (searchInput) searchInput.placeholder = t.search;
   setText('btn-taste', t.taste);
