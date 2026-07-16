@@ -554,6 +554,8 @@
         <button class="chip" id="chip-restaurant" onclick="setFilter('restaurant',this)">음식점</button>
         <button class="chip" id="chip-cafe" onclick="setFilter('cafe',this)">카페</button>
         <button class="chip" id="chip-bar" onclick="setFilter('bar',this)">주점</button>
+        <button class="chip" id="chip-liveclub" onclick="setFilter('liveclub',this)">🎸 라이브클럽</button>
+        <button class="chip" id="chip-artsupply" onclick="setFilter('artsupply',this)">🎨 화방</button>
         <button class="chip" id="chip-seogyo" onclick="setFilter('서교동',this)">서교동</button>
         <button class="chip" id="chip-yeonnam" onclick="setFilter('연남동',this)">연남동</button>
         <button class="chip" id="chip-hapjeong" onclick="setFilter('합정동',this)">합정동</button>
@@ -631,6 +633,8 @@
           <option value="restaurant">음식점</option>
           <option value="cafe">카페</option>
           <option value="bar">주점</option>
+          <option value="liveclub">라이브클럽</option>
+          <option value="artsupply">화방</option>
           <option value="retail">기타</option>
         </select>
       </div>
@@ -698,7 +702,7 @@
 
 <script>
 // ── DATA ──────────────────────────────────────────────
-const TYPES = { restaurant:'음식점', cafe:'카페', bar:'주점', retail:'기타' };
+const TYPES = { restaurant:'음식점', cafe:'카페', bar:'주점', retail:'기타', liveclub:'라이브클럽', artsupply:'화방' };
 const STATUS = { open:'영업중', closed:'폐점', risk:'주의' };
 const REASONS = { traffic:'유동인구 부족', quality:'품질/경쟁력', rent:'임대료 부담', location:'입지 불리', trend:'트렌드 이탈' };
 
@@ -757,7 +761,7 @@ let currentLang = localStorage.getItem('lang') || 'ko';
 const I18N = {
   ko: {
     langBtn: '🌐 한국어', search: '업소명 검색...', taste: '🎯 내 취향 찾기', hof: '🏅 홍대생 명예학식', michelin: '🍽️ 미쉐린 가이드',
-    all: '전체', restaurant: '음식점', cafe: '카페', bar: '주점',
+    all: '전체', restaurant: '음식점', cafe: '카페', bar: '주점', liveclub: '🎸 라이브클럽', artsupply: '🎨 화방',
     seogyo: '서교동', yeonnam: '연남동', hapjeong: '합정동',
     rip: '🪦 R.I.P', save: '♥ 저장', menuTitle: '메뉴',
     landingDesc: '취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.',
@@ -767,7 +771,7 @@ const I18N = {
   },
   en: {
     langBtn: '🌐 English', search: 'Search places...', taste: '🎯 Find my taste', hof: '🏅 Student favorites', michelin: '🍽️ Michelin Guide',
-    all: 'All', restaurant: 'Restaurants', cafe: 'Cafes', bar: 'Bars',
+    all: 'All', restaurant: 'Restaurants', cafe: 'Cafes', bar: 'Bars', liveclub: '🎸 Live Clubs', artsupply: '🎨 Art Supplies',
     seogyo: 'Seogyo-dong', yeonnam: 'Yeonnam-dong', hapjeong: 'Hapjeong-dong',
     rip: '🪦 R.I.P', save: '♥ Saved', menuTitle: 'Menu',
     landingDesc: 'Stop trusting reviews from people with different tastes.<br>We\'ll pick Hongdae spots that match yours.',
@@ -777,7 +781,7 @@ const I18N = {
   },
   zh: {
     langBtn: '🌐 中文', search: '搜索店铺...', taste: '🎯 寻找我的口味', hof: '🏅 学生推荐名店', michelin: '🍽️ 米其林指南',
-    all: '全部', restaurant: '餐厅', cafe: '咖啡店', bar: '酒吧',
+    all: '全部', restaurant: '餐厅', cafe: '咖啡店', bar: '酒吧', liveclub: '🎸 livehouse', artsupply: '🎨 美术用品店',
     seogyo: '西桥洞', yeonnam: '延南洞', hapjeong: '合井洞',
     rip: '🪦 R.I.P', save: '♥ 收藏', menuTitle: '菜单',
     landingDesc: '别再因为别人的口味而失望了。<br>我们只为你挑选合你口味的弘大店铺。',
@@ -810,6 +814,8 @@ function applyLang() {
   setText('chip-restaurant', t.restaurant);
   setText('chip-cafe', t.cafe);
   setText('chip-bar', t.bar);
+  setText('chip-liveclub', t.liveclub);
+  setText('chip-artsupply', t.artsupply);
   setText('chip-seogyo', t.seogyo);
   setText('chip-yeonnam', t.yeonnam);
   setText('chip-hapjeong', t.hapjeong);
@@ -859,6 +865,8 @@ let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '{}');
 
 // 카테고리 문자열 -> 아이콘/색/라벨 (실제 category 필드 기반, 지어내지 않음)
 function catInfo(s) {
+  if (s.type === 'liveclub') return { icon:'🎸', color:'#8e44ad', label:'라이브클럽', labelEn:'Live Club' };
+  if (s.type === 'artsupply') return { icon:'🎨', color:'#2980b9', label:'화방', labelEn:'Art Supplies' };
   if (s.category && s.category.includes('카페')) return { icon:'☕', color:'#a9744f', label:'카페', labelEn:'Cafe' };
   if (s.type === 'bar' || (s.category && /주점|맥주|호프/.test(s.category))) return { icon:'🍺', color:'#f5a623', label:'술집', labelEn:'Bar' };
   if (s.type === 'retail') return { icon:'📌', color:'#93a8a2', label:'기타', labelEn:'Other' };
@@ -916,6 +924,7 @@ const TAG_I18N = {
   '양식': { en: 'Western', zh: '西餐' }, '일식': { en: 'Japanese', zh: '日餐' },
   '아시아식': { en: 'Asian', zh: '亚洲菜' }, '카페·디저트': { en: 'Cafe & Dessert', zh: '咖啡·甜点' },
   '주점': { en: 'Bar', zh: '酒吧' },
+  '라이브클럽': { en: 'Live Club', zh: 'Livehouse' }, '화방': { en: 'Art Supplies', zh: '美术用品店' },
   // 인증
   '홍대생 명예학식': { en: 'Student favorite', zh: '学生推荐名店' },
   '미쉐린 빕구르망': { en: 'Michelin Bib Gourmand', zh: '米其林必比登' },
