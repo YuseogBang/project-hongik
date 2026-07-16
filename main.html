@@ -9,17 +9,17 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
   :root {
-    --bg: #141010;
-    --surface: #1c1616;
-    --surface2: #261e1e;
-    --border: #3a2a2a;
+    --bg: #2b070c;
+    --surface: #3d0f16;
+    --surface2: #4f151e;
+    --border: #7a2534;
     --accent: #e8362a;
     --accent2: #ff5c46;
     --danger: #b71c1c;
     --warn: #f5a623;
     --success: #2e7d32;
     --text: #f5ece7;
-    --muted: #9c8a85;
+    --muted: #c39298;
     --card-r: 14px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -63,15 +63,15 @@
   }
   .btn-bookmarks:hover { border-color:var(--accent); color:#fff; }
   #btn-lang {
-    display:inline-flex; align-items:center; justify-content:center;
+    display:inline-flex; align-items:center; justify-content:center; text-align:center;
     width:92px; min-width:92px; max-width:92px; flex-shrink:0; flex-grow:0;
     padding:7px 6px; overflow:hidden; text-overflow:ellipsis;
   }
   #btn-lang .lang-code { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   #btn-save {
-    display:inline-flex; align-items:center; justify-content:center;
-    width:110px; min-width:110px; max-width:110px; flex-shrink:0; flex-grow:0;
-    padding:7px 6px; overflow:hidden; text-overflow:ellipsis;
+    display:inline-flex; align-items:center; justify-content:center; text-align:center;
+    width:74px; min-width:74px; max-width:74px; flex-shrink:0; flex-grow:0;
+    padding:7px 4px; overflow:hidden; text-overflow:ellipsis; font-size:11px;
   }
   .topbar-search-row {
     position:relative; padding: 10px 16px; border-bottom: 1px solid var(--border);
@@ -285,7 +285,7 @@
     overflow: hidden; text-align: center;
     background:
       radial-gradient(60% 50% at 80% -10%, rgba(232,54,42,.28) 0%, rgba(232,54,42,0) 60%),
-      #141010; /* 지도 UI(var(--bg))와 동일한 검정 배경 */
+      #2b070c; /* 지도 UI(var(--bg))와 동일한 크림슨 배경 */
   }
   .landing-card {
     position: relative; z-index: 1; padding: 0 24px; max-width: 560px;
@@ -469,9 +469,9 @@
     .btn-bookmarks, .btn-directions, .btn-add {
       font-size: 11px; padding: 6px 9px;
     }
-    #btn-lang { min-width: 0; width: 40px; padding: 6px 0; }
+    #btn-lang { min-width: 40px; width: 40px; max-width: 40px; padding: 6px 0; }
     #btn-lang .lang-code { display: none; }
-    #btn-save { width: 76px; padding: 6px 8px; font-size: 11px; }
+    #btn-save { width: 50px; min-width: 50px; max-width: 50px; padding: 6px 2px; font-size: 10px; }
 
     .topbar-search-row { padding: 8px 10px; }
 
@@ -551,13 +551,36 @@
     <div class="sidebar-top">
       <div class="filter-chips">
         <button class="chip" id="btn-taste" onclick="openTasteModal()" style="background:#e8362a;border-color:#e8362a;color:#fff;font-weight:700;box-shadow:0 2px 6px rgba(232,54,42,.3)">🎯 내 취향 찾기</button>
+        <button class="chip on" id="chip-all" onclick="setFilter('all',this)">전체</button>
+      </div>
+      <div class="filter-chips" style="margin-top:6px">
+        <button class="chip" onclick="setFilter('cuisine:한식',this)">한식</button>
+        <button class="chip" onclick="setFilter('cuisine:중식',this)">중식</button>
+        <button class="chip" onclick="setFilter('cuisine:일식',this)">일식</button>
+        <button class="chip" onclick="setFilter('cuisine:양식',this)">양식</button>
+        <button class="chip" onclick="setFilter('cuisine:글로벌',this)">글로벌</button>
+      </div>
+      <div class="filter-chips" style="margin-top:6px">
+        <button class="chip" onclick="setFilter('cafeSub:작업카공',this)">☕ 작업·카공</button>
+        <button class="chip" onclick="setFilter('cafeSub:디저트',this)">🍰 디저트·베이커리</button>
+        <button class="chip" onclick="setFilter('cafeSub:스페셜티',this)">🫘 스페셜티·로스터리</button>
+      </div>
+      <div class="filter-chips" style="margin-top:6px">
+        <button class="chip" onclick="setFilter('barSub:포차',this)">포차</button>
+        <button class="chip" onclick="setFilter('barSub:요리주점',this)">요리주점</button>
+        <button class="chip" onclick="setFilter('barSub:바',this)">바</button>
+        <button class="chip" onclick="setFilter('barSub:헌팅포차',this)">헌팅포차</button>
+      </div>
+      <div class="filter-chips" style="margin-top:6px">
         <button class="chip" id="chip-hof" onclick="setFilter('hallOfFame',this)">🏅 홍대생 명예학식</button>
         <button class="chip" id="chip-michelin" onclick="setFilter('michelin',this)">🍽️ 미쉐린 가이드</button>
-        <button class="chip on" id="chip-all" onclick="setFilter('all',this)">전체</button>
-        <button class="chip" id="chip-restaurant" onclick="setFilter('restaurant',this)">🍜 음식점</button>
-        <button class="chip" id="chip-cafe" onclick="setFilter('cafe',this)">☕ 카페</button>
-        <button class="chip" id="chip-bar" onclick="setFilter('bar',this)">🍺 주점</button>
+        <button class="chip" onclick="setFilter('centuryStore',this)">🏛️ 백년가게</button>
+      </div>
+      <div class="filter-chips" style="margin-top:6px">
         <button class="chip" id="chip-liveclub" onclick="setFilter('liveclub',this)">🎤 라이브클럽</button>
+        <button class="chip" onclick="setFilter('club',this)">🪩 클럽</button>
+        <button class="chip" onclick="setFilter('giftshop',this)">🛍️ 소품샵</button>
+        <button class="chip" onclick="setFilter('entertainment',this)">🎡 엔터테인먼트</button>
         <button class="chip" id="chip-artsupply" onclick="setFilter('artsupply',this)">🎨 화방</button>
       </div>
       <div class="filter-chips" style="margin-top:6px">
@@ -567,6 +590,8 @@
         <button class="chip" id="chip-sangsu" onclick="setFilter('상수동',this)">상수동</button>
       </div>
     </div>
+    <div style="padding:0 12px;font-size:10px;color:var(--muted);margin:2px 0 4px">🎨 라이브클럽·클럽·소품샵·엔터테인먼트·화방 = 예술·창작 카테고리</div>
+    <div id="empty-cat-notice" style="display:none;padding:8px 12px;font-size:10px;color:var(--muted)"></div>
     <div class="store-list" id="store-list"></div>
   </div>
 
@@ -898,6 +923,24 @@ function cuisineLabel(s) {
   if (/주점|맥주|호프/.test(category) || s.type === 'bar') return '주점';
   return '한식';
 }
+
+// 카페 세부 분류 — 실제 데이터(카테고리/시그니처 메뉴) 키워드 기반, 지어내지 않음
+function cafeSubType(s) {
+  const text = `${s.category || ''} ${s.signatureMenu || ''}`;
+  if (/로스터리|스페셜티|싱글오리진|브루잉|CoE/i.test(text)) return '스페셜티';
+  if (/케이크|도넛|베이커리|빵|스콘|타르트|크로플|마들렌|디저트/.test(text)) return '디저트';
+  return '작업카공'; // 특별한 시그니처가 없으면 기본값(작업하기 좋은 카페)으로 분류
+}
+// 주점 세부 분류
+function barSubType(s) {
+  const text = s.category || '';
+  if (/헌팅/.test(text)) return '헌팅포차';
+  if (/포차/.test(text)) return '포차';
+  if (/요리\s*주점/.test(text)) return '요리주점';
+  return '바';
+}
+// 백년가게(중소벤처기업부 공식 인증) — certifications 배열에 실제로 인증 확인된 곳만 표시
+function isCenturyStore(s) { return (s.certifications || []).includes('백년가게'); }
 
 // 시그니처 메뉴 텍스트에서 명확히 매칭되는 이모티콘이 있으면 그걸 쓰고,
 // 없으면 장르(cuisineLabel) 기준 대표 이모티콘으로 대체한다. 지어내지 않고 규칙 기반으로만 매칭.
@@ -1419,7 +1462,11 @@ function renderList() {
   const isGoneMode = currentFilter === 'gone';
   const isHallOfFameMode = currentFilter === 'hallOfFame';
   const isMichelinMode = currentFilter === 'michelin';
+  const isCenturyMode = currentFilter === 'centuryStore';
   const isRepresentativeMode = currentFilter === 'representative'; // 태그가 붙은 프로토타입 대표 맛집 ~40곳
+  const isCuisineMode = currentFilter.startsWith('cuisine:');
+  const isCafeSubMode = currentFilter.startsWith('cafeSub:');
+  const isBarSubMode = currentFilter.startsWith('barSub:');
   const isCardMode = true; // 이제 모든 필터(전체 포함)가 태그 중심 카드 레이아웃을 씀 — 실제 평점/점수 없는 unverified 매장뿐이라 예전 점수바 레이아웃이 의미가 없었음
 
   let filtered = stores.filter(s => {
@@ -1427,7 +1474,15 @@ function renderList() {
     if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
     if (isHallOfFameMode) return (s.certifications || []).includes('홍대생 명예학식');
     if (isMichelinMode) return (s.certifications || []).some(c => c.includes('미쉐린'));
+    if (isCenturyMode) return isCenturyStore(s);
     if (isRepresentativeMode) return s.tags && s.tags.length > 0; // 취향 태그가 붙어있는 프로토타입 40곳
+    if (isCuisineMode) {
+      const want = currentFilter.split(':')[1];
+      const label = cuisineLabel(s);
+      return s.type === 'restaurant' && (want === '글로벌' ? label === '아시아식' : label === want);
+    }
+    if (isCafeSubMode) return s.type === 'cafe' && cafeSubType(s) === currentFilter.split(':')[1];
+    if (isBarSubMode) return s.type === 'bar' && barSubType(s) === currentFilter.split(':')[1];
     // 예전엔 unverified 매장을 '전체' 필터 말고는 다 숨겼는데, 지금 매장이 전부 unverified 상태라
     // 음식점/카페/주점/동네 필터를 눌러도 아무것도 안 뜨는 버그였음. 그 예외 규칙을 제거함.
     const matchFilter = currentFilter === 'all'
@@ -1437,6 +1492,11 @@ function renderList() {
       || (isDongFilter && s.dong === currentFilter);
     return matchFilter && s.name.includes(searchText);
   });
+
+  // 가나다순(2순위 기준) — "많이 찾는 순"(인기순)은 실사용 데이터가 없어 아직 구현하지 않음
+  if (isCuisineMode || isCafeSubMode || isBarSubMode || currentFilter === 'club' || currentFilter === 'giftshop' || currentFilter === 'entertainment') {
+    filtered.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+  }
 
   if (isTasteMode) filtered.sort((a, b) => matchScore(b) - matchScore(a));
   const showSortBar = !isTasteMode; // 취향 매칭 모드만 자체 정렬(일치도순)을 쓰고, 나머지 필터는 전부 공통 정렬 버튼을 씀
@@ -1457,6 +1517,9 @@ function renderList() {
     : isGoneMode ? '아직 등록된 "사라진 가게"가 없어요.'
     : isHallOfFameMode ? '아직 등록된 명예학식이 없어요.'
     : isMichelinMode ? '아직 등록된 미쉐린 가이드 매장이 없어요.'
+    : isCenturyMode ? '아직 백년가게 인증이 확인된 매장이 없어요.'
+    : (currentFilter === 'club' || currentFilter === 'giftshop' || currentFilter === 'entertainment')
+      ? '이 카테고리는 준비 중이에요. 곧 채워질 예정이에요.'
     : isRepresentativeMode ? '아직 등록된 대표 맛집이 없어요.'
     : '검색 결과 없음';
 
