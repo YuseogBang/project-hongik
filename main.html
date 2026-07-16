@@ -1241,29 +1241,40 @@ window.kakao && kakao.maps.load(() => {
 
   // "홍대 존" 경계선 — 성산로 → (신촌 구간만 직선) → 서강로 → 강변북로를 따라가는 근사 경계.
   // 실제 도로선을 정밀 추적하는 API가 없어서, 주요 교차로/역 좌표를 이어 만든 대략적인 안내선입니다.
-  const hongdaeZonePath = [
-    [37.5697, 126.9101], // 가좌역 부근 (성산로 서쪽 시작)
-    [37.5665, 126.9280], // 성산로 — 연남동 북쪽
-    [37.5620, 126.9350], // 성산로 — 신촌 방향 분기점
+  // 이전보다 홍대·연남·상수·합정 핵심 권역에 더 가깝게 좁혔습니다.
+  const hongdaeZoneCoords = [
+    [37.5665, 126.9230], // 연희로 · 성산로 교차 (연남동 북서쪽)
+    [37.5630, 126.9330], // 성산로 — 신촌 방향 분기점
     [37.5551, 126.9368], // 신촌역 (분기점에서 직선 연결)
     [37.5471, 126.9316], // 서강로 — 광흥창역 방향
     [37.5470, 126.9265], // 서강로 — 서강대역 방향
-    [37.5462, 126.9198], // 서강로 → 강변북로 합류 지점
+    [37.5460, 126.9150], // 서강로 → 강변북로 합류 지점 (마포한강공원 인근)
     [37.5478, 126.9013], // 강변북로 — 합정한강공원
-    [37.5560, 126.8930], // 강변북로 — 망원한강공원
-    [37.5688, 126.8865], // 강변북로 — 난지한강공원
-    [37.5697, 126.9101], // 성산로 서쪽 시작점으로 복귀 (폐곡선)
-  ].map(([lat, lng]) => new kakao.maps.LatLng(lat, lng));
+    [37.5560, 126.8980], // 강변북로 — 망원한강공원
+    [37.5620, 126.9050], // 강변북로에서 북쪽으로 꺾어 성산로 방향
+    [37.5665, 126.9230], // 시작점으로 복귀 (폐곡선)
+  ];
+  const hongdaeZonePath = hongdaeZoneCoords.map(([lat, lng]) => new kakao.maps.LatLng(lat, lng));
+
+  // 안쪽이 아니라 바깥쪽에 색을 칠하기 위해, 지도 전체를 덮는 큰 사각형(outer) 안에
+  // 홍대존 경계(hole)를 뚫는 방식으로 폴리곤을 만든다 — 그러면 홍대존 안쪽은 원래 지도가 그대로 보이고,
+  // 바깥쪽만 옅은 빨강으로 덮인다.
+  const outerBounds = [
+    new kakao.maps.LatLng(37.40, 126.75),
+    new kakao.maps.LatLng(37.40, 127.05),
+    new kakao.maps.LatLng(37.70, 127.05),
+    new kakao.maps.LatLng(37.70, 126.75),
+  ];
 
   new kakao.maps.Polygon({
     map,
-    path: hongdaeZonePath,
+    path: [outerBounds, hongdaeZonePath], // 첫 번째 = 바깥 전체, 두 번째 = 뚫을 구멍(홍대존)
     strokeWeight: 2,
     strokeColor: '#e8362a',
     strokeOpacity: 0.55,
     strokeStyle: 'longdash',
     fillColor: '#e8362a',
-    fillOpacity: 0.04,
+    fillOpacity: 0.16,
   });
 
   document.getElementById('loading').style.display = 'none';
