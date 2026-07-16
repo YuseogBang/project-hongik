@@ -70,8 +70,8 @@
   #btn-lang .lang-code { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   #btn-save {
     display:inline-flex; align-items:center; justify-content:center; text-align:center;
-    width:74px; min-width:74px; max-width:74px; flex-shrink:0; flex-grow:0;
-    padding:7px 4px; overflow:hidden; text-overflow:ellipsis; font-size:11px;
+    width:36px; min-width:36px; max-width:36px; height:36px; border-radius:50%;
+    flex-shrink:0; flex-grow:0; padding:0; overflow:hidden; font-size:15px;
   }
   .topbar-search-row {
     position:relative; padding: 10px 16px; border-bottom: 1px solid var(--border);
@@ -136,6 +136,7 @@
   .search-box input { background: none; border: none; color: var(--text); font-size: 13px; width: 100%; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; outline: none; }
   .search-box input::placeholder { color: var(--muted); }
   .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-group { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
   .chip { font-size: 11px; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--border); color: var(--muted); background: transparent; cursor: pointer; transition: all .15s; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; }
   .chip.on {
     border-color: var(--accent); color: #ffffff;
@@ -471,7 +472,7 @@
     }
     #btn-lang { min-width: 40px; width: 40px; max-width: 40px; padding: 6px 0; }
     #btn-lang .lang-code { display: none; }
-    #btn-save { width: 50px; min-width: 50px; max-width: 50px; padding: 6px 2px; font-size: 10px; }
+    #btn-save { width: 32px; min-width: 32px; max-width: 32px; height: 32px; border-radius: 50%; padding: 0; font-size: 13px; }
 
     .topbar-search-row { padding: 8px 10px; }
 
@@ -530,7 +531,7 @@
   <div class="topbar-right">
     <button class="btn-bookmarks" id="btn-lang" onclick="cycleLang()" title="Language / 语言">🌐 KO</button>
     <button class="btn-bookmarks" id="btn-rip" onclick="showGoneStores()">🪦 R.I.P</button>
-    <button class="btn-directions" id="btn-save" onclick="showBookmarks()">♥ 저장</button>
+    <button class="btn-directions" id="btn-save" onclick="showBookmarks()">♥</button>
   </div>
 </div>
 <div class="topbar-search-row">
@@ -553,44 +554,43 @@
         <button class="chip" id="btn-taste" onclick="openTasteModal()" style="background:#e8362a;border-color:#e8362a;color:#fff;font-weight:700;box-shadow:0 2px 6px rgba(232,54,42,.3)">🎯 내 취향 찾기</button>
         <button class="chip on" id="chip-all" onclick="setFilter('all',this)">전체</button>
       </div>
-      <div class="filter-chips" style="margin-top:6px">
+      <div class="filter-chips filter-group">
         <button class="chip" onclick="setFilter('cuisine:한식',this)">한식</button>
         <button class="chip" onclick="setFilter('cuisine:중식',this)">중식</button>
         <button class="chip" onclick="setFilter('cuisine:일식',this)">일식</button>
         <button class="chip" onclick="setFilter('cuisine:양식',this)">양식</button>
         <button class="chip" onclick="setFilter('cuisine:글로벌',this)">글로벌</button>
       </div>
-      <div class="filter-chips" style="margin-top:6px">
+      <div class="filter-chips filter-group">
         <button class="chip" onclick="setFilter('cafeSub:작업카공',this)">☕ 작업·카공</button>
         <button class="chip" onclick="setFilter('cafeSub:디저트',this)">🍰 디저트·베이커리</button>
         <button class="chip" onclick="setFilter('cafeSub:스페셜티',this)">🫘 스페셜티·로스터리</button>
       </div>
-      <div class="filter-chips" style="margin-top:6px">
+      <div class="filter-chips filter-group">
         <button class="chip" onclick="setFilter('barSub:포차',this)">포차</button>
         <button class="chip" onclick="setFilter('barSub:요리주점',this)">요리주점</button>
         <button class="chip" onclick="setFilter('barSub:바',this)">바</button>
         <button class="chip" onclick="setFilter('barSub:헌팅포차',this)">헌팅포차</button>
       </div>
-      <div class="filter-chips" style="margin-top:6px">
+      <div class="filter-chips filter-group">
         <button class="chip" id="chip-hof" onclick="setFilter('hallOfFame',this)">🏅 홍대생 명예학식</button>
         <button class="chip" id="chip-michelin" onclick="setFilter('michelin',this)">🍽️ 미쉐린 가이드</button>
         <button class="chip" onclick="setFilter('centuryStore',this)">🏛️ 백년가게</button>
       </div>
-      <div class="filter-chips" style="margin-top:6px">
+      <div class="filter-chips filter-group">
         <button class="chip" id="chip-liveclub" onclick="setFilter('liveclub',this)">🎤 라이브클럽</button>
         <button class="chip" onclick="setFilter('club',this)">🪩 클럽</button>
         <button class="chip" onclick="setFilter('giftshop',this)">🛍️ 소품샵</button>
         <button class="chip" onclick="setFilter('entertainment',this)">🎡 엔터테인먼트</button>
         <button class="chip" id="chip-artsupply" onclick="setFilter('artsupply',this)">🎨 화방</button>
       </div>
-      <div class="filter-chips" style="margin-top:6px">
+      <div class="filter-chips filter-group">
         <button class="chip" id="chip-seogyo" onclick="setFilter('서교동',this)">서교동</button>
         <button class="chip" id="chip-yeonnam" onclick="setFilter('연남동',this)">연남동</button>
         <button class="chip" id="chip-hapjeong" onclick="setFilter('합정동',this)">합정동</button>
         <button class="chip" id="chip-sangsu" onclick="setFilter('상수동',this)">상수동</button>
       </div>
     </div>
-    <div style="padding:0 12px;font-size:10px;color:var(--muted);margin:2px 0 4px">🎨 라이브클럽·클럽·소품샵·엔터테인먼트·화방 = 예술·창작 카테고리</div>
     <div id="empty-cat-notice" style="display:none;padding:8px 12px;font-size:10px;color:var(--muted)"></div>
     <div class="store-list" id="store-list"></div>
   </div>
@@ -860,7 +860,7 @@ function applyLang() {
   setText('chip-hapjeong', t.hapjeong);
   setText('chip-sangsu', t.sangsu);
   setText('btn-rip', t.rip);
-  setText('btn-save', t.save);
+  // 저장 버튼은 이제 하트 아이콘만 사용 — 언어 바뀌어도 텍스트로 안 덮어씀
   setHtml('landing-desc', t.landingDesc);
   setText('landing-note', t.landingNote);
   setText('landing-skip', t.landingSkip);
