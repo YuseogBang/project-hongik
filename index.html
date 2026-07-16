@@ -23,6 +23,7 @@
     --card-r: 14px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { max-width: 100vw; overflow-x: hidden; }
   body {
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif; color: var(--text);
     height: 100vh; display: flex; flex-direction: column; overflow: hidden;
@@ -61,6 +62,7 @@
     font-family:'Pretendard', 'Noto Sans KR', sans-serif; white-space:nowrap;
   }
   .btn-bookmarks:hover { border-color:var(--accent); color:#fff; }
+  #btn-lang { display:inline-flex; align-items:center; justify-content:center; width:104px; }
   .topbar-search-row {
     position:relative; padding: 10px 16px; border-bottom: 1px solid var(--border);
     background: var(--surface);
@@ -432,6 +434,33 @@
   }
   .kakao-infobox .ib-name { font-size: 13px; font-weight: 600; color: #3d1712; margin-bottom: 4px; }
   .kakao-infobox .ib-addr { font-size: 11px; color: #5c756d; }
+  /* ── 모바일 대응 ── */
+  @media (max-width: 640px) {
+    .topbar { padding: 0 10px; gap: 8px; }
+    .logo { font-size: 13px; }
+    .brand-logo { width: 26px !important; height: 17px !important; }
+    .topbar-right { gap: 6px; }
+    .btn-bookmarks, .btn-directions, .btn-add {
+      font-size: 11px; padding: 6px 9px;
+    }
+    #btn-lang { min-width: 0; width: 40px; padding: 6px 0; }
+    #btn-lang .lang-code { display: none; }
+
+    .topbar-search-row { padding: 8px 10px; }
+
+    .sidebar, .detail { width: 100vw; max-width: 100vw; }
+
+    .map-controls { max-width: calc(100vw - 24px); }
+    .map-btn { white-space: normal; font-size: 10px; line-height: 1.4; text-align: left; }
+
+    .modal { width: calc(100vw - 32px); padding: 18px; }
+
+    .landing-card h1 { font-size: clamp(26px, 11vw, 52px); }
+    .landing-card p { font-size: 15px; }
+    .landing-btn { flex: 1 1 100%; } /* 좁은 화면에선 버튼을 위아래로 쌓음 */
+
+    .detail-body, .store-item { font-size: 13px; }
+  }
 </style>
 </head>
 <body>
@@ -696,7 +725,7 @@ const LANG_ORDER = ['ko', 'en', 'zh'];
 let currentLang = localStorage.getItem('lang') || 'ko';
 const I18N = {
   ko: {
-    langBtn: '🌐 KO', search: '업소명 검색...', taste: '🎯 내 취향 찾기', hof: '🏅 홍대생 명예학식',
+    langBtn: '🌐 한국어', search: '업소명 검색...', taste: '🎯 내 취향 찾기', hof: '🏅 홍대생 명예학식',
     all: '전체', restaurant: '음식점', cafe: '카페', bar: '주점',
     seogyo: '서교동', yeonnam: '연남동', hapjeong: '합정동',
     rip: '🪦 R.I.P', save: '♥ 저장', menuTitle: '메뉴',
@@ -706,7 +735,7 @@ const I18N = {
     landingBeta: '아직 베타 버전이에요. 매장 정보와 기능을 계속 업데이트하고 있어요.',
   },
   en: {
-    langBtn: '🌐 EN', search: 'Search places...', taste: '🎯 Find my taste', hof: '🏅 Student favorites',
+    langBtn: '🌐 English', search: 'Search places...', taste: '🎯 Find my taste', hof: '🏅 Student favorites',
     all: 'All', restaurant: 'Restaurants', cafe: 'Cafes', bar: 'Bars',
     seogyo: 'Seogyo-dong', yeonnam: 'Yeonnam-dong', hapjeong: 'Hapjeong-dong',
     rip: '🪦 R.I.P', save: '♥ Saved', menuTitle: 'Menu',
@@ -739,7 +768,8 @@ function applyLang() {
   const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
   const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
 
-  setText('btn-lang', t.langBtn);
+  const langCode = t.langBtn.replace('🌐 ', '');
+  setHtml('btn-lang', `🌐 <span class="lang-code">${langCode}</span>`);
   const searchInput = document.getElementById('search-input');
   if (searchInput) searchInput.placeholder = t.search;
   setText('btn-taste', t.taste);
@@ -843,6 +873,106 @@ function menuEmoji(s) {
 }
 
 // 출처가 있는 운영 정보만 취향 태그로 표시한다. 값이 없는 경우 태그를 만들어내지 않는다.
+// ── 태그/메뉴 번역 (고정 어휘만 — 매장 상호명은 번역하지 않음) ──
+const TAG_I18N = {
+  // 동네
+  '서교동': { en: 'Seogyo-dong', zh: '西桥洞' }, '연남동': { en: 'Yeonnam-dong', zh: '延南洞' },
+  '합정동': { en: 'Hapjeong-dong', zh: '合井洞' }, '상수동': { en: 'Sangsu-dong', zh: '上水洞' },
+  '홍대': { en: 'Hongdae', zh: '弘大' },
+  // 장르
+  '한식': { en: 'Korean', zh: '韩餐' }, '중식': { en: 'Chinese', zh: '中餐' },
+  '양식': { en: 'Western', zh: '西餐' }, '일식': { en: 'Japanese', zh: '日餐' },
+  '아시아식': { en: 'Asian', zh: '亚洲菜' }, '카페·디저트': { en: 'Cafe & Dessert', zh: '咖啡·甜点' },
+  '주점': { en: 'Bar', zh: '酒吧' },
+  // 인증
+  '홍대생 명예학식': { en: 'Student favorite', zh: '学生推荐名店' },
+  '미쉐린 빕구르망': { en: 'Michelin Bib Gourmand', zh: '米其林必比登' },
+  // 운영 기간/리뷰
+  '30년 노포': { en: '30+ yr institution', zh: '30年老店' }, '10년 이상': { en: '10+ years', zh: '10年以上' },
+  '리뷰 1,000+': { en: '1,000+ reviews', zh: '1000+条评论' }, '리뷰 300+': { en: '300+ reviews', zh: '300+条评论' },
+  // 서비스
+  '예약 가능': { en: 'Reservations', zh: '可预约' }, '포장 가능': { en: 'Takeout', zh: '可打包' },
+  '배달 가능': { en: 'Delivery', zh: '可外送' }, '주차 가능': { en: 'Parking', zh: '有停车场' },
+  '휠체어 접근': { en: 'Wheelchair access', zh: '轮椅可通行' }, '반려동물 동반': { en: 'Pet friendly', zh: '可带宠物' },
+  '심야 영업': { en: 'Late night', zh: '深夜营业' }, '매일 영업': { en: 'Open daily', zh: '每日营业' },
+  '브레이크타임 없음': { en: 'No break time', zh: '无休息时段' },
+  // 취향 태그
+  '매운맛': { en: 'Spicy', zh: '辣味' }, '혼밥': { en: 'Solo-friendly', zh: '适合独食' },
+  '데이트': { en: 'Date spot', zh: '约会' }, '인스타감성': { en: 'Instagrammable', zh: 'Ins风' },
+  '조용한': { en: 'Quiet', zh: '安静' }, '시끌벅적': { en: 'Lively', zh: '热闹' },
+  '가성비': { en: 'Good value', zh: '性价比高' }, '술안주': { en: 'Great with drinks', zh: '下酒菜' },
+  '디저트': { en: 'Dessert', zh: '甜点' }, '로컬단골': { en: 'Local favorite', zh: '本地常客' },
+};
+function localizeTag(tag) {
+  if (currentLang === 'ko') return tag;
+  const key = tag.replace('#', '');
+  const hit = TAG_I18N[key];
+  return hit ? `#${hit[currentLang]}` : tag; // 사전에 없는 태그는 지어내지 않고 한국어 그대로 둠
+}
+
+// 알려진 메뉴명만 번역, 매칭 안 되면 원문(한국어) 유지 — 없는 번역을 지어내지 않음
+const MENU_I18N = [
+  [/제육볶음/, { en: 'Spicy Pork Stir-fry', zh: '辣炒猪肉' }],
+  [/돼지연탄구이|삼겹살/, { en: 'Grilled Pork Belly', zh: '烤五花肉' }],
+  [/고등어구이|고등어정식/, { en: 'Grilled Mackerel', zh: '烤鲭鱼' }],
+  [/함박스테이크/, { en: 'Hamburg Steak', zh: '汉堡牛排' }],
+  [/치즈버거/, { en: 'Cheeseburger', zh: '芝士汉堡' }],
+  [/닭칼국수/, { en: 'Chicken Kalguksu', zh: '鸡肉刀削面' }],
+  [/회냉면/, { en: 'Raw Fish Naengmyeon', zh: '生鱼冷面' }],
+  [/유부김밥/, { en: 'Fried Tofu Gimbap', zh: '豆皮紫菜包饭' }],
+  [/명태김밥/, { en: 'Pollack Gimbap', zh: '明太鱼紫菜包饭' }],
+  [/뚝닭|닭도리탕/, { en: 'Spicy Braised Chicken', zh: '辣炖鸡' }],
+  [/철판제육덮밥/, { en: 'Sizzling Pork Rice Bowl', zh: '铁板猪肉盖饭' }],
+  [/삼선간짜장/, { en: 'Seafood Jjajangmyeon', zh: '三鲜炸酱面' }],
+  [/짬뽕밥/, { en: 'Jjamppong Rice', zh: '什锦海鲜辣汤饭' }],
+  [/깐풍기/, { en: 'Crispy Sweet & Spicy Chicken', zh: '干烹鸡' }],
+  [/오코노미소스동/, { en: 'Okonomi Sauce Pork Bowl', zh: '御好烧酱猪排饭' }],
+  [/히레카츠|히레가츠/, { en: 'Fillet Pork Cutlet', zh: '腰内肉炸猪排' }],
+  [/게키카라라멘/, { en: 'Extra Spicy Ramen', zh: '激辣拉面' }],
+  [/츠케멘|아부라소바/, { en: 'Tsukemen (Dipping Noodles)', zh: '蘸面' }],
+  [/포테이토 피자/, { en: 'Potato Pizza', zh: '土豆披萨' }],
+  [/하프앤하프 피자/, { en: 'Half & Half Pizza', zh: '双拼披萨' }],
+  [/맑은 돼지곰탕/, { en: 'Clear Pork Bone Soup', zh: '清汤猪骨汤' }],
+  [/대방어회/, { en: 'Winter Yellowtail Sashimi', zh: '冬季鰤鱼刺身' }],
+  [/연어회/, { en: 'Salmon Sashimi', zh: '三文鱼刺身' }],
+  [/오겹살/, { en: 'Five-layer Pork Belly', zh: '五花肉' }],
+  [/생갈비/, { en: 'Raw Short Ribs', zh: '生排骨' }],
+  [/토리파이탄/, { en: 'Chicken Paitan Ramen', zh: '鸡白汤拉面' }],
+  [/특로스카츠/, { en: 'Premium Pork Loin Cutlet', zh: '特级里脊炸猪排' }],
+  [/로스카츠/, { en: 'Pork Loin Cutlet', zh: '里脊炸猪排' }],
+  [/마제소바/, { en: 'Mazesoba (Mixed Noodles)', zh: '拌面' }],
+  [/돈코츠 라멘/, { en: 'Tonkotsu Ramen', zh: '豚骨拉面' }],
+  [/토마토 오코노미야끼/, { en: 'Tomato Okonomiyaki', zh: '番茄御好烧' }],
+  [/인라멘/, { en: 'Signature Ramen', zh: '招牌拉面' }],
+  [/멘보샤/, { en: 'Shrimp Toast', zh: '面包虾' }],
+  [/대게살볶음/, { en: 'Stir-fried Crab Meat', zh: '炒蟹肉' }],
+  [/샤오롱바오/, { en: 'Xiaolongbao', zh: '小笼包' }],
+  [/우육탕면/, { en: 'Beef Noodle Soup', zh: '牛肉汤面' }],
+  [/소고기 국수/, { en: 'Beef Noodle Soup', zh: '牛肉粉' }],
+  [/쏨땀/, { en: 'Som Tam (Papaya Salad)', zh: '青木瓜沙拉' }],
+  [/차돌양지쌀국수/, { en: 'Beef Brisket Pho', zh: '牛胸肉河粉' }],
+  [/대만식 우육면/, { en: 'Taiwanese Beef Noodle Soup', zh: '台式牛肉面' }],
+  [/포테이토&페퍼로니 하프앤하프 피자/, { en: 'Potato & Pepperoni Half Pizza', zh: '土豆培根双拼披萨' }],
+  [/깻잎 떡볶이/, { en: 'Perilla Leaf Tteokbokki', zh: '紫苏叶炒年糕' }],
+  [/버터갈릭 감자튀김/, { en: 'Butter Garlic Fries', zh: '黄油蒜香薯条' }],
+  [/수제 모둠 튀김/, { en: 'Assorted Fritters', zh: '什锦炸物' }],
+  [/떡볶이/, { en: 'Tteokbokki (Spicy Rice Cake)', zh: '辣炒年糕' }],
+  [/옛날 떡볶이/, { en: 'Old-style Tteokbokki', zh: '传统辣炒年糕' }],
+  [/크림모카/, { en: 'Cream Mocha', zh: '奶油摩卡' }],
+  [/아인슈페너/, { en: 'Einspänner (Coffee w/ Cream)', zh: '维也纳咖啡' }],
+  [/더티앤크림 커피/, { en: 'Dirty Cream Coffee', zh: '脏咖啡' }],
+];
+function localizeMenuText(text) {
+  if (currentLang === 'ko' || !text) return text;
+  return text.split(',').map(part => {
+    const trimmed = part.trim();
+    for (const [re, tr] of MENU_I18N) {
+      if (re.test(trimmed)) return tr[currentLang];
+    }
+    return trimmed; // 사전에 없으면 지어내지 않고 원문 유지
+  }).join(', ');
+}
+
 function objectiveTasteTags(s) {
   const tags = [`#${s.dong || '홍대'}`];
   if (s.type === 'restaurant') tags.push(`#${cuisineLabel(s)}`);
@@ -1288,7 +1418,7 @@ function renderList() {
       if (isCardMode) {
         // 취향태그 카드와 같은 톤으로 통일된 큐레이션 카드 레이아웃
         const info = catInfo(s);
-        const cardTags = (isTasteMode || isRepresentativeMode) ? (s.tags || []).map(t => `#${t}`) : objectiveTasteTags(s);
+        const cardTags = ((isTasteMode || isRepresentativeMode) ? (s.tags || []).map(t => `#${t}`) : objectiveTasteTags(s)).map(localizeTag);
         const badgeHtml = isTasteMode ? matchBadge
           : isGoneMode ? '<span style="font-size:10px;color:#93a8a2;font-weight:600">🪦 R.I.P</span>'
           : isHallOfFameMode ? '<span style="font-size:10px;color:#a9744f;font-weight:700">🏅 명예학식</span>'
@@ -1358,12 +1488,13 @@ function selectStore(id) {
     const info = catInfo(s);
     const dist = distToCampus(s);
     const walk = Math.max(1, Math.round(dist / 70)); // 도보 약 70m/분 기준 추정치
-    const tags = objectiveTasteTags(s);
+    const tags = objectiveTasteTags(s).map(localizeTag);
     // 카드 B는 큐레이터 스토리만 보여주고, 공식 인증은 취향 태그(A)에서만 표시한다.
     const storyTags = s.storyTags || ['재학생 추천', `${s.dong} 골목 스토리`];
-    const signatureMenus = Array.isArray(s.signatureMenu)
+    const signatureMenus = (Array.isArray(s.signatureMenu)
       ? s.signatureMenu
-      : (s.signatureMenu || '').split(',').map(menu => menu.trim()).filter(Boolean);
+      : (s.signatureMenu || '').split(',').map(menu => menu.trim()).filter(Boolean)
+    ).map(localizeMenuText);
     const signatureMenuSection = `
       <div style="margin-top:10px;padding:11px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px">
         <div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.06em;margin-bottom:7px">SIGNATURE MENU</div>
