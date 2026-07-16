@@ -77,14 +77,26 @@
   .topbar-search-row .search-box { margin-bottom: 0; max-width: 480px; }
   .search-results {
     display:none; position:absolute; top:48px; left:16px; width:min(480px, calc(100vw - 32px));
-    background:var(--surface); border:1px solid var(--border); border-radius:0 0 10px 10px;
-    box-shadow:0 10px 22px rgba(0,0,0,.35); overflow:hidden; z-index:350;
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    box-shadow:0 14px 32px rgba(0,0,0,.45); overflow:hidden; z-index:350;
   }
-  .search-result { width:100%; display:flex; align-items:center; gap:8px; padding:10px 12px; border:none; border-bottom:1px solid var(--border); background:transparent; color:var(--text); text-align:left; cursor:pointer; font-family:'Pretendard', 'Noto Sans KR', sans-serif; }
+  .search-result {
+    width:100%; display:flex; align-items:center; gap:10px; padding:11px 14px;
+    border:none; border-bottom:1px solid var(--border); background:transparent; color:var(--text);
+    text-align:left; cursor:pointer; font-family:'Pretendard', 'Noto Sans KR', sans-serif;
+    transition: background .12s;
+  }
   .search-result:last-child { border-bottom:none; }
   .search-result:hover { background:var(--surface2); }
-  .search-result-type { margin-left:auto; color:var(--muted); font-size:11px; }
-  .search-empty { padding:12px; color:var(--muted); font-size:12px; }
+  .search-result:active { background:rgba(232,54,42,.12); }
+  .search-result-icon {
+    width:28px; height:28px; border-radius:50%; flex:none;
+    display:flex; align-items:center; justify-content:center; font-size:14px;
+    background:var(--surface2);
+  }
+  .search-result-name { font-weight:600; font-size:13px; }
+  .search-result-type { margin-left:auto; color:var(--muted); font-size:11px; flex:none; }
+  .search-empty { padding:16px 14px; color:var(--muted); font-size:12px; text-align:center; }
 
   /* LAYOUT */
   .layout { display: flex; flex: 1; overflow: hidden; }
@@ -134,15 +146,19 @@
   .store-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
   .store-item {
-    padding: 10px 12px; border-radius: var(--card-r);
-    border: 1px solid var(--border); margin-bottom: 6px;
-    cursor: pointer; background: var(--surface2); transition: all .15s;
+    padding: 11px 13px; border-radius: var(--card-r);
+    border: 1px solid var(--border); border-left: 3px solid transparent; margin-bottom: 8px;
+    cursor: pointer; background: var(--surface2);
+    transition: transform .15s, box-shadow .15s, border-color .15s, background .15s;
   }
-  .store-item:hover { border-color: var(--accent); }
-  .store-item.active { border-color: var(--accent); background: rgba(232,54,42,.12); }
+  .store-item:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.25); }
+  .store-item.active {
+    border-color: var(--accent); border-left-color: var(--accent);
+    background: rgba(232,54,42,.14); box-shadow: 0 4px 16px rgba(232,54,42,.2);
+  }
   .store-item.closed-item { opacity: .5; }
-  .item-top { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
-  .item-name { font-size: 13px; font-weight: 500; flex: 1; }
+  .item-top { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; }
+  .item-name { font-size: 13.5px; font-weight: 600; flex: 1; letter-spacing: -.01em; }
   .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
   .dot-open { background: var(--success); box-shadow: 0 0 6px var(--success); }
   .dot-closed { background: var(--danger); }
@@ -533,6 +549,7 @@
       <div class="filter-chips">
         <button class="chip" id="btn-taste" onclick="openTasteModal()" style="background:#e8362a;border-color:#e8362a;color:#fff;font-weight:700;box-shadow:0 2px 6px rgba(232,54,42,.3)">🎯 내 취향 찾기</button>
         <button class="chip" id="chip-hof" onclick="setFilter('hallOfFame',this)" style="background:#fdf0e4;border-color:#a9744f;color:#8a5a3a;font-weight:700">🏅 홍대생 명예학식</button>
+        <button class="chip" id="chip-michelin" onclick="setFilter('michelin',this)" style="background:#fdeee0;border-color:#c0392b;color:#c0392b;font-weight:700">🍽️ 미쉐린 가이드</button>
         <button class="chip on" id="chip-all" onclick="setFilter('all',this)">전체</button>
         <button class="chip" id="chip-restaurant" onclick="setFilter('restaurant',this)">음식점</button>
         <button class="chip" id="chip-cafe" onclick="setFilter('cafe',this)">카페</button>
@@ -699,13 +716,13 @@ let stores = [
   { id:1784137392121, name:"라멘반라이", type:'restaurant', status:'unverified', lat:37.5484683668701, lng:126.921528389839, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 독막로15길 3-12. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"일식 면 요리", kakaoId:"2095032804", kakaoUrl:"http://place.map.kakao.com/2095032804", address:"서울 마포구 독막로15길 3-12", signatureMenu:"게키카라라멘, 츠케멘(아부라소바)", certifications:["홍대생 명예학식"] },
   { id:1784137398925, name:"카미야", type:'restaurant', status:'unverified', lat:37.552582876796265, lng:126.9223637900431, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로21길 28-6. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"일식 돈까스", kakaoId:"12771116", kakaoUrl:"http://place.map.kakao.com/12771116", address:"서울 마포구 와우산로21길 28-6", signatureMenu:"오코노미소스동, 히레카츠(치즈가츠)", certifications:["홍대생 명예학식"] },
   { id:1784137405896, name:"괜찮은생고기", type:'restaurant', status:'unverified', lat:37.549412969311, lng:126.922066061194, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로15길 23. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"돼지고기 구이/찜", kakaoId:"17894166", kakaoUrl:"http://place.map.kakao.com/17894166", address:"서울 마포구 와우산로15길 23", signatureMenu:"", certifications:["홍대생 명예학식"] },
-  { id:1784138528524, name:"옥동식 서교점", type:'restaurant', status:'unverified', lat:37.5526765694055, lng:126.914521071507, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 양화로7길 44-10. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"국/탕/찌개류", kakaoId:"1797997961", kakaoUrl:"http://place.map.kakao.com/1797997961", address:"서울 마포구 양화로7길 44-10", signatureMenu:"맑은 돼지곰탕", tags:["혼밥","가성비","로컬단골"], certifications:[] },
+  { id:1784138528524, name:"옥동식 서교점", type:'restaurant', status:'unverified', lat:37.5526765694055, lng:126.914521071507, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 양화로7길 44-10. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"국/탕/찌개류", kakaoId:"1797997961", kakaoUrl:"http://place.map.kakao.com/1797997961", address:"서울 마포구 양화로7길 44-10", signatureMenu:"맑은 돼지곰탕", tags:["혼밥","가성비","로컬단골"], certifications:["미쉐린 가이드 선정"] },
   { id:1784138540633, name:"바다회사랑 서교점", type:'restaurant', status:'unverified', lat:37.5554494589204, lng:126.917790877068, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 동교로 143. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"횟집", kakaoId:"953592773", kakaoUrl:"http://place.map.kakao.com/953592773", address:"서울 마포구 동교로 143", signatureMenu:"대방어회(겨울 한정), 연어회", tags:["데이트","술안주"], certifications:[] },
   { id:1784138548616, name:"육지", type:'restaurant', status:'unverified', lat:37.5497071933215, lng:126.917495034617, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 독막로3길 34. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"돼지고기 구이/찜", kakaoId:"931881312", kakaoUrl:"http://place.map.kakao.com/931881312", address:"서울 마포구 독막로3길 34", signatureMenu:"이불갈비, 돈육 목살", tags:["데이트","술안주","시끌벅적"], certifications:[] },
   { id:1784138558637, name:"산울림1992", type:'restaurant', status:'unverified', lat:37.55464224823846, lng:126.93054626122678, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 서강로9길 60. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'합정동', category:"한정식", kakaoId:"2036183426", kakaoUrl:"http://place.map.kakao.com/2036183426", address:"서울 마포구 서강로9길 60", signatureMenu:"치즈감자전, 한우내장찜", tags:["데이트","술안주","인스타감성"], certifications:[] },
   { id:1784138591988, name:"고기꾼김춘배 홍대본점", type:'restaurant', status:'unverified', lat:37.552843607872, lng:126.921519275899, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 홍익로3길 36. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"돼지고기 구이/찜", kakaoId:"27197478", kakaoUrl:"http://place.map.kakao.com/27197478", address:"서울 마포구 홍익로3길 36", signatureMenu:"오겹살, 생갈비", tags:["술안주","시끌벅적","데이트"], certifications:[] },
   { id:1784138626622, name:"옹달샘 본점", type:'restaurant', status:'unverified', lat:37.5484383147205, lng:126.919713291109, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 양화로6길 99. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"해물볶음", kakaoId:"26871332", kakaoUrl:"http://place.map.kakao.com/26871332", address:"서울 마포구 양화로6길 99", signatureMenu:"오징어볶음, 김치찜", tags:["술안주","매운맛","시끌벅적"], certifications:[] },
-  { id:1784138675041, name:"오레노라멘 합정본점", type:'restaurant', status:'unverified', lat:37.54725761707835, lng:126.91783721734953, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 독막로8길 16. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'합정동', category:"일식 면 요리", kakaoId:"1916682638", kakaoUrl:"http://place.map.kakao.com/1916682638", address:"서울 마포구 독막로8길 16", signatureMenu:"토리파이탄(닭육수 라멘)", tags:["혼밥","가성비"], certifications:[] },
+  { id:1784138675041, name:"오레노라멘 합정본점", type:'restaurant', status:'unverified', lat:37.54725761707835, lng:126.91783721734953, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 독막로8길 16. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'합정동', category:"일식 면 요리", kakaoId:"1916682638", kakaoUrl:"http://place.map.kakao.com/1916682638", address:"서울 마포구 독막로8길 16", signatureMenu:"토리파이탄(닭육수 라멘)", tags:["혼밥","가성비"], certifications:["미쉐린 가이드 선정"] },
   { id:1784138683082, name:"크레이지카츠", type:'restaurant', status:'unverified', lat:37.5504475197438, lng:126.90970501895275, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 포은로2나길 44. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'합정동', category:"일식 돈까스", kakaoId:"83301316", kakaoUrl:"http://place.map.kakao.com/83301316", address:"서울 마포구 포은로2나길 44", signatureMenu:"특로스카츠", tags:["혼밥","가성비"], certifications:[] },
   { id:1784138699524, name:"카와카츠 본점", type:'restaurant', status:'unverified', lat:37.554741054656375, lng:126.916195926392, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 동교로 126. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"일식 돈까스", kakaoId:"1351221007", kakaoUrl:"http://place.map.kakao.com/1351221007", address:"서울 마포구 동교로 126", signatureMenu:"로스카츠, 히레카츠", tags:["혼밥","가성비"], certifications:[] },
   { id:1784138707096, name:"칸다소바 홍대점", type:'restaurant', status:'unverified', lat:37.54928453503949, lng:126.92268746534987, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로 51-6. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"일식 면 요리", kakaoId:"2057792795", kakaoUrl:"http://place.map.kakao.com/2057792795", address:"서울 마포구 와우산로 51-6", signatureMenu:"마제소바, 아부라소바", tags:["혼밥","가성비"], certifications:[] },
@@ -733,7 +750,7 @@ const LANG_ORDER = ['ko', 'en', 'zh'];
 let currentLang = localStorage.getItem('lang') || 'ko';
 const I18N = {
   ko: {
-    langBtn: '🌐 한국어', search: '업소명 검색...', taste: '🎯 내 취향 찾기', hof: '🏅 홍대생 명예학식',
+    langBtn: '🌐 한국어', search: '업소명 검색...', taste: '🎯 내 취향 찾기', hof: '🏅 홍대생 명예학식', michelin: '🍽️ 미쉐린 가이드',
     all: '전체', restaurant: '음식점', cafe: '카페', bar: '주점',
     seogyo: '서교동', yeonnam: '연남동', hapjeong: '합정동',
     rip: '🪦 R.I.P', save: '♥ 저장', menuTitle: '메뉴',
@@ -743,7 +760,7 @@ const I18N = {
     landingBeta: '아직 베타 버전이에요. 매장 정보와 기능을 계속 업데이트하고 있어요.',
   },
   en: {
-    langBtn: '🌐 English', search: 'Search places...', taste: '🎯 Find my taste', hof: '🏅 Student favorites',
+    langBtn: '🌐 English', search: 'Search places...', taste: '🎯 Find my taste', hof: '🏅 Student favorites', michelin: '🍽️ Michelin Guide',
     all: 'All', restaurant: 'Restaurants', cafe: 'Cafes', bar: 'Bars',
     seogyo: 'Seogyo-dong', yeonnam: 'Yeonnam-dong', hapjeong: 'Hapjeong-dong',
     rip: '🪦 R.I.P', save: '♥ Saved', menuTitle: 'Menu',
@@ -753,7 +770,7 @@ const I18N = {
     landingBeta: 'This is a beta version — places and features are still being updated.',
   },
   zh: {
-    langBtn: '🌐 中文', search: '搜索店铺...', taste: '🎯 寻找我的口味', hof: '🏅 学生推荐名店',
+    langBtn: '🌐 中文', search: '搜索店铺...', taste: '🎯 寻找我的口味', hof: '🏅 学生推荐名店', michelin: '🍽️ 米其林指南',
     all: '全部', restaurant: '餐厅', cafe: '咖啡店', bar: '酒吧',
     seogyo: '西桥洞', yeonnam: '延南洞', hapjeong: '合井洞',
     rip: '🪦 R.I.P', save: '♥ 收藏', menuTitle: '菜单',
@@ -782,6 +799,7 @@ function applyLang() {
   if (searchInput) searchInput.placeholder = t.search;
   setText('btn-taste', t.taste);
   setText('chip-hof', t.hof);
+  setText('chip-michelin', t.michelin);
   setText('chip-all', t.all);
   setText('chip-restaurant', t.restaurant);
   setText('chip-cafe', t.cafe);
@@ -895,6 +913,7 @@ const TAG_I18N = {
   // 인증
   '홍대생 명예학식': { en: 'Student favorite', zh: '学生推荐名店' },
   '미쉐린 빕구르망': { en: 'Michelin Bib Gourmand', zh: '米其林必比登' },
+  '미쉐린 가이드 선정': { en: 'Michelin Guide Selected', zh: '米其林指南推荐' },
   // 운영 기간/리뷰
   '30년 노포': { en: '30+ yr institution', zh: '30年老店' }, '10년 이상': { en: '10+ years', zh: '10年以上' },
   '리뷰 1,000+': { en: '1,000+ reviews', zh: '1000+条评论' }, '리뷰 300+': { en: '300+ reviews', zh: '300+条评论' },
@@ -969,6 +988,16 @@ const MENU_I18N = [
   [/크림모카/, { en: 'Cream Mocha', zh: '奶油摩卡' }],
   [/아인슈페너/, { en: 'Einspänner (Coffee w/ Cream)', zh: '维也纳咖啡' }],
   [/더티앤크림 커피/, { en: 'Dirty Cream Coffee', zh: '脏咖啡' }],
+  [/퓨전 시오라멘|시오라멘/, { en: 'Shio (Salt) Ramen', zh: '盐味拉面' }],
+  [/부추 페스토/, { en: 'Chive Pesto', zh: '韭菜青酱' }],
+  [/솥밥/, { en: 'Hot Pot Rice', zh: '锅巴饭' }],
+  [/쇼유.*라멘|간장.*라멘/, { en: 'Shoyu (Soy Sauce) Ramen', zh: '酱油拉面' }],
+  [/능이버섯.*라멘/, { en: 'Neungi Mushroom Ramen', zh: '松茸菇拉面' }],
+  [/난면/, { en: 'Nanmyeon (Egg Noodles)', zh: '鸡蛋面' }],
+  [/이북식 손만둣국|손만둣국/, { en: 'Handmade Dumpling Soup', zh: '手工饺子汤' }],
+  [/버크셔.*돼지곰탕|돼지곰탕/, { en: 'Pork Bone Soup', zh: '猪骨汤' }],
+  [/전통 양지·내장 곰탕|양지·내장 곰탕/, { en: 'Beef Brisket & Tripe Soup', zh: '牛胸肉牛杂汤' }],
+  [/어향가지/, { en: 'Yuxiang Eggplant', zh: '鱼香茄子' }],
 ];
 function localizeMenuText(text) {
   if (currentLang === 'ko' || !text) return text;
@@ -1356,6 +1385,7 @@ function renderList() {
   const isBookmarkMode = currentFilter === 'bookmarks';
   const isGoneMode = currentFilter === 'gone';
   const isHallOfFameMode = currentFilter === 'hallOfFame';
+  const isMichelinMode = currentFilter === 'michelin';
   const isRepresentativeMode = currentFilter === 'representative'; // 태그가 붙은 프로토타입 대표 맛집 ~40곳
   const isCardMode = true; // 이제 모든 필터(전체 포함)가 태그 중심 카드 레이아웃을 씀 — 실제 평점/점수 없는 unverified 매장뿐이라 예전 점수바 레이아웃이 의미가 없었음
 
@@ -1363,6 +1393,7 @@ function renderList() {
     if (isTasteMode) return s.tags && matchScore(s) > 0; // 취향 모드는 unverified 여부와 무관하게 태그 매칭만 봄
     if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
     if (isHallOfFameMode) return (s.certifications || []).includes('홍대생 명예학식');
+    if (isMichelinMode) return (s.certifications || []).some(c => c.includes('미쉐린'));
     if (isRepresentativeMode) return s.tags && s.tags.length > 0; // 취향 태그가 붙어있는 프로토타입 40곳
     // 예전엔 unverified 매장을 '전체' 필터 말고는 다 숨겼는데, 지금 매장이 전부 unverified 상태라
     // 음식점/카페/주점/동네 필터를 눌러도 아무것도 안 뜨는 버그였음. 그 예외 규칙을 제거함.
@@ -1392,6 +1423,7 @@ function renderList() {
     : isBookmarkMode ? '저장한 장소가 아직 없어요'
     : isGoneMode ? '아직 등록된 "사라진 가게"가 없어요.'
     : isHallOfFameMode ? '아직 등록된 명예학식이 없어요.'
+    : isMichelinMode ? '아직 등록된 미쉐린 가이드 매장이 없어요.'
     : isRepresentativeMode ? '아직 등록된 대표 맛집이 없어요.'
     : '검색 결과 없음';
 
@@ -1430,6 +1462,7 @@ function renderList() {
         const badgeHtml = isTasteMode ? matchBadge
           : isGoneMode ? '<span style="font-size:10px;color:#93a8a2;font-weight:600">🪦 R.I.P</span>'
           : isHallOfFameMode ? '<span style="font-size:10px;color:#a9744f;font-weight:700">🏅 명예학식</span>'
+          : isMichelinMode ? '<span style="font-size:10px;color:#c0392b;font-weight:700">🍽️ 미쉐린 가이드</span>'
           : isRepresentativeMode ? '<span style="font-size:10px;color:#a9744f;font-weight:700">⭐ 대표 맛집</span>' : '';
         const memoryHtml = (isGoneMode && s.memory)
           ? `<div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;font-style:italic">“${s.memory}”</div>` : '';
@@ -1437,7 +1470,7 @@ function renderList() {
         <div class="store-item ${selectedId===s.id?'active':''}" onclick="selectStore(${s.id})"
              style="${isGoneMode?'opacity:.75;':''}">
           <div class="item-top">
-            <span style="font-size:14px;flex:none">${menuEmoji(s)}</span>
+            <span style="width:26px;height:26px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;flex:none">${menuEmoji(s)}</span>
             <div class="item-name">${s.name}</div>
             <div style="font-size:10px;color:var(--muted)">${info.label}</div>
           </div>
@@ -1694,7 +1727,7 @@ function filterList() {
   const matched = stores.filter(s => s.name.includes(searchText)).slice(0, 8);
   results.style.display = 'block';
   results.innerHTML = matched.length
-    ? matched.map(s => `<button class="search-result" onclick="selectSearchResult(${s.id})"><span>${s.name}</span><span class="search-result-type">${TYPES[s.type]||'기타'}</span></button>`).join('')
+    ? matched.map(s => `<button class="search-result" onclick="selectSearchResult(${s.id})"><span class="search-result-icon">${menuEmoji(s)}</span><span class="search-result-name">${s.name}</span><span class="search-result-type">${TYPES[s.type]||'기타'}</span></button>`).join('')
     : '<div class="search-empty">등록된 업체에서 찾지 못했어요.</div>';
 }
 
