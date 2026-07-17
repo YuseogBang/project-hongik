@@ -1243,6 +1243,16 @@ function matchScore(s) {
   if (!s.tags) return 0;
   return s.tags.filter(t => userTastes.includes(t)).length;
 }
+// 일치율(%) — 사용자가 고른 취향 중 이 매장이 몇 %를 만족하는지
+function matchPercent(s) {
+  if (!s.tags || userTastes.length === 0) return 0;
+  return Math.round((matchScore(s) / userTastes.length) * 100);
+}
+// 실제로 겹친 태그만 뽑아서 "왜 매칭됐는지" 이유로 보여줌 (번역 적용)
+function matchedTagNames(s) {
+  if (!s.tags) return [];
+  return s.tags.filter(t => userTastes.includes(t)).map(t => localizeTag(`#${t}`));
+}
 
 // 취향 추천 화면으로 전환 (랜딩페이지 버튼 / 취향모달 둘 다 여기로 모임)
 function showTasteView() {
@@ -1588,8 +1598,10 @@ function renderList() {
       const reviewsTxt = s.reviews != null ? `리뷰 ${s.reviews}` : '';
       const scorePct = isUnverified ? 0 : s.score;
       const match = isTasteMode ? matchScore(s) : 0;
+      const matchPct = isTasteMode ? matchPercent(s) : 0;
+      const matchReasons = isTasteMode ? matchedTagNames(s) : [];
       const matchBadge = isTasteMode
-        ? `<span style="font-size:10px;color:#e8362a;font-weight:600">🎯 ${match}개 일치</span>`
+        ? `<span style="font-size:11px;color:#e8362a;font-weight:800">🎯 ${matchPct}% 일치</span>`
         : '';
 
       if (isCardMode) {
@@ -1613,6 +1625,7 @@ function renderList() {
           </div>
           <div class="item-meta">${badgeHtml}</div>
           <div style="font-size:10px;color:var(--text);opacity:.85">${cardTags.join(' · ')}</div>
+          ${isTasteMode && matchReasons.length ? `<div style="font-size:10px;color:#ff8a75;margin-top:3px">✨ ${matchReasons.join(', ')} 일치</div>` : ''}
           ${memoryHtml}
         </div>`;
       }
