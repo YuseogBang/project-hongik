@@ -64,11 +64,15 @@
   .btn-bookmarks:hover { border-color:var(--accent); color:#fff; }
   #btn-lang {
     display:inline-flex; align-items:center; justify-content:center; text-align:center;
-    width:92px; min-width:92px; max-width:92px; flex-shrink:0; flex-grow:0;
-    padding:7px 6px; overflow:hidden; text-overflow:ellipsis;
+    width:36px; min-width:36px; max-width:36px; height:36px; border-radius:50%;
+    flex-shrink:0; flex-grow:0; padding:0; overflow:hidden; font-size:15px;
   }
-  #btn-lang .lang-code { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   #btn-save {
+    display:inline-flex; align-items:center; justify-content:center; text-align:center;
+    width:36px; min-width:36px; max-width:36px; height:36px; border-radius:50%;
+    flex-shrink:0; flex-grow:0; padding:0; overflow:hidden; font-size:15px;
+  }
+  #btn-rip {
     display:inline-flex; align-items:center; justify-content:center; text-align:center;
     width:36px; min-width:36px; max-width:36px; height:36px; border-radius:50%;
     flex-shrink:0; flex-grow:0; padding:0; overflow:hidden; font-size:15px;
@@ -477,11 +481,9 @@
     .btn-bookmarks, .btn-directions, .btn-add {
       font-size: 11px; padding: 6px 9px;
     }
-    #btn-lang { min-width: 40px; width: 40px; max-width: 40px; padding: 6px 0; }
-    #btn-lang .lang-code { display: none; }
-    #btn-save { width: 32px; min-width: 32px; max-width: 32px; height: 32px; border-radius: 50%; padding: 0; font-size: 13px; }
-    #btn-rip { width: 32px; min-width: 32px; max-width: 32px; height: 32px; border-radius: 50%; padding: 0; font-size: 13px; overflow: hidden; }
-    #btn-rip .rip-label { display: none; }
+    #btn-lang { width: 32px; min-width: 32px; max-width: 32px; height: 32px; font-size: 13px; }
+    #btn-save { width: 32px; min-width: 32px; max-width: 32px; height: 32px; font-size: 13px; }
+    #btn-rip { width: 32px; min-width: 32px; max-width: 32px; height: 32px; font-size: 13px; }
 
     .topbar-search-row { padding: 8px 10px; }
 
@@ -552,8 +554,8 @@
     Hongdae Map
   </div>
   <div class="topbar-right">
-    <button class="btn-bookmarks" id="btn-lang" onclick="cycleLang()" title="Language / 语言">🌐 KO</button>
-    <button class="btn-bookmarks" id="btn-rip" onclick="showGoneStores()">🪦 <span class="rip-label">R.I.P</span></button>
+    <button class="btn-bookmarks" id="btn-lang" onclick="cycleLang()" title="Language / 语言">🌐</button>
+    <button class="btn-bookmarks" id="btn-rip" onclick="showGoneStores()">🪦</button>
     <button class="btn-directions" id="btn-save" onclick="showBookmarks()">♥</button>
   </div>
 </div>
@@ -645,8 +647,8 @@
 
     <div class="legend">
       <div class="legend-title">범례</div>
-      <div class="legend-row"><div class="legend-dot" style="background:#00e5ff"></div>등록된 매장</div>
-      <div class="legend-row" style="opacity:.6"><div class="legend-dot" style="background:#00e5ff;opacity:.5"></div>옅은 색 = 영업 여부 미확인</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#ff2d78"></div>등록된 매장</div>
+      <div class="legend-row" style="opacity:.6"><div class="legend-dot" style="background:#ff2d78;opacity:.5"></div>옅은 색 = 영업 여부 미확인</div>
     </div>
   </div>
 
@@ -815,7 +817,13 @@ let stores = [
   { id:1784182411172, name:"클럽에반스", type:'liveclub', status:'unverified', lat:37.55026765598596, lng:126.92288901613414, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로 63. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"재즈클럽", kakaoId:"8101657", kakaoUrl:"http://place.map.kakao.com/8101657", address:"서울 마포구 와우산로 63", signatureMenu:"재즈 잼세션(월·화), 주말 기획공연", certifications:[], tags:["홍대병","조용한"] },
   { id:1784182487753, name:"앤트러사이트 서교점", type:'cafe', status:'unverified', lat:37.555521630383105, lng:126.9116794320928, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 월드컵로12길 11. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"카페", kakaoId:"657926243", kakaoUrl:"http://place.map.kakao.com/657926243", address:"서울 마포구 월드컵로12길 11", signatureMenu:"나쓰메소세키 블렌드 드립커피, 레몬마들렌", certifications:[] },
   { id:1784182494623, name:"앤트러사이트 합정점", type:'cafe', status:'unverified', lat:37.5458137305902, lng:126.918435148767, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 토정로5길 10. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'합정동', category:"카페", kakaoId:"12518512", kakaoUrl:"http://place.map.kakao.com/12518512", address:"서울 마포구 토정로5길 10", signatureMenu:"나쓰메소세키 블렌드 드립커피, 레몬마들렌", certifications:[] },
-  { id:1784182529573, name:"커피 리브레 연남점", type:'cafe', status:'unverified', lat:37.56364350559978, lng:126.92372978384485, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 성미산로32길 20-5. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'연남동', category:"카페", kakaoId:"11553130", kakaoUrl:"http://place.map.kakao.com/11553130", address:"서울 마포구 성미산로32길 20-5", signatureMenu:"카페라떼, 싱글오리진(CoE) 원두", certifications:[] }
+  { id:1784182529573, name:"커피 리브레 연남점", type:'cafe', status:'unverified', lat:37.56364350559978, lng:126.92372978384485, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 성미산로32길 20-5. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'연남동', category:"카페", kakaoId:"11553130", kakaoUrl:"http://place.map.kakao.com/11553130", address:"서울 마포구 성미산로32길 20-5", signatureMenu:"카페라떼, 싱글오리진(CoE) 원두", certifications:[] },
+  { id:1784270682830, name:"인클", type:'club', status:'unverified', lat:37.55059671337728, lng:126.92181246849826, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 잔다리로 11. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"힙합클럽", kakaoId:"560830975", kakaoUrl:"http://place.map.kakao.com/560830975", address:"서울 마포구 잔다리로 11", signatureMenu:"힙합 · 홍대 핫플 클럽", certifications:[] },
+  { id:1784270693186, name:"어썸", type:'club', status:'unverified', lat:37.5508799336703, lng:126.92227728665, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 잔다리로 8. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"힙합클럽", kakaoId:"2069407891", kakaoUrl:"http://place.map.kakao.com/2069407891", address:"서울 마포구 잔다리로 8", signatureMenu:"힙합", certifications:[] },
+  { id:1784270718971, name:"도즈서울", type:'club', status:'unverified', lat:37.55058255827296, lng:126.9222074325401, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 잔다리로 7. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"힙합클럽", kakaoId:"198141342", kakaoUrl:"http://place.map.kakao.com/198141342", address:"서울 마포구 잔다리로 7", signatureMenu:"힙합", certifications:[] },
+  { id:1784270726412, name:"엑스엑스", type:'club', status:'unverified', lat:37.5505114825649, lng:126.921005684894, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 어울마당로 61. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"힙합클럽", kakaoId:"1251853398", kakaoUrl:"http://place.map.kakao.com/1251853398", address:"서울 마포구 어울마당로 61", signatureMenu:"힙합", certifications:[] },
+  { id:1784270733136, name:"사보타지", type:'club', status:'unverified', lat:37.55027594924282, lng:126.92179922370765, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로17길 22. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"클럽", kakaoId:"27417898", kakaoUrl:"http://place.map.kakao.com/27417898", address:"서울 마포구 와우산로17길 22", signatureMenu:"클럽거리 인근", certifications:[] },
+  { id:1784270739639, name:"클럽 버뮤다", type:'club', status:'unverified', lat:37.5506995087307, lng:126.923310680981, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로 70. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"올장르클럽", kakaoId:"956705122", kakaoUrl:"http://place.map.kakao.com/956705122", address:"서울 마포구 와우산로 70", signatureMenu:"올장르, 고급 음향시설(Funktion-One)", certifications:[] }
 ];
 
 let map, markers = [], storeMarkers = [], clusterer, overlay, hoverOverlay, showMarkers = true;
@@ -912,8 +920,7 @@ function applyLang() {
   const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
   const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
 
-  const langCode = t.langBtn.replace('🌐 ', '');
-  setHtml('btn-lang', `🌐<span class="lang-code" style="margin-left:7px">${langCode}</span>`);
+  // 언어 버튼은 이제 지구본 아이콘만 사용 — 언어 바뀌어도 텍스트로 안 덮어씀
   const searchInput = document.getElementById('search-input');
   if (searchInput) searchInput.placeholder = t.search;
   setText('btn-taste', t.taste);
@@ -929,7 +936,7 @@ function applyLang() {
   setText('chip-yeonnam', t.yeonnam);
   setText('chip-hapjeong', t.hapjeong);
   setText('chip-sangsu', t.sangsu);
-  setText('btn-rip', t.rip);
+  // R.I.P 버튼도 이제 무덤 아이콘만 사용 — 언어 바뀌어도 텍스트로 안 덮어씀
   // 저장 버튼은 이제 하트 아이콘만 사용 — 언어 바뀌어도 텍스트로 안 덮어씀
   setHtml('landing-desc', t.landingDesc);
   setText('landing-note', t.landingNote);
@@ -978,6 +985,7 @@ let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '{}');
 // 카테고리 문자열 -> 아이콘/색/라벨 (실제 category 필드 기반, 지어내지 않음)
 function catInfo(s) {
   if (s.type === 'liveclub') return { icon:'🎸', color:'#8e44ad', label:'라이브클럽', labelEn:'Live Club' };
+  if (s.type === 'club') return { icon:'🪩', color:'#d63384', label:'클럽', labelEn:'Club' };
   if (s.type === 'artsupply') return { icon:'🎨', color:'#2980b9', label:'화방', labelEn:'Art Supplies' };
   if (s.category && s.category.includes('카페')) return { icon:'☕', color:'#a9744f', label:'카페', labelEn:'Cafe' };
   if (s.type === 'bar' || (s.category && /주점|맥주|호프/.test(s.category))) return { icon:'🍺', color:'#f5a623', label:'술집', labelEn:'Bar' };
@@ -1019,6 +1027,7 @@ function isCenturyStore(s) { return (s.certifications || []).includes('백년가
 function menuEmoji(s) {
   // 라이브클럽/화방은 주류·카페를 같이 팔더라도 본업이 공연/미술재료라, 음식 키워드 매칭보다 먼저 전용 아이콘으로 고정한다.
   if (s.type === 'liveclub') return '🎤';
+  if (s.type === 'club') return '🪩';
   if (s.type === 'artsupply') return '🎨';
   const menu = s.signatureMenu || '';
   const MENU_RULES = [
@@ -1489,7 +1498,7 @@ function renderMarkers() {
 
     // 카테고리(맛집/카페/술집) 기준 색상 — 카드 디자인과 통일
     const info = catInfo(s);
-    const color = '#00e5ff'; // 지도(빨강/주황/노랑/초록 위주)에서 거의 안 쓰이는 시안색으로 최대한 튀게
+    const color = '#ff2d78'; // 핑크/레드 계열로 통일
     const emoji = info.icon;
 
     const isSelected = selectedId === s.id;
