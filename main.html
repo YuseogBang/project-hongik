@@ -518,30 +518,6 @@
 </head>
 <body>
 
-<!-- LANDING -->
-<div class="landing-overlay" id="landing">
-  <div class="landing-card">
-    <div class="landing-brand">
-      <svg class="brand-logo" viewBox="0 0 180 100" aria-label="Hongdae Map logo" role="img">
-        <defs><linearGradient id="landing-logo-red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs>
-        <circle cx="55" cy="62" r="31" fill="none" stroke="url(#landing-logo-red)" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="url(#landing-logo-red)" stroke-width="16"/>
-        <path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="url(#landing-logo-red)"/>
-      </svg>
-      <h1>Hongdae Map</h1>
-    </div>
-    <p id="landing-desc">취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.</p>
-    <p class="landing-note" id="landing-note">홍대 대표 맛집 40곳을 기준으로 취향을 매칭해드려요.</p>
-    <div class="landing-btns">
-      <button class="landing-btn primary" id="landing-primary" onclick="landingStart()">취향 고르고 시작하기</button>
-      <button class="landing-btn" id="landing-skip" onclick="landingSkip()">그냥 전체 지도 볼래요</button>
-    </div>
-    <div class="landing-beta">
-      <span class="beta-badge">BETA</span>
-      <span id="landing-beta-text">아직 베타 버전이에요. 매장 정보와 기능을 계속 업데이트하고 있어요.</span>
-    </div>
-  </div>
-</div>
-
 <!-- TOP BAR -->
 <div class="topbar">
   <button class="menu-btn" onclick="toggleSidebar()" title="메뉴">☰</button>
@@ -1276,28 +1252,8 @@ function showTasteView() {
   renderList();
 }
 
-// ── 랜딩 페이지 ────────────────────────────────────────
-// 저장된 취향이 있으면 버튼 문구를 바꿔서, 매번 새로 고르지 않아도 되게 함
-if (userTastes.length > 0) {
-  document.getElementById('landing-primary').textContent = `내 취향으로 보기 (${userTastes.length}개 선택됨)`;
-}
-
-function hideLanding() {
-  document.getElementById('landing').style.display = 'none';
-}
-
-function landingStart() {
-  hideLanding();
-  if (userTastes.length > 0) {
-    showTasteView(); // 이미 취향이 저장돼 있으면 바로 추천 화면으로
-  } else {
-    openTasteModal(); // 처음이면 취향 고르는 팝업부터
-  }
-}
-
-function landingSkip() {
-  hideLanding(); // currentFilter는 기본값 'all' 그대로 — 전체 지도로 시작
-}
+// ── (구)랜딩 페이지 관련 코드 제거됨 — 이제 index.html이 랜딩 역할을 전담하고,
+// main.html은 곧바로 지도로 시작해서 "🎯 내 취향 찾기" 버튼을 눌러야 취향 선택이 뜬다.
 let addingMode = false;
 let importMode = false;
 let pickerEl = null;
