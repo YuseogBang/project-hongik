@@ -1,2529 +1,337 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>홍대 상권 분석 플랫폼</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hongdae Map — 홍대의 모든 가게, 지도 위에서 한눈에</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjZmYxODNjIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiNlNjAwMjUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZjM2NTQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjI0IiBmaWxsPSJ1cmwoI2cpIi8+PHN2ZyB4PSIxNCIgeT0iMzAiIHdpZHRoPSI3MiIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDE4MCAxMDAiPjxjaXJjbGUgY3g9IjU1IiBjeT0iNjQiIHI9IjMwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMTUiLz48Y2lyY2xlIGN4PSIxMzciIGN5PSI2NCIgcj0iMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxNSIvPjxyZWN0IHg9IjE3IiB5PSIyMiIgd2lkdGg9Ijc2IiBoZWlnaHQ9IjE1IiByeD0iNy41IiBmaWxsPSIjZmZmIi8+PHJlY3QgeD0iNDgiIHk9IjAiIHdpZHRoPSIxNSIgaGVpZ2h0PSIzMCIgcng9IjcuNSIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjEzNyIgY3k9IjY0IiByPSI3IiBmaWxsPSIjZmZmIi8+PC9zdmc+PC9zdmc+">
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0837551521646a85388e11c7360953a9&libraries=services,clusterer"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #2b070c;
-    --surface: #3d0f16;
-    --surface2: #4f151e;
-    --border: #7a2534;
-    --accent: #e8362a;
-    --accent2: #ff5c46;
-    --danger: #b71c1c;
-    --warn: #f5a623;
-    --success: #2e7d32;
-    --text: #f5ece7;
-    --muted: #c39298;
-    --card-r: 14px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  button { outline: none; }
-  button:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
-  html, body { max-width: 100vw; overflow-x: hidden; }
-  body {
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; color: var(--text);
-    height: 100vh; display: flex; flex-direction: column; overflow: hidden;
-    background:
-      radial-gradient(60% 50% at 80% -10%, rgba(232,54,42,.28) 0%, rgba(232,54,42,0) 60%),
-      var(--bg);
-  }
-
-  /* TOP BAR */
-  .topbar {
-    display: flex; align-items: center; gap: 16px;
-    padding: 0 20px; height: 52px;
-    background: var(--surface); border-bottom: 1px solid var(--border);
-    flex-shrink: 0; z-index: 100;
-  }
-  .logo { font-weight: 700; font-size: 15px; letter-spacing: -0.3px; }
-  .logo span { color: var(--accent); }
-  .logo-lockup { display: flex; align-items: center; gap: 9px; }
-  .logo-divider { width: 1px; height: 20px; background: var(--border); flex: none; }
-  .logo-text { display: flex; flex-direction: column; line-height: 1.05; }
-  .logo-kr { font-size: 14px; font-weight: 800; letter-spacing: -.02em; }
-  .logo-en { font-size: 8px; font-weight: 600; letter-spacing: .18em; color: var(--accent2); }
-  .brand-logo { display:block; flex:none; filter:drop-shadow(0 0 5px rgba(255,31,61,.45)); }
-  .badge-live { font-size: 10px; background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 99px; font-family: 'DM Mono', monospace; }
-  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-  .stat-pill { font-size: 11px; font-family: 'DM Mono', monospace; background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; padding: 4px 12px; color: var(--muted); }
-  .stat-pill b { color: var(--text); }
-  .btn-add { font-size: 12px; background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 6px 14px; cursor: pointer; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; font-weight: 500; }
-  .btn-add:hover { background: #c92b20; }
-  .btn-directions {
-    font-size: 12px; font-weight: 700; color: #ffffff;
-    background: var(--accent);
-    box-shadow: 0 2px 8px rgba(232,54,42,.35);
-    border: none; border-radius: 99px; padding: 7px 16px; cursor: pointer;
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; white-space: nowrap;
-  }
-  .btn-directions:hover { background: #c92b20; }
-  .btn-bookmarks {
-    font-size:12px; font-weight:700; color:var(--text); background:var(--surface2);
-    border:1px solid var(--border); border-radius:99px; padding:7px 13px; cursor:pointer;
-    font-family:'Pretendard', 'Noto Sans KR', sans-serif; white-space:nowrap;
-  }
-  .btn-bookmarks:hover { border-color:var(--accent); color:#fff; }
-  #btn-lang, #btn-save, #btn-rip, #btn-taste-top {
-    display:inline-flex; align-items:center; justify-content:center; text-align:center;
-    width:40px; min-width:40px; max-width:40px; height:40px; border-radius:50%;
-    flex-shrink:0; flex-grow:0; padding:0; overflow:hidden; font-size:16px;
-    transition: background .15s, transform .15s, box-shadow .15s;
-  }
-  #btn-lang:hover, #btn-rip:hover { background: var(--surface2); }
-  #btn-save:hover { border-color:#a03446; box-shadow:0 4px 12px rgba(0,0,0,.35); }
-  #btn-taste-top { box-shadow: 0 2px 10px rgba(232,54,42,.45); }
-  #btn-taste-top:hover { filter:brightness(1.08); transform:translateY(-1px); }
-  #btn-lang:active, #btn-save:active, #btn-rip:active, #btn-taste-top:active { transform: scale(.92); }
-  .topbar-search-row {
-    position:relative; padding: 10px 16px; border-bottom: 1px solid var(--border);
-    background: var(--surface);
-  }
-  .topbar-search-row .search-box { margin-bottom: 0; max-width: 480px; }
-  .search-results {
-    display:none; position:absolute; top:48px; left:16px; width:min(480px, calc(100vw - 32px));
-    background:var(--surface); border:1px solid var(--border); border-radius:14px;
-    box-shadow:0 14px 32px rgba(0,0,0,.45); overflow:hidden; z-index:350;
-  }
-  .search-result {
-    width:100%; display:flex; align-items:center; gap:10px; padding:11px 14px;
-    border:none; border-bottom:1px solid var(--border); background:transparent; color:var(--text);
-    text-align:left; cursor:pointer; font-family:'Pretendard', 'Noto Sans KR', sans-serif;
-    transition: background .12s;
-  }
-  .search-result:last-child { border-bottom:none; }
-  .search-result:hover { background:var(--surface2); }
-  .search-result:active { background:rgba(232,54,42,.12); }
-  .search-result-icon {
-    width:28px; height:28px; border-radius:50%; flex:none;
-    display:flex; align-items:center; justify-content:center; font-size:14px;
-    background:var(--surface2);
-  }
-  .search-result-name { font-weight:600; font-size:13px; }
-  .search-result-type { margin-left:auto; color:var(--muted); font-size:11px; flex:none; }
-  .search-empty { padding:16px 14px; color:var(--muted); font-size:12px; text-align:center; }
-
-  /* 지도 위에 항상 떠있는 카테고리 바 — 사이드바를 안 열어도 바로 필터링 가능하게 함 */
-  .category-bar {
-    display: flex; gap: 7px; overflow-x: auto; padding: 9px 16px;
-    background: var(--surface); border-bottom: 1px solid var(--border);
-    flex-shrink: 0; scrollbar-width: none;
-  }
-  .category-bar::-webkit-scrollbar { display: none; }
-  .category-bar .chip { flex: none; white-space: nowrap; padding: 6px 13px; font-size: 12px; }
-
-  /* LAYOUT */
-  .layout { display: flex; flex: 1; overflow: hidden; }
-
-  /* SIDEBAR */
-  .sidebar {
-    position: fixed; top: 52px; left: 0; bottom: 0; width: 300px; z-index: 300;
-    background: var(--surface); border-right: 1px solid var(--border);
-    display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden;
-    transform: translateX(-100%); transition: transform .25s ease;
-    box-shadow: 4px 0 24px rgba(0,0,0,.3);
-  }
-  .sidebar.open { transform: translateX(0); }
-  .sidebar-close {
-    position: absolute; top: 10px; right: 10px; z-index: 1;
-    width: 26px; height: 26px; border-radius: 50%; border: none; cursor: pointer;
-    background: var(--surface2); color: var(--muted); font-size: 13px;
-  }
-  .menu-btn {
-    background: none; border: none; color: var(--text);
-    width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 16px;
-    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
-    transition: background .15s, transform .15s;
-  }
-  .menu-btn:hover { background: var(--surface2); }
-  .menu-btn:active { background: #5c1a24; transform: scale(.92); }
-  @media (max-width: 640px) {
-    .menu-btn { width: 40px; height: 40px; font-size: 15px; }
-  }
-  .drawer-backdrop {
-    position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 250;
-    opacity: 0; pointer-events: none; transition: opacity .25s ease;
-  }
-  .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
-  .sidebar-top { padding: 44px 14px 100px; border-bottom: 1px solid var(--border); }
-  .search-box {
-    display: flex; align-items: center; gap: 8px;
-    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
-    padding: 7px 10px; margin-bottom: 10px;
-  }
-  .search-box input { background: none; border: none; color: var(--text); font-size: 13px; width: 100%; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; outline: none; }
-  .search-box input::placeholder { color: var(--muted); }
-  .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
-  .filter-group { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
-  .trivia-card {
-    position: relative;
-    background: var(--surface2); border: 1px solid var(--border); border-radius: var(--card-r);
-    padding: 11px 13px; margin-bottom: 12px; cursor: pointer; transition: border-color .15s;
-  }
-  .trivia-card:hover { border-color: var(--accent); }
-  .trivia-stamp {
-    position: absolute; top: -10px; right: -8px; width: 40px; height: 40px;
-    background: #f5ece7; border-radius: 50%; transform: rotate(-12deg);
-    box-shadow: 0 3px 10px rgba(0,0,0,.35); opacity: .92; pointer-events: none;
-  }
-  .trivia-stamp svg { display: block; width: 100%; height: 100%; }
-  .trivia-label { font-size: 10px; font-weight: 700; color: var(--accent); margin-bottom: 5px; letter-spacing: .02em; }
-  .trivia-text { font-size: 12px; line-height: 1.55; color: var(--text); }
-  .chip {
-    font-size: 11px; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--border);
-    color: var(--muted); background: transparent; cursor: pointer; transition: all .15s;
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
-  }
-  .chip:hover { border-color: var(--muted); }
-  .chip:active { transform: scale(.95); }
-  .chip.on {
-    border: 2px solid var(--accent); color: #ffffff;
-    background: rgba(232,54,42,.18);
-    padding: 3px 9px; /* 테두리가 1px→2px로 두꺼워진 만큼 보정해서 전체 크기는 그대로 유지 */
-  }
-
-  .store-list { padding: 8px; }
-  .store-list::-webkit-scrollbar { width: 4px; }
-  .store-list::-webkit-scrollbar-track { background: transparent; }
-  .store-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  .store-item {
-    padding: 11px 13px; border-radius: var(--card-r);
-    border: 1px solid var(--border); border-left: 3px solid transparent; margin-bottom: 8px;
-    cursor: pointer; background: var(--surface2);
-    transition: transform .15s, box-shadow .15s, border-color .15s, background .15s;
-  }
-  .store-item:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.25); }
-  .store-item.active {
-    border-color: var(--accent); border-left-color: var(--accent);
-    background: rgba(232,54,42,.14); box-shadow: 0 4px 16px rgba(232,54,42,.2);
-  }
-  .store-item.closed-item { opacity: .5; }
-  .item-top { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; }
-  .item-name { font-size: 13.5px; font-weight: 600; flex: 1; letter-spacing: -.01em; }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .dot-open { background: var(--success); box-shadow: 0 0 6px var(--success); }
-  .dot-closed { background: var(--danger); }
-  .dot-risk { background: var(--warn); box-shadow: 0 0 6px var(--warn); }
-  .dot-unverified { background: #93a8a2; }
-  .dot-risk { background: var(--warn); box-shadow: 0 0 6px var(--warn); }
-  .item-meta { font-size: 11px; color: var(--muted); display: flex; gap: 8px; margin-bottom: 6px; font-family: 'DM Mono', monospace; }
-  .score-row { display: flex; align-items: center; gap: 8px; }
-  .score-bar { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
-  .score-fill { height: 100%; border-radius: 2px; transition: width .4s; }
-  .score-num { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--muted); min-width: 24px; text-align: right; }
-
-  /* MAP */
-  .map-wrap { flex: 1; position: relative; }
-  #map { width: 100%; height: 100%; }
-
-  /* MAP OVERLAY BUTTONS */
-  .map-controls {
-    position: absolute; top: 12px; left: 12px; z-index: 10;
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .btn-home {
-    position: absolute; bottom: 16px; right: 16px; z-index: 10;
-    width: 40px; height: 40px; border-radius: 50%;
-    background: var(--surface); border: 1px solid var(--border);
-    color: var(--text); font-size: 18px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,.3); transition: all .15s;
-  }
-  .btn-home:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-home:active { transform: scale(.92); }
-  .map-btn {
-    background: var(--surface); border: 1px solid var(--border);
-    color: var(--text); font-size: 11px; padding: 6px 12px;
-    border-radius: 6px; cursor: pointer; font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
-    transition: all .15s; white-space: nowrap;
-  }
-  .map-btn:hover { background: var(--surface2); }
-  .map-btn.on { border-color: var(--accent2); color: var(--accent2); }
-  .btn-search-area {
-    position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 10;
-    height: 38px; padding: 0 18px; border-radius: 99px; border: none;
-    background: var(--text); color: var(--bg); font-size: 12.5px; font-weight: 700;
-    cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.4);
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; white-space: nowrap;
-    display: none; align-items: center; gap: 6px; transition: transform .15s, opacity .15s;
-    animation: fadeSlideIn .2s ease;
-  }
-  @keyframes fadeSlideIn { from { opacity:0; transform:translateX(-50%) translateY(-6px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
-  .btn-search-area:hover { transform: translateX(-50%) scale(1.03); }
-  .btn-search-area:active { transform: translateX(-50%) scale(.96); }
-  @media (max-width: 640px) {
-    .btn-search-area { height: 42px; font-size: 12px; top: 10px; }
-  }
-
-  /* 필터를 고르면 바로 리스트가 뜨지 않고, "몇 개 나왔는지"부터 알려주는 플로팅 버튼 */
-  .btn-view-results {
-    position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 400;
-    height: 48px; padding: 0 26px; border-radius: 99px; border: none;
-    background: linear-gradient(135deg, var(--accent2), var(--accent)); color: #fff;
-    font-size: 14px; font-weight: 700; cursor: pointer;
-    box-shadow: 0 6px 20px rgba(232,54,42,.45);
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; white-space: nowrap;
-    display: none; align-items: center; gap: 8px; transition: transform .15s;
-    animation: fadeSlideUp .2s ease;
-  }
-  .btn-view-results:hover { transform: translateX(-50%) scale(1.03); }
-  .btn-view-results:active { transform: translateX(-50%) scale(.96); }
-  @keyframes fadeSlideUp { from { opacity:0; transform:translateX(-50%) translateY(10px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
-
-  /* 피드백·제보 링크 — 예전 범례가 있던 자리 */
-  .feedback-link {
-    position: absolute; bottom: 20px; left: 12px; z-index: 10;
-    background: var(--surface); border: 1px solid var(--border); color: var(--text);
-    border-radius: var(--card-r); padding: 9px 13px; font-size: 11.5px; font-weight: 600;
-    text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
-    transition: all .15s; box-shadow: 0 2px 10px rgba(0,0,0,.25);
-  }
-  .feedback-link:hover { border-color: var(--accent); color: var(--accent2); background: var(--surface2); }
-
-  /* DETAIL PANEL */
-  .detail {
-    position: fixed; top: 52px; right: 0; bottom: 0; width: 320px; z-index: 600;
-    background: var(--surface); border-left: 1px solid var(--border);
-    overflow-y: auto; display: flex; flex-direction: column;
-    transform: translateX(100%); transition: transform .25s ease;
-    box-shadow: -4px 0 24px rgba(0,0,0,.3);
-  }
-  .detail.open { transform: translateX(0); }
-  .detail-close {
-    position: absolute; top: 10px; right: 10px; z-index: 1;
-    width: 26px; height: 26px; border-radius: 50%; border: none; cursor: pointer;
-    background: var(--surface2); color: var(--muted); font-size: 13px;
-  }
-  .detail::-webkit-scrollbar { width: 4px; }
-  .detail::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-  .detail-empty {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    color: var(--muted); font-size: 13px; gap: 10px; padding: 20px; text-align: center;
-  }
-  .detail-empty .icon { font-size: 32px; opacity: .3; }
-
-  .detail-header { padding: 16px; border-bottom: 1px solid var(--border); }
-  .detail-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-  .detail-sub { font-size: 12px; color: var(--muted); display: flex; gap: 8px; align-items: center; }
-  .status-badge { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 500; }
-  .badge-open { background: rgba(0,184,148,.2); color: var(--success); }
-  .badge-closed { background: rgba(225,112,85,.2); color: var(--danger); }
-  .badge-risk { background: rgba(253,203,110,.2); color: var(--warn); }
-  .badge-unverified { background: rgba(136,136,160,.15); color: var(--muted); }
-
-  .detail-body { padding: 14px; display: flex; flex-direction: column; gap: 14px; }
-  .section-title { font-size: 10px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
-
-  /* LANDING */
-  .landing-overlay {
-    position: fixed; inset: 0; z-index: 500;
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden; text-align: center;
-    background:
-      radial-gradient(60% 50% at 80% -10%, rgba(232,54,42,.28) 0%, rgba(232,54,42,0) 60%),
-      #2b070c; /* 지도 UI(var(--bg))와 동일한 크림슨 배경 */
-  }
-  .landing-card {
-    position: relative; z-index: 1; padding: 0 24px; max-width: 560px;
-  }
-  .landing-card h1 {
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; white-space: nowrap;
-    font-size: clamp(30px, 8.5vw, 78px); font-weight: 900; letter-spacing: -0.02em;
-    line-height: 1; color: #f5ece7; margin: 0 0 20px; text-transform: uppercase;
-  }
-  .landing-brand { display:flex; align-items:center; justify-content:center; gap:14px; margin:0 0 20px; }
-  .landing-brand h1 { margin:0; }
-  .landing-brand .brand-logo { width:64px; height:40px; }
-  @media (max-width:480px) {
-    .landing-brand { gap:9px; }
-    .landing-brand .brand-logo { width:48px; height:30px; }
-  }
-  .landing-card p {
-    font-size: 18px; color: rgba(245,236,231,.9); line-height: 1.6; margin: 0 auto 12px; max-width: 440px;
-  }
-  .landing-note { font-size: 13px; color: rgba(245,236,231,.55); margin: 4px 0 80px; }
-  .landing-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-  .landing-btn {
-    flex: 1 1 240px; max-width: 300px; padding: 13px 22px; border-radius: 99px;
-    border: 1.5px solid rgba(245,236,231,.4);
-    background: transparent; color: #f5ece7; font-size: 14px; font-weight: 600; cursor: pointer;
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; transition: all .15s;
-  }
-  .landing-btn:hover { border-color: #f5ece7; background: rgba(245,236,231,.08); }
-  .landing-btn.primary { background: #ff3b3b; border-color: #ff3b3b; color: #fff; }
-  .landing-btn.primary:hover { background: #ff5555; }
-  .landing-beta {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    margin-top: 22px; font-size: 11px; color: rgba(245,236,231,.5);
-  }
-  .beta-badge {
-    background: rgba(232,54,42,.18); color: #ff8a75; border: 1px solid rgba(232,54,42,.4);
-    font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; letter-spacing: .04em;
-  }
-
-  /* MODAL */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,.7);
-    z-index: 500; display: flex; align-items: center; justify-content: center;
-    backdrop-filter: blur(4px);
-  }
-  .modal {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 14px; padding: 24px; width: 380px; max-height: 90vh; overflow-y: auto;
-  }
-  .modal h4 { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
-
-  /* "가게 N곳 보기" 결과창 — 인스타그램 피드처럼 쭉 스크롤해서 보는 느낌으로 */
-  #sort-modal .modal { display: flex; flex-direction: column; width: min(480px, 92vw); max-height: 82vh; padding: 20px 16px; }
-  #sort-modal .feed-handle {
-    display: none; width: 40px; height: 4px; border-radius: 99px;
-    background: var(--border); margin: 0 auto 10px; flex: none;
-  }
-  @keyframes feedSlideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  @media (max-width: 640px) {
-    #sort-modal { align-items: flex-end; backdrop-filter: none; background: rgba(0,0,0,.55); }
-    #sort-modal .modal {
-      width: 100vw; max-width: 100vw; height: 88dvh; max-height: 88dvh;
-      border-radius: 20px 20px 0 0; padding: 10px 14px calc(14px + env(safe-area-inset-bottom));
-      animation: feedSlideUp .25s ease-out;
-    }
-    #sort-modal .feed-handle { display: block; }
-    #sort-modal .store-item { padding: 14px 15px; margin-bottom: 10px; }
-    #sort-modal .item-name { font-size: 15px; white-space: normal; }
-    #sort-modal .item-meta { font-size: 12px; }
-  }
-  .form-group { margin-bottom: 12px; }
-  .form-group label { font-size: 11px; color: var(--muted); display: block; margin-bottom: 5px; }
-  .form-group input, .form-group select, .form-group textarea {
-    width: 100%; background: var(--surface2); border: 1px solid var(--border);
-    color: var(--text); border-radius: 6px; padding: 8px 10px; font-size: 13px;
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; outline: none;
-    transition: border-color .15s;
-  }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
-  .form-group select option { background: var(--surface2); }
-  .form-group textarea { height: 80px; resize: vertical; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
-  .btn-cancel {
-    background: transparent; border: 1px solid var(--border); color: var(--muted);
-    border-radius: 10px; padding: 8px 16px; cursor: pointer; font-size: 12px; font-weight: 600;
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; transition: all .15s;
-  }
-  .btn-cancel:hover { border-color: var(--muted); color: var(--text); }
-  .btn-cancel:active { transform: scale(.96); }
-  .btn-confirm {
-    background: linear-gradient(135deg, var(--accent2), var(--accent)); border: none; color: #fff;
-    border-radius: 10px; padding: 8px 16px; cursor: pointer; font-size: 12px; font-weight: 700;
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; box-shadow: 0 2px 10px rgba(232,54,42,.4);
-    transition: all .15s;
-  }
-  .btn-confirm:hover { filter: brightness(1.08); }
-  .btn-confirm:active { transform: scale(.96); }
-
-  /* IMPORT MODE */
-  .import-mode-banner {
-    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
-    z-index: 20; background: var(--accent); color: #fff;
-    font-size: 12px; font-weight: 500; padding: 8px 18px;
-    border-radius: 99px; white-space: nowrap;
-    box-shadow: 0 4px 16px rgba(232,54,42,.4);
-    animation: bannerIn .2s ease;
-    display: none;
-  }
-  @keyframes bannerIn { from{opacity:0;transform:translateX(-50%) translateY(-8px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
-  .btn-import-on { border-color: var(--accent) !important; color: var(--accent) !important; background: rgba(232,54,42,.18) !important; }
-
-  /* NEARBY PLACE PICKER */
-  .place-picker {
-    position: absolute; z-index: 30;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; width: 260px;
-    box-shadow: 0 8px 32px rgba(0,0,0,.6);
-    overflow: hidden;
-    animation: pickerIn .15s ease;
-  }
-  @keyframes pickerIn { from{opacity:0;transform:scale(.95)} to{opacity:1;transform:scale(1)} }
-  .picker-header {
-    padding: 10px 14px; border-bottom: 1px solid var(--border);
-    font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: space-between;
-  }
-  .picker-close { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 16px; line-height: 1; }
-  .picker-list { max-height: 280px; overflow-y: auto; }
-  .picker-list::-webkit-scrollbar { width: 4px; }
-  .picker-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-  .picker-item {
-    padding: 10px 14px; border-bottom: 1px solid var(--border);
-    cursor: pointer; transition: background .1s;
-  }
-  .picker-item:last-child { border: none; }
-  .picker-item:hover { background: var(--surface2); }
-  .picker-item-name { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
-  .picker-item-meta { font-size: 11px; color: var(--muted); }
-  .picker-item-badge {
-    display: inline-block; font-size: 10px; padding: 1px 6px;
-    border-radius: 99px; margin-left: 6px; vertical-align: middle;
-  }
-  .picker-empty { padding: 20px; text-align: center; color: var(--muted); font-size: 12px; }
-  .picker-loading { padding: 20px; text-align: center; color: var(--muted); font-size: 12px; }
-  .picker-tabs { display: flex; border-bottom: 1px solid var(--border); }
-  .picker-tab {
-    flex: 1; padding: 8px 0; font-size: 11px; font-weight: 500;
-    text-align: center; cursor: pointer; color: var(--muted);
-    border-bottom: 2px solid transparent; margin-bottom: -1px;
-    transition: all .15s; background: none; border-top: none; border-left: none; border-right: none;
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
-  }
-  .picker-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .picker-search-box {
-    display: flex; align-items: center; gap: 6px;
-    padding: 8px 10px; border-bottom: 1px solid var(--border);
-    background: var(--surface2);
-  }
-  .picker-search-box input {
-    flex: 1; background: none; border: none; color: var(--text);
-    font-size: 12px; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; outline: none;
-  }
-  .picker-search-box input::placeholder { color: var(--muted); }
-  .picker-search-btn {
-    background: var(--accent); border: none; color: #fff;
-    font-size: 11px; padding: 4px 10px; border-radius: 4px;
-    cursor: pointer; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; white-space: nowrap;
-  }
-
-  /* KAKAO MAP CUSTOM MARKER */
-  .custom-marker {
-    position: relative; cursor: pointer;
-  }
-  .marker-circle {
-    width: 28px; height: 28px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700; border: 2px solid rgba(255,255,255,.3);
-    box-shadow: 0 2px 8px rgba(0,0,0,.4);
-    transition: transform .15s;
-  }
-  .marker-label {
-    position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
-    white-space: nowrap; font-size: 10px; font-weight: 500;
-    background: #2a0a0a; color: #ffffff;
-    padding: 2px 6px; border-radius: 4px;
-  }
-
-  /* LOADING */
-  .loading {
-    position: absolute; inset: 0; background: var(--bg);
-    display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 50; gap: 12px;
-  }
-  .loading-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
-  .loading-dots { display: flex; gap: 6px; }
-  .loading-dot:nth-child(2) { animation-delay: .2s; }
-  .loading-dot:nth-child(3) { animation-delay: .4s; }
-  @keyframes pulse { 0%,100%{opacity:.3;transform:scale(.8)} 50%{opacity:1;transform:scale(1)} }
-  .loading p { font-size: 13px; color: var(--muted); }
-  .loading-neon {
-    filter: drop-shadow(0 0 6px rgba(255,54,84,.9)) drop-shadow(0 0 18px rgba(255,24,60,.5));
-    animation: neonFlicker 2.6s infinite;
-  }
-  @keyframes neonFlicker { 0%,100%{opacity:1} 92%{opacity:1} 93%{opacity:.6} 94%{opacity:1} 97%{opacity:.8} 98%{opacity:1} }
-
-  /* SEARCH RESULT INFO WINDOW */
-  .kakao-infobox {
-    background: #ffffff; border: 1px solid #dde8ec; border-radius: 10px;
-    padding: 10px 14px; min-width: 160px; font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
-    box-shadow: 0 6px 20px rgba(20,60,50,.14);
-  }
-  .kakao-infobox .ib-name { font-size: 13px; font-weight: 600; color: #3d1712; margin-bottom: 4px; }
-  .kakao-infobox .ib-addr { font-size: 11px; color: #5c756d; }
-  /* ── 모바일 대응 ── */
-  @media (max-width: 640px) {
-    .topbar { padding: 0 10px; gap: 8px; }
-    .logo { font-size: 13px; }
-    .brand-logo { width: 26px !important; height: 17px !important; }
-    .logo-divider, .logo-en { display: none; }
-    .logo-kr { font-size: 13px; }
-    .topbar-right { gap: 6px; }
-    .btn-bookmarks, .btn-directions, .btn-add {
-      font-size: 11px; padding: 6px 9px;
-    }
-    #btn-lang, #btn-save, #btn-rip, #btn-taste-top {
-      width: 40px; min-width: 40px; max-width: 40px; height: 40px; font-size: 15px;
-    }
-
-    .topbar-search-row { padding: 8px 10px; }
-    .category-bar { padding: 7px 10px; gap: 6px; }
-
-    .sidebar, .detail { width: 100vw; max-width: 100vw; }
-    .sidebar-top { padding: 40px 12px 100px; }
-    .filter-chips { gap: 5px; }
-    .filter-chips .chip { font-size: 11px; padding: 7px 11px; }
-    .filter-group { margin-top: 11px; padding-top: 9px; }
-    .trivia-card { padding: 9px 11px; margin-bottom: 9px; }
-    .trivia-text { font-size: 11.5px; }
-
-    .map-controls { max-width: calc(100vw - 24px); }
-    .map-btn { white-space: normal; font-size: 10px; line-height: 1.4; text-align: left; }
-
-    .modal { width: calc(100vw - 32px); padding: 18px; }
-
-    .landing-card h1 { font-size: clamp(26px, 11vw, 52px); }
-    .landing-card p { font-size: 15px; }
-    .landing-btn { flex: 1 1 100%; } /* 좁은 화면에선 버튼을 위아래로 쌓음 */
-
-    .detail-body, .store-item { font-size: 13px; }
-    .store-item { padding: 9px 11px; }
-    .item-name { font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  }
-
-  /* 아주 좁은 화면(구형 소형 스마트폰) 추가 여백 축소 */
-  @media (max-width: 380px) {
-    .topbar { gap: 5px; padding: 0 8px; }
-    .logo { font-size: 12px; }
-  }
+  * { box-sizing: border-box; }
+  body{margin:0;background:#2b070c;color:#f5ece7;font-family:'Pretendard',sans-serif;-webkit-font-smoothing:antialiased;word-break:keep-all}
+  a{color:#f5ece7;text-decoration:none}
+  a:hover{color:#ff5c46}
+  button{font-family:inherit}
+  @keyframes float1{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  @keyframes neonFlicker{0%,100%{opacity:1}92%{opacity:1}93%{opacity:.6}94%{opacity:1}97%{opacity:.8}98%{opacity:1}}
+  [data-reveal]{opacity:0;transform:translateY(34px) scale(.985);transition:opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1)}
+  [data-reveal].in{opacity:1;transform:none}
+  .navlink{color:#c9b8b2;transition:color .15s}
+  .navlink:hover{color:#fff}
+  .hover-red:hover{border-color:#e8362a !important;color:#fff !important}
+  .hover-darken:hover{background:#c92b20 !important}
+  .example-badge{font-size:9px;font-weight:700;letter-spacing:.05em;color:#6f5f5a;border:1px solid #7a2534;border-radius:99px;padding:2px 8px;white-space:nowrap}
 </style>
 </head>
 <body>
+<div style="min-height:100vh;background:#2b070c;overflow-x:hidden">
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <button class="menu-btn" onclick="toggleSidebar()" title="메뉴">☰</button>
-  <div class="logo logo-lockup">
-    <svg class="brand-logo" width="30" height="18" viewBox="0 0 180 100" aria-label="Hongdae Map logo" role="img">
-      <defs><linearGradient id="header-logo-red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs>
-      <circle cx="55" cy="62" r="31" fill="none" stroke="url(#header-logo-red)" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="url(#header-logo-red)" stroke-width="16"/>
-      <path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="url(#header-logo-red)"/>
+<header style="position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(20,16,16,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(58,42,42,.6)">
+  <a href="#top" style="display:flex;align-items:center;gap:9px;letter-spacing:-.3px">
+    <svg width="28" height="17" viewBox="0 0 180 100" role="img" aria-label="Hongdae Map logo"><defs><linearGradient id="hlogo" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs><circle cx="55" cy="62" r="31" fill="none" stroke="url(#hlogo)" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="url(#hlogo)" stroke-width="16"/><path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="url(#hlogo)"/></svg>
+    <span style="width:1px;height:19px;background:#7a2534"></span>
+    <span style="display:flex;flex-direction:column;line-height:1.05">
+      <span style="font-size:15px;font-weight:800;letter-spacing:-.02em">홍대맵</span>
+      <span style="font-size:8px;font-weight:600;letter-spacing:.18em;color:#ff6b7e">HONGDAE MAP</span>
+    </span>
+  </a>
+  <nav style="display:flex;align-items:center;gap:28px;font-size:14px;font-weight:500">
+    <a class="navlink" href="#feat-map">실시간 지도</a>
+    <a class="navlink" href="#feat-review">취향 분석</a>
+    <a class="navlink" href="#feat-memory">추억 아카이브</a>
+    <a class="navlink" href="#feat-busking">버스킹·이벤트</a>
+    <a class="navlink" href="#feat-subculture">서브컬처</a>
+    <a href="main.html" class="hover-darken" style="background:#e8362a;color:#fff;font-weight:700;font-size:13px;padding:9px 18px;border-radius:99px;box-shadow:0 2px 10px rgba(232,54,42,.4)">앱 실행하기</a>
+  </nav>
+</header>
+
+<section id="top" style="position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 24px 80px;background:radial-gradient(55% 45% at 50% -5%, rgba(232,54,42,.30) 0%, rgba(232,54,42,0) 65%)">
+  <svg data-reveal width="150" height="83" viewBox="0 0 180 100" role="img" aria-label="Hongdae Map" style="margin-bottom:22px;filter:drop-shadow(0 0 6px rgba(255,54,84,.9)) drop-shadow(0 0 18px rgba(255,24,60,.5));animation:neonFlicker 6s infinite">
+    <circle cx="55" cy="64" r="30" fill="none" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="137" cy="64" r="30" fill="none" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
+    <path d="M24 29.5 H86" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
+    <path d="M55.5 7 V22" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="137" cy="64" r="5" fill="#ff6b7e"/>
+  </svg>
+  <div data-reveal style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#ff8a7a;background:rgba(232,54,42,.12);border:1px solid rgba(232,54,42,.35);border-radius:99px;padding:7px 16px;margin-bottom:28px">
+    <span style="width:7px;height:7px;border-radius:50%;background:#e8362a;animation:pulse 1.6s infinite"></span>
+    홍대 상권 데이터, 계속 업데이트 중 (베타)
+  </div>
+  <h1 data-reveal style="margin:0;font-size:clamp(40px,6.4vw,76px);font-weight:800;line-height:1.18;letter-spacing:-.03em;text-wrap:pretty">홍대의 모든 가게,<br>지도 위에서 한눈에</h1>
+  <p data-reveal style="margin:26px 0 0;font-size:clamp(17px,2vw,22px);line-height:1.6;color:#c39298;text-wrap:pretty">취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.</p>
+  <div data-reveal style="display:flex;gap:12px;margin-top:40px;flex-wrap:wrap;justify-content:center">
+    <button onclick="openSheet()" style="cursor:pointer;border:none;white-space:nowrap;background:#e8362a;color:#fff;font-weight:700;font-size:17px;padding:16px 34px;border-radius:14px;box-shadow:0 6px 24px rgba(232,54,42,.45)" class="hover-darken">지금 시작하기</button>
+    <a href="#feat-map" style="white-space:nowrap;background:#4f151e;border:1px solid #7a2534;color:#f5ece7;font-weight:600;font-size:17px;padding:16px 30px;border-radius:14px" class="hover-red">기능 살펴보기</a>
+  </div>
+
+  <div data-reveal style="margin-top:76px;width:min(920px,94vw);border-radius:20px;border:1px solid #7a2534;background:#3d0f16;box-shadow:0 30px 80px rgba(0,0,0,.55);overflow:hidden;animation:float1 7s ease-in-out infinite">
+    <div style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-bottom:1px solid #7a2534;background:#3d0f16">
+      <span style="width:10px;height:10px;border-radius:50%;background:#7a2534"></span><span style="width:10px;height:10px;border-radius:50%;background:#7a2534"></span><span style="width:10px;height:10px;border-radius:50%;background:#7a2534"></span>
+      <span style="margin-left:10px;font-family:'DM Mono',monospace;font-size:11px;color:#c39298;white-space:nowrap">hongdae-map.app</span>
+    </div>
+    <div style="display:grid;grid-template-columns:240px 1fr;height:380px" class="hero-grid">
+      <div style="border-right:1px solid #7a2534;padding:12px;display:flex;flex-direction:column;gap:8px;background:#3d0f16;text-align:left">
+        <div style="display:flex;align-items:center;gap:8px;background:#4f151e;border:1px solid #7a2534;border-radius:8px;padding:8px 10px;font-size:12px;color:#c39298">🔍 매장 검색…</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <span style="font-size:10px;padding:4px 10px;border-radius:99px;background:#e8362a;color:#fff;font-weight:600">전체</span>
+          <span style="font-size:10px;padding:4px 10px;border-radius:99px;border:1px solid #7a2534;color:#c39298">카페</span>
+          <span style="font-size:10px;padding:4px 10px;border-radius:99px;border:1px solid #7a2534;color:#c39298">식당</span>
+          <span style="font-size:10px;padding:4px 10px;border-radius:99px;border:1px solid #7a2534;color:#c39298">주점</span>
+        </div>
+        <div style="border:1px solid #7a2534;border-radius:12px;padding:10px 12px;background:#4f151e">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="flex:none;width:7px;height:7px;border-radius:50%;background:#2e7d32;box-shadow:0 0 6px #2e7d32"></span><span style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">옥동식 서교점</span></div>
+          <div style="font-size:10px;color:#c39298;font-family:'DM Mono',monospace;white-space:nowrap">한식 · 맑은 돼지곰탕</div>
+        </div>
+        <div style="border:1px solid #7a2534;border-radius:12px;padding:10px 12px;background:#4f151e">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="flex:none;width:7px;height:7px;border-radius:50%;background:#a9744f;box-shadow:0 0 6px #a9744f"></span><span style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">테일러커피 연남1호점</span></div>
+          <div style="font-size:10px;color:#c39298;font-family:'DM Mono',monospace;white-space:nowrap">카페 · 크림모카</div>
+        </div>
+        <div style="border:1px solid #7a2534;border-radius:12px;padding:10px 12px;background:#4f151e">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="flex:none;width:7px;height:7px;border-radius:50%;background:#f5a623;box-shadow:0 0 6px #f5a623"></span><span style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">진진</span></div>
+          <div style="font-size:10px;color:#c39298;font-family:'DM Mono',monospace;white-space:nowrap">중식 · 미쉐린 빕구르망</div>
+        </div>
+      </div>
+      <div style="position:relative;background:linear-gradient(135deg,#221a1a 0%,#181212 55%,#241b1b 100%)">
+        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(156,138,133,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(156,138,133,.07) 1px,transparent 1px);background-size:44px 44px"></div>
+        <div style="position:absolute;left:22%;top:28%;width:16px;height:16px;border-radius:50% 50% 50% 0;background:#00e5ff;transform:rotate(-45deg);box-shadow:0 3px 10px rgba(0,0,0,.5)"></div>
+        <div style="position:absolute;left:48%;top:52%;width:16px;height:16px;border-radius:50% 50% 50% 0;background:#e8362a;transform:rotate(-45deg);box-shadow:0 3px 10px rgba(0,0,0,.5)"></div>
+        <div style="position:absolute;left:66%;top:30%;width:16px;height:16px;border-radius:50% 50% 50% 0;background:#00e5ff;transform:rotate(-45deg);box-shadow:0 3px 10px rgba(0,0,0,.5)"></div>
+        <div style="position:absolute;left:35%;top:66%;width:16px;height:16px;border-radius:50% 50% 50% 0;background:#00e5ff;transform:rotate(-45deg);box-shadow:0 3px 10px rgba(0,0,0,.5)"></div>
+        <div style="position:absolute;left:52%;top:34%;white-space:nowrap;background:#3d0f16;border:1px solid #e8362a;border-radius:10px;padding:8px 12px;font-size:11px;box-shadow:0 8px 26px rgba(0,0,0,.5)"><b>옥동식 서교점</b><span style="color:#c39298"> · 홍대 대표 맛집</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="feat-map" style="padding:150px 24px;max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center" class="two-col">
+  <div data-reveal>
+    <div style="font-size:15px;font-weight:700;color:#ff5c46;margin-bottom:14px">실시간 지도</div>
+    <h2 style="margin:0;font-size:clamp(28px,3.6vw,44px);font-weight:800;line-height:1.3;letter-spacing:-.02em">직접 검증한 가게만,<br>필터 하나로</h2>
+    <p style="margin:20px 0 0;font-size:17px;line-height:1.7;color:#c39298;text-wrap:pretty">카카오맵 실존 확인을 거친 매장만 지도에 올려요. 업종, 동네, 취향 태그로 원하는 곳만 걸러서 볼 수 있어요.</p>
+  </div>
+  <div data-reveal style="background:#3d0f16;border:1px solid #7a2534;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+      <span style="font-size:12px;padding:6px 14px;border-radius:99px;background:#e8362a;color:#fff;font-weight:600;box-shadow:0 2px 6px rgba(232,54,42,.3)">전체</span>
+      <span style="font-size:12px;padding:6px 14px;border-radius:99px;border:1px solid #7a2534;color:#c39298">음식점</span>
+      <span style="font-size:12px;padding:6px 14px;border-radius:99px;border:1px solid #7a2534;color:#c39298">카페</span>
+      <span style="font-size:12px;padding:6px 14px;border-radius:99px;border:1px solid #7a2534;color:#c39298">🏅 명예학식</span>
+    </div>
+    <div style="border:1px solid #7a2534;border-radius:14px;padding:13px 15px;background:#4f151e">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:#e8362a;box-shadow:0 0 6px #e8362a"></span><span style="font-size:14px;font-weight:600;flex:1">고기꾼김춘배 홍대본점</span><span style="font-size:11px;color:#c39298;font-family:'DM Mono',monospace">서교동</span></div>
+      <div style="font-size:12px;color:#c39298">🥩 오겹살, 생갈비</div>
+    </div>
+    <div style="border:1px solid #7a2534;border-radius:14px;padding:13px 15px;background:#4f151e">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:#a9744f;box-shadow:0 0 6px #a9744f"></span><span style="font-size:14px;font-weight:600;flex:1">앤티크커피 연남점</span><span style="font-size:11px;color:#c39298;font-family:'DM Mono',monospace">연남동</span></div>
+      <div style="font-size:12px;color:#c39298">☕ 더티앤크림 커피, 수제 케이크</div>
+    </div>
+  </div>
+</section>
+
+<section id="feat-memory" style="padding:150px 24px;background:#181212;border-top:1px solid #241b1b;border-bottom:1px solid #241b1b">
+  <div style="max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center" class="two-col">
+    <div data-reveal style="background:#3d0f16;border:1px solid #7a2534;border-radius:20px;padding:22px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:#b71c1c;flex:none"></span><span style="font-size:15px;font-weight:700">🪦 R.I.P — 사라진 가게</span></div>
+      <div style="font-size:12px;color:#c39298;margin-bottom:14px">문을 닫은 가게도 지도에서 사라지지 않아요</div>
+      <div style="font-size:11px;font-weight:600;color:#c39298;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">이 가게를 좋아했던 사람들의 코멘트</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="background:#4f151e;border:1px solid #7a2534;border-radius:12px;padding:11px 14px;font-size:13px;line-height:1.6;color:#c9b8b2">🕯️ 시험 끝나면 항상 여기서 뒤풀이했었는데, 사장님이 서비스도 많이 주셨어요.</div>
+      </div>
+    </div>
+    <div data-reveal>
+      <div style="font-size:15px;font-weight:700;color:#ff5c46;margin-bottom:14px">추억 아카이브</div>
+      <h2 style="margin:0;font-size:clamp(28px,3.6vw,44px);font-weight:800;line-height:1.3;letter-spacing:-.02em">사라진 가게에도,<br>기억은 남아요</h2>
+      <p style="margin:20px 0 0;font-size:17px;line-height:1.7;color:#c39298;text-wrap:pretty">폐업한 가게는 지도에서 지워버리지 않아요. 그 곳을 좋아했던 사람들이 남긴 마지막 코멘트까지, 홍대의 기억을 기록합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section id="feat-review" style="padding:150px 24px;max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center" class="two-col">
+  <div data-reveal>
+    <div style="font-size:15px;font-weight:700;color:#ff5c46;margin-bottom:14px">취향 분석</div>
+    <h2 style="margin:0;font-size:clamp(28px,3.6vw,44px);font-weight:800;line-height:1.3;letter-spacing:-.02em">별점 평균 말고,<br>내 취향과 닮은 가게</h2>
+    <p style="margin:20px 0 0;font-size:17px;line-height:1.7;color:#c39298;text-wrap:pretty">매운맛, 혼밥, 데이트, 가성비 — 태그 몇 개만 고르면 홍대 대표 맛집 40곳 중 내 취향과 맞는 곳을 골라드려요.</p>
+  </div>
+  <div data-reveal style="display:flex;flex-direction:column;gap:12px">
+    <div style="background:#3d0f16;border:1px solid #7a2534;border-radius:16px;padding:16px 18px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="width:26px;height:26px;border-radius:50%;background:#4f151e;border:1px solid #7a2534;display:inline-flex;align-items:center;justify-content:center;font-size:12px">🍜</span><span style="font-size:13px;font-weight:600">국시와 가래떡</span><span style="font-size:11px;color:#ff8a7a;background:rgba(232,54,42,.12);border-radius:99px;padding:2px 9px;white-space:nowrap">#혼밥 #가성비</span></div>
+      <div style="font-size:14px;line-height:1.6;color:#c9b8b2">뚝닭(닭도리탕), 철판제육덮밥 — 홍익대 학식 대체로 유명한 곳</div>
+    </div>
+    <div style="background:#3d0f16;border:1px solid #7a2534;border-radius:16px;padding:16px 18px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="width:26px;height:26px;border-radius:50%;background:#4f151e;border:1px solid #7a2534;display:inline-flex;align-items:center;justify-content:center;font-size:12px">☕</span><span style="font-size:13px;font-weight:600">아우프글렛</span><span style="font-size:11px;color:#ff8a7a;background:rgba(232,54,42,.12);border-radius:99px;padding:2px 9px;white-space:nowrap">#조용한 #디저트</span></div>
+      <div style="font-size:14px;line-height:1.6;color:#c9b8b2">크로플(크루아상 와플) 전문 — 인스타 감성 카페</div>
+    </div>
+  </div>
+</section>
+
+<section id="feat-busking" style="padding:150px 24px;background:#181212;border-top:1px solid #241b1b;border-bottom:1px solid #241b1b">
+  <div style="max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center" class="two-col">
+    <div data-reveal style="background:#3d0f16;border:1px solid #7a2534;border-radius:20px;padding:22px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+        <span style="font-size:14px;font-weight:700">레드로드 버스킹 존</span>
+        <span class="example-badge" style="margin-left:auto">화면 예시</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:12px;background:#4f151e;border:1px solid #7a2534;border-radius:12px;padding:11px 14px">
+          <span style="font-family:'DM Mono',monospace;font-size:12px;color:#c39298;white-space:nowrap;flex:none">시간 미정</span>
+          <span style="flex:1;min-width:0"><span style="display:block;font-size:13px;font-weight:600">인디 뮤지션 라인업</span><span style="display:block;font-size:11px;color:#c39298">레드로드 · 구역별 공연 정보</span></span>
+          <span style="font-size:10px;padding:3px 9px;border-radius:99px;border:1px solid #7a2534;color:#c39298;white-space:nowrap;flex:none">준비중</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#4f151e;border:1px solid #7a2534;border-radius:12px;padding:11px 14px">
+          <span style="font-family:'DM Mono',monospace;font-size:12px;color:#c39298;white-space:nowrap;flex:none">시간 미정</span>
+          <span style="flex:1;min-width:0"><span style="display:block;font-size:13px;font-weight:600">거리 공연 · 이벤트</span><span style="display:block;font-size:11px;color:#c39298">걷고싶은거리 · 야간 공연</span></span>
+          <span style="font-size:10px;padding:3px 9px;border-radius:99px;border:1px solid #7a2534;color:#c39298;white-space:nowrap;flex:none">준비중</span>
+        </div>
+      </div>
+      <div style="margin-top:12px;background:rgba(232,54,42,.08);border:1px solid rgba(232,54,42,.3);border-radius:12px;padding:11px 14px;font-size:12px;line-height:1.6;color:#c9b8b2">🎨 <b style="color:#f5ece7">벽화 도슨트</b> — 홍대 벽화거리 그래피티 위치와 작가 비하인드 스토리, 포토존 가이드 (준비 중인 기능이에요)</div>
+    </div>
+    <div data-reveal>
+      <div style="font-size:15px;font-weight:700;color:#ff5c46;margin-bottom:14px">버스킹 &amp; 이벤트</div>
+      <h2 style="margin:0;font-size:clamp(28px,3.6vw,44px);font-weight:800;line-height:1.3;letter-spacing:-.02em">지금 레드로드에선<br>무슨 일이 일어날까</h2>
+      <p style="margin:20px 0 0;font-size:17px;line-height:1.7;color:#c39298;text-wrap:pretty">길 이름만 알려주는 지도는 그만. 버스킹 존 라인업과 거리 이벤트를 실시간으로 보여주는 기능을 준비하고 있어요. 화면은 완성 예시이고, 실제 공연 데이터는 곧 채워질 예정이에요.</p>
+    </div>
+  </div>
+</section>
+
+<section id="feat-subculture" style="padding:150px 24px;max-width:1080px;margin:0 auto">
+  <div data-reveal style="text-align:center;max-width:640px;margin:0 auto 64px">
+    <div style="font-size:15px;font-weight:700;color:#ff5c46;margin-bottom:14px">서브컬처 &amp; 스페셜티</div>
+    <h2 style="margin:0;font-size:clamp(28px,3.6vw,44px);font-weight:800;line-height:1.3;letter-spacing:-.02em">'의류점', '서점'으로<br>뭉뚱그리지 않아요</h2>
+    <p style="margin:20px 0 0;font-size:17px;line-height:1.7;color:#c39298;text-wrap:pretty">전국에서 취향 소비가 가장 밀집된 동네답게, 홍대의 숨은 가게들을 취향별 루트로 엮어드릴 예정이에요.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px" class="route-grid">
+    <div data-reveal style="background:#3d0f16;border:1px solid #7a2534;border-radius:20px;padding:26px;display:flex;flex-direction:column;gap:14px" class="hover-red">
+      <div style="font-size:30px">🧸</div>
+      <div style="font-size:18px;font-weight:700;letter-spacing:-.3px">덕후 루트</div>
+      <div style="font-size:14px;line-height:1.65;color:#c39298;text-wrap:pretty">피규어숍, 애니메이트, 콜라보 카페를 한 동선으로 엮은 루트를 준비하고 있어요.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:auto">
+        <span class="example-badge">준비중</span>
+      </div>
+    </div>
+    <div data-reveal style="background:#3d0f16;border:1px solid #7a2534;border-radius:20px;padding:26px;display:flex;flex-direction:column;gap:14px" class="hover-red">
+      <div style="font-size:30px">👕</div>
+      <div style="font-size:18px;font-weight:700;letter-spacing:-.3px">빈티지 &amp; 구제 맵</div>
+      <div style="font-size:14px;line-height:1.65;color:#c39298;text-wrap:pretty">연남·서교동 골목에 숨은 빈티지 숍을 스타일별로 분류해 보여드릴 예정이에요.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:auto">
+        <span class="example-badge">준비중</span>
+      </div>
+    </div>
+    <div data-reveal style="background:#3d0f16;border:1px solid #7a2534;border-radius:20px;padding:26px;display:flex;flex-direction:column;gap:14px" class="hover-red">
+      <div style="font-size:30px">🎧</div>
+      <div style="font-size:18px;font-weight:700;letter-spacing:-.3px">독립출판 &amp; 바이닐 투어</div>
+      <div style="font-size:14px;line-height:1.65;color:#c39298;text-wrap:pretty">대형 서점 말고, 동네 독립서점과 LP 바만 모은 취향 지도를 준비하고 있어요.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:auto">
+        <span class="example-badge">준비중</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:170px 24px;text-align:center;background:radial-gradient(50% 60% at 50% 110%, rgba(232,54,42,.25) 0%, rgba(232,54,42,0) 70%)">
+  <h2 data-reveal style="margin:0;font-size:clamp(34px,5vw,60px);font-weight:800;line-height:1.25;letter-spacing:-.03em">홍대에서 뭐 먹을지,<br>이제 고민하지 마세요</h2>
+  <div data-reveal style="margin-top:38px">
+    <button onclick="openSheet()" style="cursor:pointer;border:none;display:inline-block;white-space:nowrap;background:#e8362a;color:#fff;font-weight:700;font-size:18px;padding:18px 44px;border-radius:16px;box-shadow:0 8px 30px rgba(232,54,42,.45)" class="hover-darken">Hongdae Map 시작하기</button>
+  </div>
+</section>
+
+<footer style="border-top:1px solid #241b1b;padding:44px 28px;display:flex;align-items:center;justify-content:space-between;max-width:1080px;margin:0 auto;flex-wrap:wrap;gap:16px">
+  <div style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:#c39298">
+    <svg width="24" height="15" viewBox="0 0 180 100" role="img" aria-label="Hongdae Map logo"><circle cx="55" cy="62" r="31" fill="none" stroke="#c39298" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="#c39298" stroke-width="16"/><path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="#c39298"/></svg>
+    홍대맵
+  </div>
+  <div style="display:flex;gap:24px;font-size:13px">
+    <a href="#top" style="color:#c39298">서비스 소개</a>
+    <a href="main.html" style="color:#c39298">앱 실행</a>
+    <a href="#feat-busking" style="color:#c39298">버스킹·이벤트</a>
+    <a href="#feat-subculture" style="color:#c39298">서브컬처</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <svg width="26" height="26" viewBox="0 0 140 140" aria-hidden="true" style="flex:none;opacity:.8">
+      <circle cx="70" cy="70" r="64" fill="none" stroke="#8a5f66" stroke-width="3"/>
+      <circle cx="70" cy="70" r="55" fill="none" stroke="#8a5f66" stroke-width="1" stroke-dasharray="3 4"/>
+      <g transform="translate(34,46) scale(0.4)"><circle cx="55" cy="64" r="30" fill="none" stroke="#8a5f66" stroke-width="15"/><circle cx="137" cy="64" r="30" fill="none" stroke="#8a5f66" stroke-width="15"/><rect x="17" y="22" width="76" height="15" rx="7.5" fill="#8a5f66"/><rect x="48" y="0" width="15" height="30" rx="7.5" fill="#8a5f66"/><circle cx="137" cy="64" r="7" fill="#8a5f66"/></g>
+      <text x="70" y="34" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="2.5" fill="#8a5f66" font-family="Pretendard">HONGDAE</text>
+      <text x="70" y="114" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="2.5" fill="#8a5f66" font-family="Pretendard">SINCE 2026</text>
     </svg>
-    <span class="logo-divider"></span>
-    <div class="logo-text">
-      <div class="logo-kr">홍대맵</div>
-      <div class="logo-en">HONGDAE MAP</div>
-    </div>
+    <div style="font-size:12px;color:#6f5f5a">© 2026 Hongdae Map · 베타 버전, 계속 업데이트 중</div>
   </div>
-  <div class="topbar-right">
-    <button class="btn-bookmarks" id="btn-taste-top" onclick="openTasteModal()" title="내 취향 찾기" style="background:#e8362a;border-color:#e8362a;color:#fff">🎯</button>
-    <button class="btn-bookmarks" id="btn-lang" onclick="cycleLang()" title="Language / 语言">🌐</button>
-    <button class="btn-bookmarks" id="btn-rip" onclick="showGoneStores()">🪦</button>
-    <button class="btn-directions" id="btn-save" onclick="showBookmarks()">♥</button>
-  </div>
-</div>
-<div class="topbar-search-row">
-  <div class="search-box">
-    <svg width="14" height="14" fill="none" stroke="#93a8a2" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" id="search-input" placeholder="업소명 검색..." oninput="filterList()">
-  </div>
-  <div class="search-results" id="search-results"></div>
-</div>
+</footer>
 
-<div class="category-bar" id="category-bar">
-  <button class="chip" id="chip-restaurant" onclick="selectCategoryBar('restaurant', this)">🍜 음식점</button>
-  <button class="chip" id="chip-cafe" onclick="selectCategoryBar('cafe', this)">☕ 카페</button>
-  <button class="chip" id="chip-bar" onclick="selectCategoryBar('bar', this)">🍺 주점</button>
-  <button class="chip" onclick="selectCategoryBar('club', this)">🪩 클럽</button>
-  <button class="chip" onclick="selectCategoryBar('hof', this)">🏅 명예학식</button>
-  <button class="chip" onclick="selectCategoryBar('michelin', this)">🍽️ 미쉐린</button>
-  <button class="chip" onclick="selectCategoryBar('gone', this)">🪦 사라진 가게</button>
-</div>
-
-<div class="drawer-backdrop" id="drawer-backdrop" onclick="closeSidebar()"></div>
-
-<div class="layout">
-
-  <!-- SIDEBAR -->
-  <div class="sidebar" id="sidebar">
-    <button class="sidebar-close" onclick="closeSidebar()">✕</button>
-    <div class="sidebar-top">
-      <div class="trivia-card" id="trivia-card" onclick="nextTrivia()">
-        <div class="trivia-stamp" aria-hidden="true">
-          <svg viewBox="0 0 140 140">
-            <circle cx="70" cy="70" r="64" fill="none" stroke="#e60025" stroke-width="3"/>
-            <circle cx="70" cy="70" r="55" fill="none" stroke="#e60025" stroke-width="1" stroke-dasharray="3 4"/>
-            <g transform="translate(34,46) scale(0.4)"><circle cx="55" cy="64" r="30" fill="none" stroke="#e60025" stroke-width="15"/><circle cx="137" cy="64" r="30" fill="none" stroke="#e60025" stroke-width="15"/><rect x="17" y="22" width="76" height="15" rx="7.5" fill="#e60025"/><rect x="48" y="0" width="15" height="30" rx="7.5" fill="#e60025"/><circle cx="137" cy="64" r="7" fill="#e60025"/></g>
-            <text x="70" y="34" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="2.5" fill="#e60025" font-family="Pretendard">HONGDAE</text>
-            <text x="70" y="114" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="2.5" fill="#e60025" font-family="Pretendard">SINCE 2026</text>
-          </svg>
-        </div>
-        <div class="trivia-label">💡 <span id="trivia-label-text">몰랐던 홍대 상식</span></div>
-        <div class="trivia-text" id="trivia-text"></div>
-      </div>
-      <div class="filter-chips">
-        <button class="chip on" id="chip-all" onclick="setFilter('all', this)">전체</button>
-      </div>
-      <div id="all-categories-panel">
-        <div class="filter-chips filter-group">
-          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:한식" onclick="toggleCuisineFilter('한식',this)">🍚 한식</button>
-          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:중식" onclick="toggleCuisineFilter('중식',this)">🥟 중식</button>
-          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:일식" onclick="toggleCuisineFilter('일식',this)">🍣 일식</button>
-          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:양식" onclick="toggleCuisineFilter('양식',this)">🍝 양식</button>
-          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:글로벌" onclick="toggleCuisineFilter('글로벌',this)">🌏 글로벌</button>
-        </div>
-        <div class="filter-chips filter-group">
-          <button class="chip" id="chip-hof" onclick="toggleDetailFilter('cert:hallOfFame',this)">🏅 홍대생 명예학식</button>
-          <button class="chip" id="chip-michelin" onclick="toggleDetailFilter('cert:michelin',this)">🍽️ 미쉐린 가이드</button>
-        </div>
-        <div class="filter-chips filter-group">
-          <button class="chip" onclick="toggleDetailFilter('cafeSub:작업카공',this)">☕ 작업·카공</button>
-          <button class="chip" onclick="toggleDetailFilter('cafeSub:디저트',this)">🍰 디저트·베이커리</button>
-          <button class="chip" onclick="toggleDetailFilter('cafeSub:스페셜티',this)">🫘 스페셜티·로스터리</button>
-        </div>
-        <div class="filter-chips filter-group">
-          <button class="chip" onclick="toggleDetailFilter('barSub:포차',this)">🏮 포차</button>
-          <button class="chip" onclick="toggleDetailFilter('barSub:요리주점',this)">🍢 요리주점</button>
-          <button class="chip" onclick="toggleDetailFilter('barSub:바',this)">🍸 바</button>
-          <button class="chip" onclick="toggleDetailFilter('barSub:헌팅포차',this)">💃 헌팅포차</button>
-        </div>
-        <div class="filter-chips filter-group">
-          <button class="chip" onclick="toggleDetailFilter('type:club',this)">🪩 클럽</button>
-          <button class="chip" id="chip-liveclub" onclick="toggleDetailFilter('type:liveclub',this)">🎤 라이브클럽</button>
-          <button class="chip" onclick="toggleDetailFilter('type:animeshop',this)">🎌 애니메이션샵</button>
-          <button class="chip" onclick="toggleDetailFilter('type:entertainment',this)">🎡 엔터테인먼트</button>
-          <button class="chip" id="chip-artsupply" onclick="toggleDetailFilter('type:artsupply',this)">🎨 화방</button>
-        </div>
-        <div class="filter-chips filter-group">
-          <button class="chip" id="chip-sangsu" onclick="toggleDetailFilter('dong:상수동',this)">📍 상수동</button>
-          <button class="chip" id="chip-seogyo" onclick="toggleDetailFilter('dong:서교동',this)">📍 서교동</button>
-          <button class="chip" id="chip-yeonnam" onclick="toggleDetailFilter('dong:연남동',this)">📍 연남동</button>
-          <button class="chip" id="chip-hapjeong" onclick="toggleDetailFilter('dong:합정동',this)">📍 합정동</button>
-        </div>
-        <div class="filter-group" style="padding:12px 4px 0">
-          <button class="chip" onclick="clearDetailFilters(this)" style="width:100%;text-align:center;color:var(--muted)">선택 초기화</button>
-        </div>
+<div id="backdrop" onclick="closeSheet()" style="position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);transition:opacity .3s ease;opacity:0;pointer-events:none"></div>
+<div style="position:fixed;left:0;right:0;bottom:0;z-index:401;display:flex;justify-content:center;pointer-events:none">
+  <div id="sheet" style="pointer-events:none;touch-action:none;width:min(560px,100vw);background:#3d0f16;border:1px solid #7a2534;border-bottom:none;border-radius:24px 24px 0 0;box-shadow:0 -20px 60px rgba(0,0,0,.6);padding:14px 28px 36px;transform:translateY(105%);transition:transform .38s cubic-bezier(.2,.8,.2,1)">
+    <div style="width:44px;height:5px;border-radius:99px;background:#7a2534;margin:0 auto 22px"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+      <svg width="40" height="25" viewBox="0 0 180 100" role="img" aria-label="Hongdae Map logo"><defs><linearGradient id="slogo" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs><circle cx="55" cy="62" r="31" fill="none" stroke="url(#slogo)" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="url(#slogo)" stroke-width="16"/><path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="url(#slogo)"/></svg>
+      <div>
+        <div style="font-size:18px;font-weight:800;letter-spacing:-.3px">Hongdae Map 시작하기</div>
+        <div style="font-size:13px;color:#c39298;margin-top:2px">설치 없이 웹에서 바로 사용할 수 있어요</div>
       </div>
     </div>
-    <button id="sort-trigger-btn" onclick="openSortModal()" style="display:none !important;">🔀 정렬</button>
-    <div id="empty-cat-notice" style="display:none;padding:8px 12px;font-size:10px;color:var(--muted)"></div>
-    <div class="store-list" id="store-list" style="display:none"></div>
-  </div>
-
-<!-- SORT MODAL (화면 중앙에 뜨는 정렬 선택창) -->
-<div class="modal-overlay" id="sort-modal" style="display:none" onclick="if(event.target===this)closeSortModal()">
-  <div class="modal" style="display:flex; flex-direction:column;">
-    <div class="feed-handle"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex:none">
-      <h4 style="margin:0">정렬해서 보기</h4>
-      <button class="sidebar-close" style="position:static" onclick="closeSortModal()">✕</button>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <a href="main.html" style="display:flex;align-items:center;justify-content:center;white-space:nowrap;background:#e8362a;color:#fff;font-weight:700;font-size:16px;padding:15px;border-radius:14px;box-shadow:0 4px 16px rgba(232,54,42,.4)" class="hover-darken">웹에서 바로 열기</a>
+      <button onclick="closeSheetToFeatures()" style="cursor:pointer;white-space:nowrap;background:#4f151e;border:1px solid #7a2534;color:#f5ece7;font-weight:600;font-size:15px;padding:14px;border-radius:14px" class="hover-red">기능 먼저 살펴보기</button>
     </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;flex:none">
-      <button class="chip" id="sortopt-category" onclick="setListSort('category')" style="flex:1">카테고리순</button>
-      <button class="chip" id="sortopt-name" onclick="setListSort('name')" style="flex:1">가나다순</button>
-      <button class="chip" id="sortopt-distance" onclick="setListSort('distance')" style="flex:1">거리순</button>
-    </div>
-    <div id="sort-modal-results" style="overflow-y:auto; flex:1; text-align:left"></div>
+    <div style="text-align:center;font-size:11px;color:#6f5f5a;margin-top:16px;font-family:'DM Mono',monospace">홍대 상권 데이터 · 베타 버전</div>
   </div>
 </div>
 
-  <!-- MAP -->
-  <div class="map-wrap">
-    <div class="loading" id="loading">
-      <svg class="loading-neon" width="120" height="67" viewBox="0 0 180 100" aria-label="Hongdae Map">
-        <circle cx="55" cy="64" r="30" fill="none" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
-        <circle cx="137" cy="64" r="30" fill="none" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
-        <path d="M24 29.5 H86" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
-        <path d="M55.5 7 V22" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
-        <circle cx="137" cy="64" r="5" fill="#ff6b7e"/>
-      </svg>
-      <div class="loading-dots">
-        <div class="loading-dot"></div>
-        <div class="loading-dot"></div>
-        <div class="loading-dot"></div>
-      </div>
-      <p>카카오맵 불러오는 중...</p>
-    </div>
-    <div class="import-mode-banner" id="import-banner">📌 지도를 클릭하면 주변 업체를 불러옵니다</div>
-    <div id="map"></div>
-
-    <div class="map-controls">
-      <button class="map-btn" id="btn-export" onclick="exportChanges()">💾 추가한 매장 내보내기 (<span id="export-count">0</span>)</button>
-    </div>
-
-    <button class="btn-search-area" id="btn-search-area" onclick="searchThisArea()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line></svg>
-      이 지역에서 검색
-    </button>
-
-    <button class="btn-home" onclick="resetView()" aria-label="홍대 중심으로 이동" title="홍대 중심">⌂</button>
-
-    <button class="btn-view-results" id="btn-view-results" onclick="openResultsModal()">
-      가게 <span id="results-count">0</span>곳 보기
-    </button>
-
-    <a class="feedback-link" href="https://forms.gle/gJBKqm8sU5CS5KEK7" target="_blank" rel="noopener noreferrer">📝 피드백·제보하기</a>
-  </div>
-
-
-  <!-- DETAIL PANEL -->
-  <div class="detail" id="detail-panel">
-    <button class="detail-close" onclick="closeDetail()">✕</button>
-    <div class="detail-empty" id="detail-empty">
-      <div class="icon">📊</div>
-      <div>업소를 선택하면<br>상세 분석이 나타납니다</div>
-    </div>
-    <div id="detail-content" style="display:none"></div>
-  </div>
-
 </div>
 
-<!-- TASTE MODAL -->
-<div class="modal-overlay" id="taste-modal" style="display:none">
-  <div class="modal">
-    <h4>🎯 내 취향은?</h4>
-    <p style="font-size:12px;color:var(--muted);margin:0 0 12px">좋아하는 걸 2개 이상 골라주세요. 홍대 대표 맛집 40곳 중에서 골라드려요.</p>
-    <div id="taste-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px"></div>
-    <div style="display:flex;gap:8px">
-      <button class="map-btn" onclick="closeTasteModal()" style="flex:1">닫기</button>
-      <button class="map-btn on" onclick="applyTaste()" style="flex:1">추천 보기</button>
-    </div>
-  </div>
-</div>
-
-<!-- ADD MODAL -->
-<div class="modal-overlay" id="modal" style="display:none">
-  <div class="modal">
-    <h4>📮 사라진 가게 제보하기</h4>
-    <p style="font-size:11px;color:var(--muted);margin:-6px 0 12px">이 가게에 대한 향수가 남아있다면, 알고 있는 만큼만 적어서 제보해주세요.</p>
-    <div class="form-group">
-      <label>상호명 *</label>
-      <input type="text" id="f-name" placeholder="예: 홍대포차">
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>업종</label>
-        <select id="f-type">
-          <option value="restaurant">음식점</option>
-          <option value="cafe">카페</option>
-          <option value="bar">주점</option>
-          <option value="liveclub">라이브클럽</option>
-          <option value="club">클럽</option>
-          <option value="artsupply">화방</option>
-          <option value="animeshop">애니메이션샵</option>
-          <option value="entertainment">엔터테인먼트</option>
-          <option value="retail">기타</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>상태</label>
-        <select id="f-status">
-          <option value="open">영업중</option>
-          <option value="closed" selected>폐점</option>
-          <option value="risk">주의</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>영업 기간 (개월, 아는 만큼만)</label>
-        <input type="number" id="f-months" placeholder="24">
-      </div>
-      <div class="form-group">
-        <label>대략적인 폐업 시기 (선택)</label>
-        <input type="text" id="f-closed-year" placeholder="예: 2022년쯤">
-      </div>
-    </div>
-    <div class="form-group">
-      <label>제보자 닉네임 (선택)</label>
-      <input type="text" id="f-reporter" placeholder="예: 익명, 07학번 등">
-    </div>
-    <div class="form-group">
-      <label>기억에 남은 추억</label>
-      <textarea id="f-insight" placeholder="예: 시험 끝나고 항상 여기서 뒤풀이했었는데, 사장님이 서비스도 많이 주셨어요."></textarea>
-    </div>
-    <div class="form-group">
-      <label>대표 메뉴</label>
-      <input type="text" id="f-signature-menu" placeholder="예: 들기름 막국수, 수육">
-    </div>
-    <div class="form-group">
-      <label>폐점 추정 원인</label>
-      <select id="f-reason">
-        <option value="">해당없음</option>
-        <option value="traffic">유동인구 부족</option>
-        <option value="quality">품질/경쟁력 문제</option>
-        <option value="rent">임대료 부담</option>
-        <option value="location">입지 불리</option>
-        <option value="trend">트렌드 이탈</option>
-      </select>
-    </div>
-    <div style="font-size:11px;color:var(--muted);background:var(--surface2);border-radius:6px;padding:8px 10px;">
-      💡 지도에서 위치를 클릭하면 자동으로 좌표가 입력됩니다. 또는 아래에서 직접 입력하세요.
-    </div>
-    <div class="form-row" style="margin-top:10px">
-      <div class="form-group">
-        <label>위도 (자동입력)</label>
-        <input type="number" id="f-lat" placeholder="37.5570" step="0.0001">
-      </div>
-      <div class="form-group">
-        <label>경도 (자동입력)</label>
-        <input type="number" id="f-lng" placeholder="126.9245" step="0.0001">
-      </div>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeModal()">취소</button>
-      <button class="btn-confirm" onclick="addStore()">추가하기</button>
-    </div>
-  </div>
-</div>
+<style>
+  @media (max-width: 860px) {
+    .two-col { grid-template-columns: 1fr !important; gap: 40px !important; }
+    .route-grid { grid-template-columns: 1fr !important; }
+    .hero-grid { grid-template-columns: 1fr !important; height: auto !important; }
+    header nav { gap: 14px !important; }
+    header nav a:not(:last-child) { display: none; }
+  }
+  @media (max-width: 480px) {
+    header { padding: 0 16px !important; }
+    header nav a:last-child { font-size: 12px !important; padding: 8px 14px !important; }
+    section { padding-left: 16px !important; padding-right: 16px !important; }
+    #sheet { padding-left: 20px !important; padding-right: 20px !important; }
+  }
+</style>
 
 <script>
-// ── DATA ──────────────────────────────────────────────
-const TYPES = { restaurant:'음식점', cafe:'카페', bar:'주점', retail:'기타', liveclub:'라이브클럽', artsupply:'화방', club:'클럽', animeshop:'애니메이션샵', entertainment:'엔터테인먼트' };
-const STATUS = { open:'영업중', closed:'폐점', risk:'주의' };
-const REASONS = { traffic:'유동인구 부족', quality:'품질/경쟁력', rent:'임대료 부담', location:'입지 불리', trend:'트렌드 이탈' };
-
-let stores = [
-  { id:1784136728682, name:"금복식당", type:'restaurant', status:'unverified', lat:37.54737498522558, lng:126.92217908089042, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 독막로14길 24. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"일식 가정식", kakaoId:"1722785841", kakaoUrl:"http://place.map.kakao.com/1722785841", address:"서울 마포구 독막로14길 24", signatureMenu:"고등어구이정식, 함박스테이크정식", certifications:["홍대생 명예학식"], tags:["혼밥","가성비","로컬단골"] },
-  { id:1784136773462, name:"식스티즈", type:'restaurant', status:'unverified', lat:37.55346263973659, lng:126.92435128015114, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로23길 9. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"버거", kakaoId:"488474938", kakaoUrl:"http://place.map.kakao.com/488474938", address:"서울 마포구 와우산로23길 9", signatureMenu:"치즈버거, 더블치즈버거", certifications:["홍대생 명예학식"], tags:["혼밥","가성비"] },
-  { id:1784136786163, name:"율촌", type:'restaurant', status:'unverified', lat:37.55283666731157, lng:126.92469707949675, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로 100. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"국수/칼국수", kakaoId:"24580312", kakaoUrl:"http://place.map.kakao.com/24580312", address:"서울 마포구 와우산로 100", signatureMenu:"닭칼국수, 회냉면, 메밀전병", certifications:["홍대생 명예학식"], tags:["노포","로컬단골"] },
-  { id:1784136796734, name:"연우김밥 상수점", type:'restaurant', status:'unverified', lat:37.54715284871416, lng:126.92280395938606, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로 29. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"김밥/분식", kakaoId:"26965495", kakaoUrl:"http://place.map.kakao.com/26965495", address:"서울 마포구 와우산로 29", signatureMenu:"유부김밥, 명태김밥", certifications:["홍대생 명예학식"], tags:["혼밥","가성비","로컬단골"] },
-  { id:1784136804944, name:"국시와 가래떡", type:'restaurant', status:'unverified', lat:37.5525926298454, lng:126.923502260222, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로21길 8. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"백반/한정식", kakaoId:"14734012", kakaoUrl:"http://place.map.kakao.com/14734012", address:"서울 마포구 와우산로21길 8", signatureMenu:"뚝닭(닭도리탕), 철판제육덮밥", certifications:["홍대생 명예학식"], tags:["혼밥","가성비","로컬단골"] },
-  { id:1784136812466, name:"카이화", type:'restaurant', status:'unverified', lat:37.54794667930554, lng:126.92151422567083, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 독막로 73. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"중식", kakaoId:"570518757", kakaoUrl:"http://place.map.kakao.com/570518757", address:"서울 마포구 독막로 73", signatureMenu:"삼선간짜장, 짬뽕밥, 깐풍기", certifications:["홍대생 명예학식"], tags:["혼밥","가성비"] },
-  { id:1784136819600, name:"발바리네", type:'restaurant', status:'unverified', lat:37.55332504570527, lng:126.92763901136303, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로 128. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"백반/한정식", kakaoId:"15625653", kakaoUrl:"http://place.map.kakao.com/15625653", address:"서울 마포구 와우산로 128", signatureMenu:"제육볶음정식, 뚝배기불고기", certifications:["홍대생 명예학식"], tags:["혼밥","가성비","로컬단골"] },
-  { id:1784136829801, name:"제제집 홍대점", type:'restaurant', status:'unverified', lat:37.5492802372815, lng:126.921635044526, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로15길 30. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"백반/한정식", kakaoId:"1557839449", kakaoUrl:"http://place.map.kakao.com/1557839449", address:"서울 마포구 와우산로15길 30", signatureMenu:"제육볶음, 오제볶음", certifications:["홍대생 명예학식"], tags:["혼밥","가성비","로컬단골"] },
-  { id:1784137377763, name:"더피자보이즈 서교", type:'restaurant', status:'unverified', lat:37.55529544781166, lng:126.92605607788644, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로29마길 24-1. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"피자", kakaoId:"805500797", kakaoUrl:"http://place.map.kakao.com/805500797", address:"서울 마포구 와우산로29마길 24-1", signatureMenu:"포테이토 피자, 하프앤하프 피자", certifications:["홍대생 명예학식"], tags:["데이트","인스타감성"] },
-  { id:1784137385924, name:"고집", type:'restaurant', status:'unverified', lat:37.5527871924359, lng:126.923420579454, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 홍익로 3-11. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"백반/한정식", kakaoId:"12781019", kakaoUrl:"http://place.map.kakao.com/12781019", address:"서울 마포구 홍익로 3-11", signatureMenu:"돼지연탄구이, 고등어연탄구이", certifications:["홍대생 명예학식"], tags:["술안주","로컬단골","가성비"] },
-  { id:1784137392121, name:"라멘반라이", type:'restaurant', status:'unverified', lat:37.5484683668701, lng:126.921528389839, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 독막로15길 3-12. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"일식 면 요리", kakaoId:"2095032804", kakaoUrl:"http://place.map.kakao.com/2095032804", address:"서울 마포구 독막로15길 3-12", signatureMenu:"게키카라라멘, 츠케멘(아부라소바)", certifications:["홍대생 명예학식"], tags:["혼밥","매운맛"] },
-  { id:1784137398925, name:"카미야", type:'restaurant', status:'unverified', lat:37.552582876796265, lng:126.9223637900431, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로21길 28-6. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"일식 돈까스", kakaoId:"12771116", kakaoUrl:"http://place.map.kakao.com/12771116", address:"서울 마포구 와우산로21길 28-6", signatureMenu:"오코노미소스동, 히레카츠(치즈가츠)", certifications:["홍대생 명예학식"], tags:["혼밥","가성비"] },
-  { id:1784137405896, name:"괜찮은생고기", type:'restaurant', status:'unverified', lat:37.549412969311, lng:126.922066061194, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로15길 23. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"돼지고기 구이/찜", kakaoId:"17894166", kakaoUrl:"http://place.map.kakao.com/17894166", address:"서울 마포구 와우산로15길 23", signatureMenu:"", certifications:["홍대생 명예학식"], tags:["술안주","시끌벅적","데이트"] },
-  { id:1784138528524, name:"옥동식 서교점", type:'restaurant', status:'unverified', lat:37.5526765694055, lng:126.914521071507, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 양화로7길 44-10. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"국/탕/찌개류", kakaoId:"1797997961", kakaoUrl:"http://place.map.kakao.com/1797997961", address:"서울 마포구 양화로7길 44-10", signatureMenu:"맑은 돼지곰탕", tags:["혼밥","가성비","로컬단골"], certifications:["미쉐린 가이드 선정"] },
-  { id:1784138540633, name:"바다회사랑 서교점", type:'restaurant', status:'unverified', lat:37.5554494589204, lng:126.917790877068, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 동교로 143. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"횟집", kakaoId:"953592773", kakaoUrl:"http://place.map.kakao.com/953592773", address:"서울 마포구 동교로 143", signatureMenu:"대방어회(겨울 한정), 연어회", tags:["데이트","술안주"], certifications:[] },
-  { id:1784138548616, name:"육지", type:'restaurant', status:'unverified', lat:37.5497071933215, lng:126.917495034617, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 독막로3길 34. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"돼지고기 구이/찜", kakaoId:"931881312", kakaoUrl:"http://place.map.kakao.com/931881312", address:"서울 마포구 독막로3길 34", signatureMenu:"이불갈비, 돈육 목살", tags:["데이트","술안주","시끌벅적"], certifications:[] },
-  { id:1784138558637, name:"산울림1992", type:'restaurant', status:'unverified', lat:37.55464224823846, lng:126.93054626122678, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 서강로9길 60. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'합정동', category:"한정식", kakaoId:"2036183426", kakaoUrl:"http://place.map.kakao.com/2036183426", address:"서울 마포구 서강로9길 60", signatureMenu:"치즈감자전, 한우내장찜", tags:["데이트","술안주","인스타감성"], certifications:[] },
-  { id:1784138591988, name:"고기꾼김춘배 홍대본점", type:'restaurant', status:'unverified', lat:37.552843607872, lng:126.921519275899, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 홍익로3길 36. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"돼지고기 구이/찜", kakaoId:"27197478", kakaoUrl:"http://place.map.kakao.com/27197478", address:"서울 마포구 홍익로3길 36", signatureMenu:"오겹살, 생갈비", tags:["술안주","시끌벅적","데이트"], certifications:[] },
-  { id:1784138626622, name:"옹달샘 본점", type:'restaurant', status:'unverified', lat:37.5484383147205, lng:126.919713291109, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 양화로6길 99. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"해물볶음", kakaoId:"26871332", kakaoUrl:"http://place.map.kakao.com/26871332", address:"서울 마포구 양화로6길 99", signatureMenu:"오징어볶음, 김치찜", tags:["술안주","매운맛","시끌벅적"], certifications:[] },
-  { id:1784138675041, name:"오레노라멘 합정본점", type:'restaurant', status:'unverified', lat:37.54725761707835, lng:126.91783721734953, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 독막로8길 16. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'합정동', category:"일식 면 요리", kakaoId:"1916682638", kakaoUrl:"http://place.map.kakao.com/1916682638", address:"서울 마포구 독막로8길 16", signatureMenu:"토리파이탄(닭육수 라멘)", tags:["혼밥","가성비"], certifications:["미쉐린 가이드 선정"] },
-  { id:1784138683082, name:"크레이지카츠", type:'restaurant', status:'unverified', lat:37.5504475197438, lng:126.90970501895275, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 포은로2나길 44. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'합정동', category:"일식 돈까스", kakaoId:"83301316", kakaoUrl:"http://place.map.kakao.com/83301316", address:"서울 마포구 포은로2나길 44", signatureMenu:"특로스카츠", tags:["혼밥","가성비"], certifications:[] },
-  { id:1784138699524, name:"카와카츠 본점", type:'restaurant', status:'unverified', lat:37.554741054656375, lng:126.916195926392, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 동교로 126. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"일식 돈까스", kakaoId:"1351221007", kakaoUrl:"http://place.map.kakao.com/1351221007", address:"서울 마포구 동교로 126", signatureMenu:"로스카츠, 히레카츠", tags:["혼밥","가성비"], certifications:[] },
-  { id:1784138707096, name:"칸다소바 홍대점", type:'restaurant', status:'unverified', lat:37.54928453503949, lng:126.92268746534987, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로 51-6. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"일식 면 요리", kakaoId:"2057792795", kakaoUrl:"http://place.map.kakao.com/2057792795", address:"서울 마포구 와우산로 51-6", signatureMenu:"마제소바, 아부라소바", tags:["혼밥","가성비"], certifications:[] },
-  { id:1784138715211, name:"부탄츄 홍대점", type:'restaurant', status:'unverified', lat:37.5564040951311, lng:126.926730635869, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로35길 75. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"일식 면 요리", kakaoId:"18742750", kakaoUrl:"http://place.map.kakao.com/18742750", address:"서울 마포구 와우산로35길 75", signatureMenu:"돈코츠 라멘", tags:["혼밥","가성비"], certifications:[] },
-  { id:1784138726883, name:"우와 홍대본점", type:'restaurant', status:'unverified', lat:37.5516835548182, lng:126.922172337916, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로21길 21-16. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"일식 철판요리", kakaoId:"400281849", kakaoUrl:"http://place.map.kakao.com/400281849", address:"서울 마포구 와우산로21길 21-16", signatureMenu:"토마토 오코노미야끼", tags:["데이트","인스타감성","술안주"], certifications:[] },
-  { id:1784138737286, name:"하카타분코", type:'restaurant', status:'unverified', lat:37.5488915191848, lng:126.92379574116, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 독막로19길 43. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"일식 면 요리", kakaoId:"21410206", kakaoUrl:"http://place.map.kakao.com/21410206", address:"서울 마포구 독막로19길 43", signatureMenu:"인라멘", tags:["혼밥","가성비"], certifications:[] },
-  { id:1784138760149, name:"진진", type:'restaurant', status:'unverified', lat:37.55376325035565, lng:126.91845251500338, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 월드컵북로1길 60. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'합정동', category:"중식", kakaoId:"1767349854", kakaoUrl:"http://place.map.kakao.com/1767349854", address:"서울 마포구 월드컵북로1길 60", signatureMenu:"멘보샤, 대게살볶음", tags:["데이트","술안주"], certifications:["미쉐린 빕구르망"] },
-  { id:1784138775682, name:"연교", type:'restaurant', status:'unverified', lat:37.5616046124056, lng:126.926671215681, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 연희로1길 65. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'연남동', category:"중식", kakaoId:"934767425", kakaoUrl:"http://place.map.kakao.com/934767425", address:"서울 마포구 연희로1길 65", signatureMenu:"샤오롱바오, 우육탕면", tags:["데이트","술안주"], certifications:[] },
-  { id:1784138796067, name:"소이연남", type:'restaurant', status:'unverified', lat:37.5635139207821, lng:126.92538808404, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 동교로 267. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'연남동', category:"기타 동남아식 전문", kakaoId:"25479306", kakaoUrl:"http://place.map.kakao.com/25479306", address:"서울 마포구 동교로 267", signatureMenu:"소고기 국수, 쏨땀", tags:["매운맛","데이트","인스타감성"], certifications:[] },
-  { id:1784138803767, name:"미분당 홍대점", type:'restaurant', status:'unverified', lat:37.554416885632, lng:126.930354078351, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 서강로9길 59. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'합정동', category:"베트남식 전문", kakaoId:"1551661200", kakaoUrl:"http://place.map.kakao.com/1551661200", address:"서울 마포구 서강로9길 59", signatureMenu:"차돌양지쌀국수", tags:["혼밥","가성비"], certifications:[] },
-  { id:1784138811618, name:"향미", type:'restaurant', status:'unverified', lat:37.55289706783668, lng:126.92334917025866, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 홍익로 3-24. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"중식", kakaoId:"9593688", kakaoUrl:"http://place.map.kakao.com/9593688", address:"서울 마포구 홍익로 3-24", signatureMenu:"대만식 우육면, 멘보샤", tags:["혼밥","가성비"], certifications:[] },
-  { id:1784138820313, name:"뉴오더클럽", type:'restaurant', status:'unverified', lat:37.5610590758941, lng:126.924552986639, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 동교로34길 3. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'연남동', category:"피자", kakaoId:"1629395786", kakaoUrl:"http://place.map.kakao.com/1629395786", address:"서울 마포구 동교로34길 3", signatureMenu:"포테이토&페퍼로니 하프앤하프 피자", tags:["데이트","인스타감성"], certifications:[] },
-  { id:1784138861096, name:"또보겠지떡볶이집 호호피크닉점", type:'restaurant', status:'unverified', lat:37.54970538896052, lng:126.91749164166613, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 독막로3길 34. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"김밥/만두/분식", kakaoId:"2127178691", kakaoUrl:"http://place.map.kakao.com/2127178691", address:"서울 마포구 독막로3길 34", signatureMenu:"깻잎 떡볶이, 버터갈릭 감자튀김", tags:["매운맛","가성비","혼밥"], certifications:[] },
-  { id:1784138877250, name:"홍대삭 상수본점", type:'restaurant', status:'unverified', lat:37.54794925427472, lng:126.9213218475811, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 독막로 71. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"김밥/만두/분식", kakaoId:"19909925", kakaoUrl:"http://place.map.kakao.com/19909925", address:"서울 마포구 독막로 71", signatureMenu:"수제 모둠 튀김, 떡볶이", tags:["매운맛","가성비"], certifications:[] },
-  { id:1784138883698, name:"홍대조폭떡볶이", type:'restaurant', status:'unverified', lat:37.5552690731955, lng:126.928584390234, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로29길 26. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"김밥/만두/분식", kakaoId:"1260873032", kakaoUrl:"http://place.map.kakao.com/1260873032", address:"서울 마포구 와우산로29길 26", signatureMenu:"옛날 떡볶이, 수제 튀김", tags:["매운맛","가성비","로컬단골"], certifications:[] },
-  { id:1784138896622, name:"테일러커피 연남1호점", type:'cafe', status:'unverified', lat:37.563085683374, lng:126.926402647715, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 성미산로 189. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'연남동', category:"카페", kakaoId:"27508963", kakaoUrl:"http://place.map.kakao.com/27508963", address:"서울 마포구 성미산로 189", signatureMenu:"크림모카, 아인슈페너", tags:["디저트","인스타감성","조용한"], certifications:[] },
-  { id:1784138912103, name:"앤티크커피 연남점", type:'cafe', status:'unverified', lat:37.561217140524874, lng:126.92660142255426, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 연희로 25-1. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'연남동', category:"카페", kakaoId:"1868341857", kakaoUrl:"http://place.map.kakao.com/1868341857", address:"서울 마포구 연희로 25-1", signatureMenu:"더티앤크림 커피, 수제 케이크", tags:["디저트","조용한","인스타감성"], certifications:[] },
-  { id:1784164639151, name:"니시무라멘 연남본점", type:'restaurant', status:'unverified', lat:37.5633606727732, lng:126.92526373304, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 동교로 265. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'연남동', category:"일식 면 요리", kakaoId:"1897298692", kakaoUrl:"http://place.map.kakao.com/1897298692", address:"서울 마포구 동교로 265", signatureMenu:"퓨전 시오라멘(부추 페스토, 솥밥·치즈 추가)", certifications:["미쉐린 가이드 선정"], tags:["혼밥","인스타감성"] },
-  { id:1784164645951, name:"사루카메", type:'restaurant', status:'unverified', lat:37.5610362571878, lng:126.922705882899, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 연남로 15. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'연남동', category:"일식 면 요리", kakaoId:"560657944", kakaoUrl:"http://place.map.kakao.com/560657944", address:"서울 마포구 연남로 15", signatureMenu:"바지락·꽃게 육수 쇼유라멘", certifications:["미쉐린 가이드 선정"], tags:["혼밥","가성비"] },
-  { id:1784164655928, name:"담택 본점", type:'restaurant', status:'unverified', lat:37.554451999412265, lng:126.91516525478127, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 동교로12안길 51. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"일식 면 요리", kakaoId:"1534943798", kakaoUrl:"http://place.map.kakao.com/1534943798", address:"서울 마포구 동교로12안길 51", signatureMenu:"능이버섯 시오라멘", certifications:["미쉐린 가이드 선정"], tags:["혼밥","인스타감성"] },
-  { id:1784164662671, name:"서교난면방", type:'restaurant', status:'unverified', lat:37.553583157798776, lng:126.91231547459775, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 동교로12길 16. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"일식 면 요리", kakaoId:"1437270529", kakaoUrl:"http://place.map.kakao.com/1437270529", address:"서울 마포구 동교로12길 16", signatureMenu:"구엄닭 육수 난면", certifications:["미쉐린 가이드 선정"], tags:["혼밥","가성비"] },
-  { id:1784164670173, name:"미필담", type:'restaurant', status:'unverified', lat:37.5466180322608, lng:126.914211142051, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 성지3길 22. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'합정동', category:"국/탕/찌개류", kakaoId:"810201050", kakaoUrl:"http://place.map.kakao.com/810201050", address:"서울 마포구 성지3길 22", signatureMenu:"이북식 손만둣국", certifications:["미쉐린 빕구르망"], tags:["혼밥","가성비","로컬단골"] },
-  { id:1784164685329, name:"합정옥", type:'restaurant', status:'unverified', lat:37.549533619095335, lng:126.91050958852588, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 양화로1길 21. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'합정동', category:"국/탕/찌개류", kakaoId:"27493864", kakaoUrl:"http://place.map.kakao.com/27493864", address:"서울 마포구 양화로1길 21", signatureMenu:"전통 양지·내장 곰탕", certifications:["미쉐린 가이드 선정"], tags:["혼밥","로컬단골"] },
-  { id:1784182331830, name:"호미화방", type:'artsupply', status:'unverified', lat:37.55328517765706, lng:126.9216410365255, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 홍익로3길 20. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"미술용품", kakaoId:"8164173", kakaoUrl:"http://place.map.kakao.com/8164173", address:"서울 마포구 홍익로3길 20", signatureMenu:"아크릴·유화 물감, 붓, 스케치북 등 미술재료 전반", certifications:[], tags:["홍대병","인스타감성"] },
-  { id:1784182347948, name:"한가람문구 홍익대점", type:'artsupply', status:'unverified', lat:37.552564747664, lng:126.924982538903, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로 94. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"문구/미술용품", kakaoId:"8622690", kakaoUrl:"http://place.map.kakao.com/8622690", address:"서울 마포구 와우산로 94", signatureMenu:"제도용품, 디자인 마커, 건축모형 재료", certifications:[], tags:["홍대병","가성비"] },
-  { id:1784182364776, name:"제비다방", type:'liveclub', status:'unverified', lat:37.5466169482794, lng:126.923100991167, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로 24. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'상수동', category:"라이브카페", kakaoId:"27194461", kakaoUrl:"http://place.map.kakao.com/27194461", address:"서울 마포구 와우산로 24", signatureMenu:"낮엔 카페(가래떡·꼬레아노), 밤엔 '취한제비' 라이브 공연", certifications:[], tags:["홍대병","로컬단골","술안주"] },
-  { id:1784182373485, name:"라이브클럽 빵", type:'liveclub', status:'unverified', lat:37.55485954187758, lng:126.92928645021782, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로29길 12. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"라이브클럽", kakaoId:"10449951", kakaoUrl:"http://place.map.kakao.com/10449951", address:"서울 마포구 와우산로29길 12", signatureMenu:"모던록·인디밴드 라이브 공연 (수~일 저녁)", certifications:[], tags:["홍대병","시끌벅적","노포"] },
-  { id:1784182411172, name:"클럽에반스", type:'liveclub', status:'unverified', lat:37.55026765598596, lng:126.92288901613414, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로 63. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"재즈클럽", kakaoId:"8101657", kakaoUrl:"http://place.map.kakao.com/8101657", address:"서울 마포구 와우산로 63", signatureMenu:"재즈 잼세션(월·화), 주말 기획공연", certifications:[], tags:["홍대병","조용한"] },
-  { id:1784182487753, name:"앤트러사이트 서교점", type:'cafe', status:'unverified', lat:37.555521630383105, lng:126.9116794320928, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 월드컵로12길 11. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"카페", kakaoId:"657926243", kakaoUrl:"http://place.map.kakao.com/657926243", address:"서울 마포구 월드컵로12길 11", signatureMenu:"나쓰메소세키 블렌드 드립커피, 레몬마들렌", certifications:[], tags:["조용한","인스타감성","데이트"] },
-  { id:1784182494623, name:"앤트러사이트 합정점", type:'cafe', status:'unverified', lat:37.5458137305902, lng:126.918435148767, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 토정로5길 10. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'합정동', category:"카페", kakaoId:"12518512", kakaoUrl:"http://place.map.kakao.com/12518512", address:"서울 마포구 토정로5길 10", signatureMenu:"나쓰메소세키 블렌드 드립커피, 레몬마들렌", certifications:[], tags:["조용한","인스타감성","데이트"] },
-  { id:1784182529573, name:"커피 리브레 연남점", type:'cafe', status:'unverified', lat:37.56364350559978, lng:126.92372978384485, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 성미산로32길 20-5. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'연남동', category:"카페", kakaoId:"11553130", kakaoUrl:"http://place.map.kakao.com/11553130", address:"서울 마포구 성미산로32길 20-5", signatureMenu:"카페라떼, 싱글오리진(CoE) 원두", certifications:[], tags:["조용한","인스타감성"] },
-  { id:1784270682830, name:"인클", type:'club', status:'unverified', lat:37.55059671337728, lng:126.92181246849826, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 잔다리로 11. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"힙합클럽", kakaoId:"560830975", kakaoUrl:"http://place.map.kakao.com/560830975", address:"서울 마포구 잔다리로 11", signatureMenu:"힙합 · 홍대 핫플 클럽", certifications:[], tags:["홍대병","시끌벅적"] },
-  { id:1784270693186, name:"어썸", type:'club', status:'unverified', lat:37.5508799336703, lng:126.92227728665, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 잔다리로 8. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"힙합클럽", kakaoId:"2069407891", kakaoUrl:"http://place.map.kakao.com/2069407891", address:"서울 마포구 잔다리로 8", signatureMenu:"힙합", certifications:[], tags:["홍대병","시끌벅적"] },
-  { id:1784270718971, name:"도즈서울", type:'club', status:'unverified', lat:37.55058255827296, lng:126.9222074325401, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 잔다리로 7. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"힙합클럽", kakaoId:"198141342", kakaoUrl:"http://place.map.kakao.com/198141342", address:"서울 마포구 잔다리로 7", signatureMenu:"힙합", certifications:[], tags:["홍대병","시끌벅적"] },
-  { id:1784270726412, name:"엑스엑스", type:'club', status:'unverified', lat:37.5505114825649, lng:126.921005684894, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 어울마당로 61. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"힙합클럽", kakaoId:"1251853398", kakaoUrl:"http://place.map.kakao.com/1251853398", address:"서울 마포구 어울마당로 61", signatureMenu:"힙합", certifications:[], tags:["홍대병","시끌벅적"] },
-  { id:1784270733136, name:"사보타지", type:'club', status:'unverified', lat:37.55027594924282, lng:126.92179922370765, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로17길 22. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"클럽", kakaoId:"27417898", kakaoUrl:"http://place.map.kakao.com/27417898", address:"서울 마포구 와우산로17길 22", signatureMenu:"클럽거리 인근", certifications:[], tags:["홍대병","시끌벅적"] },
-  { id:1784270739639, name:"클럽 버뮤다", type:'club', status:'unverified', lat:37.5506995087307, lng:126.923310680981, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로 70. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, dong:'서교동', category:"올장르클럽", kakaoId:"956705122", kakaoUrl:"http://place.map.kakao.com/956705122", address:"서울 마포구 와우산로 70", signatureMenu:"올장르, 고급 음향시설(Funktion-One)", certifications:[], tags:["홍대병","시끌벅적","데이트"] },
-  { id:1784273660286, name:"자유인들", type:'bar', status:'closed', lat:37.5514, lng:126.9228, rating:null, reviews:null, months:null, rent:null, score:null, insight:"직접 제보로 등록된 매장입니다. 정확한 폐업 시기는 확인되지 않았어요(2022년까지 영업 기록은 검색으로 확인됨).", reason:null, dong:'홍대', category:"칵테일바", signatureMenu:"", certifications:[], memory:"홍대 칵테일바로 기억하는 분들의 제보로 등록됐어요." },
-  { id:1784273660287, name:"리치몬드과자점 홍대점", type:'cafe', status:'closed', lat:37.5563, lng:126.9236, rating:null, reviews:null, months:null, rent:null, score:null, insight:"2012년 폐업. 홍대 젠트리피케이션(임대료 상승으로 인한 기존 상권 이탈)을 상징하는 대표 사례로 꼽혀요.", reason:null, dong:'서교동', category:"베이커리", signatureMenu:"", certifications:[], memory:"2012년 폐업으로, 홍대 젠트리피케이션을 상징하는 사건 중 하나로 남아있어요." },
-  { id:1784273660288, name:"두리반", type:'restaurant', status:'closed', lat:37.5558, lng:126.9251, rating:null, reviews:null, months:null, rent:null, score:null, insight:"재개발로 인한 강제 철거에 맞서 2009~2011년 장기 농성을 벌였던 곳으로, 홍대 지역 젠트리피케이션 저항의 상징적 사례예요.", reason:null, dong:'동교동', category:"중식당", signatureMenu:"", certifications:[], memory:"재개발에 맞선 장기 농성으로 유명했던 중식당으로, 홍대 젠트리피케이션 저항의 상징이에요." }
-];
-
-let map, markers = [], storeMarkers = [], clusterer, overlay, hoverOverlay, showMarkers = true;
-let currentFilter = 'all', searchText = '', selectedId = null;
-let boundsFilter = null; // '이 지역에서 검색' 클릭 시 현재 지도 화면(bounds)으로 한 번 좁혀서 보여줌
-// 아래 4개는 원래 각자 쓰이는 함수 바로 위에 선언돼 있었는데, 카카오맵 로드 콜백이
-// (네트워크 상황에 따라) 동기적으로 바로 실행되면서 "선언되기도 전에" 이 변수들을
-// 참조해버리는 경우가 있어 ReferenceError가 났음. 그래서 아예 맨 앞으로 옮겨둠.
-let verifyQueue = [];      // 카카오 실존 검증 대기열
-let verifyRunning = false;
-let verifiedCount = 0;
-let removedCount = 0;
-let lastFilteredCount = 0; // 필터링된 매장 개수("가게 N곳 보기" 버튼에 표시)
-let activeDetailFilters = new Set(); // 복수 선택된 상세 필터(예: cuisine:한식, dong:서교동)
-
-// ── 몰랐던 홍대 상식 (전부 검증된 사실만) ────────────────
-const TRIVIA = [
-  {
-    ko: '"홍대"는 사실 지명이 아니라 홍익대학교의 줄임말이에요.',
-    en: '"Hongdae" isn\'t an official place name — it\'s short for Hongik University.',
-    zh: '"弘大"其实不是地名，而是弘益大学的简称。',
-  },
-  {
-    ko: '지금의 홍대 일대는 원래 "잔다리(細橋里)"라는 순우리말 지명으로 불렸어요. 세교천에 작은 다리가 많아서 붙은 이름이에요.',
-    en: 'Before "Hongdae," this area was called "Jandari" — named after the many small bridges over the old Segyo stream.',
-    zh: '在被称为"弘大"之前，这一带原本叫"棧橋里"，因过去细桥川上有很多小桥而得名。',
-  },
-  {
-    ko: '클럽 빵(Club Bbang)은 1994년부터 이어져 온, 홍대에서 가장 오래된 라이브클럽 중 하나예요.',
-    en: 'Club Bbang has been running since 1994 — one of the oldest live clubs in Hongdae.',
-    zh: 'Club Bbang自1994年至今，是弘大历史最悠久的livehouse之一。',
-  },
-  {
-    ko: '크라잉넛, 노브레인 같은 1세대 인디밴드들이 홍대에서 활동하며 지금의 "홍대 인디씬"을 만들었어요.',
-    en: 'First-gen indie bands like Crying Nut and No Brain built Hongdae\'s indie music scene from the ground up.',
-    zh: 'Crying Nut、No Brain等第一代独立乐队正是在弘大活动，奠定了如今的"弘大indie"文化。',
-  },
-  {
-    ko: '코로나19로 약 1년 4개월간 금지됐던 홍대 버스킹은 2022년 3월 30일에 다시 시작됐어요.',
-    en: 'Hongdae street busking, banned for about 16 months during COVID-19, resumed on March 30, 2022.',
-    zh: '因新冠疫情被禁演约16个月的弘大街头表演，于2022年3月30日重新恢复。',
-  },
-];
-let triviaIdx = Math.floor(Math.random() * TRIVIA.length);
-function renderTrivia() {
-  const t = TRIVIA[triviaIdx];
-  const el = document.getElementById('trivia-text');
-  if (el) el.textContent = t[currentLang] || t.ko;
-}
-function nextTrivia() {
-  triviaIdx = (triviaIdx + 1) % TRIVIA.length;
-  renderTrivia();
-}
-
-
-// ── 언어 전환 (정적 UI 텍스트만 — 매장명/태그/코멘트 같은 실제 데이터는 번역하지 않음) ──
-const LANG_ORDER = ['ko', 'en', 'zh'];
-let currentLang = localStorage.getItem('lang') || 'ko';
-const I18N = {
-  ko: {
-    langBtn: '🌐 한국어', search: '업소명 검색...', taste: '🎯 내 취향 찾기', hof: '🏅 홍대생 명예학식', michelin: '🍽️ 미쉐린 가이드',
-    all: '전체', browseCategories: '카테고리 보기', restaurant: '🍜 음식점', cafe: '☕ 카페', bar: '🍺 주점', liveclub: '🎤 라이브클럽', artsupply: '🎨 화방',
-    seogyo: '📍 서교동', yeonnam: '📍 연남동', hapjeong: '📍 합정동', sangsu: '📍 상수동',
-    rip: '🪦 R.I.P', save: '♥ 저장', menuTitle: '메뉴',
-    landingDesc: '취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.',
-    landingNote: '홍대 대표 맛집 40곳을 기준으로 취향을 매칭해드려요.',
-    landingStart: '취향 고르고 시작하기', landingSkip: '그냥 전체 지도 볼래요',
-    landingBeta: '아직 베타 버전이에요. 매장 정보와 기능을 계속 업데이트하고 있어요.',
-    triviaLabel: '몰랐던 홍대 상식',
-  },
-  en: {
-    langBtn: '🌐 English', search: 'Search places...', taste: '🎯 Find my taste', hof: '🏅 Student favorites', michelin: '🍽️ Michelin Guide',
-    all: 'All', browseCategories: 'Categories', restaurant: '🍜 Restaurants', cafe: '☕ Cafes', bar: '🍺 Bars', liveclub: '🎤 Live Clubs', artsupply: '🎨 Art Supplies',
-    seogyo: '📍 Seogyo-dong', yeonnam: '📍 Yeonnam-dong', hapjeong: '📍 Hapjeong-dong', sangsu: '📍 Sangsu-dong',
-    rip: '🪦 R.I.P', save: '♥ Saved', menuTitle: 'Menu',
-    landingDesc: 'Stop trusting reviews from people with different tastes.<br>We\'ll pick Hongdae spots that match yours.',
-    landingNote: 'Taste matching is based on 40 representative Hongdae spots.',
-    landingStart: 'Pick my taste & start', landingSkip: 'Just show the full map',
-    landingBeta: 'This is a beta version — places and features are still being updated.',
-    triviaLabel: 'Did you know?',
-  },
-  zh: {
-    langBtn: '🌐 中文', search: '搜索店铺...', taste: '🎯 寻找我的口味', hof: '🏅 学生推荐名店', michelin: '🍽️ 米其林指南',
-    all: '全部', browseCategories: '分类浏览', restaurant: '🍜 餐厅', cafe: '☕ 咖啡店', bar: '🍺 酒吧', liveclub: '🎤 livehouse', artsupply: '🎨 美术用品店',
-    seogyo: '📍 西桥洞', yeonnam: '📍 延南洞', hapjeong: '📍 合井洞', sangsu: '📍 上水洞',
-    rip: '🪦 R.I.P', save: '♥ 收藏', menuTitle: '菜单',
-    landingDesc: '别再因为别人的口味而失望了。<br>我们只为你挑选合你口味的弘大店铺。',
-    landingNote: '取向匹配基于40家弘大代表性店铺。',
-    landingStart: '选择口味并开始', landingSkip: '直接看全图',
-    landingBeta: '目前是测试版，店铺信息和功能仍在持续更新中。',
-    triviaLabel: '你知道吗？',
-  },
-};
-
-function cycleLang() {
-  const idx = LANG_ORDER.indexOf(currentLang);
-  currentLang = LANG_ORDER[(idx + 1) % LANG_ORDER.length];
-  localStorage.setItem('lang', currentLang);
-  applyLang();
-}
-
-function applyLang() {
-  const t = I18N[currentLang];
-  const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-  const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
-
-  // 언어 버튼은 이제 지구본 아이콘만 사용 — 언어 바뀌어도 텍스트로 안 덮어씀
-  const searchInput = document.getElementById('search-input');
-  if (searchInput) searchInput.placeholder = t.search;
-  setText('btn-taste', t.taste);
-  setText('chip-hof', t.hof);
-  setText('chip-michelin', t.michelin);
-  setText('chip-all', t.all);
-  setText('chip-restaurant', t.restaurant);
-  setText('chip-cafe', t.cafe);
-  setText('chip-bar', t.bar);
-  setText('chip-liveclub', t.liveclub);
-  setText('chip-artsupply', t.artsupply);
-  setText('chip-seogyo', t.seogyo);
-  setText('chip-yeonnam', t.yeonnam);
-  setText('chip-hapjeong', t.hapjeong);
-  setText('chip-sangsu', t.sangsu);
-  // R.I.P 버튼도 이제 무덤 아이콘만 사용 — 언어 바뀌어도 텍스트로 안 덮어씀
-  // 저장 버튼은 이제 하트 아이콘만 사용 — 언어 바뀌어도 텍스트로 안 덮어씀
-  setHtml('landing-desc', t.landingDesc);
-  setText('landing-note', t.landingNote);
-  setText('landing-skip', t.landingSkip);
-  setText('landing-beta-text', t.landingBeta);
-  // 취향 저장 여부에 따라 문구가 달라지는 시작 버튼은, 아직 취향을 안 골랐을 때만 번역 문구로 덮어씀
-  if (userTastes.length === 0) setText('landing-primary', t.landingStart);
-  setText('trivia-label-text', t.triviaLabel);
-  renderTrivia();
-}
-
-
-let listSort = 'category'; // 'category' | 'name' | 'distance' — "기본순" 버튼은 없앴고 카테고리순을 기본값으로 씀
-function setListSort(key) {
-  listSort = key; // 모달에서 직접 고르는 방식이라 토글이 아니라 그대로 지정
-  renderList();
-  updateSortOptionHighlight();
-  syncSortModalResults();
-}
-function openSortModal() {
-  const m = document.getElementById('sort-modal');
-  if (m) m.style.display = 'flex';
-  // 사이드바가 열려있으면 접어서, 뒤에 가려진 채로 열리는 느낌 없이 바로 피드로 전환되게 함
-  const sidebar = document.getElementById('sidebar');
-  if (sidebar && sidebar.classList.contains('open')) {
-    sidebar.classList.remove('open');
-    try { updateBackdrop(); } catch (e) {}
-  }
-  try { updateSortOptionHighlight(); } catch (e) { console.error('updateSortOptionHighlight 오류:', e); }
-  try { syncSortModalResults(); } catch (e) { console.error('syncSortModalResults 오류:', e); }
-}
-// setFilter(카테고리 클릭)에서도 동일한 중앙 결과 배너를 띄우기 위한 별칭
-const openResultsModal = openSortModal;
-function closeSortModal() { document.getElementById('sort-modal').style.display = 'none'; }
-
-// 모바일 피드 시트 상단 손잡이(핸들)를 아래로 끌면 닫히게 — 인스타그램 등 앱의 바텀시트와 같은 방식
-(function setupFeedSwipeToClose() {
-  const modal = document.querySelector('#sort-modal .modal');
-  const handle = document.querySelector('#sort-modal .feed-handle');
-  if (!modal || !handle) return;
-  let startY = null;
-  handle.addEventListener('touchstart', e => {
-    startY = e.touches[0].clientY;
-    modal.style.transition = 'none';
-  }, { passive: true });
-  handle.addEventListener('touchmove', e => {
-    if (startY === null) return;
-    const dy = e.touches[0].clientY - startY;
-    if (dy > 0) modal.style.transform = `translateY(${dy}px)`;
-  }, { passive: true });
-  handle.addEventListener('touchend', e => {
-    modal.style.transition = '';
-    const dy = e.changedTouches[0].clientY - startY;
-    modal.style.transform = '';
-    startY = null;
-    if (dy > 100) closeSortModal();
+  // 스크롤하면 순서대로 나타나는 효과
+  const revealEls = document.querySelectorAll('[data-reveal]');
+  revealEls.forEach((el, i) => {
+    const sec = el.closest('section');
+    const siblings = sec ? Array.from(sec.querySelectorAll('[data-reveal]')) : [el];
+    const idx = siblings.indexOf(el);
+    el.style.transitionDelay = (idx * 110) + 'ms';
   });
-})();
-function updateSortOptionHighlight() {
-  ['category','name','distance'].forEach(key => {
-    const el = document.getElementById(`sortopt-${key}`);
-    if (el) el.classList.toggle('on', listSort === key);
-  });
-}
-// 사이드바 리스트랑 똑같은 결과를, 정렬 모달 안에도 그대로 복사해서 중앙에서 바로 보이게 한다
-function syncSortModalResults() {
-  const modalResults = document.getElementById('sort-modal-results');
-  const sourceList = document.getElementById('store-list');
-  if (modalResults && sourceList) modalResults.innerHTML = sourceList.innerHTML;
-}
-
-// 이번 브라우저 세션에서 새로 추가한 매장만 따로 모아둠 (파일 자체엔 저장 안 됨 — 내보내기로 꺼내야 함)
-let sessionAdditions = [];
-function trackAddition(store) {
-  sessionAdditions.push(store);
-  const el = document.getElementById('export-count');
-  if (el) el.textContent = sessionAdditions.length;
-}
-
-function exportChanges() {
-  if (sessionAdditions.length === 0) {
-    alert('아직 추가한 매장이 없어요.\n지도에서 불러오기로 매장을 먼저 추가해주세요.');
-    return;
-  }
-  const blob = new Blob([JSON.stringify(sessionAdditions, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  const now = new Date();
-  const stamp = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
-  a.href = URL.createObjectURL(blob);
-  a.download = `new_stores_${stamp}.json`;
-  a.click();
-  showToast(`💾 매장 ${sessionAdditions.length}곳을 파일로 내보냈어요`);
-}
-
-// ── 매장 카드 디자인 (Claude Design 시안 반영) ──────────
-let cardStyle = localStorage.getItem('cardStyle') || 'A';
-let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '{}');
-
-// 카테고리 문자열 -> 아이콘/색/라벨 (실제 category 필드 기반, 지어내지 않음)
-function catInfo(s) {
-  if (s.type === 'liveclub') return { icon:'🎸', color:'#8e44ad', label:'라이브클럽', labelEn:'Live Club' };
-  if (s.type === 'club') return { icon:'🪩', color:'#d63384', label:'클럽', labelEn:'Club' };
-  if (s.type === 'artsupply') return { icon:'🎨', color:'#2980b9', label:'화방', labelEn:'Art Supplies' };
-  if (s.type === 'animeshop') return { icon:'🎌', color:'#e83e8c', label:'애니메이션샵', labelEn:'Anime Shop' };
-  if (s.type === 'entertainment') return { icon:'🔑', color:'#16a085', label:'엔터테인먼트', labelEn:'Entertainment' };
-  if (s.category && s.category.includes('카페')) return { icon:'☕', color:'#a9744f', label:'카페', labelEn:'Cafe' };
-  if (s.type === 'bar' || (s.category && /주점|맥주|호프/.test(s.category))) return { icon:'🍺', color:'#f5a623', label:'술집', labelEn:'Bar' };
-  if (s.type === 'retail') return { icon:'📌', color:'#93a8a2', label:'기타', labelEn:'Other' };
-  return { icon:'🍜', color:'#e8362a', label:'맛집', labelEn:'Eat' };
-}
-
-function cuisineLabel(s) {
-  const category = s.category || '';
-  if (/중식|중국|마라탕|훠궈/.test(category)) return '중식';
-  if (/일식|초밥|회|라멘|소바|야키토리/.test(category)) return '일식';
-  if (/양식|경양식|피자|버거|파스타/.test(category)) return '양식';
-  if (/베트남|태국|동남아/.test(category)) return '아시아식';
-  if (/카페|빵|도넛|베이커리/.test(category)) return '카페·디저트';
-  if (/주점|맥주|호프/.test(category) || s.type === 'bar') return '주점';
-  return '한식';
-}
-
-// 카페 세부 분류 — 실제 데이터(카테고리/시그니처 메뉴) 키워드 기반, 지어내지 않음
-function cafeSubType(s) {
-  const text = `${s.category || ''} ${s.signatureMenu || ''}`;
-  if (/로스터리|스페셜티|싱글오리진|브루잉|CoE/i.test(text)) return '스페셜티';
-  if (/케이크|도넛|베이커리|빵|스콘|타르트|크로플|마들렌|디저트/.test(text)) return '디저트';
-  return '작업카공'; // 특별한 시그니처가 없으면 기본값(작업하기 좋은 카페)으로 분류
-}
-// 주점 세부 분류
-function barSubType(s) {
-  const text = s.category || '';
-  if (/헌팅/.test(text)) return '헌팅포차';
-  if (/포차/.test(text)) return '포차';
-  if (/요리\s*주점/.test(text)) return '요리주점';
-  return '바';
-}
-// 백년가게(중소벤처기업부 공식 인증) — certifications 배열에 실제로 인증 확인된 곳만 표시
-function isCenturyStore(s) { return (s.certifications || []).includes('백년가게'); }
-
-// 시그니처 메뉴 텍스트에서 명확히 매칭되는 이모티콘이 있으면 그걸 쓰고,
-// 없으면 장르(cuisineLabel) 기준 대표 이모티콘으로 대체한다. 지어내지 않고 규칙 기반으로만 매칭.
-function menuEmoji(s) {
-  // 라이브클럽/화방은 주류·카페를 같이 팔더라도 본업이 공연/미술재료라, 음식 키워드 매칭보다 먼저 전용 아이콘으로 고정한다.
-  if (s.type === 'liveclub') return '🎤';
-  if (s.type === 'club') return '🪩';
-  if (s.type === 'animeshop') return '🎌';
-  if (s.type === 'entertainment') return '🔑';
-  if (s.type === 'artsupply') return '🎨';
-  const menu = s.signatureMenu || '';
-  const MENU_RULES = [
-    [/피자/, '🍕'], [/버거/, '🍔'], [/타코/, '🌮'],
-    [/초밥|스시|사시미|가츠|카츠|돈까스|돈카츠/, '🍱'],
-    [/라멘|소바|우동|칼국수|국수|짬뽕|짜장|면요리|츠케멘/, '🍜'],
-    [/쌀국수|분짜/, '🍜'],
-    [/떡볶이/, '🌶️'], [/김밥|만두|분식/, '🍙'],
-    [/곱창|막창/, '🥘'], [/삼겹살|목살|갈비|생고기|구이|스테이크|함박/, '🥩'],
-    [/곰탕|국밥|탕|찌개|전골/, '🍲'],
-    [/회|생선|방어|연어/, '🐟'],
-    [/치킨/, '🍗'], [/맥주|호프/, '🍺'],
-    [/커피|라떼|아메리카노|모카|에스프레소/, '☕'],
-    [/케이크|디저트|도넛|스콘|크로플|타르트/, '🍰'],
-    [/짜장면|간짜장|짬뽕|깐풍기|탕수육|마파두부|양장피|멘보샤/, '🥟'],
-  ];
-  for (const [re, emoji] of MENU_RULES) {
-    if (re.test(menu)) return emoji;
-  }
-  const GENRE_EMOJI = {
-    '한식':'🍚', '중식':'🥟', '양식':'🍝', '일식':'🍣',
-    '아시아식':'🌶️', '카페·디저트':'☕', '주점':'🍺'
-  };
-  return GENRE_EMOJI[cuisineLabel(s)] || '🍽️';
-}
-
-// 출처가 있는 운영 정보만 취향 태그로 표시한다. 값이 없는 경우 태그를 만들어내지 않는다.
-// ── 태그/메뉴 번역 (고정 어휘만 — 매장 상호명은 번역하지 않음) ──
-const TAG_I18N = {
-  // 동네
-  '서교동': { en: 'Seogyo-dong', zh: '西桥洞' }, '연남동': { en: 'Yeonnam-dong', zh: '延南洞' },
-  '합정동': { en: 'Hapjeong-dong', zh: '合井洞' }, '상수동': { en: 'Sangsu-dong', zh: '上水洞' },
-  '홍대': { en: 'Hongdae', zh: '弘大' },
-  // 장르
-  '한식': { en: 'Korean', zh: '韩餐' }, '중식': { en: 'Chinese', zh: '中餐' },
-  '양식': { en: 'Western', zh: '西餐' }, '일식': { en: 'Japanese', zh: '日餐' },
-  '아시아식': { en: 'Asian', zh: '亚洲菜' }, '카페·디저트': { en: 'Cafe & Dessert', zh: '咖啡·甜点' },
-  '주점': { en: 'Bar', zh: '酒吧' },
-  '라이브클럽': { en: 'Live Club', zh: 'Livehouse' }, '화방': { en: 'Art Supplies', zh: '美术用品店' },
-  // 인증
-  '홍대생 명예학식': { en: 'Student favorite', zh: '学生推荐名店' },
-  '미쉐린 빕구르망': { en: 'Michelin Bib Gourmand', zh: '米其林必比登' },
-  '미쉐린 가이드 선정': { en: 'Michelin Guide Selected', zh: '米其林指南推荐' },
-  // 운영 기간/리뷰
-  '30년 노포': { en: '30+ yr institution', zh: '30年老店' }, '10년 이상': { en: '10+ years', zh: '10年以上' },
-  '리뷰 1,000+': { en: '1,000+ reviews', zh: '1000+条评论' }, '리뷰 300+': { en: '300+ reviews', zh: '300+条评论' },
-  // 서비스
-  '예약 가능': { en: 'Reservations', zh: '可预约' }, '포장 가능': { en: 'Takeout', zh: '可打包' },
-  '배달 가능': { en: 'Delivery', zh: '可外送' }, '주차 가능': { en: 'Parking', zh: '有停车场' },
-  '휠체어 접근': { en: 'Wheelchair access', zh: '轮椅可通行' }, '반려동물 동반': { en: 'Pet friendly', zh: '可带宠物' },
-  '심야 영업': { en: 'Late night', zh: '深夜营业' }, '매일 영업': { en: 'Open daily', zh: '每日营业' },
-  '브레이크타임 없음': { en: 'No break time', zh: '无休息时段' },
-  // 취향 태그
-  '매운맛': { en: 'Spicy', zh: '辣味' }, '혼밥': { en: 'Solo-friendly', zh: '适合独食' },
-  '데이트': { en: 'Date spot', zh: '约会' }, '인스타감성': { en: 'Instagrammable', zh: 'Ins风' },
-  '조용한': { en: 'Quiet', zh: '安静' }, '시끌벅적': { en: 'Lively', zh: '热闹' },
-  '가성비': { en: 'Good value', zh: '性价比高' }, '술안주': { en: 'Great with drinks', zh: '下酒菜' },
-  '디저트': { en: 'Dessert', zh: '甜点' }, '로컬단골': { en: 'Local favorite', zh: '本地常客' },
-  '홍대병': { en: 'Hongdae Hipster', zh: '弘大文艺范' },
-  '노포': { en: 'Old-school institution', zh: '老字号' },
-};
-function localizeTag(tag) {
-  if (currentLang === 'ko') return tag;
-  const key = tag.replace('#', '');
-  const hit = TAG_I18N[key];
-  return hit ? `#${hit[currentLang]}` : tag; // 사전에 없는 태그는 지어내지 않고 한국어 그대로 둠
-}
-
-// 알려진 메뉴명만 번역, 매칭 안 되면 원문(한국어) 유지 — 없는 번역을 지어내지 않음
-const MENU_I18N = [
-  [/제육볶음/, { en: 'Spicy Pork Stir-fry', zh: '辣炒猪肉' }],
-  [/돼지연탄구이|삼겹살/, { en: 'Grilled Pork Belly', zh: '烤五花肉' }],
-  [/고등어구이|고등어정식/, { en: 'Grilled Mackerel', zh: '烤鲭鱼' }],
-  [/함박스테이크/, { en: 'Hamburg Steak', zh: '汉堡牛排' }],
-  [/치즈버거/, { en: 'Cheeseburger', zh: '芝士汉堡' }],
-  [/닭칼국수/, { en: 'Chicken Kalguksu', zh: '鸡肉刀削面' }],
-  [/회냉면/, { en: 'Raw Fish Naengmyeon', zh: '生鱼冷面' }],
-  [/유부김밥/, { en: 'Fried Tofu Gimbap', zh: '豆皮紫菜包饭' }],
-  [/명태김밥/, { en: 'Pollack Gimbap', zh: '明太鱼紫菜包饭' }],
-  [/뚝닭|닭도리탕/, { en: 'Spicy Braised Chicken', zh: '辣炖鸡' }],
-  [/철판제육덮밥/, { en: 'Sizzling Pork Rice Bowl', zh: '铁板猪肉盖饭' }],
-  [/삼선간짜장/, { en: 'Seafood Jjajangmyeon', zh: '三鲜炸酱面' }],
-  [/짬뽕밥/, { en: 'Jjamppong Rice', zh: '什锦海鲜辣汤饭' }],
-  [/깐풍기/, { en: 'Crispy Sweet & Spicy Chicken', zh: '干烹鸡' }],
-  [/오코노미소스동/, { en: 'Okonomi Sauce Pork Bowl', zh: '御好烧酱猪排饭' }],
-  [/히레카츠|히레가츠/, { en: 'Fillet Pork Cutlet', zh: '腰内肉炸猪排' }],
-  [/게키카라라멘/, { en: 'Extra Spicy Ramen', zh: '激辣拉面' }],
-  [/츠케멘|아부라소바/, { en: 'Tsukemen (Dipping Noodles)', zh: '蘸面' }],
-  [/포테이토 피자/, { en: 'Potato Pizza', zh: '土豆披萨' }],
-  [/하프앤하프 피자/, { en: 'Half & Half Pizza', zh: '双拼披萨' }],
-  [/맑은 돼지곰탕/, { en: 'Clear Pork Bone Soup', zh: '清汤猪骨汤' }],
-  [/대방어회/, { en: 'Winter Yellowtail Sashimi', zh: '冬季鰤鱼刺身' }],
-  [/연어회/, { en: 'Salmon Sashimi', zh: '三文鱼刺身' }],
-  [/오겹살/, { en: 'Five-layer Pork Belly', zh: '五花肉' }],
-  [/생갈비/, { en: 'Raw Short Ribs', zh: '生排骨' }],
-  [/토리파이탄/, { en: 'Chicken Paitan Ramen', zh: '鸡白汤拉面' }],
-  [/특로스카츠/, { en: 'Premium Pork Loin Cutlet', zh: '特级里脊炸猪排' }],
-  [/로스카츠/, { en: 'Pork Loin Cutlet', zh: '里脊炸猪排' }],
-  [/마제소바/, { en: 'Mazesoba (Mixed Noodles)', zh: '拌面' }],
-  [/돈코츠 라멘/, { en: 'Tonkotsu Ramen', zh: '豚骨拉面' }],
-  [/토마토 오코노미야끼/, { en: 'Tomato Okonomiyaki', zh: '番茄御好烧' }],
-  [/인라멘/, { en: 'Signature Ramen', zh: '招牌拉面' }],
-  [/멘보샤/, { en: 'Shrimp Toast', zh: '面包虾' }],
-  [/대게살볶음/, { en: 'Stir-fried Crab Meat', zh: '炒蟹肉' }],
-  [/샤오롱바오/, { en: 'Xiaolongbao', zh: '小笼包' }],
-  [/우육탕면/, { en: 'Beef Noodle Soup', zh: '牛肉汤面' }],
-  [/소고기 국수/, { en: 'Beef Noodle Soup', zh: '牛肉粉' }],
-  [/쏨땀/, { en: 'Som Tam (Papaya Salad)', zh: '青木瓜沙拉' }],
-  [/차돌양지쌀국수/, { en: 'Beef Brisket Pho', zh: '牛胸肉河粉' }],
-  [/대만식 우육면/, { en: 'Taiwanese Beef Noodle Soup', zh: '台式牛肉面' }],
-  [/포테이토&페퍼로니 하프앤하프 피자/, { en: 'Potato & Pepperoni Half Pizza', zh: '土豆培根双拼披萨' }],
-  [/깻잎 떡볶이/, { en: 'Perilla Leaf Tteokbokki', zh: '紫苏叶炒年糕' }],
-  [/버터갈릭 감자튀김/, { en: 'Butter Garlic Fries', zh: '黄油蒜香薯条' }],
-  [/수제 모둠 튀김/, { en: 'Assorted Fritters', zh: '什锦炸物' }],
-  [/떡볶이/, { en: 'Tteokbokki (Spicy Rice Cake)', zh: '辣炒年糕' }],
-  [/옛날 떡볶이/, { en: 'Old-style Tteokbokki', zh: '传统辣炒年糕' }],
-  [/크림모카/, { en: 'Cream Mocha', zh: '奶油摩卡' }],
-  [/아인슈페너/, { en: 'Einspänner (Coffee w/ Cream)', zh: '维也纳咖啡' }],
-  [/더티앤크림 커피/, { en: 'Dirty Cream Coffee', zh: '脏咖啡' }],
-  [/퓨전 시오라멘|시오라멘/, { en: 'Shio (Salt) Ramen', zh: '盐味拉面' }],
-  [/부추 페스토/, { en: 'Chive Pesto', zh: '韭菜青酱' }],
-  [/솥밥/, { en: 'Hot Pot Rice', zh: '锅巴饭' }],
-  [/쇼유.*라멘|간장.*라멘/, { en: 'Shoyu (Soy Sauce) Ramen', zh: '酱油拉面' }],
-  [/능이버섯.*라멘/, { en: 'Neungi Mushroom Ramen', zh: '松茸菇拉面' }],
-  [/난면/, { en: 'Nanmyeon (Egg Noodles)', zh: '鸡蛋面' }],
-  [/이북식 손만둣국|손만둣국/, { en: 'Handmade Dumpling Soup', zh: '手工饺子汤' }],
-  [/버크셔.*돼지곰탕|돼지곰탕/, { en: 'Pork Bone Soup', zh: '猪骨汤' }],
-  [/전통 양지·내장 곰탕|양지·내장 곰탕/, { en: 'Beef Brisket & Tripe Soup', zh: '牛胸肉牛杂汤' }],
-  [/어향가지/, { en: 'Yuxiang Eggplant', zh: '鱼香茄子' }],
-];
-function localizeMenuText(text) {
-  if (currentLang === 'ko' || !text) return text;
-  return text.split(',').map(part => {
-    const trimmed = part.trim();
-    for (const [re, tr] of MENU_I18N) {
-      if (re.test(trimmed)) return tr[currentLang];
-    }
-    return trimmed; // 사전에 없으면 지어내지 않고 원문 유지
-  }).join(', ');
-}
-
-function objectiveTasteTags(s) {
-  const tags = [`#${s.dong || '홍대'}`];
-  if (s.type === 'restaurant') tags.push(`#${cuisineLabel(s)}`);
-
-  (s.certifications || []).forEach(tag => tags.push(`#${tag}`));
-  if (Number.isFinite(s.operatingMonths)) {
-    if (s.operatingMonths >= 360) tags.push('#30년 노포');
-    else if (s.operatingMonths >= 120) tags.push('#10년 이상');
-  }
-
-  const reviewTotal = (Number.isFinite(s.kakaoReviews) ? s.kakaoReviews : 0)
-    + (Number.isFinite(s.naverReviews) ? s.naverReviews : 0);
-  if (reviewTotal >= 1000) tags.push('#리뷰 1,000+');
-  else if (reviewTotal >= 300) tags.push('#리뷰 300+');
-
-  const serviceTags = {
-    reservation:'예약 가능', takeout:'포장 가능', delivery:'배달 가능', parking:'주차 가능',
-    wheelchair:'휠체어 접근', petFriendly:'반려동물 동반', lateNight:'심야 영업',
-    dailyOpen:'매일 영업', noBreak:'브레이크타임 없음'
-  };
-  (s.services || []).forEach(key => { if (serviceTags[key]) tags.push(`#${serviceTags[key]}`); });
-  return tags;
-}
-
-// 홍익대 정문 기준 실거리(m) — 실제 좌표로 계산, 임의값 아님
-const HONGIK = { lat: 37.5511, lng: 126.9256 };
-const HONGDAE_ENTRANCE = { name:'홍대입구역', lat:37.556670, lng:126.923610 };
-function distToCampus(s) {
-  const R = 6371000, toRad = d => d * Math.PI / 180;
-  const dLat = toRad(HONGIK.lat - s.lat), dLng = toRad(HONGIK.lng - s.lng);
-  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(s.lat))*Math.cos(toRad(HONGIK.lat))*Math.sin(dLng/2)**2;
-  return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
-}
-
-function setCardStyle(style) {
-  cardStyle = style;
-  localStorage.setItem('cardStyle', style);
-  if (selectedId != null) selectStore(selectedId);
-}
-
-function toggleBookmark(id) {
-  if (bookmarks[id]) delete bookmarks[id];
-  else bookmarks[id] = true;
-  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-  if (selectedId != null) selectStore(selectedId);
-}
-
-// ── 사라진 가게 코멘트 (브라우저에 저장 — 북마크와 같은 방식) ──
-function loadComments(storeId) {
-  const all = JSON.parse(localStorage.getItem('storeComments') || '{}');
-  return all[storeId] || [];
-}
-function submitComment(storeId) {
-  const input = document.getElementById(`comment-input-${storeId}`);
-  const text = input.value.trim();
-  if (!text) return;
-  const all = JSON.parse(localStorage.getItem('storeComments') || '{}');
-  if (!all[storeId]) all[storeId] = [];
-  all[storeId].push({ text, date: new Date().toLocaleDateString('ko-KR') });
-  localStorage.setItem('storeComments', JSON.stringify(all));
-  selectStore(storeId); // 다시 그려서 새 코멘트 반영
-}
-
-// ── 취향 매칭 (홍대 대표 맛집 40곳에 취향 태그 부여) ──────
-const TASTE_TAGS = ['매운맛','혼밥','데이트','인스타감성','조용한','시끌벅적','가성비','술안주','디저트','로컬단골','홍대병','노포'];
-let userTastes = JSON.parse(localStorage.getItem('userTastes') || '[]');
-applyLang(); // 페이지 로드 즉시 적용 (카카오맵 로드를 기다리지 않아도 되게)
-
-
-function openTasteModal() {
-  const wrap = document.getElementById('taste-tags');
-  wrap.innerHTML = TASTE_TAGS.map(t => {
-    const isHongdaeByeong = t === '홍대병';
-    const label = isHongdaeByeong ? '🦋 홍대병' : t;
-    const specialStyle = isHongdaeByeong ? 'border-color:#8e44ad;' : '';
-    return `<button class="chip ${userTastes.includes(t)?'on':''}" style="${specialStyle}" onclick="toggleTaste('${t}', this)">${label}</button>`;
-  }).join('');
-  document.getElementById('taste-modal').style.display = 'flex';
-}
-function closeTasteModal() { document.getElementById('taste-modal').style.display = 'none'; }
-
-function toggleTaste(tag, btn) {
-  if (userTastes.includes(tag)) userTastes = userTastes.filter(t => t !== tag);
-  else userTastes.push(tag);
-  btn.classList.toggle('on');
-}
-
-function applyTaste() {
-  if (userTastes.length === 0) { alert('취향을 2개 이상 골라주세요.'); return; }
-  localStorage.setItem('userTastes', JSON.stringify(userTastes));
-  closeTasteModal();
-  showTasteView();
-}
-
-// store와 사용자 취향이 겹치는 개수 (tags 없는 매장은 0)
-function matchScore(s) {
-  if (!s.tags) return 0;
-  return s.tags.filter(t => userTastes.includes(t)).length;
-}
-// 일치율(%) — 사용자가 고른 취향 중 이 매장이 몇 %를 만족하는지
-function matchPercent(s) {
-  if (!s.tags || userTastes.length === 0) return 0;
-  return Math.round((matchScore(s) / userTastes.length) * 100);
-}
-// 실제로 겹친 태그만 뽑아서 "왜 매칭됐는지" 이유로 보여줌 (번역 적용)
-function matchedTagNames(s) {
-  if (!s.tags) return [];
-  return s.tags.filter(t => userTastes.includes(t)).map(t => localizeTag(`#${t}`));
-}
-
-// 취향 추천 화면으로 전환 (랜딩페이지 버튼 / 취향모달 둘 다 여기로 모임)
-function showTasteView() {
-  currentFilter = 'taste';
-  boundsFilter = null;
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
-  document.getElementById('btn-taste').classList.add('on');
-  renderList();
-}
-
-// ── (구)랜딩 페이지 관련 코드 제거됨 — 이제 index.html이 랜딩 역할을 전담하고,
-// main.html은 곧바로 지도로 시작해서 "🎯 내 취향 찾기" 버튼을 눌러야 취향 선택이 뜬다.
-let addingMode = false;
-let importMode = false;
-let pickerEl = null;
-let pickerLatlng = null;
-
-// ── MAP INIT ──────────────────────────────────────────
-window.kakao && kakao.maps.load(() => {
-  const container = document.getElementById('map');
-  const centerPosition = new kakao.maps.LatLng(HONGDAE_ENTRANCE.lat, HONGDAE_ENTRANCE.lng);
-  map = new kakao.maps.Map(container, { center: centerPosition, level: 4 });
-
-  // 길찾기 출발지 표식이 아니라, 지도의 기준점(홍대입구역)을 나타내는 심플한 빨간 핀
-  const pinSize = 34;
-  const pinSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${pinSize}" height="${pinSize*1.3}" viewBox="0 0 34 44">
-    <path d="M17 0C7.6 0 0 7.6 0 17c0 12.7 17 27 17 27s17-14.3 17-27C34 7.6 26.4 0 17 0z" fill="#e8362a" stroke="#ffffff" stroke-width="2"/>
-    <circle cx="17" cy="17" r="6" fill="#ffffff"/>
-  </svg>`;
-  const centerPin = new kakao.maps.Marker({
-    map, position: centerPosition, title: HONGDAE_ENTRANCE.name,
-    image: new kakao.maps.MarkerImage(
-      'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(pinSvg),
-      new kakao.maps.Size(pinSize, pinSize * 1.3),
-      { offset: new kakao.maps.Point(pinSize / 2, pinSize * 1.3) } // 핀 뾰족한 끝이 좌표를 정확히 가리키게
-    )
-  });
-
-  document.getElementById('loading').style.display = 'none';
-  applyLang(); // 저장된 언어 설정(있다면) 적용
-
-  // Click on map
-  kakao.maps.event.addListener(map, 'click', e => {
-    if (document.getElementById('modal').style.display !== 'none') {
-      document.getElementById('f-lat').value = e.latLng.getLat().toFixed(6);
-      document.getElementById('f-lng').value = e.latLng.getLng().toFixed(6);
-      return;
-    }
-    if (importMode) {
-      pickerLatlng = e.latLng;
-      showNearbyPicker(e.latLng, e.point);
-    }
-  });
-
-  // 사용자가 지도를 직접 드래그했을 때만 '이 지역에서 검색' 버튼을 보여줌
-  // (resetView 등 코드로 지도를 옮기는 경우엔 안 뜸 — dragend는 사람이 손으로 끌 때만 발생)
-  kakao.maps.event.addListener(map, 'dragend', () => {
-    const bar = document.getElementById('btn-search-area');
-    if (bar) bar.style.display = 'inline-flex';
-  });
-
-  // 초기 렌더 후 카카오 실존 검증 시작
-  renderAll();
-  updateStats();
-  verifyStoresWithKakao();
-});
-
-// ── 카카오 실존 검증 엔진 ──────────────────────────────
-// 배치 단위로 업체명+좌표를 카카오 Places에 검색, 실존 확인 + 실제 데이터 채움
-
-function verifyStoresWithKakao() {
-  // unverified 상태인 것만
-  verifyQueue = stores.filter(s => s.status === 'unverified').map(s => s.id);
-  updateVerifyBanner();
-  processVerifyQueue();
-}
-
-function updateVerifyBanner() {
-  const total = stores.filter(s => s.status === 'unverified').length + verifiedCount + removedCount;
-  const done = verifiedCount + removedCount;
-  let el = document.getElementById('verify-banner');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'verify-banner';
-    el.style.cssText = `position:fixed;bottom:20px;right:20px;z-index:400;
-      background:#ffffff;border:1px solid #dde8ec;border-radius:10px;
-      padding:10px 16px;font-size:11px;color:#5c756d;
-      box-shadow:0 4px 16px rgba(20,60,50,.18);min-width:200px;`;
-    document.body.appendChild(el);
-  }
-  if (verifyQueue.length === 0 && done > 0) {
-    el.innerHTML = `✅ 검증 완료 — 실존 <b style="color:#e8362a">${verifiedCount}곳</b> 확인, <b style="color:#e8362a">${removedCount}곳</b> 제외`;
-    setTimeout(() => el.style.opacity = '0', 4000);
-    setTimeout(() => el.remove(), 4500);
-    return;
-  }
-  el.innerHTML = `🔍 카카오 실존 검증 중... <b style="color:#3d1712">${done}/${total}</b>`;
-}
-
-function processVerifyQueue() {
-  if (verifyRunning || verifyQueue.length === 0) return;
-  verifyRunning = true;
-
-  const id = verifyQueue.shift();
-  const s = stores.find(x => x.id === id);
-  if (!s) { verifyRunning = false; processVerifyQueue(); return; }
-
-  const ps = new kakao.maps.services.Places();
-  const latlng = new kakao.maps.LatLng(s.lat, s.lng);
-
-  // 업체명으로 반경 200m 내 검색
-  ps.keywordSearch(s.name, (data, status) => {
-    if (status === kakao.maps.services.Status.OK && data.length > 0) {
-      // 가장 가까운 결과 선택
-      const best = data[0];
-      const CAT_TYPE = { FD6:'restaurant', CE7:'cafe', BK9:'bar', MT1:'retail' };
-
-      // 실제 카카오 데이터로 업데이트
-      s.kakaoId = best.id;
-      s.kakaoUrl = best.place_url;
-      s.lat = parseFloat(best.y);
-      s.lng = parseFloat(best.x);
-      s.address = best.road_address_name || best.address_name;
-      if (CAT_TYPE[best.category_group_code]) s.type = CAT_TYPE[best.category_group_code];
-
-      // 평점·리뷰는 카카오 API에서 직접 제공 안 되므로 운영 기간만 추정, 나머지 기본값
-      s.rating = s.rating || 3.8;
-      s.reviews = s.reviews || 0;
-      s.months = s.months || 18;
-      s.rent = s.rent || 280;
-      const sc = Math.round((s.rating/5)*30 + Math.min(s.reviews/500,1)*20 + Math.min(s.months/60,1)*25 + Math.max(0,(500-s.rent)/500)*15 + 10);
-      s.score = Math.min(100, sc);
-      s.status = 'open';
-
-      verifiedCount++;
-    } else {
-      // 카카오에서 못 찾으면 목록에서 제거
-      stores = stores.filter(x => x.id !== id);
-      removedCount++;
-    }
-
-    verifiedCount % 10 === 0 && renderAll();  // 10개마다 화면 갱신
-    updateStats();
-    updateVerifyBanner();
-
-    verifyRunning = false;
-    // 카카오 API 쿼터 보호: 100ms 간격
-    setTimeout(processVerifyQueue, 100);
-  }, { location: latlng, radius: 200, size: 1 });
-}
-
-// ── RENDER ────────────────────────────────────────────
-function renderAll() {
-  renderMarkers();
-  renderList();
-}
-
-function getScoreColor(score) {
-  if (score >= 75) return '#00b894';
-  if (score >= 50) return '#fdcb6e';
-  return '#e17055';
-}
-
-// 매장 이름표 오버레이 하나를 만들어주는 헬퍼 (선택됨/호버 공용)
-function makeLabelOverlay(s, pos, opts) {
-  return new kakao.maps.CustomOverlay({
-    position: pos, yAnchor: 2.4, zIndex: opts.zIndex,
-    content: `<div style="white-space:nowrap;font-size:9px;font-weight:600;
-      background:#2a0a0a;color:#ffffff;padding:2px 5px;border-radius:3px;
-      font-family:sans-serif;pointer-events:none;${opts.outline?'outline:1px solid #e8362a':''}">
-      ${s.name}
-    </div>`
-  });
-}
-
-// 마우스를 올렸을 때만 보이는 이름표 — 선택된 매장 라벨과는 별개
-function showHoverLabel(s, pos) {
-  if (selectedId === s.id) return; // 이미 선택 라벨이 떠 있음
-  if (hoverOverlay) hoverOverlay.setMap(null);
-  hoverOverlay = makeLabelOverlay(s, pos, { zIndex: 15, outline: false });
-  hoverOverlay.setMap(map);
-}
-function hideHoverLabel(id) {
-  if (selectedId === id) return;
-  if (hoverOverlay) { hoverOverlay.setMap(null); hoverOverlay = null; }
-}
-
-function renderMarkers() {
-  // 클러스터러는 최초 1회만 생성해서 재사용 (매번 새로 만들면 깜빡임 생김)
-  if (!clusterer) {
-    clusterer = new kakao.maps.MarkerClusterer({
-      map,
-      averageCenter: true,
-      minLevel: 3,       // 이 레벨보다 축소하면 클러스터로 뭉침 (기존 4 → 3, 더 적극적으로 뭉치게)
-      minClusterSize: 3, // 3개 미만이면 굳이 안 뭉침
-      styles: [{
-        width: '38px', height: '38px', lineHeight: '38px',
-        borderRadius: '50%', textAlign: 'center', fontWeight: '600',
-        fontSize: '13px', color: '#fff',
-        background: 'rgba(34,66,58,.88)',
-        border: '2px solid rgba(255,255,255,.6)'
-      }]
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
     });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // 하단 시트 (앱 시작하기)
+  function openSheet() {
+    document.getElementById('backdrop').style.opacity = '1';
+    document.getElementById('backdrop').style.pointerEvents = 'auto';
+    const sheet = document.getElementById('sheet');
+    sheet.style.pointerEvents = 'auto';
+    sheet.style.transform = 'translateY(0)';
   }
-  clusterer.clear();
-  storeMarkers.forEach(m => kakao.maps.event.removeListener(m));
-  storeMarkers = [];
-  if (overlay) { overlay.setMap(null); overlay = null; }
-  if (hoverOverlay) { hoverOverlay.setMap(null); hoverOverlay = null; }
-
-  stores.forEach(s => {
-    const pos = new kakao.maps.LatLng(s.lat, s.lng);
-
-    // 카테고리(맛집/카페/술집) 기준 색상 — 카드 디자인과 통일
-    const info = catInfo(s);
-    const color = '#ff2d78'; // 핑크/레드 계열로 통일
-    const emoji = info.icon;
-
-    const isSelected = selectedId === s.id;
-    const isUnverified = s.status === 'unverified';
-    // 카카오 기본 업체 아이콘/라벨과 겹칠 확률과 면적을 줄이기 위해, 이모지+큰 원 대신 작은 점(dot)으로 단순화
-    const size = isSelected ? 16 : 10;
-    const strokeW = isSelected ? 2.5 : 1.5;
-    const strokeColor = '#ffffff';
-    const fillOpacity = isUnverified ? 0.7 : 1; // 미검증이어도 카테고리색은 유지하되 살짝 옅게
-
-    // 카카오 기본 라벨과 안 겹치게, 아이콘을 이미지 마커로 그려서 클러스터러가 관리하게 함
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
-      <circle cx="${size/2}" cy="${size/2}" r="${size/2 - strokeW}" fill="${color}"
-        fill-opacity="${fillOpacity}" stroke="${strokeColor}" stroke-width="${strokeW}"/>
-    </svg>`;
-    const markerImage = new kakao.maps.MarkerImage(
-      'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
-      new kakao.maps.Size(size, size)
-    );
-
-    const marker = new kakao.maps.Marker({
-      position: pos, image: markerImage, title: s.name, zIndex: isSelected ? 10 : 1
-    });
-
-    kakao.maps.event.addListener(marker, 'click', () => selectStore(s.id));
-    kakao.maps.event.addListener(marker, 'mouseover', () => showHoverLabel(s, pos));
-    kakao.maps.event.addListener(marker, 'mouseout', () => hideHoverLabel(s.id));
-
-    storeMarkers.push(marker);
-
-    if (isSelected) {
-      overlay = makeLabelOverlay(s, pos, { zIndex: 20, outline: true });
-      overlay.setMap(map);
-    }
-  });
-
-  if (showMarkers) clusterer.addMarkers(storeMarkers);
-}
-
-function renderList() {
-  try {
-    renderListImpl();
-  } catch (e) {
-    console.error('renderList 오류:', e);
-    if (typeof showToast === 'function') showToast('목록을 불러오는 중 오류가 발생했어요 (콘솔 확인)');
+  function closeSheet() {
+    document.getElementById('backdrop').style.opacity = '0';
+    document.getElementById('backdrop').style.pointerEvents = 'none';
+    const sheet = document.getElementById('sheet');
+    sheet.style.pointerEvents = 'none';
+    sheet.style.transform = 'translateY(105%)';
   }
-}
-function renderListImpl() {
-  const list = document.getElementById('store-list');
-  const dongFilters = ['서교동','연남동','합정동','상수동'];
-  const isDongFilter = dongFilters.includes(currentFilter);
-  const isTasteMode = currentFilter === 'taste';
-  const isBookmarkMode = currentFilter === 'bookmarks';
-  const isGoneMode = currentFilter === 'gone';
-  const isHallOfFameMode = currentFilter === 'hallOfFame';
-  const isMichelinMode = currentFilter === 'michelin';
-  const isCenturyMode = currentFilter === 'centuryStore';
-  const isRepresentativeMode = currentFilter === 'representative'; // 태그가 붙은 프로토타입 대표 맛집 ~40곳
-  const isCuisineMode = currentFilter.startsWith('cuisine:');
-  const isCafeSubMode = currentFilter.startsWith('cafeSub:');
-  const isBarSubMode = currentFilter.startsWith('barSub:');
-  const isDetailFiltersMode = currentFilter === 'detailFilters';
-  const isCardMode = true; // 이제 모든 필터(전체 포함)가 태그 중심 카드 레이아웃을 씀 — 실제 평점/점수 없는 unverified 매장뿐이라 예전 점수바 레이아웃이 의미가 없었음
-
-  let filtered = stores.filter(s => {
-    // '이 지역에서 검색'으로 지도 화면을 좁혀뒀다면, 그 화면 밖 매장은 어떤 모드든 제외
-    if (boundsFilter && !boundsFilter.contain(new kakao.maps.LatLng(s.lat, s.lng))) return false;
-
-    if (isTasteMode) return s.tags && matchScore(s) > 0; // 취향 모드는 unverified 여부와 무관하게 태그 매칭만 봄
-    if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
-    if (isHallOfFameMode) return (s.certifications || []).includes('홍대생 명예학식');
-    if (isMichelinMode) return (s.certifications || []).some(c => c.includes('미쉐린'));
-    if (isCenturyMode) return isCenturyStore(s);
-    if (isRepresentativeMode) return s.tags && s.tags.length > 0; // 취향 태그가 붙어있는 프로토타입 40곳
-    if (isDetailFiltersMode) return matchesActiveDetailFilters(s); // 복수 선택 — 같은 종류끼리는 OR, 다른 종류끼리는 AND
-    if (isCuisineMode) {
-      const want = currentFilter.split(':')[1];
-      const label = cuisineLabel(s);
-      return s.type === 'restaurant' && (want === '글로벌' ? label === '아시아식' : label === want);
-    }
-    if (isCafeSubMode) return s.type === 'cafe' && cafeSubType(s) === currentFilter.split(':')[1];
-    if (isBarSubMode) return s.type === 'bar' && barSubType(s) === currentFilter.split(':')[1];
-    // 예전엔 unverified 매장을 '전체' 필터 말고는 다 숨겼는데, 지금 매장이 전부 unverified 상태라
-    // 음식점/카페/주점/동네 필터를 눌러도 아무것도 안 뜨는 버그였음. 그 예외 규칙을 제거함.
-    const matchFilter = currentFilter === 'all'
-      || (isBookmarkMode && bookmarks[s.id])
-      || s.type === currentFilter
-      || (currentFilter === 'closed' && s.status === 'closed')
-      || (isDongFilter && s.dong === currentFilter);
-    return matchFilter && s.name.includes(searchText);
-  });
-
-  // 가나다순(2순위 기준) — "많이 찾는 순"(인기순)은 실사용 데이터가 없어 아직 구현하지 않음
-  if (isCuisineMode || isCafeSubMode || isBarSubMode || isDetailFiltersMode || currentFilter === 'club' || currentFilter === 'animeshop' || currentFilter === 'entertainment') {
-    filtered.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+  function closeSheetToFeatures() {
+    closeSheet();
+    const el = document.getElementById('feat-map');
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 60, behavior: 'smooth' });
   }
-
-  if (isTasteMode) filtered.sort((a, b) => matchScore(b) - matchScore(a));
-  const showSortBar = !isTasteMode; // 취향 매칭 모드만 자체 정렬(일치도순)을 쓰고, 나머지 필터는 전부 공통 정렬 버튼을 씀
-  if (showSortBar) {
-    if (listSort === 'name') filtered.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
-    else if (listSort === 'category') {
-      const order = ['한식','중식','양식','일식','아시아식','카페·디저트','주점'];
-      filtered.sort((a, b) => {
-        const diff = order.indexOf(cuisineLabel(a)) - order.indexOf(cuisineLabel(b));
-        return diff !== 0 ? diff : a.name.localeCompare(b.name, 'ko');
-      });
-    }
-    else if (listSort === 'distance') filtered.sort((a, b) => distToCampus(a) - distToCampus(b));
-  }
-
-  const emptyMsg = isTasteMode ? '취향에 맞는 매장이 아직 없어요 (홍대 대표 맛집 40곳 중에서만 찾아요)'
-    : isBookmarkMode ? '저장한 장소가 아직 없어요'
-    : isGoneMode ? '아직 등록된 "사라진 가게"가 없어요.'
-    : isHallOfFameMode ? '아직 등록된 명예학식이 없어요.'
-    : isMichelinMode ? '아직 등록된 미쉐린 가이드 매장이 없어요.'
-    : isCenturyMode ? '아직 백년가게 인증이 확인된 매장이 없어요.'
-    : (currentFilter === 'club' || currentFilter === 'animeshop' || currentFilter === 'entertainment')
-      ? '이 카테고리는 준비 중이에요. 곧 채워질 예정이에요.'
-    : isRepresentativeMode ? '아직 등록된 대표 맛집이 없어요.'
-    : '검색 결과 없음';
-
-  // "사라진 가게" 모드에서는 몇 개가 등록돼 있든 상관없이 계속 추가할 수 있게,
-  // 리스트 맨 위에 항상 등록 버튼을 띄워둔다 (예전엔 리스트가 비어있을 때만 보여서 1개 등록하면 사라지는 버그가 있었음).
-  const goneAddButtonHtml = isGoneMode
-    ? `<button class="map-btn" style="width:100%;margin-bottom:10px" onclick="openModal('closed')">+ 사라진 가게 제보하기</button>`
-    : '';
-
-  // 정렬 트리거 버튼/리스트는 왼쪽 사이드바에서 더 이상 노출하지 않음 — 결과는 항상 중앙 모달에서만 보여줌
-  const sortLabelMap = { default:'기본', category:'카테고리순', name:'가나다순', distance:'거리순' };
-
-  list.innerHTML = (isGoneMode ? goneAddButtonHtml : '') + (filtered.length === 0
-    ? `<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">${emptyMsg}</div>`
-    : filtered.map(s => {
-      const isUnverified = s.status === 'unverified';
-      const scoreColor = isUnverified ? '#93a8a2' : getScoreColor(s.score);
-      const monthsTxt = s.months != null ? `${s.months}개월` : '';
-      const reviewsTxt = s.reviews != null ? `리뷰 ${s.reviews}` : '';
-      const scorePct = isUnverified ? 0 : s.score;
-      const match = isTasteMode ? matchScore(s) : 0;
-      const matchPct = isTasteMode ? matchPercent(s) : 0;
-      const matchReasons = isTasteMode ? matchedTagNames(s) : [];
-      const matchBadge = isTasteMode
-        ? `<span style="font-size:11px;color:#e8362a;font-weight:800">🎯 ${matchPct}% 일치</span>`
-        : '';
-
-      if (isCardMode) {
-        // 취향태그 카드와 같은 톤으로 통일된 큐레이션 카드 레이아웃
-        const info = catInfo(s);
-        const cardTags = ((isTasteMode || isRepresentativeMode) ? (s.tags || []).map(t => `#${t}`) : objectiveTasteTags(s)).map(localizeTag);
-        const badgeHtml = isTasteMode ? matchBadge
-          : isGoneMode ? '<span style="font-size:10px;color:#93a8a2;font-weight:600">🪦 R.I.P</span>'
-          : isHallOfFameMode ? '<span style="font-size:10px;color:#a9744f;font-weight:700">🏅 명예학식</span>'
-          : isMichelinMode ? '<span style="font-size:10px;color:#c0392b;font-weight:700">🍽️ 미쉐린 가이드</span>'
-          : isRepresentativeMode ? '<span style="font-size:10px;color:#a9744f;font-weight:700">⭐ 대표 맛집</span>' : '';
-        const memoryHtml = (isGoneMode && s.memory)
-          ? `<div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;font-style:italic">“${s.memory}”</div>` : '';
-        return `
-        <div class="store-item ${selectedId===s.id?'active':''}" onclick="selectStore(${s.id})"
-             style="${isGoneMode?'opacity:.75;':''}">
-          <div class="item-top">
-            <span style="width:26px;height:26px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;flex:none">${menuEmoji(s)}</span>
-            <div class="item-name">${s.name}</div>
-            <div style="font-size:10px;color:var(--muted)">${info.label}</div>
-          </div>
-          <div class="item-meta">${badgeHtml}</div>
-          <div style="font-size:10px;color:var(--text);opacity:.85">${cardTags.join(' · ')}</div>
-          ${isTasteMode && matchReasons.length ? `<div style="font-size:10px;color:#ff8a75;margin-top:3px">✨ ${matchReasons.join(', ')} 일치</div>` : ''}
-          ${memoryHtml}
-        </div>`;
-      }
-
-      return `
-      <div class="store-item ${s.status==='closed'?'closed-item':''} ${selectedId===s.id?'active':''}"
-           onclick="selectStore(${s.id})" style="${isUnverified?'opacity:.4;':''}">
-        <div class="item-top">
-          <div class="status-dot dot-${s.status}"></div>
-          <div class="item-name">${s.name}</div>
-          <div style="font-size:10px;color:var(--muted)">${TYPES[s.type]||s.type}</div>
-        </div>
-        <div class="item-meta">
-          ${monthsTxt?`<span>${monthsTxt}</span>`:''}
-          ${reviewsTxt?`<span>${reviewsTxt}</span>`:''}
-        </div>
-        <div class="score-row">
-          <div class="score-bar"><div class="score-fill" style="width:${scorePct}%;background:${scoreColor}"></div></div>
-          <div class="score-num" style="color:${scoreColor}">${isUnverified?'…':s.score}</div>
-        </div>
-      </div>`;
-    }).join(''));
-
-  lastFilteredCount = filtered.length;
-  updateResultsBar();
-}
-
-// 필터를 고를 때마다 곧장 리스트를 열지 않고, 몇 개가 나왔는지부터 하단에 알려줌.
-// (네이버지도의 "결과보기 00건" 버튼과 같은 역할 — 사용자가 직접 눌러야 전체 리스트로 넘어감)
-function updateResultsBar() {
-  const bar = document.getElementById('btn-view-results');
-  const countEl = document.getElementById('results-count');
-  if (!bar) return;
-  if (lastFilteredCount > 0) {
-    if (countEl) countEl.textContent = lastFilteredCount;
-    bar.style.display = 'flex';
-  } else {
-    bar.style.display = 'none';
-  }
-}
-
-function updateStats() {
-  // 상단바 통계 UI(영업중/폐점/평균생존)는 제거했으므로 더 이상 DOM에 쓰지 않음.
-  // 필요해지면 여기서 다시 계산해서 원하는 위치에 표시하면 됨.
-}
-
-// ── SELECT STORE ──────────────────────────────────────
-function selectStore(id) {
-  selectedId = id;
-  const s = stores.find(x=>x.id===id);
-  if (!s) return;
-  renderMarkers();
-  renderList();
-  // 결과 피드에서 매장을 고르면, 피드에 가려지지 않고 바로 카드 배너로 넘어가게 피드는 닫음
-  const sortModal = document.getElementById('sort-modal');
-  if (sortModal && sortModal.style.display !== 'none') sortModal.style.display = 'none';
-  openDetail();
-
-  if (map) map.panTo(new kakao.maps.LatLng(s.lat, s.lng));
-
-  document.getElementById('detail-empty').style.display = 'none';
-  const dc = document.getElementById('detail-content');
-  dc.style.display = 'block';
-
-  // 캡션 카드 — 폐업이 확인된 곳(아래 별도 R.I.P 카드)만 빼고 전부 이 스타일로 통일.
-  // 예전엔 '실제 평점/임대료 데이터가 있는 곳'만 따로 상권분석 패널(핵심지표/임대료분석/AI분석 등)을
-  // 보여줬는데, 그 데이터 자체가 실제로는 없는 추정치였고 계속 혼란을 줘서 완전히 없앰.
-  if (s.status !== 'closed') {
-    // 카카오/네이버 지도 API는 실시간 영업 여부·영업시간 필드를 제공하지 않으므로,
-    // 자동 판정 대신 사람이 링크를 눌러 직접 확인 후 상태를 반영하는 방식으로 처리한다.
-    const kakaoUrl = s.kakaoUrl || `https://map.kakao.com/?q=${encodeURIComponent(s.name + ' ' + (s.address||s.dong||''))}`;
-    const naverUrl = s.naverUrl || `https://map.naver.com/p/search/${encodeURIComponent(s.name + ' ' + (s.address||s.dong||''))}`;
-    const info = catInfo(s);
-    const dist = distToCampus(s);
-    const walk = Math.max(1, Math.round(dist / 70)); // 도보 약 70m/분 기준 추정치
-    const tags = objectiveTasteTags(s).map(localizeTag);
-    // 카드 B는 큐레이터 스토리만 보여주고, 공식 인증은 취향 태그(A)에서만 표시한다.
-    const storyTags = s.storyTags || ['재학생 추천', `${s.dong} 골목 스토리`];
-    const signatureMenus = (Array.isArray(s.signatureMenu)
-      ? s.signatureMenu
-      : (s.signatureMenu || '').split(',').map(menu => menu.trim()).filter(Boolean)
-    ).map(localizeMenuText);
-    const signatureMenuSection = `
-      <div style="margin-top:10px;padding:11px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px">
-        <div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.06em;margin-bottom:7px">SIGNATURE MENU</div>
-        ${signatureMenus.length
-          ? `<div style="display:flex;flex-wrap:wrap;gap:6px">${signatureMenus.map(menu => `<span style="background:#fdf0e4;color:#8a5a3a;font-size:11px;font-weight:700;padding:4px 8px;border-radius:999px">${menu}</span>`).join('')}</div>`
-          : '<div style="font-size:11px;color:var(--muted)">대표 메뉴 정보가 아직 없어요.</div>'}
-      </div>`;
-    const bm = !!bookmarks[s.id];
-
-    const styleToggle = `
-      <div style="display:flex;gap:4px;background:#fff;border-radius:999px;padding:4px;box-shadow:0 2px 10px rgba(20,60,50,.1);width:fit-content;margin-bottom:10px">
-        <button onclick="setCardStyle('A')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Noto Sans KR',sans-serif;background:${cardStyle==='A'?'#e8362a':'transparent'};color:${cardStyle==='A'?'#fff':'#5c756d'}">취향 태그</button>
-        <button onclick="setCardStyle('B')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Noto Sans KR',sans-serif;background:${cardStyle==='B'?'#e8362a':'transparent'};color:${cardStyle==='B'?'#fff':'#5c756d'}">Story</button>
-      </div>`;
-
-    const cardA = `
-      <div style="background:#ffffff;border-radius:20px;box-shadow:0 10px 32px rgba(20,60,50,.14);overflow:hidden">
-        <div style="position:relative;height:110px;background:linear-gradient(135deg,#ffe8d9,#ffd4b8);display:flex;align-items:center;justify-content:center">
-          <div style="font-size:28px">${menuEmoji(s)}</div>
-          <div style="position:absolute;bottom:10px;left:12px;font-size:10px;font-weight:900;letter-spacing:.08em;color:#8a5a3a">MY TASTE PICK</div>
-          <div style="position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:5px;background:#fff;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700;color:${info.color}">${menuEmoji(s)} ${info.label} <span style="color:#93a8a2;font-weight:500">${info.labelEn}</span></div>
-          <button onclick="toggleBookmark(${s.id})" style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;background:${bm?'#e8362a':'#fff'};color:${bm?'#fff':'#e8362a'};font-size:14px;box-shadow:0 3px 10px rgba(20,60,50,.15)">${bm?'♥':'♡'}</button>
-        </div>
-        <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px">
-          <div style="font-size:17px;font-weight:900;color:#1c352e">${s.name}</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            ${tags.map(t=>`<span style="background:#fdf0e4;color:#8a5a3a;font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px">${t}</span>`).join('')}
-          </div>
-          <div style="display:flex;align-items:center;gap:14px">
-            <div style="font-size:12px;font-weight:700;color:#e8362a">📍 ${dist}m</div>
-            <div style="font-size:12px;color:#5c756d">🚶 도보 약 ${walk}분</div>
-          </div>
-        </div>
-      </div>`;
-
-    const cardB = `
-      <div style="background:#fff8f0;border-radius:22px;box-shadow:0 10px 32px rgba(140,30,20,.18);overflow:hidden;border:3px solid #e8362a">
-        <div style="background:#e8362a;padding:10px 16px;display:flex;align-items:center;gap:8px">
-          <div style="font-family:'Pretendard',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:.7px">HONGDAE STORY</div>
-        </div>
-        <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:11px">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#ffe3cf,#ffd0b5);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;border:2px dashed #f0a080">${menuEmoji(s)}</div>
-            <div style="font-size:17px;font-weight:900;color:#6b1510;flex:1">${s.name}</div>
-          </div>
-          <div style="background:#fff0e6;border-radius:12px;padding:9px 10px">
-            <div style="font-size:10px;font-weight:900;color:#a43a2d;letter-spacing:.06em;margin-bottom:6px">STORY &amp; CERTIFICATION</div>
-            <div style="display:flex;gap:5px;flex-wrap:wrap">
-              ${storyTags.map(t=>`<span style="background:#fff;border:1.5px solid #f2b8ae;color:#c1382c;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px">✦ ${t}</span>`).join('')}
-            </div>
-          </div>
-        </div>
-      </div>`;
-
-    dc.innerHTML = `
-      <div class="detail-body" style="padding:14px">
-        ${styleToggle}
-        ${cardStyle === 'A' ? cardA : cardB}
-        ${cardStyle === 'A' ? `
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <a href="${kakaoUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">카카오맵 확인 ↗</a>
-            <a href="${naverUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">네이버지도 확인 ↗</a>
-          </div>
-          ${signatureMenuSection}` : ''}
-      </div>`;
-    return;
-  }
-
-  // 사라진 가게(폐업 확인됨): 상권분석 지표는 의미가 없으므로 다 빼고,
-  // 그 가게를 좋아했던 사람들의 코멘트를 모으는 추모/추억 카드로 대체한다.
-  if (s.status === 'closed') {
-    const info = catInfo(s);
-    const comments = loadComments(s.id);
-    const commentsHtml = comments.length
-      ? comments.map(c => `
-          <div style="background:var(--surface2);border-radius:10px;padding:10px 12px;margin-bottom:8px">
-            <div style="font-size:12px;color:var(--text);line-height:1.5">“${c.text}”</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:4px">${c.date}</div>
-          </div>`).join('')
-      : `<div style="font-size:12px;color:var(--muted);text-align:center;padding:14px 0">아직 남겨진 코멘트가 없어요.<br>이 가게를 좋아했다면 첫 코멘트를 남겨주세요.</div>`;
-
-    dc.innerHTML = `
-      <div class="detail-body" style="padding:14px">
-        <div style="background:#fff8f0;border-radius:22px;box-shadow:0 10px 32px rgba(140,30,20,.1);overflow:hidden;border:2px dashed #d8b8a8">
-          <div style="background:#4a4038;padding:10px 16px;display:flex;align-items:center;gap:8px">
-            <div style="font-family:'Pretendard',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:.7px">🪦 R.I.P</div>
-          </div>
-          <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px">
-            <div style="display:flex;align-items:center;gap:10px">
-              <div style="width:52px;height:52px;border-radius:14px;background:#e8e2da;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;filter:grayscale(60%)">${menuEmoji(s)}</div>
-              <div style="flex:1">
-                <div style="font-size:17px;font-weight:900;color:#6b1510">${s.name}</div>
-                <div style="font-size:11px;color:var(--muted)">${s.dong || ''} · ${info.label}${s.closedYear ? ` · ${s.closedYear} 폐업` : ''}</div>
-              </div>
-            </div>
-            ${s.memory ? `<div style="background:#fff0e6;border-radius:12px;padding:10px 12px;font-size:12px;color:#6b1510;line-height:1.6;font-style:italic">“${s.memory}”${s.reporter ? `<div style="margin-top:6px;font-size:10px;color:#a06a55;font-style:normal">— 제보: ${s.reporter}</div>` : ''}</div>` : ''}
-          </div>
-        </div>
-
-        <div class="section-title" style="margin-top:14px">이 가게를 좋아했던 사람들의 코멘트</div>
-        <div>${commentsHtml}</div>
-        <div style="display:flex;gap:6px;margin-top:8px">
-          <input type="text" id="comment-input-${s.id}" placeholder="여기서 자주 먹었던 메뉴, 추억을 남겨주세요"
-            style="flex:1;padding:9px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;font-family:'Pretendard','Noto Sans KR',sans-serif"
-            onkeydown="if(event.key==='Enter')submitComment(${s.id})">
-          <button class="map-btn" onclick="submitComment(${s.id})">등록</button>
-        </div>
-      </div>`;
-    return;
-  }
-}
-
-
-// ── FILTER / SEARCH ───────────────────────────────────
-// ── 복수 카테고리 동시 선택 (예: 서교동 + 한식을 같이 켜면 두 조건 다 만족하는 곳만) ──
-function toggleDetailFilter(key, btn) {
-  if (activeDetailFilters.has(key)) {
-    activeDetailFilters.delete(key);
-    btn.classList.remove('on');
-  } else {
-    activeDetailFilters.add(key);
-    btn.classList.add('on');
-  }
-  applyDetailFilterState();
-}
-// 한식/중식/일식/양식/글로벌 — 이제 여러 개를 동시에 선택할 수 있음(토글 방식)
-function toggleCuisineFilter(value, btn) {
-  const key = 'cuisine:' + value;
-  if (activeDetailFilters.has(key)) {
-    activeDetailFilters.delete(key);
-    btn.classList.remove('on');
-  } else {
-    activeDetailFilters.add(key);
-    btn.classList.add('on');
-  }
-  applyDetailFilterState();
-}
-function applyDetailFilterState() {
-  // 다중 필터를 하나라도 켜면 "detailFilters" 모드로, 다 끄면 전체 보기로 돌아감
-  currentFilter = activeDetailFilters.size > 0 ? 'detailFilters' : 'all';
-  boundsFilter = null; // 이전에 '이 지역에서 검색'으로 좁혀둔 범위가 남아있으면 여기서도 매장이 안 보이므로 초기화
-  if (activeDetailFilters.size === 0) {
-    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
-    const allBtn = document.getElementById('chip-all');
-    if (allBtn) allBtn.classList.add('on');
-  }
-  renderList();
-}
-function clearDetailFilters(btn) {
-  activeDetailFilters.clear();
-  currentFilter = 'all';
-  boundsFilter = null;
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
-  const allBtn = document.getElementById('chip-all');
-  if (allBtn) allBtn.classList.add('on');
-  renderList();
-}
-// 여러 필터를 동시에 골랐을 때: 같은 종류(kind)끼리는 하나만 맞아도 통과(OR),
-// 종류가 다르면 그 종류들은 전부 만족해야 함(AND). 예) 한식+중식 선택 = 한식이거나 중식인 곳,
-// 한식+서교동 선택 = 서교동에 있는 한식집만.
-function matchesActiveDetailFilters(s) {
-  if (activeDetailFilters.size === 0) return true;
-  const groups = {};
-  activeDetailFilters.forEach(key => {
-    const kind = key.split(':')[0];
-    (groups[kind] = groups[kind] || []).push(key);
-  });
-  return Object.values(groups).every(keys => keys.some(k => matchesDetailFilter(s, k)));
-}
-// 매장 s가 다중 필터 key 하나(예: 'cuisine:한식', 'dong:서교동', 'type:club', 'cert:michelin') 조건을 만족하는지 확인
-function matchesDetailFilter(s, key) {
-  const [kind, value] = key.split(':');
-  if (kind === 'cuisine') {
-    const label = cuisineLabel(s);
-    return s.type === 'restaurant' && (value === '글로벌' ? label === '아시아식' : label === value);
-  }
-  if (kind === 'cafeSub') return s.type === 'cafe' && cafeSubType(s) === value;
-  if (kind === 'barSub') return s.type === 'bar' && barSubType(s) === value;
-  if (kind === 'dong') return s.dong === value;
-  if (kind === 'type') return s.type === value;
-  if (kind === 'cert') {
-    if (value === 'hallOfFame') return (s.certifications || []).includes('홍대생 명예학식');
-    if (value === 'michelin') return (s.certifications || []).some(c => c.includes('미쉐린'));
-  }
-  return false;
-}
-
-// 지도 위에 항상 떠있는 카테고리 바 전용 핸들러.
-// 사이드바를 열지 않아도 바로 필터링되게 하는 게 목적이라, 한 번에 하나만 선택되는
-// 단순한 방식으로 만듦(구글맵 상단 카테고리 버튼과 같은 방식).
-function selectCategoryBar(key, btn) {
-  activeDetailFilters.clear();
-  boundsFilter = null;
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
-  if (btn) btn.classList.add('on');
-  if (key === 'club') { activeDetailFilters.add('type:club'); currentFilter = 'detailFilters'; }
-  else if (key === 'hof') { activeDetailFilters.add('cert:hallOfFame'); currentFilter = 'detailFilters'; }
-  else if (key === 'michelin') { activeDetailFilters.add('cert:michelin'); currentFilter = 'detailFilters'; }
-  else if (key === 'gone') { currentFilter = 'gone'; }
-  else { currentFilter = key; } // 'all' | 'restaurant' | 'cafe' | 'bar'
-  renderList();
-}
-
-function setFilter(type, btn) {
-  currentFilter = type;
-  activeDetailFilters.clear(); // 단일 카테고리를 새로 고르면 다중 선택 상태는 초기화
-  boundsFilter = null; // 카테고리를 새로 고르면 '이 지역에서 검색'으로 좁혀둔 범위는 초기화
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
-  btn.classList.add('on');
-  // 카테고리를 고르면 곧장 리스트를 열지 않고, "가게 N곳 보기" 버튼으로 몇 개인지부터 보여준다.
-  renderList();
-}
-function filterList() {
-  searchText = document.getElementById('search-input').value.trim();
-  renderList();
-  const results = document.getElementById('search-results');
-  if (!searchText) { results.style.display = 'none'; results.innerHTML = ''; return; }
-  const matched = stores.filter(s => s.name.includes(searchText)).slice(0, 8);
-  results.style.display = 'block';
-  results.innerHTML = matched.length
-    ? matched.map(s => `<button class="search-result" onclick="selectSearchResult(${s.id})"><span class="search-result-icon">${menuEmoji(s)}</span><span class="search-result-name">${s.name}</span><span class="search-result-type">${TYPES[s.type]||'기타'}</span></button>`).join('')
-    : '<div class="search-empty">등록된 업체에서 찾지 못했어요.</div>';
-}
-
-function selectSearchResult(id) {
-  const s = stores.find(x => x.id === id);
-  if (!s) return;
-  document.getElementById('search-input').value = s.name;
-  searchText = s.name;
-  document.getElementById('search-results').style.display = 'none';
-  renderList();
-  selectStore(id);
-}
-
-// 우측 상단 길찾기 — 선택된 매장이 있으면 그 매장까지의 카카오맵 길찾기를 새 탭으로 연다
-function goDirections() {
-  const s = stores.find(x => x.id === selectedId);
-  if (!s) { showToast('먼저 지도에서 매장을 선택해주세요'); return; }
-  const origin = `${encodeURIComponent(HONGDAE_ENTRANCE.name)},${HONGDAE_ENTRANCE.lat},${HONGDAE_ENTRANCE.lng}`;
-  const destination = `${encodeURIComponent(s.name)},${s.lat},${s.lng}`;
-  window.open(`https://map.kakao.com/link/by/walk/${origin}/${destination}`, '_blank', 'noopener');
-}
-
-// 상단바 ♥ 버튼 — 저장한 장소 보기. 다른 필터들과 동일하게 "결과 N곳 보기" 버튼으로 안내
-// (예전엔 이 버튼만 사이드바를 강제로 열었는데, 경로를 하나로 통일함)
-function showBookmarks(btn) {
-  currentFilter = 'bookmarks';
-  boundsFilter = null;
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
-  if (btn) btn.classList.add('on');
-  renderList();
-}
-
-// 상단바 🪦 버튼 / 카테고리 바 "사라진 가게" — 폐업/사라진 가게 큐레이션.
-// 홍대에서 없어진, 추억의 장소를 모아 보여줌 (마찬가지로 결과 N곳 보기 버튼으로 안내)
-function showGoneStores(btn) {
-  currentFilter = 'gone';
-  boundsFilter = null;
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
-  if (btn) btn.classList.add('on');
-  renderList();
-}
-
-// ── MAP CONTROLS ──────────────────────────────────────
-// ── 좌/우 패널 열고 닫기 ──────────────────────────────
-function updateBackdrop() {
-  const sidebarOpen = document.getElementById('sidebar').classList.contains('open');
-  const detailOpen = document.getElementById('detail-panel').classList.contains('open');
-  document.getElementById('drawer-backdrop').classList.toggle('show', sidebarOpen || detailOpen);
-}
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  updateBackdrop();
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  updateBackdrop();
-}
-function openDetail() {
-  document.getElementById('detail-panel').classList.add('open');
-  updateBackdrop();
-}
-function closeDetail() {
-  document.getElementById('detail-panel').classList.remove('open');
-  updateBackdrop();
-  selectedId = null;
-  renderMarkers();
-  renderList();
-}
-
-function toggleMarkers() {
-  showMarkers = !showMarkers;
-  if (clusterer) {
-    if (showMarkers) clusterer.addMarkers(storeMarkers);
-    else clusterer.clear();
-  }
-  document.getElementById('btn-markers').classList.toggle('on', showMarkers);
-}
-
-function toggleImportMode() {
-  importMode = !importMode;
-  const btn = document.getElementById('btn-import');
-  const banner = document.getElementById('import-banner');
-  btn.classList.toggle('btn-import-on', importMode);
-  banner.style.display = importMode ? 'block' : 'none';
-  if (!importMode) closePicker();
-  document.getElementById('map').style.cursor = importMode ? 'crosshair' : '';
-}
-
-function closePicker() {
-  if (pickerEl) { pickerEl.remove(); pickerEl = null; }
-}
-
-function showNearbyPicker(latlng, point) {
-  closePicker();
-
-  // Create picker positioned near click
-  const mapWrap = document.querySelector('.map-wrap');
-  const rect = mapWrap.getBoundingClientRect();
-
-  pickerEl = document.createElement('div');
-  pickerEl.className = 'place-picker';
-
-  // Position: prefer right of click, flip left if near edge
-  let left = point.x + 16;
-  let top = point.y - 20;
-  if (left + 270 > mapWrap.offsetWidth) left = point.x - 276;
-  if (top + 320 > mapWrap.offsetHeight) top = mapWrap.offsetHeight - 320;
-  if (top < 8) top = 8;
-
-  pickerEl.style.left = left + 'px';
-  pickerEl.style.top = top + 'px';
-  pickerEl.innerHTML = `
-    <div class="picker-header">
-      <span>📍 업체 불러오기</span>
-      <button class="picker-close" onclick="closePicker()">×</button>
-    </div>
-    <div class="picker-tabs">
-      <button class="picker-tab active" id="ptab-nearby" onclick="switchPickerTab('nearby')">📡 주변 자동검색</button>
-      <button class="picker-tab" id="ptab-search" onclick="switchPickerTab('search')">🔍 이름으로 검색</button>
-    </div>
-    <div id="picker-search-area" style="display:none">
-      <div class="picker-search-box">
-        <input type="text" id="picker-search-input" placeholder="업체명 입력 후 Enter"
-          onkeydown="if(event.key==='Enter') runPickerSearch(pickerLatlng)">
-        <button class="picker-search-btn" onclick="runPickerSearch(pickerLatlng)">검색</button>
-      </div>
-    </div>
-    <div class="picker-list" id="picker-list">
-      <div class="picker-loading">🔍 주변 검색 중...</div>
-    </div>`;
-  mapWrap.appendChild(pickerEl);
-  pickerEl._latlng = latlng; // store for search tab
-
-  // Search nearby with Kakao Places
-  const ps = new kakao.maps.services.Places();
-  const categories = ['FD6','CE7','BK9','MT1'];
-  let allResults = [];
-  let done = 0;
-
-  categories.forEach(cat => {
-    ps.categorySearch(cat, (data, status) => {
-      done++;
-      if (status === kakao.maps.services.Status.OK) allResults.push(...data);
-      if (done === categories.length) renderPickerResults(allResults, latlng);
-    }, { location: latlng, radius: 300, size: 10 });
-  });
-}
-
-// 탭 전환
-function switchPickerTab(tab) {
-  document.getElementById('ptab-nearby').classList.toggle('active', tab === 'nearby');
-  document.getElementById('ptab-search').classList.toggle('active', tab === 'search');
-  document.getElementById('picker-search-area').style.display = tab === 'search' ? 'block' : 'none';
-  if (tab === 'search') {
-    document.getElementById('picker-list').innerHTML = '<div class="picker-empty">업체명을 입력하고 검색하세요</div>';
-    setTimeout(() => document.getElementById('picker-search-input')?.focus(), 50);
-  } else {
-    // 다시 주변 검색
-    document.getElementById('picker-list').innerHTML = '<div class="picker-loading">🔍 주변 검색 중...</div>';
-    const latlng = pickerEl?._latlng;
-    if (!latlng) return;
-    const ps = new kakao.maps.services.Places();
-    const categories = ['FD6','CE7','BK9','MT1'];
-    let allResults = [], done = 0;
-    categories.forEach(cat => {
-      ps.categorySearch(cat, (data, status) => {
-        done++;
-        if (status === kakao.maps.services.Status.OK) allResults.push(...data);
-        if (done === categories.length) renderPickerResults(allResults, latlng);
-      }, { location: latlng, radius: 300, size: 10 });
-    });
-  }
-}
-
-function runPickerSearch(latlng) {
-  const q = document.getElementById('picker-search-input')?.value.trim();
-  if (!q) return;
-  document.getElementById('picker-list').innerHTML = '<div class="picker-loading">🔍 검색 중...</div>';
-  const ps = new kakao.maps.services.Places();
-  // 이름으로 직접 검색할 땐 거리 제한을 두지 않는다 (동네가 다르면 못 찾는 문제 방지).
-  // 결과는 renderPickerResults에서 클릭 지점 기준 거리순으로 정렬해서 보여준다.
-  ps.keywordSearch(q, (data, status) => {
-    if (status !== kakao.maps.services.Status.OK || data.length === 0) {
-      document.getElementById('picker-list').innerHTML = `<div class="picker-empty">"${q}" 검색 결과가 없어요</div>`;
-      return;
-    }
-    renderPickerResults(data, latlng);
-  }, { size: 15 });
-}
-
-function renderPickerResults(data, latlng) {
-  if (!pickerEl) return;
-  const list = pickerEl.querySelector('#picker-list');
-
-  // Deduplicate by place_id, sort by distance
-  const seen = new Set();
-  const unique = data.filter(p => { if (seen.has(p.id)) return false; seen.add(p.id); return true; });
-  unique.sort((a,b) => parseFloat(a.distance||999) - parseFloat(b.distance||999));
-
-  if (unique.length === 0) {
-    list.innerHTML = '<div class="picker-empty">주변 업체를 찾지 못했어요.<br>다른 위치를 클릭해보세요.</div>';
-    return;
-  }
-
-  const CAT_LABEL = { FD6:'음식점', CE7:'카페', BK9:'주점' };
-  const CAT_COLOR = { FD6:'#e8362a', CE7:'#a9744f', BK9:'#f5a623' };
-
-  list.innerHTML = unique.slice(0, 12).map(p => {
-    const alreadyAdded = stores.some(s => s.kakaoId === p.id);
-    const catLabel = CAT_LABEL[p.category_group_code] || '기타';
-    const catColor = CAT_COLOR[p.category_group_code] || '#93a8a2';
-    const dist = p.distance ? p.distance + 'm' : '';
-    return `
-    <div class="picker-item ${alreadyAdded ? 'opacity-50' : ''}" onclick="${alreadyAdded ? '' : `importPlace(${JSON.stringify(p).replace(/"/g,"'")})`}">
-      <div class="picker-item-name">
-        ${p.place_name}
-        ${alreadyAdded ? '<span class="picker-item-badge" style="background:rgba(147,168,162,.2);color:#93a8a2">이미 추가됨</span>' : ''}
-      </div>
-      <div class="picker-item-meta">
-        <span class="picker-item-badge" style="background:${catColor}22;color:${catColor}">${catLabel}</span>
-        ${dist ? `<span style="margin-left:4px">${dist}</span>` : ''}
-        ${p.road_address_name ? `<span style="margin-left:4px;opacity:.7">${p.road_address_name}</span>` : ''}
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// 사람이 카카오맵/네이버지도 링크를 눌러 직접 확인한 뒤 결과를 반영.
-// API가 주지 않는 정보를 자동으로 지어내지 않고, 사용자의 확인 행위에만 의존한다.
-function markVerified(id, status) {
-  const s = stores.find(x => x.id === id);
-  if (!s) return;
-  s.status = status;
-  // 평점/리뷰/운영기간/임대료 등은 여전히 미상이므로 null로 남겨두고,
-  // 화면에서는 '정보 없음'으로 표시한다(있지도 않은 값을 추정해 넣지 않음).
-  if (s.score == null) s.score = status === 'closed' ? 30 : 50; // 표시용 최소값, 실측 아님을 UI에 명시
-  renderAll();
-  updateStats();
-  selectStore(id);
-  showToast(status === 'open' ? `✅ "${s.name}" 영업중으로 반영됨` : `🚫 "${s.name}" 폐업/휴업으로 반영됨`);
-}
-
-function importPlace(p) {
-  // Determine type from category
-  const CAT_TYPE = { FD6:'restaurant', CE7:'cafe', BK9:'bar' };
-  const type = CAT_TYPE[p.category_group_code] || 'retail';
-
-  const address = p.road_address_name || p.address_name || '';
-
-  // 주의: 카카오 로컬 API(keywordSearch/categorySearch)는 영업시간·실시간 영업 여부
-  // 필드를 제공하지 않는다 (공식문서: https://developers.kakao.com/docs/ko/local/dev-guide).
-  // 여기서 status를 'open'으로 임의 고정하면 실제로는 폐업/휴업인 곳도
-  // 무조건 '영업중'으로 뜨는 오류가 생긴다. 실제 영업 여부는 알 수 없으므로
-  // 정직하게 'unverified'(미확인)로 넣고, 카카오맵/네이버지도 링크로 사람이 직접 확인하게 한다.
-  const newStore = {
-    id: Date.now(),
-    kakaoId: p.id,
-    name: p.place_name,
-    type,
-    status: 'unverified',
-    lat: parseFloat(p.y),
-    lng: parseFloat(p.x),
-    rating: null,
-    reviews: null,
-    months: null,
-    rent: null,
-    score: null,
-    address,
-    kakaoUrl: p.place_url || null,
-    naverUrl: `https://map.naver.com/p/search/${encodeURIComponent(p.place_name + ' ' + address)}`,
-    insight: `카카오맵에서 불러온 업체입니다. 주소: ${address}. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.`,
-    reason: null,
-  };
-
-  stores.push(newStore);
-  trackAddition(newStore);
-  closePicker();
-  renderAll();
-  updateStats();
-  selectStore(newStore.id);
-
-  // Show toast
-  showToast(`✅ "${p.place_name}" 추가됨 — 영업 여부는 직접 확인해주세요`);
-}
-
-function showToast(msg) {
-  let t = document.getElementById('toast');
-  if (!t) {
-    t = document.createElement('div');
-    t.id = 'toast';
-    t.style.cssText = `position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
-      background:#2a0a0a;border:1px solid #4a0e0e;color:#ffffff;
-      font-size:12px;padding:10px 18px;border-radius:99px;z-index:999;
-      box-shadow:0 4px 16px rgba(20,60,50,.3);transition:opacity .3s;white-space:nowrap;`;
-    document.body.appendChild(t);
-  }
-  t.textContent = msg;
-  t.style.opacity = '1';
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.style.opacity = '0', 3000);
-}
-
-function searchNearby() {
-  if (!map) return;
-  const ps = new kakao.maps.services.Places();
-  const center = map.getCenter();
-  ps.keywordSearch('홍대 음식점', (data, status) => {
-    if (status !== kakao.maps.services.Status.OK) return;
-    data.slice(0,5).forEach(place => {
-      const pos = new kakao.maps.LatLng(place.y, place.x);
-      const infowindow = new kakao.maps.InfoWindow({
-        content: `<div class="kakao-infobox"><div class="ib-name">${place.place_name}</div><div class="ib-addr">${place.road_address_name||place.address_name}</div></div>`,
-        removable: true
-      });
-      const marker2 = new kakao.maps.Marker({ position: pos, map });
-      kakao.maps.event.addListener(marker2, 'click', () => infowindow.open(map, marker2));
-      markers.push(marker2);
-    });
-  }, { location: center, radius: 500 });
-}
-
-function resetView() {
-  if (map) map.setCenter(new kakao.maps.LatLng(37.556670, 126.923610));
-  if (map) map.setLevel(4);
-  boundsFilter = null;
-  const bar = document.getElementById('btn-search-area');
-  if (bar) bar.style.display = 'none';
-}
-
-// '이 지역에서 검색' — 현재 지도 화면에 보이는 매장만 한 번 걸러서 결과에 반영.
-// 지속되는 필터가 아니라 스냅샷이라, 카테고리를 바꾸거나 지도를 다시 옮기면 초기화됨.
-function searchThisArea() {
-  if (!map) return;
-  boundsFilter = map.getBounds();
-  renderList();
-  openResultsModal();
-  const bar = document.getElementById('btn-search-area');
-  if (bar) bar.style.display = 'none'; // 다음에 지도를 또 움직이기 전까진 다시 안 뜸
-  if (typeof showToast === 'function') showToast('현재 화면에 보이는 매장만 표시했어요');
-}
-
-// ── MODAL ─────────────────────────────────────────────
-function openModal(defaultStatus) {
-  document.getElementById('modal').style.display = 'flex';
-  // Default to Hongdae center
-  document.getElementById('f-lat').value = '37.556670';
-  document.getElementById('f-lng').value = '126.923610';
-  if (defaultStatus) document.getElementById('f-status').value = defaultStatus;
-}
-function closeModal() { document.getElementById('modal').style.display = 'none'; }
-
-function addStore() {
-  const name = document.getElementById('f-name').value.trim();
-  if (!name) return alert('상호명을 입력해주세요.');
-  const lat = parseFloat(document.getElementById('f-lat').value) || 37.556670;
-  const lng = parseFloat(document.getElementById('f-lng').value) || 126.923610;
-  const months = parseInt(document.getElementById('f-months').value) || null;
-  const status = document.getElementById('f-status').value;
-  const closedYear = document.getElementById('f-closed-year').value.trim();
-  const reporter = document.getElementById('f-reporter').value.trim();
-  const memoText = document.getElementById('f-insight').value.trim();
-
-  // 평점/리뷰/임대료 데이터가 없으니(실제로 알 수 없는 값), 억지로 점수를 만들어내지 않는다.
-  const newStore = {
-    id: Date.now(), name, type: document.getElementById('f-type').value,
-    status, lat, lng, rating: null, reviews: null, months, rent: null, score: null,
-    insight: memoText || '아직 제보된 내용이 없어요.',
-    signatureMenu: document.getElementById('f-signature-menu').value || '',
-    reason: document.getElementById('f-reason').value || null,
-    // "사라진 가게" 큐레이션에서 보여줄 추억 텍스트
-    memory: status === 'closed' ? (memoText || null) : null,
-    closedYear: closedYear || null,
-    reporter: reporter || null,
-  };
-  stores.push(newStore);
-  trackAddition(newStore);
-  closeModal();
-  renderAll();
-  updateStats();
-  selectStore(newStore.id);
-}
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
 </script>
 </body>
 </html>
