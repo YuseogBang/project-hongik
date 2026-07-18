@@ -967,6 +967,8 @@ function openSortModal() {
   updateSortOptionHighlight();
   syncSortModalResults();
 }
+// setFilter(카테고리 클릭)에서도 동일한 중앙 결과 배너를 띄우기 위한 별칭
+const openResultsModal = openSortModal;
 function closeSortModal() { document.getElementById('sort-modal').style.display = 'none'; }
 function updateSortOptionHighlight() {
   ['category','name','distance','default'].forEach(key => {
@@ -1922,6 +1924,8 @@ function setFilter(type, btn) {
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
   btn.classList.add('on');
   renderList();
+  // 카테고리를 고르면 결과가 사이드바에 묻히지 않고, 항상 화면 중앙 배너로 바로 보이게 한다.
+  openResultsModal();
 }
 // "전체" 클릭 시: 전체 필터 적용 + 대표 몇 개만 보이던 상세 카테고리 목록을 펼침/접음
 function toggleAllCategories(btn) {
