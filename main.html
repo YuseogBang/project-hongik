@@ -928,6 +928,15 @@ let stores = [
 let map, markers = [], storeMarkers = [], clusterer, overlay, hoverOverlay, showMarkers = true;
 let currentFilter = 'all', searchText = '', selectedId = null;
 let boundsFilter = null; // '이 지역에서 검색' 클릭 시 현재 지도 화면(bounds)으로 한 번 좁혀서 보여줌
+// 아래 4개는 원래 각자 쓰이는 함수 바로 위에 선언돼 있었는데, 카카오맵 로드 콜백이
+// (네트워크 상황에 따라) 동기적으로 바로 실행되면서 "선언되기도 전에" 이 변수들을
+// 참조해버리는 경우가 있어 ReferenceError가 났음. 그래서 아예 맨 앞으로 옮겨둠.
+let verifyQueue = [];      // 카카오 실존 검증 대기열
+let verifyRunning = false;
+let verifiedCount = 0;
+let removedCount = 0;
+let lastFilteredCount = 0; // 필터링된 매장 개수("가게 N곳 보기" 버튼에 표시)
+let activeDetailFilters = new Set(); // 복수 선택된 상세 필터(예: cuisine:한식, dong:서교동)
 
 // ── 몰랐던 홍대 상식 (전부 검증된 사실만) ────────────────
 const TRIVIA = [
@@ -1475,10 +1484,6 @@ window.kakao && kakao.maps.load(() => {
 
 // ── 카카오 실존 검증 엔진 ──────────────────────────────
 // 배치 단위로 업체명+좌표를 카카오 Places에 검색, 실존 확인 + 실제 데이터 채움
-let verifyQueue = [];
-let verifyRunning = false;
-let verifiedCount = 0;
-let removedCount = 0;
 
 function verifyStoresWithKakao() {
   // unverified 상태인 것만
@@ -1823,7 +1828,6 @@ function renderListImpl() {
 
 // 필터를 고를 때마다 곧장 리스트를 열지 않고, 몇 개가 나왔는지부터 하단에 알려줌.
 // (네이버지도의 "결과보기 00건" 버튼과 같은 역할 — 사용자가 직접 눌러야 전체 리스트로 넘어감)
-let lastFilteredCount = 0;
 function updateResultsBar() {
   const bar = document.getElementById('btn-view-results');
   const countEl = document.getElementById('results-count');
@@ -2050,7 +2054,6 @@ function selectStore(id) {
 
 // ── FILTER / SEARCH ───────────────────────────────────
 // ── 복수 카테고리 동시 선택 (예: 서교동 + 한식을 같이 켜면 두 조건 다 만족하는 곳만) ──
-let activeDetailFilters = new Set();
 function toggleDetailFilter(key, btn) {
   if (activeDetailFilters.has(key)) {
     activeDetailFilters.delete(key);
