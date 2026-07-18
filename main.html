@@ -23,6 +23,8 @@
     --card-r: 14px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  button { outline: none; }
+  button:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
   html, body { max-width: 100vw; overflow-x: hidden; }
   body {
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif; color: var(--text);
@@ -101,6 +103,15 @@
   .search-result-type { margin-left:auto; color:var(--muted); font-size:11px; flex:none; }
   .search-empty { padding:16px 14px; color:var(--muted); font-size:12px; text-align:center; }
 
+  /* 지도 위에 항상 떠있는 카테고리 바 — 사이드바를 안 열어도 바로 필터링 가능하게 함 */
+  .category-bar {
+    display: flex; gap: 7px; overflow-x: auto; padding: 9px 16px;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    flex-shrink: 0; scrollbar-width: none;
+  }
+  .category-bar::-webkit-scrollbar { display: none; }
+  .category-bar .chip { flex: none; white-space: nowrap; padding: 6px 13px; font-size: 12px; }
+
   /* LAYOUT */
   .layout { display: flex; flex: 1; overflow: hidden; }
 
@@ -164,23 +175,13 @@
     padding: 3px 9px; /* 테두리가 1px→2px로 두꺼워진 만큼 보정해서 전체 크기는 그대로 유지 */
   }
 
-  /* 영업 상태 구간 토글 (전체 / 영업중 / 폐업) */
-  .seg-toggle {
-    display: flex; border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
-    background: #330b12; margin: 10px 0 2px;
+  /* '카테고리 보기' 토글 버튼 — 예전엔 작은 칩 하나였는데, 눌러서 아래 카테고리 목록을
+     펼치고 접는 역할이 명확히 보이도록 폭을 넓히고 화살표 아이콘을 붙임 */
+  .chip-category-toggle {
+    width: 100%; text-align: left; display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px; font-size: 12.5px; font-weight: 600;
   }
-  .seg-btn {
-    flex: 1; height: 40px; border: none; cursor: pointer; background: transparent;
-    color: var(--muted); font-size: 12px; font-weight: 500; font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
-    transition: all .15s;
-  }
-  .seg-btn:hover { color: var(--text); }
-  .seg-btn.on {
-    background: rgba(232,54,42,.18); color: #fff; font-weight: 700;
-    box-shadow: inset 0 0 0 2px var(--accent); border-radius: 12px;
-  }
-  .seg-btn:active { opacity: .85; }
-  @media (max-width: 640px) { .seg-btn { height: 44px; font-size: 12.5px; } }
+  .chip-caret { display: inline-block; transition: transform .2s ease; font-size: 10px; }
 
   .store-list { padding: 8px; }
   .store-list::-webkit-scrollbar { width: 4px; }
@@ -246,13 +247,30 @@
     background: var(--text); color: var(--bg); font-size: 12.5px; font-weight: 700;
     cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.4);
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif; white-space: nowrap;
-    display: inline-flex; align-items: center; gap: 6px; transition: all .15s;
+    display: none; align-items: center; gap: 6px; transition: transform .15s, opacity .15s;
+    animation: fadeSlideIn .2s ease;
   }
+  @keyframes fadeSlideIn { from { opacity:0; transform:translateX(-50%) translateY(-6px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
   .btn-search-area:hover { transform: translateX(-50%) scale(1.03); }
   .btn-search-area:active { transform: translateX(-50%) scale(.96); }
   @media (max-width: 640px) {
     .btn-search-area { height: 42px; font-size: 12px; top: 10px; }
   }
+
+  /* 필터를 고르면 바로 리스트가 뜨지 않고, "몇 개 나왔는지"부터 알려주는 플로팅 버튼 */
+  .btn-view-results {
+    position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 400;
+    height: 48px; padding: 0 26px; border-radius: 99px; border: none;
+    background: linear-gradient(135deg, var(--accent2), var(--accent)); color: #fff;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 6px 20px rgba(232,54,42,.45);
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; white-space: nowrap;
+    display: none; align-items: center; gap: 8px; transition: transform .15s;
+    animation: fadeSlideUp .2s ease;
+  }
+  .btn-view-results:hover { transform: translateX(-50%) scale(1.03); }
+  .btn-view-results:active { transform: translateX(-50%) scale(.96); }
+  @keyframes fadeSlideUp { from { opacity:0; transform:translateX(-50%) translateY(10px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
 
   /* LEGEND */
   .legend {
@@ -540,6 +558,7 @@
     }
 
     .topbar-search-row { padding: 8px 10px; }
+    .category-bar { padding: 7px 10px; gap: 6px; }
 
     .sidebar, .detail { width: 100vw; max-width: 100vw; }
     .sidebar-top { padding: 40px 12px 10px; }
@@ -598,6 +617,17 @@
   <div class="search-results" id="search-results"></div>
 </div>
 
+<div class="category-bar" id="category-bar">
+  <button class="chip on" id="catbar-all" onclick="selectCategoryBar('all', this)">전체</button>
+  <button class="chip" id="chip-restaurant" onclick="selectCategoryBar('restaurant', this)">🍜 음식점</button>
+  <button class="chip" id="chip-cafe" onclick="selectCategoryBar('cafe', this)">☕ 카페</button>
+  <button class="chip" id="chip-bar" onclick="selectCategoryBar('bar', this)">🍺 주점</button>
+  <button class="chip" onclick="selectCategoryBar('club', this)">🪩 클럽</button>
+  <button class="chip" onclick="selectCategoryBar('hof', this)">🏅 명예학식</button>
+  <button class="chip" onclick="selectCategoryBar('michelin', this)">🍽️ 미쉐린</button>
+  <button class="chip" onclick="selectCategoryBar('gone', this)">🪦 사라진 가게</button>
+</div>
+
 <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeSidebar()"></div>
 
 <div class="layout">
@@ -611,12 +641,9 @@
         <div class="trivia-text" id="trivia-text"></div>
       </div>
       <div class="filter-chips">
-        <button class="chip on" id="chip-all" onclick="toggleAllCategories(this)">전체</button>
-      </div>
-      <div class="seg-toggle" id="seg-status" role="group" aria-label="영업 상태">
-        <button class="seg-btn on" id="seg-status-all" onclick="setStatusFilter('all')">전체</button>
-        <button class="seg-btn" id="seg-status-open" onclick="setStatusFilter('open')">영업중</button>
-        <button class="seg-btn" id="seg-status-closed" onclick="setStatusFilter('closed')">폐업</button>
+        <button class="chip on chip-category-toggle" id="chip-all" onclick="toggleAllCategories(this)">
+          <span id="chip-all-label">카테고리 보기</span> <span class="chip-caret" id="chip-all-caret">▾</span>
+        </button>
       </div>
       <div id="all-categories-panel" style="display:none">
         <div class="filter-chips filter-group">
@@ -706,6 +733,10 @@
     </button>
 
     <button class="btn-home" onclick="resetView()" aria-label="홍대 중심으로 이동" title="홍대 중심">⌂</button>
+
+    <button class="btn-view-results" id="btn-view-results" onclick="openResultsModal()">
+      가게 <span id="results-count">0</span>곳 보기
+    </button>
 
     <div class="legend">
       <div class="legend-title">범례</div>
@@ -896,7 +927,6 @@ let stores = [
 
 let map, markers = [], storeMarkers = [], clusterer, overlay, hoverOverlay, showMarkers = true;
 let currentFilter = 'all', searchText = '', selectedId = null;
-let statusFilter = 'all'; // 'all' | 'open' | 'closed' — 상단 세그먼트 토글(전체/영업중/폐업)
 let boundsFilter = null; // '이 지역에서 검색' 클릭 시 현재 지도 화면(bounds)으로 한 번 좁혀서 보여줌
 
 // ── 몰랐던 홍대 상식 (전부 검증된 사실만) ────────────────
@@ -945,7 +975,7 @@ let currentLang = localStorage.getItem('lang') || 'ko';
 const I18N = {
   ko: {
     langBtn: '🌐 한국어', search: '업소명 검색...', taste: '🎯 내 취향 찾기', hof: '🏅 홍대생 명예학식', michelin: '🍽️ 미쉐린 가이드',
-    all: '전체', restaurant: '🍜 음식점', cafe: '☕ 카페', bar: '🍺 주점', liveclub: '🎤 라이브클럽', artsupply: '🎨 화방',
+    all: '전체', browseCategories: '카테고리 보기', restaurant: '🍜 음식점', cafe: '☕ 카페', bar: '🍺 주점', liveclub: '🎤 라이브클럽', artsupply: '🎨 화방',
     seogyo: '서교동', yeonnam: '연남동', hapjeong: '합정동', sangsu: '상수동',
     rip: '🪦 R.I.P', save: '♥ 저장', menuTitle: '메뉴',
     landingDesc: '취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.',
@@ -956,7 +986,7 @@ const I18N = {
   },
   en: {
     langBtn: '🌐 English', search: 'Search places...', taste: '🎯 Find my taste', hof: '🏅 Student favorites', michelin: '🍽️ Michelin Guide',
-    all: 'All', restaurant: '🍜 Restaurants', cafe: '☕ Cafes', bar: '🍺 Bars', liveclub: '🎤 Live Clubs', artsupply: '🎨 Art Supplies',
+    all: 'All', browseCategories: 'Categories', restaurant: '🍜 Restaurants', cafe: '☕ Cafes', bar: '🍺 Bars', liveclub: '🎤 Live Clubs', artsupply: '🎨 Art Supplies',
     seogyo: 'Seogyo-dong', yeonnam: 'Yeonnam-dong', hapjeong: 'Hapjeong-dong', sangsu: 'Sangsu-dong',
     rip: '🪦 R.I.P', save: '♥ Saved', menuTitle: 'Menu',
     landingDesc: 'Stop trusting reviews from people with different tastes.<br>We\'ll pick Hongdae spots that match yours.',
@@ -967,7 +997,7 @@ const I18N = {
   },
   zh: {
     langBtn: '🌐 中文', search: '搜索店铺...', taste: '🎯 寻找我的口味', hof: '🏅 学生推荐名店', michelin: '🍽️ 米其林指南',
-    all: '全部', restaurant: '🍜 餐厅', cafe: '☕ 咖啡店', bar: '🍺 酒吧', liveclub: '🎤 livehouse', artsupply: '🎨 美术用品店',
+    all: '全部', browseCategories: '分类浏览', restaurant: '🍜 餐厅', cafe: '☕ 咖啡店', bar: '🍺 酒吧', liveclub: '🎤 livehouse', artsupply: '🎨 美术用品店',
     seogyo: '西桥洞', yeonnam: '延南洞', hapjeong: '合井洞', sangsu: '上水洞',
     rip: '🪦 R.I.P', save: '♥ 收藏', menuTitle: '菜单',
     landingDesc: '别再因为别人的口味而失望了。<br>我们只为你挑选合你口味的弘大店铺。',
@@ -996,7 +1026,8 @@ function applyLang() {
   setText('btn-taste', t.taste);
   setText('chip-hof', t.hof);
   setText('chip-michelin', t.michelin);
-  setText('chip-all', t.all);
+  setText('chip-all-label', t.browseCategories);
+  setText('catbar-all', t.all);
   setText('chip-restaurant', t.restaurant);
   setText('chip-cafe', t.cafe);
   setText('chip-bar', t.bar);
@@ -1428,6 +1459,13 @@ window.kakao && kakao.maps.load(() => {
     }
   });
 
+  // 사용자가 지도를 직접 드래그했을 때만 '이 지역에서 검색' 버튼을 보여줌
+  // (resetView 등 코드로 지도를 옮기는 경우엔 안 뜸 — dragend는 사람이 손으로 끌 때만 발생)
+  kakao.maps.event.addListener(map, 'dragend', () => {
+    const bar = document.getElementById('btn-search-area');
+    if (bar) bar.style.display = 'inline-flex';
+  });
+
   // 초기 렌더 후 카카오 실존 검증 시작
   renderAll();
   updateStats();
@@ -1647,14 +1685,6 @@ function renderList() {
     // '이 지역에서 검색'으로 지도 화면을 좁혀뒀다면, 그 화면 밖 매장은 어떤 모드든 제외
     if (boundsFilter && !boundsFilter.contain(new kakao.maps.LatLng(s.lat, s.lng))) return false;
 
-    // 상단 세그먼트 토글(전체/영업중/폐업). 취향추천·명예학식 등 이미 정해진 큐레이션 모드,
-    // 그리고 '사라진 가게' 모드(정의상 이미 폐업만 보여줌)에는 겹쳐 적용하지 않음.
-    const skipStatusToggle = isGoneMode || isTasteMode || isHallOfFameMode || isMichelinMode || isCenturyMode || isRepresentativeMode;
-    if (!skipStatusToggle && statusFilter !== 'all') {
-      if (statusFilter === 'open' && s.status === 'closed') return false; // 영업중 = 폐업 확정 아닌 곳(미확인 포함)
-      if (statusFilter === 'closed' && s.status !== 'closed') return false; // 폐업 = 폐업 확정된 곳만
-    }
-
     if (isTasteMode) return s.tags && matchScore(s) > 0; // 취향 모드는 unverified 여부와 무관하게 태그 매칭만 봄
     if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
     if (isHallOfFameMode) return (s.certifications || []).includes('홍대생 명예학식');
@@ -1777,6 +1807,24 @@ function renderList() {
         </div>
       </div>`;
     }).join(''));
+
+  lastFilteredCount = filtered.length;
+  updateResultsBar();
+}
+
+// 필터를 고를 때마다 곧장 리스트를 열지 않고, 몇 개가 나왔는지부터 하단에 알려줌.
+// (네이버지도의 "결과보기 00건" 버튼과 같은 역할 — 사용자가 직접 눌러야 전체 리스트로 넘어감)
+let lastFilteredCount = 0;
+function updateResultsBar() {
+  const bar = document.getElementById('btn-view-results');
+  const countEl = document.getElementById('results-count');
+  if (!bar) return;
+  if (lastFilteredCount > 0) {
+    if (countEl) countEl.textContent = lastFilteredCount;
+    bar.style.display = 'flex';
+  } else {
+    bar.style.display = 'none';
+  }
 }
 
 function updateStats() {
@@ -2028,7 +2076,6 @@ function applyDetailFilterState() {
     if (allBtn) allBtn.classList.add('on');
   }
   renderList();
-  openResultsModal();
 }
 function clearDetailFilters(btn) {
   activeDetailFilters.clear();
@@ -2037,7 +2084,6 @@ function clearDetailFilters(btn) {
   const allBtn = document.getElementById('chip-all');
   if (allBtn) allBtn.classList.add('on');
   renderList();
-  openResultsModal();
 }
 // 매장 s가 다중 필터 key 하나(예: 'cuisine:한식', 'dong:서교동', 'type:club', 'cert:michelin') 조건을 만족하는지 확인
 function matchesDetailFilter(s, key) {
@@ -2057,30 +2103,32 @@ function matchesDetailFilter(s, key) {
   return false;
 }
 
+// 지도 위에 항상 떠있는 카테고리 바 전용 핸들러.
+// 사이드바를 열지 않아도 바로 필터링되게 하는 게 목적이라, 한 번에 하나만 선택되는
+// 단순한 방식으로 만듦(구글맵 상단 카테고리 버튼과 같은 방식).
+function selectCategoryBar(key, btn) {
+  activeDetailFilters.clear();
+  boundsFilter = null;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  if (key === 'club') { activeDetailFilters.add('type:club'); currentFilter = 'detailFilters'; }
+  else if (key === 'hof') { activeDetailFilters.add('cert:hallOfFame'); currentFilter = 'detailFilters'; }
+  else if (key === 'michelin') { activeDetailFilters.add('cert:michelin'); currentFilter = 'detailFilters'; }
+  else if (key === 'gone') { currentFilter = 'gone'; }
+  else { currentFilter = key; } // 'all' | 'restaurant' | 'cafe' | 'bar'
+  renderList();
+}
+
 function setFilter(type, btn) {
   currentFilter = type;
   activeDetailFilters.clear(); // 단일 카테고리를 새로 고르면 다중 선택 상태는 초기화
   boundsFilter = null; // 카테고리를 새로 고르면 '이 지역에서 검색'으로 좁혀둔 범위는 초기화
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
   btn.classList.add('on');
+  // 카테고리를 고르면 곧장 리스트를 열지 않고, "가게 N곳 보기" 버튼으로 몇 개인지부터 보여준다.
   renderList();
-  // 카테고리를 고르면 결과가 사이드바에 묻히지 않고, 항상 화면 중앙 배너로 바로 보이게 한다.
-  openResultsModal();
 }
-// 영업 상태 세그먼트 토글 (전체 / 영업중 / 폐업) — 카테고리 선택과 별개로 겹쳐서 적용됨
-// 참고: 대부분의 매장이 아직 'unverified'(영업 여부 미확인) 상태라, '영업중'은
-// "폐업으로 확인되지 않은 곳(unverified 포함)", '폐업'은 "폐업으로 확인된 곳"만 의미함.
-function setStatusFilter(key) {
-  statusFilter = key;
-  boundsFilter = null;
-  ['all','open','closed'].forEach(k => {
-    const el = document.getElementById(`seg-status-${k}`);
-    if (el) el.classList.toggle('on', k === key);
-  });
-  renderList();
-  openResultsModal();
-}
-// "전체" 클릭 시: 전체 필터 적용 + 대표 몇 개만 보이던 상세 카테고리 목록을 펼침/접음
+// "카테고리 보기" 클릭 시: 전체 필터 적용 + 상세 카테고리 목록을 펼침/접음
 function toggleAllCategories(btn) {
   try {
     setFilter('all', btn);
@@ -2089,7 +2137,10 @@ function toggleAllCategories(btn) {
   }
   try {
     const panel = document.getElementById('all-categories-panel');
-    if (panel) panel.style.display = (panel.style.display === 'none') ? '' : 'none';
+    const isOpening = panel && panel.style.display === 'none';
+    if (panel) panel.style.display = isOpening ? '' : 'none';
+    const caret = document.getElementById('chip-all-caret');
+    if (caret) caret.style.transform = isOpening ? 'rotate(180deg)' : 'rotate(0deg)';
   } catch (e) {
     console.error('toggleAllCategories - panel 토글 오류:', e);
   }
@@ -2125,21 +2176,22 @@ function goDirections() {
   window.open(`https://map.kakao.com/link/by/walk/${origin}/${destination}`, '_blank', 'noopener');
 }
 
-function showBookmarks() {
+// 상단바 ♥ 버튼 — 저장한 장소 보기. 다른 필터들과 동일하게 "결과 N곳 보기" 버튼으로 안내
+// (예전엔 이 버튼만 사이드바를 강제로 열었는데, 경로를 하나로 통일함)
+function showBookmarks(btn) {
   currentFilter = 'bookmarks';
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  if (btn) btn.classList.add('on');
   renderList();
-  document.getElementById('sidebar').classList.add('open');
-  updateBackdrop();
 }
 
-// 폐업/사라진 가게 큐레이션 — 홍대에서 없어진, 추억의 장소를 모아 보여줌
-function showGoneStores() {
+// 상단바 🪦 버튼 / 카테고리 바 "사라진 가게" — 폐업/사라진 가게 큐레이션.
+// 홍대에서 없어진, 추억의 장소를 모아 보여줌 (마찬가지로 결과 N곳 보기 버튼으로 안내)
+function showGoneStores(btn) {
   currentFilter = 'gone';
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  if (btn) btn.classList.add('on');
   renderList();
-  document.getElementById('sidebar').classList.add('open');
-  updateBackdrop();
 }
 
 // ── MAP CONTROLS ──────────────────────────────────────
@@ -2424,15 +2476,20 @@ function searchNearby() {
 function resetView() {
   if (map) map.setCenter(new kakao.maps.LatLng(37.556670, 126.923610));
   if (map) map.setLevel(4);
+  boundsFilter = null;
+  const bar = document.getElementById('btn-search-area');
+  if (bar) bar.style.display = 'none';
 }
 
-// '이 지역에서 검색' — 현재 지도 화면에 보이는 매장만 한 번 걸러서 중앙 결과 모달로 보여줌.
-// 지속되는 필터가 아니라 스냅샷이라, 카테고리를 바꾸거나 모달을 닫으면 초기화됨.
+// '이 지역에서 검색' — 현재 지도 화면에 보이는 매장만 한 번 걸러서 결과에 반영.
+// 지속되는 필터가 아니라 스냅샷이라, 카테고리를 바꾸거나 지도를 다시 옮기면 초기화됨.
 function searchThisArea() {
   if (!map) return;
   boundsFilter = map.getBounds();
   renderList();
   openResultsModal();
+  const bar = document.getElementById('btn-search-area');
+  if (bar) bar.style.display = 'none'; // 다음에 지도를 또 움직이기 전까진 다시 안 뜸
   if (typeof showToast === 'function') showToast('현재 화면에 보이는 매장만 표시했어요');
 }
 
