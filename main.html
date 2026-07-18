@@ -318,37 +318,6 @@
   .detail-body { padding: 14px; display: flex; flex-direction: column; gap: 14px; }
   .section-title { font-size: 10px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
 
-  .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .metric { background: var(--surface2); border-radius: 8px; padding: 10px 12px; }
-  .metric-val { font-size: 20px; font-weight: 700; font-family: 'DM Mono', monospace; }
-  .metric-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; }
-  .metric-val.good { color: var(--success); }
-  .metric-val.bad { color: var(--danger); }
-  .metric-val.warn { color: var(--warn); }
-
-  .insight-card {
-    background: var(--surface2); border-radius: 8px; padding: 12px;
-    border-left: 3px solid var(--accent); font-size: 12px; color: var(--muted); line-height: 1.7;
-  }
-  .insight-card.danger { border-color: var(--danger); }
-  .insight-card.warn { border-color: var(--warn); }
-  .insight-label { font-size: 11px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
-
-  .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
-  .compare-row:last-child { border: none; }
-  .compare-label { color: var(--muted); }
-  .compare-val { font-family: 'DM Mono', monospace; font-size: 11px; }
-  .up { color: var(--success); }
-  .down { color: var(--danger); }
-
-  .ai-btn {
-    width: 100%; padding: 10px; border-radius: 8px;
-    border: 1px solid var(--accent); background: rgba(232,54,42,.12);
-    color: var(--accent); font-size: 12px; font-weight: 500;
-    cursor: pointer; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; transition: all .15s;
-  }
-  .ai-btn:hover { background: rgba(232,54,42,.25); }
-
   /* LANDING */
   .landing-overlay {
     position: fixed; inset: 0; z-index: 500;
@@ -716,7 +685,7 @@
   <div class="modal" style="display:flex; flex-direction:column;">
     <div class="feed-handle"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex:none">
-      <h4 style="margin:0">🔀 정렬해서 보기</h4>
+      <h4 style="margin:0">정렬해서 보기</h4>
       <button class="sidebar-close" style="position:static" onclick="closeSortModal()">✕</button>
     </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;flex:none">
@@ -1910,8 +1879,10 @@ function selectStore(id) {
   const dc = document.getElementById('detail-content');
   dc.style.display = 'block';
 
-  // unverified: 검증 대기 패널 — Claude Design 시안(카드 A 민트클린 / 카드 B 레드로드) 반영
-  if (s.status === 'unverified') {
+  // 캡션 카드 — 폐업이 확인된 곳(아래 별도 R.I.P 카드)만 빼고 전부 이 스타일로 통일.
+  // 예전엔 '실제 평점/임대료 데이터가 있는 곳'만 따로 상권분석 패널(핵심지표/임대료분석/AI분석 등)을
+  // 보여줬는데, 그 데이터 자체가 실제로는 없는 추정치였고 계속 혼란을 줘서 완전히 없앰.
+  if (s.status !== 'closed') {
     // 카카오/네이버 지도 API는 실시간 영업 여부·영업시간 필드를 제공하지 않으므로,
     // 자동 판정 대신 사람이 링크를 눌러 직접 확인 후 상태를 반영하는 방식으로 처리한다.
     const kakaoUrl = s.kakaoUrl || `https://map.kakao.com/?q=${encodeURIComponent(s.name + ' ' + (s.address||s.dong||''))}`;
@@ -2036,69 +2007,6 @@ function selectStore(id) {
       </div>`;
     return;
   }
-
-  const scoreColor = getScoreColor(s.score);
-  const sameType = stores.filter(x=>x.type===s.type && x.rating!=null);
-  const avgRating = sameType.length ? (sameType.reduce((a,x)=>a+x.rating,0)/sameType.length).toFixed(1) : s.rating;
-  const verifiedStores = stores.filter(x=>x.status!=='unverified');
-  const rankMonths = [...verifiedStores].sort((a,b)=>b.months-a.months).findIndex(x=>x.id===s.id)+1;
-  const rentClass = s.rent > 400 ? 'bad' : s.rent > 250 ? 'warn' : 'good';
-  const kakaoLink = s.kakaoUrl ? `<a href="${s.kakaoUrl}" target="_blank" style="font-size:10px;color:var(--accent2);text-decoration:none;">카카오맵에서 보기 ↗</a>` : '';
-  const bm = !!bookmarks[s.id];
-
-  dc.innerHTML = `
-    <div class="detail-header" style="position:relative">
-      <div class="detail-name">${s.name}</div>
-      <button onclick="toggleBookmark(${s.id})" aria-label="저장한 장소에 추가" style="position:absolute;top:14px;right:42px;width:32px;height:32px;border-radius:50%;border:1px solid #e8362a;cursor:pointer;background:${bm?'#e8362a':'var(--surface2)'};color:#fff;font-size:15px">${bm?'♥':'♡'}</button>
-      <div class="detail-sub">
-        ${TYPES[s.type]||s.type}
-        <span class="status-badge badge-${s.status}">${STATUS[s.status]||s.status}</span>
-        ${s.score>=80?'<span style="font-size:10px;color:#e8362a">★ 우수업소</span>':''}
-        ${kakaoLink}
-      </div>
-      ${s.address ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">📍 ${s.address}</div>` : ''}
-    </div>
-    <div class="detail-body">
-
-      <div>
-        <div class="section-title">핵심 지표</div>
-        <div class="metrics">
-          <div class="metric"><div class="metric-val ${s.rating==null?'':(s.rating>=4.2?'good':s.rating>=3.5?'warn':'bad')}">${s.rating!=null?'★'+s.rating:'정보 없음'}</div><div class="metric-lbl">카카오 평점</div></div>
-          <div class="metric"><div class="metric-val">${s.months!=null?s.months+'m':'정보 없음'}</div><div class="metric-lbl">운영 기간</div></div>
-          <div class="metric"><div class="metric-val">${s.reviews!=null?s.reviews:'정보 없음'}</div><div class="metric-lbl">리뷰 수</div></div>
-          <div class="metric"><div class="metric-val" style="color:${scoreColor}">${s.score!=null?s.score:'-'}</div><div class="metric-lbl">생존력 점수(참고용)</div></div>
-        </div>
-      </div>
-
-      ${s.rent ? `
-      <div>
-        <div class="section-title">임대료 분석</div>
-        <div class="metrics">
-          <div class="metric"><div class="metric-val ${rentClass}">${s.rent}만</div><div class="metric-lbl">월 임대료 추정</div></div>
-          <div class="metric"><div class="metric-val ${s.rent > s.rating * 80 ? 'bad' : 'good'}">${(s.rent/s.months).toFixed(1)}</div><div class="metric-lbl">월평균 임대부담</div></div>
-        </div>
-      </div>` : ''}
-
-      <div>
-        <div class="section-title">업소 인사이트</div>
-        <div class="insight-card ${s.status==='closed'?'danger':s.status==='risk'?'warn':''}">
-          <div class="insight-label">${s.status==='closed'?'🔴 폐점 분석':s.status==='risk'?'🟡 위험 신호':'🟢 운영 현황'}</div>
-          ${s.insight}
-          ${s.reason ? `<div style="margin-top:8px;font-size:11px;color:#e17055">▸ 폐점 원인: ${REASONS[s.reason]}</div>` : ''}
-        </div>
-      </div>
-
-      <div>
-        <div class="section-title">상권 내 비교</div>
-        <div class="compare-row"><span class="compare-label">동종 업종 평균 평점</span><span class="compare-val ${s.rating!=null && s.rating>=avgRating?'up':'down'}">${s.rating!=null ? `${avgRating} 대비 ${s.rating>=avgRating?'▲':'▼'} ${Math.abs(s.rating-avgRating).toFixed(1)}` : '정보 없음'}</span></div>
-        <div class="compare-row"><span class="compare-label">운영 기간 순위</span><span class="compare-val">${rankMonths}위 / ${verifiedStores.length}개</span></div>
-        <div class="compare-row"><span class="compare-label">리뷰 활성도</span><span class="compare-val ${s.reviews>200?'up':'down'}">${s.reviews>200?'활발':'낮음'} (${s.reviews}개)</span></div>
-        <div class="compare-row"><span class="compare-label">생존력 점수</span><span class="compare-val" style="color:${scoreColor}">${s.score}점 / 100</span></div>
-      </div>
-
-      <button class="ai-btn" onclick="sendPrompt('${s.name} 업소 분석: 업종=${TYPES[s.type]||s.type}, 상태=${STATUS[s.status]||s.status}, 평점=${s.rating}, 운영기간=${s.months}개월, 리뷰수=${s.reviews}, 생존력점수=${s.score}, 주소=${s.address||s.dong}. 이 데이터를 바탕으로 이 업소의 상권 내 경쟁력과 향후 전망, 부동산 가치 측면에서의 분석을 해줘.')">🤖 AI 심층 분석 요청 ↗</button>
-    </div>
-  `;
 }
 
 
