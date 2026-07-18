@@ -1666,6 +1666,14 @@ function renderMarkers() {
 }
 
 function renderList() {
+  try {
+    renderListImpl();
+  } catch (e) {
+    console.error('renderList 오류:', e);
+    if (typeof showToast === 'function') showToast('목록을 불러오는 중 오류가 발생했어요 (콘솔 확인)');
+  }
+}
+function renderListImpl() {
   const list = document.getElementById('store-list');
   const dongFilters = ['서교동','연남동','합정동','상수동'];
   const isDongFilter = dongFilters.includes(currentFilter);
@@ -1692,7 +1700,7 @@ function renderList() {
     if (isMichelinMode) return (s.certifications || []).some(c => c.includes('미쉐린'));
     if (isCenturyMode) return isCenturyStore(s);
     if (isRepresentativeMode) return s.tags && s.tags.length > 0; // 취향 태그가 붙어있는 프로토타입 40곳
-    if (isDetailFiltersMode) return [...activeDetailFilters].every(key => matchesDetailFilter(s, key)); // 복수 선택 — 전부 만족해야 함(AND)
+    if (isDetailFiltersMode) return matchesActiveDetailFilters(s); // 복수 선택 — 같은 종류끼리는 OR, 다른 종류끼리는 AND
     if (isCuisineMode) {
       const want = currentFilter.split(':')[1];
       const label = cuisineLabel(s);
@@ -2053,16 +2061,13 @@ function toggleDetailFilter(key, btn) {
   }
   applyDetailFilterState();
 }
-// 한식/중식/일식/양식/글로벌은 이 그룹 안에서 하나만 선택되게 (라디오처럼 동작)
+// 한식/중식/일식/양식/글로벌 — 이제 여러 개를 동시에 선택할 수 있음(토글 방식)
 function toggleCuisineFilter(value, btn) {
   const key = 'cuisine:' + value;
-  const wasOn = activeDetailFilters.has(key);
-  document.querySelectorAll('[data-filter-group="cuisine"]').forEach(b => {
-    const k = b.getAttribute('data-filter-key');
-    activeDetailFilters.delete(k);
-    b.classList.remove('on');
-  });
-  if (!wasOn) {
+  if (activeDetailFilters.has(key)) {
+    activeDetailFilters.delete(key);
+    btn.classList.remove('on');
+  } else {
     activeDetailFilters.add(key);
     btn.classList.add('on');
   }
@@ -2087,6 +2092,18 @@ function clearDetailFilters(btn) {
   const allBtn = document.getElementById('chip-all');
   if (allBtn) allBtn.classList.add('on');
   renderList();
+}
+// 여러 필터를 동시에 골랐을 때: 같은 종류(kind)끼리는 하나만 맞아도 통과(OR),
+// 종류가 다르면 그 종류들은 전부 만족해야 함(AND). 예) 한식+중식 선택 = 한식이거나 중식인 곳,
+// 한식+서교동 선택 = 서교동에 있는 한식집만.
+function matchesActiveDetailFilters(s) {
+  if (activeDetailFilters.size === 0) return true;
+  const groups = {};
+  activeDetailFilters.forEach(key => {
+    const kind = key.split(':')[0];
+    (groups[kind] = groups[kind] || []).push(key);
+  });
+  return Object.values(groups).every(keys => keys.some(k => matchesDetailFilter(s, k)));
 }
 // 매장 s가 다중 필터 key 하나(예: 'cuisine:한식', 'dong:서교동', 'type:club', 'cert:michelin') 조건을 만족하는지 확인
 function matchesDetailFilter(s, key) {
