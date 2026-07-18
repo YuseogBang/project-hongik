@@ -131,7 +131,7 @@
     opacity: 0; pointer-events: none; transition: opacity .25s ease;
   }
   .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
-  .sidebar-top { padding: 14px 14px 10px; border-bottom: 1px solid var(--border); }
+  .sidebar-top { padding: 44px 14px 10px; border-bottom: 1px solid var(--border); }
   .search-box {
     display: flex; align-items: center; gap: 8px;
     background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
@@ -488,7 +488,7 @@
     .topbar-search-row { padding: 8px 10px; }
 
     .sidebar, .detail { width: 100vw; max-width: 100vw; }
-    .sidebar-top { padding: 10px 12px; }
+    .sidebar-top { padding: 40px 12px 10px; }
     .filter-chips { gap: 5px; }
     .filter-chips .chip { font-size: 10.5px; padding: 5px 9px; }
     .filter-group { margin-top: 11px; padding-top: 9px; }
@@ -572,7 +572,10 @@
         <button class="chip" onclick="setFilter('cafeSub:스페셜티',this)">🫘 스페셜티·로스터리</button>
       </div>
       <div class="filter-chips filter-group">
+        <button class="chip" onclick="setFilter('barSub:포차',this)">🏮 포차</button>
+        <button class="chip" onclick="setFilter('barSub:요리주점',this)">🍢 요리주점</button>
         <button class="chip" onclick="setFilter('barSub:바',this)">🍸 바</button>
+        <button class="chip" onclick="setFilter('barSub:헌팅포차',this)">💃 헌팅포차</button>
       </div>
       <div class="filter-chips filter-group">
         <button class="chip" id="chip-hof" onclick="setFilter('hallOfFame',this)">🏅 홍대생 명예학식</button>
