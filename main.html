@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>홍대 상권 분석 플랫폼</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjZmYxODNjIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiNlNjAwMjUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZjM2NTQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjI0IiBmaWxsPSJ1cmwoI2cpIi8+PHN2ZyB4PSIxNCIgeT0iMzAiIHdpZHRoPSI3MiIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDE4MCAxMDAiPjxjaXJjbGUgY3g9IjU1IiBjeT0iNjQiIHI9IjMwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMTUiLz48Y2lyY2xlIGN4PSIxMzciIGN5PSI2NCIgcj0iMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxNSIvPjxyZWN0IHg9IjE3IiB5PSIyMiIgd2lkdGg9Ijc2IiBoZWlnaHQ9IjE1IiByeD0iNy41IiBmaWxsPSIjZmZmIi8+PHJlY3QgeD0iNDgiIHk9IjAiIHdpZHRoPSIxNSIgaGVpZ2h0PSIzMCIgcng9IjcuNSIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjEzNyIgY3k9IjY0IiByPSI3IiBmaWxsPSIjZmZmIi8+PC9zdmc+PC9zdmc+">
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0837551521646a85388e11c7360953a9&libraries=services,clusterer"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
@@ -43,6 +44,11 @@
   }
   .logo { font-weight: 700; font-size: 15px; letter-spacing: -0.3px; }
   .logo span { color: var(--accent); }
+  .logo-lockup { display: flex; align-items: center; gap: 9px; }
+  .logo-divider { width: 1px; height: 20px; background: var(--border); flex: none; }
+  .logo-text { display: flex; flex-direction: column; line-height: 1.05; }
+  .logo-kr { font-size: 14px; font-weight: 800; letter-spacing: -.02em; }
+  .logo-en { font-size: 8px; font-weight: 600; letter-spacing: .18em; color: var(--accent2); }
   .brand-logo { display:block; flex:none; filter:drop-shadow(0 0 5px rgba(255,31,61,.45)); }
   .badge-live { font-size: 10px; background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 99px; font-family: 'DM Mono', monospace; }
   .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
@@ -156,10 +162,17 @@
   .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
   .filter-group { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
   .trivia-card {
+    position: relative;
     background: var(--surface2); border: 1px solid var(--border); border-radius: var(--card-r);
     padding: 11px 13px; margin-bottom: 12px; cursor: pointer; transition: border-color .15s;
   }
   .trivia-card:hover { border-color: var(--accent); }
+  .trivia-stamp {
+    position: absolute; top: -10px; right: -8px; width: 40px; height: 40px;
+    background: #f5ece7; border-radius: 50%; transform: rotate(-12deg);
+    box-shadow: 0 3px 10px rgba(0,0,0,.35); opacity: .92; pointer-events: none;
+  }
+  .trivia-stamp svg { display: block; width: 100%; height: 100%; }
   .trivia-label { font-size: 10px; font-weight: 700; color: var(--accent); margin-bottom: 5px; letter-spacing: .02em; }
   .trivia-text { font-size: 12px; line-height: 1.55; color: var(--text); }
   .chip {
@@ -516,6 +529,11 @@
   .loading-dot:nth-child(3) { animation-delay: .4s; }
   @keyframes pulse { 0%,100%{opacity:.3;transform:scale(.8)} 50%{opacity:1;transform:scale(1)} }
   .loading p { font-size: 13px; color: var(--muted); }
+  .loading-neon {
+    filter: drop-shadow(0 0 6px rgba(255,54,84,.9)) drop-shadow(0 0 18px rgba(255,24,60,.5));
+    animation: neonFlicker 2.6s infinite;
+  }
+  @keyframes neonFlicker { 0%,100%{opacity:1} 92%{opacity:1} 93%{opacity:.6} 94%{opacity:1} 97%{opacity:.8} 98%{opacity:1} }
 
   /* SEARCH RESULT INFO WINDOW */
   .kakao-infobox {
@@ -530,6 +548,8 @@
     .topbar { padding: 0 10px; gap: 8px; }
     .logo { font-size: 13px; }
     .brand-logo { width: 26px !important; height: 17px !important; }
+    .logo-divider, .logo-en { display: none; }
+    .logo-kr { font-size: 13px; }
     .topbar-right { gap: 6px; }
     .btn-bookmarks, .btn-directions, .btn-add {
       font-size: 11px; padding: 6px 9px;
@@ -575,13 +595,17 @@
 <!-- TOP BAR -->
 <div class="topbar">
   <button class="menu-btn" onclick="toggleSidebar()" title="메뉴">☰</button>
-  <div class="logo" style="letter-spacing:0.5px;display:flex;align-items:center;gap:8px">
-    <svg class="brand-logo" width="34" height="22" viewBox="0 0 180 100" aria-label="Hongdae Map logo" role="img">
+  <div class="logo logo-lockup">
+    <svg class="brand-logo" width="30" height="18" viewBox="0 0 180 100" aria-label="Hongdae Map logo" role="img">
       <defs><linearGradient id="header-logo-red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs>
       <circle cx="55" cy="62" r="31" fill="none" stroke="url(#header-logo-red)" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="url(#header-logo-red)" stroke-width="16"/>
       <path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="url(#header-logo-red)"/>
     </svg>
-    Hongdae Map
+    <span class="logo-divider"></span>
+    <div class="logo-text">
+      <div class="logo-kr">홍대맵</div>
+      <div class="logo-en">HONGDAE MAP</div>
+    </div>
   </div>
   <div class="topbar-right">
     <button class="btn-bookmarks" id="btn-taste-top" onclick="openTasteModal()" title="내 취향 찾기" style="background:#e8362a;border-color:#e8362a;color:#fff">🎯</button>
@@ -617,6 +641,15 @@
     <button class="sidebar-close" onclick="closeSidebar()">✕</button>
     <div class="sidebar-top">
       <div class="trivia-card" id="trivia-card" onclick="nextTrivia()">
+        <div class="trivia-stamp" aria-hidden="true">
+          <svg viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="64" fill="none" stroke="#e60025" stroke-width="3"/>
+            <circle cx="70" cy="70" r="55" fill="none" stroke="#e60025" stroke-width="1" stroke-dasharray="3 4"/>
+            <g transform="translate(34,46) scale(0.4)"><circle cx="55" cy="64" r="30" fill="none" stroke="#e60025" stroke-width="15"/><circle cx="137" cy="64" r="30" fill="none" stroke="#e60025" stroke-width="15"/><rect x="17" y="22" width="76" height="15" rx="7.5" fill="#e60025"/><rect x="48" y="0" width="15" height="30" rx="7.5" fill="#e60025"/><circle cx="137" cy="64" r="7" fill="#e60025"/></g>
+            <text x="70" y="34" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="2.5" fill="#e60025" font-family="Pretendard">HONGDAE</text>
+            <text x="70" y="114" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="2.5" fill="#e60025" font-family="Pretendard">SINCE 2026</text>
+          </svg>
+        </div>
         <div class="trivia-label">💡 <span id="trivia-label-text">몰랐던 홍대 상식</span></div>
         <div class="trivia-text" id="trivia-text"></div>
       </div>
@@ -689,6 +722,13 @@
   <!-- MAP -->
   <div class="map-wrap">
     <div class="loading" id="loading">
+      <svg class="loading-neon" width="120" height="67" viewBox="0 0 180 100" aria-label="Hongdae Map">
+        <circle cx="55" cy="64" r="30" fill="none" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="137" cy="64" r="30" fill="none" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
+        <path d="M24 29.5 H86" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
+        <path d="M55.5 7 V22" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="137" cy="64" r="5" fill="#ff6b7e"/>
+      </svg>
       <div class="loading-dots">
         <div class="loading-dot"></div>
         <div class="loading-dot"></div>
