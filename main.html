@@ -571,40 +571,43 @@
       </div>
       <div id="all-categories-panel" style="display:none">
         <div class="filter-chips filter-group">
-          <button class="chip" onclick="setFilter('cuisine:한식',this)">한식</button>
-          <button class="chip" onclick="setFilter('cuisine:중식',this)">중식</button>
-          <button class="chip" onclick="setFilter('cuisine:일식',this)">일식</button>
-          <button class="chip" onclick="setFilter('cuisine:양식',this)">양식</button>
-          <button class="chip" onclick="setFilter('cuisine:글로벌',this)">글로벌</button>
+          <button class="chip" onclick="toggleDetailFilter('cuisine:한식',this)">한식</button>
+          <button class="chip" onclick="toggleDetailFilter('cuisine:중식',this)">중식</button>
+          <button class="chip" onclick="toggleDetailFilter('cuisine:일식',this)">일식</button>
+          <button class="chip" onclick="toggleDetailFilter('cuisine:양식',this)">양식</button>
+          <button class="chip" onclick="toggleDetailFilter('cuisine:글로벌',this)">글로벌</button>
         </div>
         <div class="filter-chips filter-group">
-          <button class="chip" onclick="setFilter('cafeSub:작업카공',this)">☕ 작업·카공</button>
-          <button class="chip" onclick="setFilter('cafeSub:디저트',this)">🍰 디저트·베이커리</button>
-          <button class="chip" onclick="setFilter('cafeSub:스페셜티',this)">🫘 스페셜티·로스터리</button>
+          <button class="chip" onclick="toggleDetailFilter('cafeSub:작업카공',this)">☕ 작업·카공</button>
+          <button class="chip" onclick="toggleDetailFilter('cafeSub:디저트',this)">🍰 디저트·베이커리</button>
+          <button class="chip" onclick="toggleDetailFilter('cafeSub:스페셜티',this)">🫘 스페셜티·로스터리</button>
         </div>
         <div class="filter-chips filter-group">
-          <button class="chip" onclick="setFilter('barSub:포차',this)">🏮 포차</button>
-          <button class="chip" onclick="setFilter('barSub:요리주점',this)">🍢 요리주점</button>
-          <button class="chip" onclick="setFilter('barSub:바',this)">🍸 바</button>
-          <button class="chip" onclick="setFilter('barSub:헌팅포차',this)">💃 헌팅포차</button>
+          <button class="chip" onclick="toggleDetailFilter('barSub:포차',this)">🏮 포차</button>
+          <button class="chip" onclick="toggleDetailFilter('barSub:요리주점',this)">🍢 요리주점</button>
+          <button class="chip" onclick="toggleDetailFilter('barSub:바',this)">🍸 바</button>
+          <button class="chip" onclick="toggleDetailFilter('barSub:헌팅포차',this)">💃 헌팅포차</button>
         </div>
         <div class="filter-chips filter-group">
-          <button class="chip" onclick="setFilter('club',this)">🪩 클럽</button>
-          <button class="chip" onclick="setFilter('animeshop',this)">🎌 애니메이션샵</button>
-          <button class="chip" onclick="setFilter('entertainment',this)">🎡 엔터테인먼트</button>
-          <button class="chip" id="chip-artsupply" onclick="setFilter('artsupply',this)">🎨 화방</button>
+          <button class="chip" onclick="toggleDetailFilter('type:club',this)">🪩 클럽</button>
+          <button class="chip" onclick="toggleDetailFilter('type:animeshop',this)">🎌 애니메이션샵</button>
+          <button class="chip" onclick="toggleDetailFilter('type:entertainment',this)">🎡 엔터테인먼트</button>
+          <button class="chip" id="chip-artsupply" onclick="toggleDetailFilter('type:artsupply',this)">🎨 화방</button>
         </div>
         <div class="filter-chips filter-group">
-          <button class="chip" id="chip-sangsu" onclick="setFilter('상수동',this)">상수동</button>
-          <button class="chip" id="chip-seogyo" onclick="setFilter('서교동',this)">서교동</button>
-          <button class="chip" id="chip-yeonnam" onclick="setFilter('연남동',this)">연남동</button>
-          <button class="chip" id="chip-hapjeong" onclick="setFilter('합정동',this)">합정동</button>
+          <button class="chip" id="chip-sangsu" onclick="toggleDetailFilter('dong:상수동',this)">상수동</button>
+          <button class="chip" id="chip-seogyo" onclick="toggleDetailFilter('dong:서교동',this)">서교동</button>
+          <button class="chip" id="chip-yeonnam" onclick="toggleDetailFilter('dong:연남동',this)">연남동</button>
+          <button class="chip" id="chip-hapjeong" onclick="toggleDetailFilter('dong:합정동',this)">합정동</button>
+        </div>
+        <div style="padding:2px 4px 0">
+          <button class="chip" onclick="clearDetailFilters(this)" style="width:100%;text-align:center;color:var(--muted)">선택 초기화</button>
         </div>
       </div>
     </div>
-    <button id="sort-trigger-btn" onclick="openSortModal()" style="display:none;position:sticky;top:0;z-index:5;width:calc(100% - 16px);margin:0 8px 8px;padding:9px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;font-family:'Pretendard','Noto Sans KR',sans-serif;text-align:center">🔀 정렬</button>
+    <button id="sort-trigger-btn" onclick="openSortModal()" style="display:none !important;">🔀 정렬</button>
     <div id="empty-cat-notice" style="display:none;padding:8px 12px;font-size:10px;color:var(--muted)"></div>
-    <div class="store-list" id="store-list"></div>
+    <div class="store-list" id="store-list" style="display:none"></div>
   </div>
 
 <!-- SORT MODAL (화면 중앙에 뜨는 정렬 선택창) -->
@@ -1575,6 +1578,7 @@ function renderList() {
   const isCuisineMode = currentFilter.startsWith('cuisine:');
   const isCafeSubMode = currentFilter.startsWith('cafeSub:');
   const isBarSubMode = currentFilter.startsWith('barSub:');
+  const isDetailFiltersMode = currentFilter === 'detailFilters';
   const isCardMode = true; // 이제 모든 필터(전체 포함)가 태그 중심 카드 레이아웃을 씀 — 실제 평점/점수 없는 unverified 매장뿐이라 예전 점수바 레이아웃이 의미가 없었음
 
   let filtered = stores.filter(s => {
@@ -1584,6 +1588,7 @@ function renderList() {
     if (isMichelinMode) return (s.certifications || []).some(c => c.includes('미쉐린'));
     if (isCenturyMode) return isCenturyStore(s);
     if (isRepresentativeMode) return s.tags && s.tags.length > 0; // 취향 태그가 붙어있는 프로토타입 40곳
+    if (isDetailFiltersMode) return [...activeDetailFilters].every(key => matchesDetailFilter(s, key)); // 복수 선택 — 전부 만족해야 함(AND)
     if (isCuisineMode) {
       const want = currentFilter.split(':')[1];
       const label = cuisineLabel(s);
@@ -1602,7 +1607,7 @@ function renderList() {
   });
 
   // 가나다순(2순위 기준) — "많이 찾는 순"(인기순)은 실사용 데이터가 없어 아직 구현하지 않음
-  if (isCuisineMode || isCafeSubMode || isBarSubMode || currentFilter === 'club' || currentFilter === 'animeshop' || currentFilter === 'entertainment') {
+  if (isCuisineMode || isCafeSubMode || isBarSubMode || isDetailFiltersMode || currentFilter === 'club' || currentFilter === 'animeshop' || currentFilter === 'entertainment') {
     filtered.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
   }
 
@@ -1637,13 +1642,8 @@ function renderList() {
     ? `<button class="map-btn" style="width:100%;margin-bottom:10px" onclick="openModal('closed')">+ 사라진 가게 제보하기</button>`
     : '';
 
-  // 취향 매칭 모드를 제외한 모든 필터에서, 정렬 트리거 버튼을 스크롤 없이 항상 보이는 위치(상단 고정)에 둔다.
+  // 정렬 트리거 버튼/리스트는 왼쪽 사이드바에서 더 이상 노출하지 않음 — 결과는 항상 중앙 모달에서만 보여줌
   const sortLabelMap = { default:'기본', category:'카테고리순', name:'가나다순', distance:'거리순' };
-  const sortTriggerEl = document.getElementById('sort-trigger-btn');
-  if (sortTriggerEl) {
-    sortTriggerEl.style.display = showSortBar ? 'block' : 'none';
-    sortTriggerEl.textContent = `🔀 정렬: ${sortLabelMap[listSort] || '기본'}`;
-  }
 
   list.innerHTML = (isGoneMode ? goneAddButtonHtml : '') + (filtered.length === 0
     ? `<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">${emptyMsg}</div>`
@@ -1919,8 +1919,52 @@ function selectStore(id) {
 
 
 // ── FILTER / SEARCH ───────────────────────────────────
+// ── 복수 카테고리 동시 선택 (예: 서교동 + 한식을 같이 켜면 두 조건 다 만족하는 곳만) ──
+let activeDetailFilters = new Set();
+function toggleDetailFilter(key, btn) {
+  if (activeDetailFilters.has(key)) {
+    activeDetailFilters.delete(key);
+    btn.classList.remove('on');
+  } else {
+    activeDetailFilters.add(key);
+    btn.classList.add('on');
+  }
+  // 다중 필터를 하나라도 켜면 "detailFilters" 모드로, 다 끄면 전체 보기로 돌아감
+  currentFilter = activeDetailFilters.size > 0 ? 'detailFilters' : 'all';
+  if (activeDetailFilters.size === 0) {
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+    const allBtn = document.getElementById('chip-all');
+    if (allBtn) allBtn.classList.add('on');
+  }
+  renderList();
+  openResultsModal();
+}
+function clearDetailFilters(btn) {
+  activeDetailFilters.clear();
+  currentFilter = 'all';
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  const allBtn = document.getElementById('chip-all');
+  if (allBtn) allBtn.classList.add('on');
+  renderList();
+  openResultsModal();
+}
+// 매장 s가 다중 필터 key 하나(예: 'cuisine:한식', 'dong:서교동', 'type:club') 조건을 만족하는지 확인
+function matchesDetailFilter(s, key) {
+  const [kind, value] = key.split(':');
+  if (kind === 'cuisine') {
+    const label = cuisineLabel(s);
+    return s.type === 'restaurant' && (value === '글로벌' ? label === '아시아식' : label === value);
+  }
+  if (kind === 'cafeSub') return s.type === 'cafe' && cafeSubType(s) === value;
+  if (kind === 'barSub') return s.type === 'bar' && barSubType(s) === value;
+  if (kind === 'dong') return s.dong === value;
+  if (kind === 'type') return s.type === value;
+  return false;
+}
+
 function setFilter(type, btn) {
   currentFilter = type;
+  activeDetailFilters.clear(); // 단일 카테고리를 새로 고르면 다중 선택 상태는 초기화
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
   btn.classList.add('on');
   renderList();
