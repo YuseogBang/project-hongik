@@ -145,7 +145,7 @@
     opacity: 0; pointer-events: none; transition: opacity .25s ease;
   }
   .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
-  .sidebar-top { padding: 44px 14px 10px; border-bottom: 1px solid var(--border); }
+  .sidebar-top { padding: 44px 14px 100px; border-bottom: 1px solid var(--border); }
   .search-box {
     display: flex; align-items: center; gap: 8px;
     background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
@@ -174,14 +174,6 @@
     background: rgba(232,54,42,.18);
     padding: 3px 9px; /* 테두리가 1px→2px로 두꺼워진 만큼 보정해서 전체 크기는 그대로 유지 */
   }
-
-  /* '카테고리 보기' 토글 버튼 — 예전엔 작은 칩 하나였는데, 눌러서 아래 카테고리 목록을
-     펼치고 접는 역할이 명확히 보이도록 폭을 넓히고 화살표 아이콘을 붙임 */
-  .chip-category-toggle {
-    width: 100%; text-align: left; display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 12px; font-size: 12.5px; font-weight: 600;
-  }
-  .chip-caret { display: inline-block; transition: transform .2s ease; font-size: 10px; }
 
   .store-list { padding: 8px; }
   .store-list::-webkit-scrollbar { width: 4px; }
@@ -550,7 +542,7 @@
     .category-bar { padding: 7px 10px; gap: 6px; }
 
     .sidebar, .detail { width: 100vw; max-width: 100vw; }
-    .sidebar-top { padding: 40px 12px 10px; }
+    .sidebar-top { padding: 40px 12px 100px; }
     .filter-chips { gap: 5px; }
     .filter-chips .chip { font-size: 11px; padding: 7px 11px; }
     .filter-group { margin-top: 11px; padding-top: 9px; }
@@ -630,11 +622,9 @@
         <div class="trivia-text" id="trivia-text"></div>
       </div>
       <div class="filter-chips">
-        <button class="chip on chip-category-toggle" id="chip-all" onclick="toggleAllCategories(this)">
-          <span id="chip-all-label">카테고리 보기</span> <span class="chip-caret" id="chip-all-caret">▾</span>
-        </button>
+        <button class="chip on" id="chip-all" onclick="setFilter('all', this)">전체</button>
       </div>
-      <div id="all-categories-panel" style="display:none">
+      <div id="all-categories-panel">
         <div class="filter-chips filter-group">
           <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:한식" onclick="toggleCuisineFilter('한식',this)">한식</button>
           <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:중식" onclick="toggleCuisineFilter('중식',this)">중식</button>
@@ -1024,7 +1014,7 @@ function applyLang() {
   setText('btn-taste', t.taste);
   setText('chip-hof', t.hof);
   setText('chip-michelin', t.michelin);
-  setText('chip-all-label', t.browseCategories);
+  setText('chip-all', t.all);
   setText('catbar-all', t.all);
   setText('chip-restaurant', t.restaurant);
   setText('chip-cafe', t.cafe);
@@ -2108,23 +2098,6 @@ function setFilter(type, btn) {
   btn.classList.add('on');
   // 카테고리를 고르면 곧장 리스트를 열지 않고, "가게 N곳 보기" 버튼으로 몇 개인지부터 보여준다.
   renderList();
-}
-// "카테고리 보기" 클릭 시: 전체 필터 적용 + 상세 카테고리 목록을 펼침/접음
-function toggleAllCategories(btn) {
-  try {
-    setFilter('all', btn);
-  } catch (e) {
-    console.error('toggleAllCategories - setFilter 오류:', e);
-  }
-  try {
-    const panel = document.getElementById('all-categories-panel');
-    const isOpening = panel && panel.style.display === 'none';
-    if (panel) panel.style.display = isOpening ? '' : 'none';
-    const caret = document.getElementById('chip-all-caret');
-    if (caret) caret.style.transform = isOpening ? 'rotate(180deg)' : 'rotate(0deg)';
-  } catch (e) {
-    console.error('toggleAllCategories - panel 토글 오류:', e);
-  }
 }
 function filterList() {
   searchText = document.getElementById('search-input').value.trim();
