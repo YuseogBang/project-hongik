@@ -277,7 +277,7 @@
 
   /* DETAIL PANEL */
   .detail {
-    position: fixed; top: 52px; right: 0; bottom: 0; width: 320px; z-index: 300;
+    position: fixed; top: 52px; right: 0; bottom: 0; width: 320px; z-index: 600;
     background: var(--surface); border-left: 1px solid var(--border);
     overflow-y: auto; display: flex; flex-direction: column;
     transform: translateX(100%); transition: transform .25s ease;
@@ -599,7 +599,6 @@
 </div>
 
 <div class="category-bar" id="category-bar">
-  <button class="chip on" id="catbar-all" onclick="selectCategoryBar('all', this)">전체</button>
   <button class="chip" id="chip-restaurant" onclick="selectCategoryBar('restaurant', this)">🍜 음식점</button>
   <button class="chip" id="chip-cafe" onclick="selectCategoryBar('cafe', this)">☕ 카페</button>
   <button class="chip" id="chip-bar" onclick="selectCategoryBar('bar', this)">🍺 주점</button>
@@ -626,11 +625,11 @@
       </div>
       <div id="all-categories-panel">
         <div class="filter-chips filter-group">
-          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:한식" onclick="toggleCuisineFilter('한식',this)">한식</button>
-          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:중식" onclick="toggleCuisineFilter('중식',this)">중식</button>
-          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:일식" onclick="toggleCuisineFilter('일식',this)">일식</button>
-          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:양식" onclick="toggleCuisineFilter('양식',this)">양식</button>
-          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:글로벌" onclick="toggleCuisineFilter('글로벌',this)">글로벌</button>
+          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:한식" onclick="toggleCuisineFilter('한식',this)">🍚 한식</button>
+          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:중식" onclick="toggleCuisineFilter('중식',this)">🥟 중식</button>
+          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:일식" onclick="toggleCuisineFilter('일식',this)">🍣 일식</button>
+          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:양식" onclick="toggleCuisineFilter('양식',this)">🍝 양식</button>
+          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:글로벌" onclick="toggleCuisineFilter('글로벌',this)">🌏 글로벌</button>
         </div>
         <div class="filter-chips filter-group">
           <button class="chip" id="chip-hof" onclick="toggleDetailFilter('cert:hallOfFame',this)">🏅 홍대생 명예학식</button>
@@ -655,10 +654,10 @@
           <button class="chip" id="chip-artsupply" onclick="toggleDetailFilter('type:artsupply',this)">🎨 화방</button>
         </div>
         <div class="filter-chips filter-group">
-          <button class="chip" id="chip-sangsu" onclick="toggleDetailFilter('dong:상수동',this)">상수동</button>
-          <button class="chip" id="chip-seogyo" onclick="toggleDetailFilter('dong:서교동',this)">서교동</button>
-          <button class="chip" id="chip-yeonnam" onclick="toggleDetailFilter('dong:연남동',this)">연남동</button>
-          <button class="chip" id="chip-hapjeong" onclick="toggleDetailFilter('dong:합정동',this)">합정동</button>
+          <button class="chip" id="chip-sangsu" onclick="toggleDetailFilter('dong:상수동',this)">📍 상수동</button>
+          <button class="chip" id="chip-seogyo" onclick="toggleDetailFilter('dong:서교동',this)">📍 서교동</button>
+          <button class="chip" id="chip-yeonnam" onclick="toggleDetailFilter('dong:연남동',this)">📍 연남동</button>
+          <button class="chip" id="chip-hapjeong" onclick="toggleDetailFilter('dong:합정동',this)">📍 합정동</button>
         </div>
         <div class="filter-group" style="padding:12px 4px 0">
           <button class="chip" onclick="clearDetailFilters(this)" style="width:100%;text-align:center;color:var(--muted)">선택 초기화</button>
@@ -964,7 +963,7 @@ const I18N = {
   ko: {
     langBtn: '🌐 한국어', search: '업소명 검색...', taste: '🎯 내 취향 찾기', hof: '🏅 홍대생 명예학식', michelin: '🍽️ 미쉐린 가이드',
     all: '전체', browseCategories: '카테고리 보기', restaurant: '🍜 음식점', cafe: '☕ 카페', bar: '🍺 주점', liveclub: '🎤 라이브클럽', artsupply: '🎨 화방',
-    seogyo: '서교동', yeonnam: '연남동', hapjeong: '합정동', sangsu: '상수동',
+    seogyo: '📍 서교동', yeonnam: '📍 연남동', hapjeong: '📍 합정동', sangsu: '📍 상수동',
     rip: '🪦 R.I.P', save: '♥ 저장', menuTitle: '메뉴',
     landingDesc: '취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.',
     landingNote: '홍대 대표 맛집 40곳을 기준으로 취향을 매칭해드려요.',
@@ -975,7 +974,7 @@ const I18N = {
   en: {
     langBtn: '🌐 English', search: 'Search places...', taste: '🎯 Find my taste', hof: '🏅 Student favorites', michelin: '🍽️ Michelin Guide',
     all: 'All', browseCategories: 'Categories', restaurant: '🍜 Restaurants', cafe: '☕ Cafes', bar: '🍺 Bars', liveclub: '🎤 Live Clubs', artsupply: '🎨 Art Supplies',
-    seogyo: 'Seogyo-dong', yeonnam: 'Yeonnam-dong', hapjeong: 'Hapjeong-dong', sangsu: 'Sangsu-dong',
+    seogyo: '📍 Seogyo-dong', yeonnam: '📍 Yeonnam-dong', hapjeong: '📍 Hapjeong-dong', sangsu: '📍 Sangsu-dong',
     rip: '🪦 R.I.P', save: '♥ Saved', menuTitle: 'Menu',
     landingDesc: 'Stop trusting reviews from people with different tastes.<br>We\'ll pick Hongdae spots that match yours.',
     landingNote: 'Taste matching is based on 40 representative Hongdae spots.',
@@ -986,7 +985,7 @@ const I18N = {
   zh: {
     langBtn: '🌐 中文', search: '搜索店铺...', taste: '🎯 寻找我的口味', hof: '🏅 学生推荐名店', michelin: '🍽️ 米其林指南',
     all: '全部', browseCategories: '分类浏览', restaurant: '🍜 餐厅', cafe: '☕ 咖啡店', bar: '🍺 酒吧', liveclub: '🎤 livehouse', artsupply: '🎨 美术用品店',
-    seogyo: '西桥洞', yeonnam: '延南洞', hapjeong: '合井洞', sangsu: '上水洞',
+    seogyo: '📍 西桥洞', yeonnam: '📍 延南洞', hapjeong: '📍 合井洞', sangsu: '📍 上水洞',
     rip: '🪦 R.I.P', save: '♥ 收藏', menuTitle: '菜单',
     landingDesc: '别再因为别人的口味而失望了。<br>我们只为你挑选合你口味的弘大店铺。',
     landingNote: '取向匹配基于40家弘大代表性店铺。',
@@ -1015,7 +1014,6 @@ function applyLang() {
   setText('chip-hof', t.hof);
   setText('chip-michelin', t.michelin);
   setText('chip-all', t.all);
-  setText('catbar-all', t.all);
   setText('chip-restaurant', t.restaurant);
   setText('chip-cafe', t.cafe);
   setText('chip-bar', t.bar);
@@ -1861,6 +1859,9 @@ function selectStore(id) {
   if (!s) return;
   renderMarkers();
   renderList();
+  // 결과 피드에서 매장을 고르면, 피드에 가려지지 않고 바로 카드 배너로 넘어가게 피드는 닫음
+  const sortModal = document.getElementById('sort-modal');
+  if (sortModal && sortModal.style.display !== 'none') sortModal.style.display = 'none';
   openDetail();
 
   if (map) map.panTo(new kakao.maps.LatLng(s.lat, s.lng));
