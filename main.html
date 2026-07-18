@@ -966,9 +966,10 @@ function setListSort(key) {
   syncSortModalResults();
 }
 function openSortModal() {
-  document.getElementById('sort-modal').style.display = 'flex';
-  updateSortOptionHighlight();
-  syncSortModalResults();
+  const m = document.getElementById('sort-modal');
+  if (m) m.style.display = 'flex';
+  try { updateSortOptionHighlight(); } catch (e) { console.error('updateSortOptionHighlight 오류:', e); }
+  try { syncSortModalResults(); } catch (e) { console.error('syncSortModalResults 오류:', e); }
 }
 // setFilter(카테고리 클릭)에서도 동일한 중앙 결과 배너를 띄우기 위한 별칭
 const openResultsModal = openSortModal;
@@ -1973,9 +1974,17 @@ function setFilter(type, btn) {
 }
 // "전체" 클릭 시: 전체 필터 적용 + 대표 몇 개만 보이던 상세 카테고리 목록을 펼침/접음
 function toggleAllCategories(btn) {
-  setFilter('all', btn);
-  const panel = document.getElementById('all-categories-panel');
-  panel.style.display = (panel.style.display === 'none') ? '' : 'none';
+  try {
+    setFilter('all', btn);
+  } catch (e) {
+    console.error('toggleAllCategories - setFilter 오류:', e);
+  }
+  try {
+    const panel = document.getElementById('all-categories-panel');
+    if (panel) panel.style.display = (panel.style.display === 'none') ? '' : 'none';
+  } catch (e) {
+    console.error('toggleAllCategories - panel 토글 오류:', e);
+  }
 }
 function filterList() {
   searchText = document.getElementById('search-input').value.trim();
