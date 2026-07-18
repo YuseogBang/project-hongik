@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hongdae Map — 홍대의 모든 가게, 지도 위에서 한눈에</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjZmYxODNjIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiNlNjAwMjUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZjM2NTQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjI0IiBmaWxsPSJ1cmwoI2cpIi8+PHN2ZyB4PSIxNCIgeT0iMzAiIHdpZHRoPSI3MiIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDE4MCAxMDAiPjxjaXJjbGUgY3g9IjU1IiBjeT0iNjQiIHI9IjMwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMTUiLz48Y2lyY2xlIGN4PSIxMzciIGN5PSI2NCIgcj0iMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxNSIvPjxyZWN0IHg9IjE3IiB5PSIyMiIgd2lkdGg9Ijc2IiBoZWlnaHQ9IjE1IiByeD0iNy41IiBmaWxsPSIjZmZmIi8+PHJlY3QgeD0iNDgiIHk9IjAiIHdpZHRoPSIxNSIgaGVpZ2h0PSIzMCIgcng9IjcuNSIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjEzNyIgY3k9IjY0IiByPSI3IiBmaWxsPSIjZmZmIi8+PC9zdmc+PC9zdmc+">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -14,6 +15,7 @@
   button{font-family:inherit}
   @keyframes float1{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  @keyframes neonFlicker{0%,100%{opacity:1}92%{opacity:1}93%{opacity:.6}94%{opacity:1}97%{opacity:.8}98%{opacity:1}}
   [data-reveal]{opacity:0;transform:translateY(34px) scale(.985);transition:opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1)}
   [data-reveal].in{opacity:1;transform:none}
   .navlink{color:#c9b8b2;transition:color .15s}
@@ -27,9 +29,13 @@
 <div style="min-height:100vh;background:#2b070c;overflow-x:hidden">
 
 <header style="position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(20,16,16,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(58,42,42,.6)">
-  <a href="#top" style="display:flex;align-items:center;gap:9px;font-weight:800;font-size:16px;letter-spacing:-.3px">
-    <svg width="30" height="19" viewBox="0 0 180 100" role="img" aria-label="Hongdae Map logo"><defs><linearGradient id="hlogo" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs><circle cx="55" cy="62" r="31" fill="none" stroke="url(#hlogo)" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="url(#hlogo)" stroke-width="16"/><path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="url(#hlogo)"/></svg>
-    Hongdae Map
+  <a href="#top" style="display:flex;align-items:center;gap:9px;letter-spacing:-.3px">
+    <svg width="28" height="17" viewBox="0 0 180 100" role="img" aria-label="Hongdae Map logo"><defs><linearGradient id="hlogo" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs><circle cx="55" cy="62" r="31" fill="none" stroke="url(#hlogo)" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="url(#hlogo)" stroke-width="16"/><path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="url(#hlogo)"/></svg>
+    <span style="width:1px;height:19px;background:#7a2534"></span>
+    <span style="display:flex;flex-direction:column;line-height:1.05">
+      <span style="font-size:15px;font-weight:800;letter-spacing:-.02em">홍대맵</span>
+      <span style="font-size:8px;font-weight:600;letter-spacing:.18em;color:#ff6b7e">HONGDAE MAP</span>
+    </span>
   </a>
   <nav style="display:flex;align-items:center;gap:28px;font-size:14px;font-weight:500">
     <a class="navlink" href="#feat-map">실시간 지도</a>
@@ -42,6 +48,13 @@
 </header>
 
 <section id="top" style="position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 24px 80px;background:radial-gradient(55% 45% at 50% -5%, rgba(232,54,42,.30) 0%, rgba(232,54,42,0) 65%)">
+  <svg data-reveal width="150" height="83" viewBox="0 0 180 100" role="img" aria-label="Hongdae Map" style="margin-bottom:22px;filter:drop-shadow(0 0 6px rgba(255,54,84,.9)) drop-shadow(0 0 18px rgba(255,24,60,.5));animation:neonFlicker 6s infinite">
+    <circle cx="55" cy="64" r="30" fill="none" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="137" cy="64" r="30" fill="none" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
+    <path d="M24 29.5 H86" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
+    <path d="M55.5 7 V22" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="137" cy="64" r="5" fill="#ff6b7e"/>
+  </svg>
   <div data-reveal style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#ff8a7a;background:rgba(232,54,42,.12);border:1px solid rgba(232,54,42,.35);border-radius:99px;padding:7px 16px;margin-bottom:28px">
     <span style="width:7px;height:7px;border-radius:50%;background:#e8362a;animation:pulse 1.6s infinite"></span>
     홍대 상권 데이터, 계속 업데이트 중 (베타)
@@ -225,7 +238,7 @@
 <footer style="border-top:1px solid #241b1b;padding:44px 28px;display:flex;align-items:center;justify-content:space-between;max-width:1080px;margin:0 auto;flex-wrap:wrap;gap:16px">
   <div style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:#c39298">
     <svg width="24" height="15" viewBox="0 0 180 100" role="img" aria-label="Hongdae Map logo"><circle cx="55" cy="62" r="31" fill="none" stroke="#c39298" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="#c39298" stroke-width="16"/><path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="#c39298"/></svg>
-    Hongdae Map
+    홍대맵
   </div>
   <div style="display:flex;gap:24px;font-size:13px">
     <a href="#top" style="color:#c39298">서비스 소개</a>
@@ -233,7 +246,16 @@
     <a href="#feat-busking" style="color:#c39298">버스킹·이벤트</a>
     <a href="#feat-subculture" style="color:#c39298">서브컬처</a>
   </div>
-  <div style="font-size:12px;color:#6f5f5a">© 2026 Hongdae Map · 베타 버전, 계속 업데이트 중</div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <svg width="26" height="26" viewBox="0 0 140 140" aria-hidden="true" style="flex:none;opacity:.8">
+      <circle cx="70" cy="70" r="64" fill="none" stroke="#8a5f66" stroke-width="3"/>
+      <circle cx="70" cy="70" r="55" fill="none" stroke="#8a5f66" stroke-width="1" stroke-dasharray="3 4"/>
+      <g transform="translate(34,46) scale(0.4)"><circle cx="55" cy="64" r="30" fill="none" stroke="#8a5f66" stroke-width="15"/><circle cx="137" cy="64" r="30" fill="none" stroke="#8a5f66" stroke-width="15"/><rect x="17" y="22" width="76" height="15" rx="7.5" fill="#8a5f66"/><rect x="48" y="0" width="15" height="30" rx="7.5" fill="#8a5f66"/><circle cx="137" cy="64" r="7" fill="#8a5f66"/></g>
+      <text x="70" y="34" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="2.5" fill="#8a5f66" font-family="Pretendard">HONGDAE</text>
+      <text x="70" y="114" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="2.5" fill="#8a5f66" font-family="Pretendard">SINCE 2026</text>
+    </svg>
+    <div style="font-size:12px;color:#6f5f5a">© 2026 Hongdae Map · 베타 버전, 계속 업데이트 중</div>
+  </div>
 </footer>
 
 <div id="backdrop" onclick="closeSheet()" style="position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);transition:opacity .3s ease;opacity:0;pointer-events:none"></div>
