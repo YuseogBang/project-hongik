@@ -1410,6 +1410,7 @@ function matchedTagNames(s) {
 // 취향 추천 화면으로 전환 (랜딩페이지 버튼 / 취향모달 둘 다 여기로 모임)
 function showTasteView() {
   currentFilter = 'taste';
+  boundsFilter = null;
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
   document.getElementById('btn-taste').classList.add('on');
   renderList();
@@ -2070,6 +2071,7 @@ function toggleCuisineFilter(value, btn) {
 function applyDetailFilterState() {
   // 다중 필터를 하나라도 켜면 "detailFilters" 모드로, 다 끄면 전체 보기로 돌아감
   currentFilter = activeDetailFilters.size > 0 ? 'detailFilters' : 'all';
+  boundsFilter = null; // 이전에 '이 지역에서 검색'으로 좁혀둔 범위가 남아있으면 여기서도 매장이 안 보이므로 초기화
   if (activeDetailFilters.size === 0) {
     document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
     const allBtn = document.getElementById('chip-all');
@@ -2080,6 +2082,7 @@ function applyDetailFilterState() {
 function clearDetailFilters(btn) {
   activeDetailFilters.clear();
   currentFilter = 'all';
+  boundsFilter = null;
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
   const allBtn = document.getElementById('chip-all');
   if (allBtn) allBtn.classList.add('on');
@@ -2180,6 +2183,7 @@ function goDirections() {
 // (예전엔 이 버튼만 사이드바를 강제로 열었는데, 경로를 하나로 통일함)
 function showBookmarks(btn) {
   currentFilter = 'bookmarks';
+  boundsFilter = null;
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
   if (btn) btn.classList.add('on');
   renderList();
@@ -2189,6 +2193,7 @@ function showBookmarks(btn) {
 // 홍대에서 없어진, 추억의 장소를 모아 보여줌 (마찬가지로 결과 N곳 보기 버튼으로 안내)
 function showGoneStores(btn) {
   currentFilter = 'gone';
+  boundsFilter = null;
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
   if (btn) btn.classList.add('on');
   renderList();
