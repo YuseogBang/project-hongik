@@ -565,17 +565,18 @@
       </div>
       <div class="filter-chips">
         <button class="chip on" id="chip-all" onclick="toggleAllCategories(this)">전체</button>
-        <button class="chip" id="chip-hof" onclick="setFilter('hallOfFame',this)">🏅 홍대생 명예학식</button>
-        <button class="chip" id="chip-michelin" onclick="setFilter('michelin',this)">🍽️ 미쉐린 가이드</button>
-        <button class="chip" id="chip-liveclub" onclick="setFilter('liveclub',this)">🎤 라이브클럽</button>
       </div>
       <div id="all-categories-panel" style="display:none">
         <div class="filter-chips filter-group">
-          <button class="chip" onclick="toggleDetailFilter('cuisine:한식',this)">한식</button>
-          <button class="chip" onclick="toggleDetailFilter('cuisine:중식',this)">중식</button>
-          <button class="chip" onclick="toggleDetailFilter('cuisine:일식',this)">일식</button>
-          <button class="chip" onclick="toggleDetailFilter('cuisine:양식',this)">양식</button>
-          <button class="chip" onclick="toggleDetailFilter('cuisine:글로벌',this)">글로벌</button>
+          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:한식" onclick="toggleCuisineFilter('한식',this)">한식</button>
+          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:중식" onclick="toggleCuisineFilter('중식',this)">중식</button>
+          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:일식" onclick="toggleCuisineFilter('일식',this)">일식</button>
+          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:양식" onclick="toggleCuisineFilter('양식',this)">양식</button>
+          <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:글로벌" onclick="toggleCuisineFilter('글로벌',this)">글로벌</button>
+        </div>
+        <div class="filter-chips filter-group">
+          <button class="chip" id="chip-hof" onclick="toggleDetailFilter('cert:hallOfFame',this)">🏅 홍대생 명예학식</button>
+          <button class="chip" id="chip-michelin" onclick="toggleDetailFilter('cert:michelin',this)">🍽️ 미쉐린 가이드</button>
         </div>
         <div class="filter-chips filter-group">
           <button class="chip" onclick="toggleDetailFilter('cafeSub:작업카공',this)">☕ 작업·카공</button>
@@ -590,6 +591,7 @@
         </div>
         <div class="filter-chips filter-group">
           <button class="chip" onclick="toggleDetailFilter('type:club',this)">🪩 클럽</button>
+          <button class="chip" id="chip-liveclub" onclick="toggleDetailFilter('type:liveclub',this)">🎤 라이브클럽</button>
           <button class="chip" onclick="toggleDetailFilter('type:animeshop',this)">🎌 애니메이션샵</button>
           <button class="chip" onclick="toggleDetailFilter('type:entertainment',this)">🎡 엔터테인먼트</button>
           <button class="chip" id="chip-artsupply" onclick="toggleDetailFilter('type:artsupply',this)">🎨 화방</button>
@@ -600,7 +602,7 @@
           <button class="chip" id="chip-yeonnam" onclick="toggleDetailFilter('dong:연남동',this)">연남동</button>
           <button class="chip" id="chip-hapjeong" onclick="toggleDetailFilter('dong:합정동',this)">합정동</button>
         </div>
-        <div style="padding:2px 4px 0">
+        <div class="filter-group" style="padding:12px 4px 0">
           <button class="chip" onclick="clearDetailFilters(this)" style="width:100%;text-align:center;color:var(--muted)">선택 초기화</button>
         </div>
       </div>
@@ -1930,6 +1932,24 @@ function toggleDetailFilter(key, btn) {
     activeDetailFilters.add(key);
     btn.classList.add('on');
   }
+  applyDetailFilterState();
+}
+// 한식/중식/일식/양식/글로벌은 이 그룹 안에서 하나만 선택되게 (라디오처럼 동작)
+function toggleCuisineFilter(value, btn) {
+  const key = 'cuisine:' + value;
+  const wasOn = activeDetailFilters.has(key);
+  document.querySelectorAll('[data-filter-group="cuisine"]').forEach(b => {
+    const k = b.getAttribute('data-filter-key');
+    activeDetailFilters.delete(k);
+    b.classList.remove('on');
+  });
+  if (!wasOn) {
+    activeDetailFilters.add(key);
+    btn.classList.add('on');
+  }
+  applyDetailFilterState();
+}
+function applyDetailFilterState() {
   // 다중 필터를 하나라도 켜면 "detailFilters" 모드로, 다 끄면 전체 보기로 돌아감
   currentFilter = activeDetailFilters.size > 0 ? 'detailFilters' : 'all';
   if (activeDetailFilters.size === 0) {
@@ -1949,7 +1969,7 @@ function clearDetailFilters(btn) {
   renderList();
   openResultsModal();
 }
-// 매장 s가 다중 필터 key 하나(예: 'cuisine:한식', 'dong:서교동', 'type:club') 조건을 만족하는지 확인
+// 매장 s가 다중 필터 key 하나(예: 'cuisine:한식', 'dong:서교동', 'type:club', 'cert:michelin') 조건을 만족하는지 확인
 function matchesDetailFilter(s, key) {
   const [kind, value] = key.split(':');
   if (kind === 'cuisine') {
@@ -1960,6 +1980,10 @@ function matchesDetailFilter(s, key) {
   if (kind === 'barSub') return s.type === 'bar' && barSubType(s) === value;
   if (kind === 'dong') return s.dong === value;
   if (kind === 'type') return s.type === value;
+  if (kind === 'cert') {
+    if (value === 'hallOfFame') return (s.certifications || []).includes('홍대생 명예학식');
+    if (value === 'michelin') return (s.certifications || []).some(c => c.includes('미쉐린'));
+  }
   return false;
 }
 
