@@ -399,7 +399,7 @@
   /* MODAL */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,.7);
-    z-index: 200; display: flex; align-items: center; justify-content: center;
+    z-index: 500; display: flex; align-items: center; justify-content: center;
     backdrop-filter: blur(4px);
   }
   .modal {
@@ -723,7 +723,6 @@
       <button class="chip" id="sortopt-category" onclick="setListSort('category')" style="flex:1">카테고리순</button>
       <button class="chip" id="sortopt-name" onclick="setListSort('name')" style="flex:1">가나다순</button>
       <button class="chip" id="sortopt-distance" onclick="setListSort('distance')" style="flex:1">거리순</button>
-      <button class="chip" id="sortopt-default" onclick="setListSort('default')" style="flex:1">기본순</button>
     </div>
     <div id="sort-modal-results" style="overflow-y:auto; flex:1; text-align:left"></div>
   </div>
@@ -1080,7 +1079,7 @@ function applyLang() {
 }
 
 
-let listSort = 'default'; // 'default' | 'name' | 'distance' | 'category' — 명예학식뿐 아니라 모든 필터에 공통 적용
+let listSort = 'category'; // 'category' | 'name' | 'distance' — "기본순" 버튼은 없앴고 카테고리순을 기본값으로 씀
 function setListSort(key) {
   listSort = key; // 모달에서 직접 고르는 방식이라 토글이 아니라 그대로 지정
   renderList();
@@ -1090,6 +1089,12 @@ function setListSort(key) {
 function openSortModal() {
   const m = document.getElementById('sort-modal');
   if (m) m.style.display = 'flex';
+  // 사이드바가 열려있으면 접어서, 뒤에 가려진 채로 열리는 느낌 없이 바로 피드로 전환되게 함
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar && sidebar.classList.contains('open')) {
+    sidebar.classList.remove('open');
+    try { updateBackdrop(); } catch (e) {}
+  }
   try { updateSortOptionHighlight(); } catch (e) { console.error('updateSortOptionHighlight 오류:', e); }
   try { syncSortModalResults(); } catch (e) { console.error('syncSortModalResults 오류:', e); }
 }
@@ -1121,7 +1126,7 @@ function closeSortModal() { document.getElementById('sort-modal').style.display 
   });
 })();
 function updateSortOptionHighlight() {
-  ['category','name','distance','default'].forEach(key => {
+  ['category','name','distance'].forEach(key => {
     const el = document.getElementById(`sortopt-${key}`);
     if (el) el.classList.toggle('on', listSort === key);
   });
