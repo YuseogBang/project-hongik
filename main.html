@@ -62,27 +62,17 @@
     font-family:'Pretendard', 'Noto Sans KR', sans-serif; white-space:nowrap;
   }
   .btn-bookmarks:hover { border-color:var(--accent); color:#fff; }
-  #btn-lang {
+  #btn-lang, #btn-save, #btn-rip, #btn-taste-top {
     display:inline-flex; align-items:center; justify-content:center; text-align:center;
-    width:36px; min-width:36px; max-width:36px; height:36px; border-radius:50%;
-    flex-shrink:0; flex-grow:0; padding:0; overflow:hidden; font-size:15px;
-  }
-  #btn-save {
-    display:inline-flex; align-items:center; justify-content:center; text-align:center;
-    width:36px; min-width:36px; max-width:36px; height:36px; border-radius:50%;
-    flex-shrink:0; flex-grow:0; padding:0; overflow:hidden; font-size:15px;
-  }
-  #btn-rip {
-    display:inline-flex; align-items:center; justify-content:center; text-align:center;
-    width:36px; min-width:36px; max-width:36px; height:36px; border-radius:50%;
-    flex-shrink:0; flex-grow:0; padding:0; overflow:hidden; font-size:15px;
-  }
-  #btn-taste-top {
-    display:inline-flex; align-items:center; justify-content:center; text-align:center;
-    width:36px; min-width:36px; max-width:36px; height:36px; border-radius:50%;
+    width:40px; min-width:40px; max-width:40px; height:40px; border-radius:50%;
     flex-shrink:0; flex-grow:0; padding:0; overflow:hidden; font-size:16px;
-    box-shadow: 0 2px 8px rgba(232,54,42,.4);
+    transition: background .15s, transform .15s, box-shadow .15s;
   }
+  #btn-lang:hover, #btn-rip:hover { background: var(--surface2); }
+  #btn-save:hover { border-color:#a03446; box-shadow:0 4px 12px rgba(0,0,0,.35); }
+  #btn-taste-top { box-shadow: 0 2px 10px rgba(232,54,42,.45); }
+  #btn-taste-top:hover { filter:brightness(1.08); transform:translateY(-1px); }
+  #btn-lang:active, #btn-save:active, #btn-rip:active, #btn-taste-top:active { transform: scale(.92); }
   .topbar-search-row {
     position:relative; padding: 10px 16px; border-bottom: 1px solid var(--border);
     background: var(--surface);
@@ -129,8 +119,15 @@
     background: var(--surface2); color: var(--muted); font-size: 13px;
   }
   .menu-btn {
-    background: none; border: 1px solid var(--border); color: var(--text);
-    width: 32px; height: 32px; border-radius: 6px; cursor: pointer; font-size: 15px;
+    background: none; border: none; color: var(--text);
+    width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 16px;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+    transition: background .15s, transform .15s;
+  }
+  .menu-btn:hover { background: var(--surface2); }
+  .menu-btn:active { background: #5c1a24; transform: scale(.92); }
+  @media (max-width: 640px) {
+    .menu-btn { width: 40px; height: 40px; font-size: 15px; }
   }
   .drawer-backdrop {
     position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 250;
@@ -154,12 +151,36 @@
   .trivia-card:hover { border-color: var(--accent); }
   .trivia-label { font-size: 10px; font-weight: 700; color: var(--accent); margin-bottom: 5px; letter-spacing: .02em; }
   .trivia-text { font-size: 12px; line-height: 1.55; color: var(--text); }
-  .chip { font-size: 11px; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--border); color: var(--muted); background: transparent; cursor: pointer; transition: all .15s; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; }
-  .chip.on {
-    border-color: var(--accent); color: #ffffff;
-    background: var(--accent);
-    box-shadow: 0 2px 6px rgba(232,54,42,.3);
+  .chip {
+    font-size: 11px; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--border);
+    color: var(--muted); background: transparent; cursor: pointer; transition: all .15s;
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   }
+  .chip:hover { border-color: var(--muted); }
+  .chip:active { transform: scale(.95); }
+  .chip.on {
+    border: 2px solid var(--accent); color: #ffffff;
+    background: rgba(232,54,42,.18);
+    padding: 3px 9px; /* 테두리가 1px→2px로 두꺼워진 만큼 보정해서 전체 크기는 그대로 유지 */
+  }
+
+  /* 영업 상태 구간 토글 (전체 / 영업중 / 폐업) */
+  .seg-toggle {
+    display: flex; border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    background: #330b12; margin: 10px 0 2px;
+  }
+  .seg-btn {
+    flex: 1; height: 40px; border: none; cursor: pointer; background: transparent;
+    color: var(--muted); font-size: 12px; font-weight: 500; font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+    transition: all .15s;
+  }
+  .seg-btn:hover { color: var(--text); }
+  .seg-btn.on {
+    background: rgba(232,54,42,.18); color: #fff; font-weight: 700;
+    box-shadow: inset 0 0 0 2px var(--accent); border-radius: 12px;
+  }
+  .seg-btn:active { opacity: .85; }
+  @media (max-width: 640px) { .seg-btn { height: 44px; font-size: 12.5px; } }
 
   .store-list { padding: 8px; }
   .store-list::-webkit-scrollbar { width: 4px; }
@@ -210,6 +231,7 @@
     box-shadow: 0 2px 10px rgba(0,0,0,.3); transition: all .15s;
   }
   .btn-home:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-home:active { transform: scale(.92); }
   .map-btn {
     background: var(--surface); border: 1px solid var(--border);
     color: var(--text); font-size: 11px; padding: 6px 12px;
@@ -218,6 +240,19 @@
   }
   .map-btn:hover { background: var(--surface2); }
   .map-btn.on { border-color: var(--accent2); color: var(--accent2); }
+  .btn-search-area {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 10;
+    height: 38px; padding: 0 18px; border-radius: 99px; border: none;
+    background: var(--text); color: var(--bg); font-size: 12.5px; font-weight: 700;
+    cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.4);
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 6px; transition: all .15s;
+  }
+  .btn-search-area:hover { transform: translateX(-50%) scale(1.03); }
+  .btn-search-area:active { transform: translateX(-50%) scale(.96); }
+  @media (max-width: 640px) {
+    .btn-search-area { height: 42px; font-size: 12px; top: 10px; }
+  }
 
   /* LEGEND */
   .legend {
@@ -367,8 +402,21 @@
   .form-group textarea { height: 80px; resize: vertical; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
-  .btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 6px; padding: 8px 16px; cursor: pointer; font-size: 12px; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; }
-  .btn-confirm { background: var(--accent); border: none; color: #fff; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-size: 12px; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; font-weight: 500; }
+  .btn-cancel {
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+    border-radius: 10px; padding: 8px 16px; cursor: pointer; font-size: 12px; font-weight: 600;
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; transition: all .15s;
+  }
+  .btn-cancel:hover { border-color: var(--muted); color: var(--text); }
+  .btn-cancel:active { transform: scale(.96); }
+  .btn-confirm {
+    background: linear-gradient(135deg, var(--accent2), var(--accent)); border: none; color: #fff;
+    border-radius: 10px; padding: 8px 16px; cursor: pointer; font-size: 12px; font-weight: 700;
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; box-shadow: 0 2px 10px rgba(232,54,42,.4);
+    transition: all .15s;
+  }
+  .btn-confirm:hover { filter: brightness(1.08); }
+  .btn-confirm:active { transform: scale(.96); }
 
   /* IMPORT MODE */
   .import-mode-banner {
@@ -487,17 +535,16 @@
     .btn-bookmarks, .btn-directions, .btn-add {
       font-size: 11px; padding: 6px 9px;
     }
-    #btn-lang { width: 32px; min-width: 32px; max-width: 32px; height: 32px; font-size: 13px; }
-    #btn-save { width: 32px; min-width: 32px; max-width: 32px; height: 32px; font-size: 13px; }
-    #btn-rip { width: 32px; min-width: 32px; max-width: 32px; height: 32px; font-size: 13px; }
-    #btn-taste-top { width: 32px; min-width: 32px; max-width: 32px; height: 32px; font-size: 14px; }
+    #btn-lang, #btn-save, #btn-rip, #btn-taste-top {
+      width: 40px; min-width: 40px; max-width: 40px; height: 40px; font-size: 15px;
+    }
 
     .topbar-search-row { padding: 8px 10px; }
 
     .sidebar, .detail { width: 100vw; max-width: 100vw; }
     .sidebar-top { padding: 40px 12px 10px; }
     .filter-chips { gap: 5px; }
-    .filter-chips .chip { font-size: 10.5px; padding: 5px 9px; }
+    .filter-chips .chip { font-size: 11px; padding: 7px 11px; }
     .filter-group { margin-top: 11px; padding-top: 9px; }
     .trivia-card { padding: 9px 11px; margin-bottom: 9px; }
     .trivia-text { font-size: 11.5px; }
@@ -565,6 +612,11 @@
       </div>
       <div class="filter-chips">
         <button class="chip on" id="chip-all" onclick="toggleAllCategories(this)">전체</button>
+      </div>
+      <div class="seg-toggle" id="seg-status" role="group" aria-label="영업 상태">
+        <button class="seg-btn on" id="seg-status-all" onclick="setStatusFilter('all')">전체</button>
+        <button class="seg-btn" id="seg-status-open" onclick="setStatusFilter('open')">영업중</button>
+        <button class="seg-btn" id="seg-status-closed" onclick="setStatusFilter('closed')">폐업</button>
       </div>
       <div id="all-categories-panel" style="display:none">
         <div class="filter-chips filter-group">
@@ -647,6 +699,11 @@
       <button class="map-btn" id="btn-import" onclick="toggleImportMode()">📌 지도에서 불러오기</button>
       <button class="map-btn" id="btn-export" onclick="exportChanges()">💾 추가한 매장 내보내기 (<span id="export-count">0</span>)</button>
     </div>
+
+    <button class="btn-search-area" id="btn-search-area" onclick="searchThisArea()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line></svg>
+      이 지역에서 검색
+    </button>
 
     <button class="btn-home" onclick="resetView()" aria-label="홍대 중심으로 이동" title="홍대 중심">⌂</button>
 
@@ -839,6 +896,8 @@ let stores = [
 
 let map, markers = [], storeMarkers = [], clusterer, overlay, hoverOverlay, showMarkers = true;
 let currentFilter = 'all', searchText = '', selectedId = null;
+let statusFilter = 'all'; // 'all' | 'open' | 'closed' — 상단 세그먼트 토글(전체/영업중/폐업)
+let boundsFilter = null; // '이 지역에서 검색' 클릭 시 현재 지도 화면(bounds)으로 한 번 좁혀서 보여줌
 
 // ── 몰랐던 홍대 상식 (전부 검증된 사실만) ────────────────
 const TRIVIA = [
@@ -1585,6 +1644,17 @@ function renderList() {
   const isCardMode = true; // 이제 모든 필터(전체 포함)가 태그 중심 카드 레이아웃을 씀 — 실제 평점/점수 없는 unverified 매장뿐이라 예전 점수바 레이아웃이 의미가 없었음
 
   let filtered = stores.filter(s => {
+    // '이 지역에서 검색'으로 지도 화면을 좁혀뒀다면, 그 화면 밖 매장은 어떤 모드든 제외
+    if (boundsFilter && !boundsFilter.contain(new kakao.maps.LatLng(s.lat, s.lng))) return false;
+
+    // 상단 세그먼트 토글(전체/영업중/폐업). 취향추천·명예학식 등 이미 정해진 큐레이션 모드,
+    // 그리고 '사라진 가게' 모드(정의상 이미 폐업만 보여줌)에는 겹쳐 적용하지 않음.
+    const skipStatusToggle = isGoneMode || isTasteMode || isHallOfFameMode || isMichelinMode || isCenturyMode || isRepresentativeMode;
+    if (!skipStatusToggle && statusFilter !== 'all') {
+      if (statusFilter === 'open' && s.status === 'closed') return false; // 영업중 = 폐업 확정 아닌 곳(미확인 포함)
+      if (statusFilter === 'closed' && s.status !== 'closed') return false; // 폐업 = 폐업 확정된 곳만
+    }
+
     if (isTasteMode) return s.tags && matchScore(s) > 0; // 취향 모드는 unverified 여부와 무관하게 태그 매칭만 봄
     if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
     if (isHallOfFameMode) return (s.certifications || []).includes('홍대생 명예학식');
@@ -1990,10 +2060,24 @@ function matchesDetailFilter(s, key) {
 function setFilter(type, btn) {
   currentFilter = type;
   activeDetailFilters.clear(); // 단일 카테고리를 새로 고르면 다중 선택 상태는 초기화
+  boundsFilter = null; // 카테고리를 새로 고르면 '이 지역에서 검색'으로 좁혀둔 범위는 초기화
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
   btn.classList.add('on');
   renderList();
   // 카테고리를 고르면 결과가 사이드바에 묻히지 않고, 항상 화면 중앙 배너로 바로 보이게 한다.
+  openResultsModal();
+}
+// 영업 상태 세그먼트 토글 (전체 / 영업중 / 폐업) — 카테고리 선택과 별개로 겹쳐서 적용됨
+// 참고: 대부분의 매장이 아직 'unverified'(영업 여부 미확인) 상태라, '영업중'은
+// "폐업으로 확인되지 않은 곳(unverified 포함)", '폐업'은 "폐업으로 확인된 곳"만 의미함.
+function setStatusFilter(key) {
+  statusFilter = key;
+  boundsFilter = null;
+  ['all','open','closed'].forEach(k => {
+    const el = document.getElementById(`seg-status-${k}`);
+    if (el) el.classList.toggle('on', k === key);
+  });
+  renderList();
   openResultsModal();
 }
 // "전체" 클릭 시: 전체 필터 적용 + 대표 몇 개만 보이던 상세 카테고리 목록을 펼침/접음
@@ -2340,6 +2424,16 @@ function searchNearby() {
 function resetView() {
   if (map) map.setCenter(new kakao.maps.LatLng(37.556670, 126.923610));
   if (map) map.setLevel(4);
+}
+
+// '이 지역에서 검색' — 현재 지도 화면에 보이는 매장만 한 번 걸러서 중앙 결과 모달로 보여줌.
+// 지속되는 필터가 아니라 스냅샷이라, 카테고리를 바꾸거나 모달을 닫으면 초기화됨.
+function searchThisArea() {
+  if (!map) return;
+  boundsFilter = map.getBounds();
+  renderList();
+  openResultsModal();
+  if (typeof showToast === 'function') showToast('현재 화면에 보이는 매장만 표시했어요');
 }
 
 // ── MODAL ─────────────────────────────────────────────
