@@ -739,7 +739,9 @@
     <div class="import-mode-banner" id="import-banner">📌 지도를 클릭하면 주변 업체를 불러옵니다</div>
     <div id="map"></div>
 
-    <div class="map-controls">
+    <!-- 배포용으로 숨김: 관리자(나)만 쓰는 업체 추가 도구라 일반 사용자한테는 안 보이게 함.
+         다시 보이게 하려면 아래 style="display:none"만 지우면 됨. -->
+    <div class="map-controls" style="display:none">
       <button class="map-btn" id="btn-import" onclick="toggleImportMode()">📌 지도에서 불러오기</button>
       <button class="map-btn" id="btn-export" onclick="exportChanges()">💾 추가한 매장 내보내기 (<span id="export-count">0</span>)</button>
     </div>
@@ -1700,6 +1702,53 @@ function hideHoverLabel(id) {
   if (hoverOverlay) { hoverOverlay.setMap(null); hoverOverlay = null; }
 }
 
+// 현재 필터(currentFilter/activeDetailFilters/boundsFilter 등) 조건에 맞는 매장만 골라냄.
+// 리스트(renderListImpl)와 지도 마커(renderMarkers) 둘 다 이 함수 하나만 씀 — 그래야 "지금 보이는 리스트"와
+// "지도 위 마커"가 항상 똑같은 걸 보여줌.
+function getFilteredStores() {
+  const dongFilters = ['서교동','연남동','합정동','상수동'];
+  const isDongFilter = dongFilters.includes(currentFilter);
+  const isTasteMode = currentFilter === 'taste';
+  const isBookmarkMode = currentFilter === 'bookmarks';
+  const isGoneMode = currentFilter === 'gone';
+  const isHallOfFameMode = currentFilter === 'hallOfFame';
+  const isMichelinMode = currentFilter === 'michelin';
+  const isCenturyMode = currentFilter === 'centuryStore';
+  const isRepresentativeMode = currentFilter === 'representative';
+  const isCuisineMode = currentFilter.startsWith('cuisine:');
+  const isCafeSubMode = currentFilter.startsWith('cafeSub:');
+  const isBarSubMode = currentFilter.startsWith('barSub:');
+  const isDetailFiltersMode = currentFilter === 'detailFilters';
+
+  return stores.filter(s => {
+    // '이 지역에서 검색'으로 지도 화면을 좁혀뒀다면, 그 화면 밖 매장은 어떤 모드든 제외
+    if (boundsFilter && !boundsFilter.contain(new kakao.maps.LatLng(s.lat, s.lng))) return false;
+
+    if (isTasteMode) return s.tags && matchScore(s) > 0; // 취향 모드는 unverified 여부와 무관하게 태그 매칭만 봄
+    if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
+    if (isHallOfFameMode) return (s.certifications || []).includes('홍대생 명예학식');
+    if (isMichelinMode) return (s.certifications || []).some(c => c.includes('미쉐린'));
+    if (isCenturyMode) return isCenturyStore(s);
+    if (isRepresentativeMode) return s.tags && s.tags.length > 0; // 취향 태그가 붙어있는 프로토타입 40곳
+    if (isDetailFiltersMode) return matchesActiveDetailFilters(s); // 복수 선택 — 같은 종류끼리는 OR, 다른 종류끼리는 AND
+    if (isCuisineMode) {
+      const want = currentFilter.split(':')[1];
+      const label = cuisineLabel(s);
+      return s.type === 'restaurant' && (want === '글로벌' ? label === '아시아식' : label === want);
+    }
+    if (isCafeSubMode) return s.type === 'cafe' && cafeSubType(s) === currentFilter.split(':')[1];
+    if (isBarSubMode) return s.type === 'bar' && barSubType(s) === currentFilter.split(':')[1];
+    // 예전엔 unverified 매장을 '전체' 필터 말고는 다 숨겼는데, 지금 매장이 전부 unverified 상태라
+    // 음식점/카페/주점/동네 필터를 눌러도 아무것도 안 뜨는 버그였음. 그 예외 규칙을 제거함.
+    const matchFilter = currentFilter === 'all'
+      || (isBookmarkMode && bookmarks[s.id])
+      || s.type === currentFilter
+      || (currentFilter === 'closed' && s.status === 'closed')
+      || (isDongFilter && s.dong === currentFilter);
+    return matchFilter && s.name.includes(searchText);
+  });
+}
+
 function renderMarkers() {
   // 클러스터러는 최초 1회만 생성해서 재사용 (매번 새로 만들면 깜빡임 생김)
   if (!clusterer) {
@@ -1723,7 +1772,8 @@ function renderMarkers() {
   if (overlay) { overlay.setMap(null); overlay = null; }
   if (hoverOverlay) { hoverOverlay.setMap(null); hoverOverlay = null; }
 
-  stores.forEach(s => {
+  const visibleStores = getFilteredStores();
+  visibleStores.forEach(s => {
     const pos = new kakao.maps.LatLng(s.lat, s.lng);
 
     // 카테고리(맛집/카페/술집) 기준 색상 — 카드 디자인과 통일
@@ -1770,6 +1820,11 @@ function renderMarkers() {
 
 function renderList() {
   try {
+    if (map) renderMarkers(); // 지도가 아직 안 떴으면(초기 로드 중) 건너뜀 — renderAll()이 따로 처리함
+  } catch (e) {
+    console.error('renderMarkers 오류:', e);
+  }
+  try {
     renderListImpl();
   } catch (e) {
     console.error('renderList 오류:', e);
@@ -1793,33 +1848,7 @@ function renderListImpl() {
   const isDetailFiltersMode = currentFilter === 'detailFilters';
   const isCardMode = true; // 이제 모든 필터(전체 포함)가 태그 중심 카드 레이아웃을 씀 — 실제 평점/점수 없는 unverified 매장뿐이라 예전 점수바 레이아웃이 의미가 없었음
 
-  let filtered = stores.filter(s => {
-    // '이 지역에서 검색'으로 지도 화면을 좁혀뒀다면, 그 화면 밖 매장은 어떤 모드든 제외
-    if (boundsFilter && !boundsFilter.contain(new kakao.maps.LatLng(s.lat, s.lng))) return false;
-
-    if (isTasteMode) return s.tags && matchScore(s) > 0; // 취향 모드는 unverified 여부와 무관하게 태그 매칭만 봄
-    if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
-    if (isHallOfFameMode) return (s.certifications || []).includes('홍대생 명예학식');
-    if (isMichelinMode) return (s.certifications || []).some(c => c.includes('미쉐린'));
-    if (isCenturyMode) return isCenturyStore(s);
-    if (isRepresentativeMode) return s.tags && s.tags.length > 0; // 취향 태그가 붙어있는 프로토타입 40곳
-    if (isDetailFiltersMode) return matchesActiveDetailFilters(s); // 복수 선택 — 같은 종류끼리는 OR, 다른 종류끼리는 AND
-    if (isCuisineMode) {
-      const want = currentFilter.split(':')[1];
-      const label = cuisineLabel(s);
-      return s.type === 'restaurant' && (want === '글로벌' ? label === '아시아식' : label === want);
-    }
-    if (isCafeSubMode) return s.type === 'cafe' && cafeSubType(s) === currentFilter.split(':')[1];
-    if (isBarSubMode) return s.type === 'bar' && barSubType(s) === currentFilter.split(':')[1];
-    // 예전엔 unverified 매장을 '전체' 필터 말고는 다 숨겼는데, 지금 매장이 전부 unverified 상태라
-    // 음식점/카페/주점/동네 필터를 눌러도 아무것도 안 뜨는 버그였음. 그 예외 규칙을 제거함.
-    const matchFilter = currentFilter === 'all'
-      || (isBookmarkMode && bookmarks[s.id])
-      || s.type === currentFilter
-      || (currentFilter === 'closed' && s.status === 'closed')
-      || (isDongFilter && s.dong === currentFilter);
-    return matchFilter && s.name.includes(searchText);
-  });
+  let filtered = getFilteredStores();
 
   // 가나다순(2순위 기준) — "많이 찾는 순"(인기순)은 실사용 데이터가 없어 아직 구현하지 않음
   if (isCuisineMode || isCafeSubMode || isBarSubMode || isDetailFiltersMode || currentFilter === 'club' || currentFilter === 'animeshop' || currentFilter === 'entertainment') {
@@ -1948,8 +1977,7 @@ function selectStore(id) {
   selectedId = id;
   const s = stores.find(x=>x.id===id);
   if (!s) return;
-  renderMarkers();
-  renderList();
+  renderList(); // renderList 안에서 renderMarkers도 같이 갱신됨 (선택 표시가 마커에도 반영됨)
   // 결과 피드에서 매장을 고르면, 피드에 가려지지 않고 바로 카드 배너로 넘어가게 피드는 닫음
   const sortModal = document.getElementById('sort-modal');
   if (sortModal && sortModal.style.display !== 'none') sortModal.style.display = 'none';
@@ -2190,14 +2218,6 @@ function selectCategoryBar(key, btn) {
     currentFilter = key; // 'all' | 'restaurant' | 'cafe' | 'bar'
   }
   renderList();
-  // 음식점/카페/주점/엔터테인먼트는 그 안에 세부 카테고리가 더 있으니, 사이드바를 자동으로 열어서
-  // 바로 이어서 골라볼 수 있게 함 (음식점→한식~미쉐린가이드, 카페→작업카공~스페셜티로스터리 등).
-  // 배경을 어둡게 덮는 딤 처리는 일부러 안 켬 — 그거까지 켜면 상단 카테고리 바 자체를 못 누르게 막혀버림.
-  if (key === 'restaurant' || key === 'cafe' || key === 'bar' || key === 'entertainment') {
-    document.getElementById('sidebar').classList.add('open');
-    const backdrop = document.getElementById('drawer-backdrop');
-    if (backdrop) backdrop.classList.remove('show');
-  }
 }
 
 function setFilter(type, btn) {
