@@ -16,12 +16,30 @@
     --border: #7a2534;
     --accent: #e8362a;
     --accent2: #ff5c46;
+    --accent-rgb: 232,54,42;
+    --accent2-rgb: 255,92,70;
     --danger: #b71c1c;
     --warn: #f5a623;
     --success: #2e7d32;
     --text: #f5ece7;
     --muted: #c39298;
     --card-r: 14px;
+  }
+  /* 홍익대학교 브랜드 컬러 테마 — Primary #1833DB(Hongik Medium Blue), Secondary #05014A(Hongik Midnight Blue) */
+  html[data-theme="hongik"] {
+    --bg: #05014a;
+    --surface: #0b0a5e;
+    --surface2: #131278;
+    --border: #2f34a8;
+    --accent: #1833db;
+    --accent2: #4d63ff;
+    --accent-rgb: 24,51,219;
+    --accent2-rgb: 77,99,255;
+    --danger: #e0433f;
+    --warn: #f5a623;
+    --success: #2e9e6b;
+    --text: #eef0ff;
+    --muted: #9ba3d9;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   button { outline: none; }
@@ -31,7 +49,7 @@
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif; color: var(--text);
     height: 100vh; display: flex; flex-direction: column; overflow: hidden;
     background:
-      radial-gradient(60% 50% at 80% -10%, rgba(232,54,42,.28) 0%, rgba(232,54,42,0) 60%),
+      radial-gradient(60% 50% at 80% -10%, rgba(var(--accent-rgb),.28) 0%, rgba(var(--accent-rgb),0) 60%),
       var(--bg);
   }
 
@@ -59,7 +77,7 @@
   .btn-directions {
     font-size: 12px; font-weight: 700; color: #ffffff;
     background: var(--accent);
-    box-shadow: 0 2px 8px rgba(232,54,42,.35);
+    box-shadow: 0 2px 8px rgba(var(--accent-rgb),.35);
     border: none; border-radius: 99px; padding: 7px 16px; cursor: pointer;
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif; white-space: nowrap;
   }
@@ -70,15 +88,15 @@
     font-family:'Pretendard', 'Noto Sans KR', sans-serif; white-space:nowrap;
   }
   .btn-bookmarks:hover { border-color:var(--accent); color:#fff; }
-  #btn-lang, #btn-save, #btn-rip, #btn-taste-top {
+  #btn-lang, #btn-save, #btn-rip, #btn-taste-top, #btn-theme {
     display:inline-flex; align-items:center; justify-content:center; text-align:center;
     width:40px; min-width:40px; max-width:40px; height:40px; border-radius:50%;
     flex-shrink:0; flex-grow:0; padding:0; overflow:hidden; font-size:16px;
     transition: background .15s, transform .15s, box-shadow .15s;
   }
-  #btn-lang:hover, #btn-rip:hover { background: var(--surface2); }
+  #btn-lang:hover, #btn-rip:hover, #btn-theme:hover { background: var(--surface2); }
   #btn-save:hover { border-color:#a03446; box-shadow:0 4px 12px rgba(0,0,0,.35); }
-  #btn-taste-top { box-shadow: 0 2px 10px rgba(232,54,42,.45); }
+  #btn-taste-top { box-shadow: 0 2px 10px rgba(var(--accent-rgb),.45); }
   #btn-taste-top:hover { filter:brightness(1.08); transform:translateY(-1px); }
   #btn-lang:active, #btn-save:active, #btn-rip:active, #btn-taste-top:active { transform: scale(.92); }
   .topbar-search-row {
@@ -99,7 +117,7 @@
   }
   .search-result:last-child { border-bottom:none; }
   .search-result:hover { background:var(--surface2); }
-  .search-result:active { background:rgba(232,54,42,.12); }
+  .search-result:active { background:rgba(var(--accent-rgb),.12); }
   .search-result-icon {
     width:28px; height:28px; border-radius:50%; flex:none;
     display:flex; align-items:center; justify-content:center; font-size:14px;
@@ -184,7 +202,7 @@
   .chip:active { transform: scale(.95); }
   .chip.on {
     border: 2px solid var(--accent); color: #ffffff;
-    background: rgba(232,54,42,.18);
+    background: rgba(var(--accent-rgb),.18);
     padding: 3px 9px; /* 테두리가 1px→2px로 두꺼워진 만큼 보정해서 전체 크기는 그대로 유지 */
   }
 
@@ -202,7 +220,7 @@
   .store-item:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.25); }
   .store-item.active {
     border-color: var(--accent); border-left-color: var(--accent);
-    background: rgba(232,54,42,.14); box-shadow: 0 4px 16px rgba(232,54,42,.2);
+    background: rgba(var(--accent-rgb),.14); box-shadow: 0 4px 16px rgba(var(--accent-rgb),.2);
   }
   .store-item.closed-item { opacity: .5; }
   .item-top { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; }
@@ -268,7 +286,7 @@
     height: 48px; padding: 0 26px; border-radius: 99px; border: none;
     background: linear-gradient(135deg, var(--accent2), var(--accent)); color: #fff;
     font-size: 14px; font-weight: 700; cursor: pointer;
-    box-shadow: 0 6px 20px rgba(232,54,42,.45);
+    box-shadow: 0 6px 20px rgba(var(--accent-rgb),.45);
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif; white-space: nowrap;
     display: none; align-items: center; gap: 8px; transition: transform .15s;
     animation: fadeSlideUp .2s ease;
@@ -328,7 +346,7 @@
     display: flex; align-items: center; justify-content: center;
     overflow: hidden; text-align: center;
     background:
-      radial-gradient(60% 50% at 80% -10%, rgba(232,54,42,.28) 0%, rgba(232,54,42,0) 60%),
+      radial-gradient(60% 50% at 80% -10%, rgba(var(--accent-rgb),.28) 0%, rgba(var(--accent-rgb),0) 60%),
       #2b070c; /* 지도 UI(var(--bg))와 동일한 크림슨 배경 */
   }
   .landing-card {
@@ -365,7 +383,7 @@
     margin-top: 22px; font-size: 11px; color: rgba(245,236,231,.5);
   }
   .beta-badge {
-    background: rgba(232,54,42,.18); color: #ff8a75; border: 1px solid rgba(232,54,42,.4);
+    background: rgba(var(--accent-rgb),.18); color: #ff8a75; border: 1px solid rgba(var(--accent-rgb),.4);
     font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; letter-spacing: .04em;
   }
 
@@ -423,7 +441,7 @@
   .btn-confirm {
     background: linear-gradient(135deg, var(--accent2), var(--accent)); border: none; color: #fff;
     border-radius: 10px; padding: 8px 16px; cursor: pointer; font-size: 12px; font-weight: 700;
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; box-shadow: 0 2px 10px rgba(232,54,42,.4);
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; box-shadow: 0 2px 10px rgba(var(--accent-rgb),.4);
     transition: all .15s;
   }
   .btn-confirm:hover { filter: brightness(1.08); }
@@ -435,12 +453,12 @@
     z-index: 20; background: var(--accent); color: #fff;
     font-size: 12px; font-weight: 500; padding: 8px 18px;
     border-radius: 99px; white-space: nowrap;
-    box-shadow: 0 4px 16px rgba(232,54,42,.4);
+    box-shadow: 0 4px 16px rgba(var(--accent-rgb),.4);
     animation: bannerIn .2s ease;
     display: none;
   }
   @keyframes bannerIn { from{opacity:0;transform:translateX(-50%) translateY(-8px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
-  .btn-import-on { border-color: var(--accent) !important; color: var(--accent) !important; background: rgba(232,54,42,.18) !important; }
+  .btn-import-on { border-color: var(--accent) !important; color: var(--accent) !important; background: rgba(var(--accent-rgb),.18) !important; }
 
   /* NEARBY PLACE PICKER */
   .place-picker {
@@ -553,7 +571,7 @@
     .btn-bookmarks, .btn-directions, .btn-add {
       font-size: 11px; padding: 6px 9px;
     }
-    #btn-lang, #btn-save, #btn-rip, #btn-taste-top {
+    #btn-lang, #btn-save, #btn-rip, #btn-taste-top, #btn-theme {
       width: 40px; min-width: 40px; max-width: 40px; height: 40px; font-size: 15px;
     }
 
@@ -610,7 +628,17 @@
     </div>
   </div>
   <div class="topbar-right">
-    <button class="btn-bookmarks" id="btn-taste-top" onclick="openTasteModal()" title="내 취향 찾기" style="background:#e8362a;border-color:#e8362a;color:#fff">🎯</button>
+    <button class="btn-bookmarks" id="btn-taste-top" onclick="openTasteModal()" title="내 취향 찾기" style="background:var(--accent);border-color:var(--accent);color:#fff">🎯</button>
+    <button class="btn-bookmarks" id="btn-theme" onclick="cycleTheme()" title="테마 색상 바꾸기">
+      <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+        <defs><clipPath id="theme-swatch-clip"><circle cx="10" cy="10" r="9"/></clipPath></defs>
+        <g clip-path="url(#theme-swatch-clip)">
+          <rect x="0" y="0" width="10" height="20" fill="#e8362a"/>
+          <rect x="10" y="0" width="10" height="20" fill="#1833db"/>
+        </g>
+        <circle cx="10" cy="10" r="9" fill="none" stroke="#fff" stroke-width="1.2"/>
+      </svg>
+    </button>
     <button class="btn-bookmarks" id="btn-lang" onclick="cycleLang()" title="Language / 语言">🌐</button>
     <button class="btn-bookmarks" id="btn-rip" onclick="showGoneStores()">🪦</button>
     <button class="btn-directions" id="btn-save" onclick="showBookmarks()">♥</button>
@@ -1051,6 +1079,17 @@ function nextTrivia() {
 // ── 언어 전환 (정적 UI 텍스트만 — 매장명/태그/코멘트 같은 실제 데이터는 번역하지 않음) ──
 const LANG_ORDER = ['ko', 'en', 'zh'];
 let currentLang = localStorage.getItem('lang') || 'ko';
+// 색상 테마 — 'default'(기존 레드) | 'hongik'(홍익대 블루). 새로고침해도 유지되도록 저장해두고 바로 적용.
+let colorTheme = localStorage.getItem('colorTheme') || 'default';
+document.documentElement.setAttribute('data-theme', colorTheme === 'hongik' ? 'hongik' : 'default');
+function cycleTheme() {
+  colorTheme = colorTheme === 'hongik' ? 'default' : 'hongik';
+  localStorage.setItem('colorTheme', colorTheme);
+  document.documentElement.setAttribute('data-theme', colorTheme === 'hongik' ? 'hongik' : 'default');
+  if (typeof showToast === 'function') {
+    showToast(colorTheme === 'hongik' ? '홍익대 블루 테마로 바꿨어요' : '기본 테마로 바꿨어요');
+  }
+}
 const I18N = {
   ko: {
     langBtn: '🌐 한국어', search: '업소명 검색...', taste: '🎯 내 취향 찾기', hof: '🏅 홍대생 명예학식', michelin: '🍽️ 미쉐린 가이드',
@@ -1224,7 +1263,7 @@ function catInfo(s) {
   if (s.category && s.category.includes('카페')) return { icon:'☕', color:'#a9744f', label:'카페', labelEn:'Cafe' };
   if (s.type === 'bar' || (s.category && /주점|맥주|호프/.test(s.category))) return { icon:'🍺', color:'#f5a623', label:'술집', labelEn:'Bar' };
   if (s.type === 'retail') return { icon:'📌', color:'#93a8a2', label:'기타', labelEn:'Other' };
-  return { icon:'🍜', color:'#e8362a', label:'맛집', labelEn:'Eat' };
+  return { icon:'🍜', color:'var(--accent)', label:'맛집', labelEn:'Eat' };
 }
 
 function cuisineLabel(s) {
@@ -1541,7 +1580,7 @@ window.kakao && kakao.maps.load(() => {
   // 길찾기 출발지 표식이 아니라, 지도의 기준점(홍대입구역)을 나타내는 심플한 빨간 핀
   const pinSize = 34;
   const pinSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${pinSize}" height="${pinSize*1.3}" viewBox="0 0 34 44">
-    <path d="M17 0C7.6 0 0 7.6 0 17c0 12.7 17 27 17 27s17-14.3 17-27C34 7.6 26.4 0 17 0z" fill="#e8362a" stroke="#ffffff" stroke-width="2"/>
+    <path d="M17 0C7.6 0 0 7.6 0 17c0 12.7 17 27 17 27s17-14.3 17-27C34 7.6 26.4 0 17 0z" fill="var(--accent)" stroke="#ffffff" stroke-width="2"/>
     <circle cx="17" cy="17" r="6" fill="#ffffff"/>
   </svg>`;
   const centerPin = new kakao.maps.Marker({
@@ -1607,7 +1646,7 @@ function updateVerifyBanner() {
     document.body.appendChild(el);
   }
   if (verifyQueue.length === 0 && done > 0) {
-    el.innerHTML = `✅ 검증 완료 — 실존 <b style="color:#e8362a">${verifiedCount}곳</b> 확인, <b style="color:#e8362a">${removedCount}곳</b> 제외`;
+    el.innerHTML = `✅ 검증 완료 — 실존 <b style="color:var(--accent)">${verifiedCount}곳</b> 확인, <b style="color:var(--accent)">${removedCount}곳</b> 제외`;
     setTimeout(() => el.style.opacity = '0', 4000);
     setTimeout(() => el.remove(), 4500);
     return;
@@ -1685,7 +1724,7 @@ function makeLabelOverlay(s, pos, opts) {
     position: pos, yAnchor: 2.4, zIndex: opts.zIndex,
     content: `<div style="white-space:nowrap;font-size:9px;font-weight:600;
       background:#2a0a0a;color:#ffffff;padding:2px 5px;border-radius:3px;
-      font-family:sans-serif;pointer-events:none;${opts.outline?'outline:1px solid #e8362a':''}">
+      font-family:sans-serif;pointer-events:none;${opts.outline?'outline:1px solid var(--accent)':''}">
       ${s.name}
     </div>`
   });
@@ -1902,7 +1941,7 @@ function renderListImpl() {
       const matchPct = isTasteMode ? matchPercent(s) : 0;
       const matchReasons = isTasteMode ? matchedTagNames(s) : [];
       const matchBadge = isTasteMode
-        ? `<span style="font-size:11px;color:#e8362a;font-weight:800">🎯 ${matchPct}% 일치</span>`
+        ? `<span style="font-size:11px;color:var(--accent);font-weight:800">🎯 ${matchPct}% 일치</span>`
         : '';
 
       if (isCardMode) {
@@ -2019,8 +2058,8 @@ function selectStore(id) {
 
     const styleToggle = `
       <div style="display:flex;gap:4px;background:#fff;border-radius:999px;padding:4px;box-shadow:0 2px 10px rgba(20,60,50,.1);width:fit-content;margin-bottom:10px">
-        <button onclick="setCardStyle('A')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Noto Sans KR',sans-serif;background:${cardStyle==='A'?'#e8362a':'transparent'};color:${cardStyle==='A'?'#fff':'#5c756d'}">취향 태그</button>
-        <button onclick="setCardStyle('B')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Noto Sans KR',sans-serif;background:${cardStyle==='B'?'#e8362a':'transparent'};color:${cardStyle==='B'?'#fff':'#5c756d'}">Story</button>
+        <button onclick="setCardStyle('A')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Noto Sans KR',sans-serif;background:${cardStyle==='A'?'var(--accent)':'transparent'};color:${cardStyle==='A'?'#fff':'#5c756d'}">취향 태그</button>
+        <button onclick="setCardStyle('B')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Noto Sans KR',sans-serif;background:${cardStyle==='B'?'var(--accent)':'transparent'};color:${cardStyle==='B'?'#fff':'#5c756d'}">Story</button>
       </div>`;
 
     const cardA = `
@@ -2029,7 +2068,7 @@ function selectStore(id) {
           <div style="font-size:28px">${menuEmoji(s)}</div>
           <div style="position:absolute;bottom:10px;left:12px;font-size:10px;font-weight:900;letter-spacing:.08em;color:#8a5a3a">MY TASTE PICK</div>
           <div style="position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:5px;background:#fff;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700;color:${info.color}">${menuEmoji(s)} ${info.label} <span style="color:#93a8a2;font-weight:500">${info.labelEn}</span></div>
-          <button onclick="toggleBookmark(${s.id})" style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;background:${bm?'#e8362a':'#fff'};color:${bm?'#fff':'#e8362a'};font-size:14px;box-shadow:0 3px 10px rgba(20,60,50,.15)">${bm?'♥':'♡'}</button>
+          <button onclick="toggleBookmark(${s.id})" style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;background:${bm?'var(--accent)':'#fff'};color:${bm?'#fff':'var(--accent)'};font-size:14px;box-shadow:0 3px 10px rgba(20,60,50,.15)">${bm?'♥':'♡'}</button>
         </div>
         <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px">
           <div style="font-size:17px;font-weight:900;color:#1c352e">${s.name}</div>
@@ -2037,15 +2076,15 @@ function selectStore(id) {
             ${tags.map(t=>`<span style="background:#fdf0e4;color:#8a5a3a;font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px">${t}</span>`).join('')}
           </div>
           <div style="display:flex;align-items:center;gap:14px">
-            <div style="font-size:12px;font-weight:700;color:#e8362a">📍 ${dist}m</div>
+            <div style="font-size:12px;font-weight:700;color:var(--accent)">📍 ${dist}m</div>
             <div style="font-size:12px;color:#5c756d">🚶 도보 약 ${walk}분</div>
           </div>
         </div>
       </div>`;
 
     const cardB = `
-      <div style="background:#fff8f0;border-radius:22px;box-shadow:0 10px 32px rgba(140,30,20,.18);overflow:hidden;border:3px solid #e8362a">
-        <div style="background:#e8362a;padding:10px 16px;display:flex;align-items:center;gap:8px">
+      <div style="background:#fff8f0;border-radius:22px;box-shadow:0 10px 32px rgba(140,30,20,.18);overflow:hidden;border:3px solid var(--accent)">
+        <div style="background:var(--accent);padding:10px 16px;display:flex;align-items:center;gap:8px">
           <div style="font-family:'Pretendard',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:.7px">HONGDAE STORY</div>
         </div>
         <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:11px">
@@ -2444,7 +2483,7 @@ function renderPickerResults(data, latlng) {
   }
 
   const CAT_LABEL = { FD6:'음식점', CE7:'카페', BK9:'주점' };
-  const CAT_COLOR = { FD6:'#e8362a', CE7:'#a9744f', BK9:'#f5a623' };
+  const CAT_COLOR = { FD6:'var(--accent)', CE7:'#a9744f', BK9:'#f5a623' };
 
   list.innerHTML = unique.slice(0, 12).map(p => {
     const alreadyAdded = stores.some(s => s.kakaoId === p.id);
