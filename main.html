@@ -44,10 +44,11 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   button { outline: none; }
   button:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   html, body { max-width: 100vw; overflow-x: hidden; }
   body {
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif; color: var(--text);
-    height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+    height: 100vh; height: 100dvh; display: flex; flex-direction: column; overflow: hidden;
     background:
       radial-gradient(60% 50% at 80% -10%, rgba(var(--accent-rgb),.28) 0%, rgba(var(--accent-rgb),0) 60%),
       var(--bg);
@@ -135,6 +136,20 @@
   }
   .category-bar::-webkit-scrollbar { display: none; }
   .category-bar .chip { flex: none; white-space: nowrap; padding: 6px 13px; font-size: 12px; }
+  /* 로컬 인디 레이어 토글 — 카테고리 칩(단일선택)과 달리 켜짐/꺼짐이 유지되는 별도 버튼이라 .chip이 아닌 .cat-toggle 사용 */
+  .category-bar .cat-toggle {
+    flex: none; white-space: nowrap; padding: 6px 13px; font-size: 12px;
+    border-radius: 99px; border: 1px solid var(--border); cursor: pointer;
+    background: transparent; color: var(--muted); font-weight: 600;
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; transition: all .15s;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .category-bar .cat-toggle:hover { border-color: var(--muted); }
+  .category-bar .cat-toggle.on {
+    border-color: var(--accent); color: #fff; font-weight: 700;
+    background: rgba(var(--accent-rgb),.18);
+  }
+  .category-bar .cat-divider { flex: none; width: 1px; align-self: stretch; margin: 2px 4px; background: var(--border); }
 
   /* LAYOUT */
   .layout { display: flex; flex: 1; overflow: hidden; }
@@ -282,7 +297,7 @@
 
   /* 필터를 고르면 바로 리스트가 뜨지 않고, "몇 개 나왔는지"부터 알려주는 플로팅 버튼 */
   .btn-view-results {
-    position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 400;
+    position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 400;
     height: 48px; padding: 0 26px; border-radius: 99px; border: none;
     background: linear-gradient(135deg, var(--accent2), var(--accent)); color: #fff;
     font-size: 14px; font-weight: 700; cursor: pointer;
@@ -297,7 +312,7 @@
 
   /* 피드백·제보 링크 — 예전 범례가 있던 자리 */
   .feedback-link {
-    position: absolute; bottom: 20px; left: 12px; z-index: 10;
+    position: absolute; bottom: calc(20px + env(safe-area-inset-bottom)); left: 12px; z-index: 10;
     background: var(--surface); border: 1px solid var(--border); color: var(--text);
     border-radius: var(--card-r); padding: 9px 13px; font-size: 11.5px; font-weight: 600;
     text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
@@ -562,6 +577,9 @@
   .kakao-infobox .ib-addr { font-size: 11px; color: #5c756d; }
   /* ── 모바일 대응 ── */
   @media (max-width: 640px) {
+    /* iOS는 폰트 16px 미만 입력창에 포커스하면 화면을 자동 확대함 → 확대 방지 위해 16px로 통일 */
+    #search-input, .search-box input, .form-group input, .form-group select,
+    .form-group textarea, .picker-search-box input { font-size: 16px; }
     .topbar { padding: 0 10px; gap: 8px; }
     .logo { font-size: 13px; }
     .brand-logo { width: 26px !important; height: 17px !important; }
@@ -653,6 +671,8 @@
 </div>
 
 <div class="category-bar" id="category-bar">
+  <button class="cat-toggle" id="chip-indie" onclick="toggleIndieOnly(this)" title="대형 프랜차이즈를 숨기고 홍대 로컬·인디 매장만 봅니다">🎸 로컬 인디</button>
+  <span class="cat-divider"></span>
   <button class="chip" id="chip-restaurant" onclick="selectCategoryBar('restaurant', this)">🍜 음식점</button>
   <button class="chip" id="chip-cafe" onclick="selectCategoryBar('cafe', this)">☕ 카페</button>
   <button class="chip" id="chip-bar" onclick="selectCategoryBar('bar', this)">🍺 주점</button>
@@ -697,6 +717,9 @@
           <button class="chip" id="chip-michelin" onclick="toggleDetailFilter('cert:michelin',this)">🍽️ 미쉐린 가이드</button>
         </div>
         <div class="filter-chips filter-group">
+          <button class="chip" id="chip-openlate" onclick="toggleDetailFilter('attr:lateNight',this)">🌙 심야영업 (자정 이후)</button>
+        </div>
+        <div class="filter-chips filter-group">
           <button class="chip" onclick="toggleDetailFilter('cafeSub:작업카공',this)">☕ 작업·카공</button>
           <button class="chip" onclick="toggleDetailFilter('cafeSub:디저트',this)">🍰 디저트·베이커리</button>
           <button class="chip" onclick="toggleDetailFilter('cafeSub:스페셜티',this)">🫘 스페셜티·로스터리</button>
@@ -711,6 +734,7 @@
           <button class="chip" onclick="toggleDetailFilter('type:club',this)">🪩 클럽</button>
           <button class="chip" id="chip-liveclub" onclick="toggleDetailFilter('type:liveclub',this)">🎤 라이브클럽</button>
           <button class="chip" onclick="toggleDetailFilter('type:animeshop',this)">🎌 애니메이션샵</button>
+          <button class="chip" id="chip-practice" onclick="toggleDetailFilter('type:practice',this)">🎸 합주·연습실</button>
           <button class="chip" onclick="toggleDetailFilter('type:entertainment',this)">🎡 엔터테인먼트</button>
           <button class="chip" id="chip-artsupply" onclick="toggleDetailFilter('type:artsupply',this)">🎨 화방</button>
         </div>
@@ -834,6 +858,7 @@
           <option value="club">클럽</option>
           <option value="artsupply">화방</option>
           <option value="animeshop">애니메이션샵</option>
+          <option value="practice">합주·연습실</option>
           <option value="entertainment">엔터테인먼트</option>
           <option value="retail">기타</option>
         </select>
@@ -902,7 +927,7 @@
 
 <script>
 // ── DATA ──────────────────────────────────────────────
-const TYPES = { restaurant:'음식점', cafe:'카페', bar:'주점', retail:'기타', liveclub:'라이브클럽', artsupply:'화방', club:'클럽', animeshop:'애니메이션샵', entertainment:'엔터테인먼트' };
+const TYPES = { restaurant:'음식점', cafe:'카페', bar:'주점', retail:'기타', liveclub:'라이브클럽', artsupply:'화방', club:'클럽', animeshop:'애니메이션샵', entertainment:'엔터테인먼트', practice:'합주·연습실' };
 const STATUS = { open:'영업중', closed:'폐점', risk:'주의' };
 const REASONS = { traffic:'유동인구 부족', quality:'품질/경쟁력', rent:'임대료 부담', location:'입지 불리', trend:'트렌드 이탈' };
 
@@ -1024,6 +1049,7 @@ let stores = [
 ];
 
 let map, markers = [], storeMarkers = [], clusterer, overlay, hoverOverlay, showMarkers = true;
+let indieOnly = localStorage.getItem('indieOnly') !== '0'; // 기본 켜짐(프랜차이즈 숨김). 사용자가 직접 끄면(=='0') 그때만 전체 표시
 let currentFilter = 'all', searchText = '', selectedId = null;
 let boundsFilter = null; // '이 지역에서 검색' 클릭 시 현재 지도 화면(bounds)으로 한 번 좁혀서 보여줌
 // 아래 4개는 원래 각자 쓰이는 함수 바로 위에 선언돼 있었는데, 카카오맵 로드 콜백이
@@ -1254,11 +1280,58 @@ let cardStyle = localStorage.getItem('cardStyle') || 'A';
 let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '{}');
 
 // 카테고리 문자열 -> 아이콘/색/라벨 (실제 category 필드 기반, 지어내지 않음)
+// ── 로컬 인디 레이어 ───────────────────────────────────
+// 대형 프랜차이즈(체인) 판별용 목록. 여기에 브랜드 이름만 넣고 빼면 인디 필터에 바로 반영됨.
+// 무조작 원칙: 이름/카테고리에 이 브랜드가 실제로 들어간 곳만 프랜차이즈로 처리한다.
+// "○○점 / 본점" 같은 상호만으로는 절대 프랜차이즈로 몰지 않는다(제제집·옹달샘 같은 동네 인디 다점포 보호).
+const FRANCHISE_BRANDS = [
+  // 카페·디저트
+  '스타벅스','투썸플레이스','투썸','이디야','커피빈','할리스','폴바셋','메가커피','메가엠지씨',
+  '컴포즈','빽다방','파스쿠찌','엔제리너스','탐앤탐스','카페베네','공차','스무디킹','설빙',
+  '배스킨라빈스','베스킨라빈스','던킨','파리바게뜨','파리바게트','뚜레쥬르',
+  // 버거·패스트푸드
+  '맥도날드','버거킹','롯데리아','맘스터치','케이에프씨','써브웨이','노브랜드버거','파파이스','프랭크버거',
+  // 분식·한식 체인
+  '미분당','홍콩반점','새마을식당','한신포차','명륜진사갈비','채선당','본죽','김밥천국','한솥',
+  '이삭토스트','명랑핫도그','죠스떡볶이','신전떡볶이','엽기떡볶이','청년다방','두끼',
+  // 피자
+  '도미노','피자헛','미스터피자','파파존스','피자스쿨','반올림피자',
+  // 치킨
+  '교촌','비비큐','굽네','네네치킨','처갓집','자담치킨','푸라닭','또래오래',
+];
+// 프랜차이즈여도 인디 모드에서 "계속 보이게" 하고 싶은 매장을 여기에 개별적으로 추가하세요.
+// 매장 이름의 일부만 적어도 됩니다. 예: '스타벅스 홍대점' 을 넣으면 그 지점만 예외로 표시됨.
+// (비워두면 예외 없이, FRANCHISE_BRANDS에 해당하는 프랜차이즈는 전부 숨겨집니다.)
+const FRANCHISE_ALLOW = [
+  // '스타벅스 홍대점',
+  // '써브웨이 홍익대점',
+];
+function isFranchise(s) {
+  // 예외 목록에 있으면 프랜차이즈여도 숨기지 않는다(개별 되살리기)
+  if (FRANCHISE_ALLOW.some(keep => (s.name || '').includes(keep))) return false;
+  const hay = `${s.name || ''} ${s.category || ''}`;
+  return FRANCHISE_BRANDS.some(brand => hay.includes(brand));
+}
+
+// 클럽/라이브클럽의 '대표 장르' — category와 signatureMenu에 실제로 나타난 장르 단어만 사용(지어내지 않음).
+// 장르 단서가 전혀 없는 곳(예: 사보타지·싱크홀)은 null을 반환해 배지를 아예 표시하지 않는다.
+function clubGenre(s) {
+  if (s.type !== 'club' && s.type !== 'liveclub') return null;
+  const t = `${s.category || ''} ${s.signatureMenu || ''}`;
+  if (/재즈/.test(t))                         return { ko:'재즈',      en:'Jazz',       zh:'爵士' };
+  if (/힙합/.test(t))                         return { ko:'힙합',      en:'Hip-hop',    zh:'嘻哈' };
+  if (/모던록|인디\s*밴드|인디밴드|인디\s*록/.test(t)) return { ko:'인디·록',   en:'Indie Rock', zh:'独立摇滚' };
+  if (/올장르/.test(t))                       return { ko:'올장르',    en:'All genres', zh:'全曲风' };
+  if (/라이브/.test(t))                       return { ko:'라이브 공연', en:'Live music', zh:'现场演出' };
+  return null; // 장르 단서 없음 → 배지 없음
+}
+
 function catInfo(s) {
   if (s.type === 'liveclub') return { icon:'🎸', color:'#8e44ad', label:'라이브클럽', labelEn:'Live Club' };
   if (s.type === 'club') return { icon:'🪩', color:'#d63384', label:'클럽', labelEn:'Club' };
   if (s.type === 'artsupply') return { icon:'🎨', color:'#2980b9', label:'화방', labelEn:'Art Supplies' };
   if (s.type === 'animeshop') return { icon:'🎌', color:'#e83e8c', label:'애니메이션샵', labelEn:'Anime Shop' };
+  if (s.type === 'practice') return { icon:'🎸', color:'#6d5acd', label:'합주·연습실', labelEn:'Band Practice' };
   if (s.type === 'entertainment') return { icon:'🔑', color:'#16a085', label:'엔터테인먼트', labelEn:'Entertainment' };
   if (s.category && s.category.includes('카페')) return { icon:'☕', color:'#a9744f', label:'카페', labelEn:'Cafe' };
   if (s.type === 'bar' || (s.category && /주점|맥주|호프/.test(s.category))) return { icon:'🍺', color:'#f5a623', label:'술집', labelEn:'Bar' };
@@ -1302,6 +1375,7 @@ function menuEmoji(s) {
   if (s.type === 'liveclub') return '🎤';
   if (s.type === 'club') return '🪩';
   if (s.type === 'animeshop') return '🎌';
+  if (s.type === 'practice') return '🎸';
   if (s.type === 'entertainment') return '🔑';
   if (s.type === 'artsupply') return '🎨';
   const menu = s.signatureMenu || '';
@@ -1763,6 +1837,8 @@ function getFilteredStores() {
   return stores.filter(s => {
     // '이 지역에서 검색'으로 지도 화면을 좁혀뒀다면, 그 화면 밖 매장은 어떤 모드든 제외
     if (boundsFilter && !boundsFilter.contain(new kakao.maps.LatLng(s.lat, s.lng))) return false;
+    // 로컬 인디 레이어가 켜져 있으면 대형 프랜차이즈는 어떤 필터에서든 공통으로 숨김
+    if (indieOnly && isFranchise(s)) return false;
 
     if (isTasteMode) return s.tags && matchScore(s) > 0; // 취향 모드는 unverified 여부와 무관하게 태그 매칭만 봄
     if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
@@ -2038,6 +2114,12 @@ function selectStore(id) {
     const kakaoUrl = s.kakaoUrl || `https://map.kakao.com/?q=${encodeURIComponent(s.name + ' ' + (s.address||s.dong||''))}`;
     const naverUrl = s.naverUrl || `https://map.naver.com/p/search/${encodeURIComponent(s.name + ' ' + (s.address||s.dong||''))}`;
     const info = catInfo(s);
+    // 대표 장르 배지 (클럽/라이브클럽만, 장르 단서가 있을 때만)
+    const g = clubGenre(s);
+    const genreBadge = g ? `<div style="display:inline-flex;align-items:center;gap:6px;
+      background:rgba(var(--accent-rgb),.16);border:1px solid var(--accent);color:var(--text);
+      font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px;margin-bottom:10px">
+      🎵 ${g[currentLang] || g.ko}${currentLang !== 'en' ? ` · ${g.en}` : ''}</div>` : '';
     const dist = distToCampus(s);
     const walk = Math.max(1, Math.round(dist / 70)); // 도보 약 70m/분 기준 추정치
     const tags = objectiveTasteTags(s).map(localizeTag);
@@ -2103,6 +2185,7 @@ function selectStore(id) {
 
     dc.innerHTML = `
       <div class="detail-body" style="padding:14px">
+        ${genreBadge}
         ${styleToggle}
         ${cardStyle === 'A' ? cardA : cardB}
         ${cardStyle === 'A' ? `
@@ -2234,12 +2317,30 @@ function matchesDetailFilter(s, key) {
     if (value === 'hallOfFame') return (s.certifications || []).includes('홍대생 명예학식');
     if (value === 'michelin') return (s.certifications || []).some(c => c.includes('미쉐린'));
   }
+  if (kind === 'attr') return (s.services || []).includes(value); // 심야영업(lateNight) 등 확인된 운영 속성
   return false;
 }
 
 // 지도 위에 항상 떠있는 카테고리 바 전용 핸들러.
 // 사이드바를 열지 않아도 바로 필터링되게 하는 게 목적이라, 한 번에 하나만 선택되는
 // 단순한 방식으로 만듦(구글맵 상단 카테고리 버튼과 같은 방식).
+// 로컬 인디 레이어 켜고/끄기 — 카테고리 선택과 독립적으로 겹쳐서 작동(레이어 방식).
+// 그래서 다른 칩의 on/off를 건드리지 않고, 이 버튼만 토글한다.
+function toggleIndieOnly(btn) {
+  indieOnly = !indieOnly;
+  localStorage.setItem('indieOnly', indieOnly ? '1' : '0');
+  if (btn) btn.classList.toggle('on', indieOnly);
+  renderList();
+  if (typeof showToast === 'function') {
+    showToast(indieOnly ? '🎸 프랜차이즈를 숨기고 로컬·인디 매장만 보여줘요' : '전체 매장을 다시 보여줘요');
+  }
+}
+// 새로고침해도 인디 레이어 상태가 유지되도록, 로드 시 버튼 표시를 복원한다.
+(function restoreIndieToggle() {
+  const b = document.getElementById('chip-indie');
+  if (b) b.classList.toggle('on', indieOnly);
+})();
+
 function selectCategoryBar(key, btn) {
   activeDetailFilters.clear();
   boundsFilter = null;
@@ -2251,6 +2352,7 @@ function selectCategoryBar(key, btn) {
     activeDetailFilters.add('type:liveclub');
     activeDetailFilters.add('type:animeshop');
     activeDetailFilters.add('type:artsupply');
+    activeDetailFilters.add('type:practice');
     currentFilter = 'detailFilters';
   } else if (key === 'gone') {
     currentFilter = 'gone';
@@ -2531,6 +2633,7 @@ function importPlace(p) {
       return /라이브\s*클럽|라이브\s*하우스|인디\s*밴드/i.test(catName) ? 'liveclub' : 'club';
     }
     if (/애니메이션|피규어|굿즈|만화/i.test(catName)) return 'animeshop';
+    if (/합주(실)?|연습실|녹음실|녹음\s*스튜디오|음악\s*연습|밴드\s*연습/i.test(catName)) return 'practice';
     if (/화방|미술\s*재료|화방용품/i.test(catName)) return 'artsupply';
     if (code === 'CE7') return 'cafe';
     if (code === 'FD6' || !code) {
@@ -2679,7 +2782,7 @@ function addStore() {
 }
 </script>
   <!-- 홍대 실시간 혼잡도 배지 -->
-  <div id="congestBadge" style="display:none;position:absolute;bottom:64px;left:12px;z-index:10;
+  <div id="congestBadge" style="display:none;position:absolute;bottom:calc(64px + env(safe-area-inset-bottom));left:12px;z-index:10;
     background:var(--surface);border:1px solid var(--border);color:var(--text);
     border-radius:9999px;padding:8px 14px;font-family:'Pretendard','Noto Sans KR',sans-serif;
     font-size:12px;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.3);
