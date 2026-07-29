@@ -200,6 +200,9 @@
   .category-bar .chip.on svg,
   .category-bar .cat-toggle.on svg { stroke: #fff; }
 
+  /* top-stack: 데스크톱에서는 래퍼 자체가 없는 것처럼(display:contents) 기존 문서 흐름을 그대로 유지 */
+  .top-stack { display: contents; }
+
   /* LAYOUT */
   .layout { display: flex; flex: 1; overflow: hidden; }
 
@@ -320,33 +323,35 @@
   }
   .btn-home:hover { border-color: var(--accent); color: var(--accent); }
   .btn-home:active { transform: scale(.92); }
-  /* 현위치 버튼 — 데스크톱에서는 숨기고(공간 부족·오버랩 방지), 모바일 하단 FAB 행에서만 노출 */
-  .btn-locate {
+  /* 현위치 — 네이버지도 참고: 지도 위에 뜨는 작은 원형 버튼. 데스크톱은 숨기고(공간 부족), 모바일에서만 노출 */
+  .btn-locate-map {
     display: none;
-    position: absolute; bottom: 16px; left: 12px; z-index: 10;
-    width: 40px; height: 40px; border-radius: 50%;
+    position: absolute; z-index: 15;
+    width: 44px; height: 44px; border-radius: 50%;
     background: var(--surface); border: 1px solid var(--border);
     color: var(--text); cursor: pointer;
     align-items: center; justify-content: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,.3); transition: all .15s;
+    box-shadow: 0 4px 14px rgba(0,0,0,.4); transition: all .15s;
   }
-  .btn-locate:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-locate:active { transform: scale(.92); }
-  .btn-locate.locating svg { animation: locatePulse 1s ease-in-out infinite; }
+  .btn-locate-map:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-locate-map:active { transform: scale(.92); }
+  .btn-locate-map.locating svg { animation: locatePulse 1s ease-in-out infinite; }
   @keyframes locatePulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-  /* 즐겨찾기(하단) — 위치 버튼과 동일한 스타일. 데스크톱에는 상단 하트가 이미 있어 모바일 하단 바에서만 노출 */
-  .btn-fab-save {
-    display: none;
-    position: absolute; bottom: 16px; right: 66px; z-index: 10;
-    width: 40px; height: 40px; border-radius: 50%;
-    background: var(--surface); border: 1px solid var(--border);
-    color: var(--text); cursor: pointer;
-    align-items: center; justify-content: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,.3); transition: all .15s;
+  /* 지도 위 '내 위치' 파란 점 — 카카오맵 CustomOverlay 콘텐츠로 삽입됨 */
+  .user-location-dot { position: relative; width: 20px; height: 20px; pointer-events: none; }
+  .user-location-dot .dot {
+    position: absolute; inset: 0; margin: auto; width: 14px; height: 14px; border-radius: 50%;
+    background: #1a73e8; border: 3px solid #fff; box-shadow: 0 1px 6px rgba(0,0,0,.4);
   }
-  .btn-fab-save:hover { border-color: var(--accent); color: var(--accent2); }
-  .btn-fab-save:active { transform: scale(.92); }
-  /* 하단 FAB(현위치·결과보기·즐겨찾기)를 감싸는 래퍼 — 시안(mockup)의 3버튼 구성을 그대로 따름.
+  .user-location-dot .ring {
+    position: absolute; inset: 0; margin: auto; width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(26,115,232,.28); animation: locateRing 2s ease-out infinite;
+  }
+  @keyframes locateRing {
+    0% { transform: scale(.5); opacity: .8; }
+    100% { transform: scale(2.6); opacity: 0; }
+  }
+  /* 하단 FAB(결과보기)를 감싸는 래퍼.
      데스크톱: display:contents로 박스 자체를 없애서 기존 개별 position:absolute 배치를 그대로 유지(무변화).
      모바일: 아래 미디어쿼리에서 진짜 flex row로 바뀌며 홍대맵 Mobile 디자인 컴프의 플로팅 바를 재현.
      '홍대 중심으로 이동'(btn-home)은 이 행 밖으로 분리해 데스크톱 전용 보조 버튼으로 남기고,
@@ -670,11 +675,22 @@
     .store-item { padding: 9px 11px; }
     .item-name { font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    /* ── 홍대맵 시안(mockup) 기준 모바일 카드 ──────────────────────────────
-       로고 + 검색 + 메뉴/즐겨찾기가 한 장의 떠있는 유리 카드 안에서 2줄로 배치되고,
-       카테고리 칩은 지도 위로 겹쳐 뜨는 알약들로, 하단 3버튼은 한 줄의 플로팅 바로 재구성한다.
+    /* ── 홍대맵 시안(mockup) 기준 모바일 오버레이 ──────────────────────────────
+       지도를 화면 전체(.layout)로 꽉 채우고, 헤더 카드+카테고리 칩을 담은 top-stack을
+       그 위에 고정 오버레이로 띄운다. 이래야 카테고리 칩 사이 '투명한 틈'에 실제 지도가
+       비쳐서 진짜로 떠 있는 느낌이 난다(이전에는 top-stack이 일반 문서 흐름에 있어서
+       투명하게 해도 지도가 아닌 페이지 배경만 보였음).
        구조(HTML)는 그대로 두고 모바일에서만 배치를 오버라이드하는 방식이라
        데스크톱 레이아웃과 기존 기능(필터·검색·정렬 등)은 전혀 건드리지 않는다. */
+    .layout { position: fixed; inset: 0; z-index: 1; }
+
+    .top-stack {
+      display: block; position: fixed; top: 0; left: 0; right: 0; z-index: 40;
+      pointer-events: none; /* 카드/칩이 없는 빈 공간은 터치가 그대로 지도로 전달됨 */
+    }
+    .top-stack .topbar-search-row,
+    .top-stack .category-bar { pointer-events: auto; }
+
     .topbar-search-row {
       position: relative; z-index: 40;
       background: rgba(43,7,12,.9);
@@ -701,13 +717,16 @@
       display: flex; align-items: center;
       position: fixed; left: 16px; right: 16px; z-index: 38;
       bottom: calc(18px + env(safe-area-inset-bottom));
+      height: 56px; /* 행 높이를 명시적으로 고정해 자식 요소의 flex 계산이 흔들리지 않게 함 */
     }
-    /* 현위치·즐겨찾기 버튼은 모바일 하단에서 숨김 — 즐겨찾기는 상단 헤더 하트로 이미 접근 가능 */
-    .bottom-fab-row .btn-locate,
-    .bottom-fab-row .btn-fab-save { display: none; }
     .bottom-fab-row .btn-view-results {
       position: static; left: auto; bottom: auto; transform: none;
-      flex: 1; height: 56px; font-size: 15.5px;
+      flex: none; width: 100%; height: 56px; font-size: 15.5px;
+    }
+    /* 현위치 — 네이버지도처럼 CTA 위 오른쪽에 작은 원형 버튼으로 독립 배치 */
+    .btn-locate-map {
+      display: flex; right: 16px;
+      bottom: calc(18px + 56px + 12px + env(safe-area-inset-bottom));
     }
     /* '홍대 중심으로 이동'은 데스크톱 전용 보조 버튼이라 모바일에서는 숨김 */
     .btn-home { display: none; }
@@ -724,6 +743,8 @@
 
 <!-- TOP BAR -->
 <!-- 로고 + 검색 + 메뉴/즐겨찾기를 한 장의 카드로 (홍대맵 시안 기준 디자인 시스템) -->
+<!-- top-stack: 헤더 카드 + 카테고리 칩을 하나로 묶어 모바일에서 지도 위에 뜨는 오버레이로 만듦(데스크톱은 무변화) -->
+<div class="top-stack" id="top-stack">
 <div class="topbar-search-row">
   <div class="logo logo-lockup">
     <svg class="brand-logo" width="30" height="18" viewBox="0 0 180 100" aria-label="Hongdae Map logo" role="img">
@@ -773,6 +794,7 @@
   <button class="chip" id="chip-bar" onclick="selectCategoryBar('bar', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h12l-5 7v6h3v2H8v-2h3v-6ZM8 7h8"></path></svg>주점</button>
   <button class="chip" onclick="selectCategoryBar('entertainment', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.5V6l8-2v11M9 17.5a2.3 2.3 0 1 1-4.6 0 2.3 2.3 0 0 1 4.6 0ZM17 15a2.3 2.3 0 1 1-4.6 0 2.3 2.3 0 0 1 4.6 0Z"></path></svg>엔터테인먼트</button>
   <button class="chip" onclick="selectCategoryBar('gone', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20v-9a6 6 0 0 1 12 0v9l-2-1.6-2 1.6-2-1.6L10 20l-2-1.6ZM9.5 11h.01M14.5 11h.01"></path></svg>사라진 가게</button>
+</div>
 </div>
 
 <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeSidebar()"></div>
@@ -903,19 +925,15 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"></path><path d="M6 10v9a1 1 0 0 0 1 1h4v-6h2v6h4a1 1 0 0 0 1-1v-9"></path></svg>
     </button>
 
-    <!-- 위치·즐겨찾기 버튼은 마크업만 남기고 모바일에서 CSS로 숨김(데스크톱은 원래부터 숨김) —
-         즐겨찾기는 상단 헤더 하트로 이미 접근 가능하고, 모바일 하단은 CTA 하나만 깔끔하게 노출한다. -->
-    <div class="bottom-fab-row">
-      <button class="btn-locate" id="btn-locate" onclick="locateMe(this)" aria-label="현위치" title="현위치">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7.5"></circle><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>
-      </button>
+    <!-- 현위치 — 네이버지도 참고: CTA와 분리된 작은 원형 버튼으로 지도 위 오른쪽에 떠 있음 -->
+    <button class="btn-locate-map" id="btn-locate" onclick="locateMe(this)" aria-label="현위치" title="현위치">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7.5"></circle><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>
+    </button>
 
+    <!-- 하단은 CTA 하나만 깔끔하게 유지. 즐겨찾기는 상단 헤더 하트로 이미 접근 가능해 별도 버튼을 두지 않는다. -->
+    <div class="bottom-fab-row">
       <button class="btn-view-results" id="btn-view-results" onclick="openResultsModal()">
         가게 <span id="results-count">0</span>곳 보기
-      </button>
-
-      <button class="btn-fab-save" id="btn-fab-save" onclick="showBookmarks()" aria-label="즐겨찾기 모아보기" title="즐겨찾기 모아보기">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5 4.7 13a4.9 4.9 0 0 1 7-7l.3.4.3-.4a4.9 4.9 0 0 1 7 7Z"></path></svg>
       </button>
     </div>
 
@@ -3433,6 +3451,36 @@ function searchNearby() {
 
 // 현위치 버튼 — 브라우저 GPS로 실제 위치를 받아와 지도를 그 위치로 이동.
 // 위치 정보가 없거나 거부되면 지어내지 않고 정직하게 안내만 하고 끝낸다.
+// 사용자 위치 표시 — 네이버지도의 파란 점처럼, 한 번 카메라만 이동하는 게 아니라
+// 지도 위에 내 위치를 계속 보여주는 마커. watchPosition으로 움직임에 따라 갱신된다.
+let userLocationOverlay = null;
+let userLocationWatchId = null;
+function ensureUserLocationOverlay(lat, lng) {
+  if (!map) return;
+  if (userLocationOverlay) {
+    userLocationOverlay.setPosition(new kakao.maps.LatLng(lat, lng));
+    return;
+  }
+  const el = document.createElement('div');
+  el.className = 'user-location-dot';
+  el.innerHTML = '<span class="ring"></span><span class="dot"></span>';
+  userLocationOverlay = new kakao.maps.CustomOverlay({
+    position: new kakao.maps.LatLng(lat, lng),
+    content: el,
+    zIndex: 20,
+    yAnchor: 0.5, xAnchor: 0.5
+  });
+  userLocationOverlay.setMap(map);
+}
+function startWatchingUserLocation() {
+  if (!navigator.geolocation || userLocationWatchId != null) return;
+  userLocationWatchId = navigator.geolocation.watchPosition(
+    (pos) => ensureUserLocationOverlay(pos.coords.latitude, pos.coords.longitude),
+    () => {}, // 위치 갱신 실패는 조용히 무시(최초 클릭 시 이미 locateMe에서 에러 안내함)
+    { enableHighAccuracy: true, maximumAge: 10000 }
+  );
+}
+
 function locateMe(btn) {
   if (!navigator.geolocation) { showToast('이 브라우저는 위치 확인을 지원하지 않아요'); return; }
   if (btn) btn.classList.add('locating');
@@ -3443,6 +3491,8 @@ function locateMe(btn) {
       const here = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
       map.panTo(here);
       map.setLevel(4);
+      ensureUserLocationOverlay(pos.coords.latitude, pos.coords.longitude);
+      startWatchingUserLocation(); // 최초 허용 이후로는 파란 점이 계속 따라다님
     },
     (err) => {
       if (btn) btn.classList.remove('locating');
