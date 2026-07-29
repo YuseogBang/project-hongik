@@ -114,9 +114,10 @@
   .search-box input { color: #3d0f16 !important; font-weight: 500; }
   .search-box input::placeholder { color: #9a7d80 !important; }
   .search-results {
-    display:none; position:absolute; top:48px; left:16px; width:min(480px, calc(100vw - 32px));
+    display:none; position:absolute; top:100%; left:0; right:0; margin-top:8px;
     background:var(--surface); border:1px solid var(--border); border-radius:14px;
     box-shadow:0 14px 32px rgba(0,0,0,.45); overflow:hidden; z-index:350;
+    max-height: min(60vh, 420px); overflow-y: auto;
   }
   .search-result {
     width:100%; display:flex; align-items:center; gap:10px; padding:11px 14px;
@@ -337,8 +338,147 @@
   .btn-locate-map:active { transform: scale(.92); }
   .btn-locate-map.locating svg { animation: locatePulse 1s ease-in-out infinite; }
   @keyframes locatePulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  /* 큐레이션 피드 진입 버튼 — 현위치 버튼과 같은 스타일, 그 바로 아래에 배치 */
+  .btn-feed-map {
+    display: none;
+    position: absolute; z-index: 15;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); cursor: pointer;
+    align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,.4); transition: all .15s;
+  }
+  .btn-feed-map:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-feed-map:active { transform: scale(.92); }
+  .btn-feed-map .feed-dot {
+    position: absolute; top: 6px; right: 6px; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--accent); border: 1.5px solid var(--surface);
+  }
   /* 지도 위 '내 위치' 파란 점 — 카카오맵 CustomOverlay 콘텐츠로 삽입됨 */
   .user-location-dot { position: relative; width: 20px; height: 20px; pointer-events: none; }
+  /* ── 큐레이션 피드(CuratedFeed) — 인스타그램 Explore 느낌의 가로 스크롤 카드 ── */
+  .curated-card-scroll {
+    display: flex; gap: 12px; overflow-x: auto; padding: 2px 16px 6px;
+    scrollbar-width: none; flex: 1;
+  }
+  .curated-card-scroll::-webkit-scrollbar { display: none; }
+  .curated-card {
+    flex: none; width: 168px; border-radius: 16px; overflow: hidden; cursor: pointer;
+    background: var(--surface2); border: 1px solid var(--border);
+    box-shadow: 0 6px 18px rgba(0,0,0,.3); transition: transform .15s;
+  }
+  .curated-card:active { transform: scale(.97); }
+  .curated-card-thumb {
+    position: relative; width: 100%; aspect-ratio: 4 / 5; /* 요청된 4:5 비율 */
+    background: linear-gradient(135deg, var(--surface2), var(--surface)) center/cover;
+    display: flex; align-items: flex-end;
+  }
+  .curated-card-thumb img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+  .curated-card-overlay {
+    position: relative; z-index: 1; width: 100%; padding: 10px 10px 9px;
+    background: linear-gradient(to top, rgba(10,2,4,.92) 0%, rgba(10,2,4,.55) 55%, rgba(10,2,4,0) 100%);
+  }
+  .curated-card-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 5px; }
+  .curated-card-tag {
+    font-size: 9px; font-weight: 700; color: #fff; background: rgba(232,54,42,.85);
+    padding: 2px 7px; border-radius: 99px; white-space: nowrap;
+  }
+  .curated-card-title { font-size: 12.5px; font-weight: 800; color: #fff; line-height: 1.3; }
+  .curated-card-body { padding: 9px 10px 10px; }
+  .curated-card-desc { font-size: 11px; color: var(--muted); line-height: 1.4; margin: 0 0 8px; }
+  .curated-card-cta {
+    display: block; width: 100%; text-align: center; padding: 7px 0; border-radius: 99px;
+    font-size: 11px; font-weight: 700; color: #fff; border: none; cursor: pointer;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    font-family: 'Pretendard', sans-serif;
+  }
+  .curated-feed-empty { padding: 30px 16px; text-align: center; color: var(--muted); font-size: 12.5px; line-height: 1.6; }
+
+  /* ── 큐레이션 상세(CuratedDetail) ── */
+  .curated-detail-hero { width: 100%; aspect-ratio: 4 / 5; max-height: 260px; border-radius: 14px; overflow: hidden; background: var(--surface2); margin-bottom: 12px; }
+  .curated-detail-hero img { width: 100%; height: 100%; object-fit: cover; }
+  .curated-detail-title { font-size: 17px; font-weight: 800; margin: 0 0 6px; line-height: 1.35; }
+  .curated-detail-desc { font-size: 12.5px; color: var(--muted); line-height: 1.6; margin: 0 0 14px; }
+  .curated-place-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  /* ── 장소 카드(PlaceCard) ── */
+  .curated-place-card {
+    display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 13px;
+    background: var(--surface2); border: 1px solid var(--border); cursor: pointer;
+  }
+  .curated-place-thumb {
+    flex: none; width: 46px; height: 46px; border-radius: 10px; background: var(--surface);
+    display: flex; align-items: center; justify-content: center; font-size: 18px; overflow: hidden;
+  }
+  .curated-place-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .curated-place-info { flex: 1; min-width: 0; }
+  .curated-place-name { font-size: 13px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .curated-place-meta { font-size: 10.5px; color: var(--muted); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* ── 저장 버튼(SaveButton) ── */
+  .curated-save-btn {
+    flex: none; width: 32px; height: 32px; border-radius: 50%; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; background: var(--surface);
+    color: var(--muted); transition: all .15s;
+  }
+  .curated-save-btn.saved { background: var(--accent); color: #fff; }
+  /* ── 인스타그램 버튼(InstagramButton) ── */
+  .curated-ig-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+    padding: 12px 0; border-radius: 99px; border: none; cursor: pointer; margin-top: 4px;
+    font-size: 13.5px; font-weight: 700; color: #fff; font-family: 'Pretendard', sans-serif;
+    background: linear-gradient(135deg, #f58529, #dd2a7b 45%, #8134af 75%, #515bd4);
+  }
+  .curated-course-cta {
+    display: block; width: 100%; text-align: center; padding: 10px 0; margin-bottom: 14px;
+    border-radius: 99px; border: 1px solid var(--border); background: var(--surface2);
+    color: var(--text); font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: 'Pretendard', sans-serif;
+  }
+
+  /* ── 코스 배너 — 지도 위에서 여러 장소의 방문 순서를 보여줌 ── */
+  .course-banner {
+    position: fixed; left: 16px; right: 16px; z-index: 45;
+    top: calc(12px + env(safe-area-inset-top));
+    background: rgba(43,7,12,.94); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border: 1px solid var(--border); border-radius: 16px; padding: 10px 12px;
+    box-shadow: 0 10px 28px rgba(0,0,0,.4); max-width: 420px; margin: 0 auto;
+  }
+  .course-banner-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .course-banner-head span { font-size: 12.5px; font-weight: 800; }
+  .course-banner-head button { width: 22px; height: 22px; border-radius: 50%; border: none; background: var(--surface2); color: var(--muted); cursor: pointer; font-size: 11px; }
+  .course-banner-steps { display: flex; align-items: center; gap: 5px; overflow-x: auto; scrollbar-width: none; }
+  .course-banner-steps::-webkit-scrollbar { display: none; }
+  .course-step { flex: none; display: flex; align-items: center; gap: 5px; }
+  .course-step-badge {
+    flex: none; display: flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff;
+    font-size: 10.5px; font-weight: 800; cursor: pointer;
+  }
+  .course-step-name { font-size: 11.5px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+  .course-step-arrow { color: var(--muted); font-size: 11px; flex: none; }
+
+  /* ── 홍익대 전시·행사 카드 ── */
+  .exhibition-card {
+    display: flex; gap: 10px; padding: 11px; border-radius: 13px; margin-bottom: 9px;
+    background: var(--surface2); border: 1px solid var(--border);
+  }
+  .exhibition-thumb {
+    flex: none; width: 56px; height: 56px; border-radius: 10px; background: var(--surface);
+    display: flex; align-items: center; justify-content: center; font-size: 20px; overflow: hidden;
+  }
+  .exhibition-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .exhibition-info { flex: 1; min-width: 0; }
+  .exhibition-title { font-size: 13px; font-weight: 700; line-height: 1.35; }
+  .exhibition-meta { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+  .exhibition-status {
+    display: inline-block; font-size: 9.5px; font-weight: 800; padding: 2px 8px;
+    border-radius: 99px; margin-bottom: 5px;
+  }
+  .exhibition-status.ongoing { background: rgba(232,54,42,.22); color: var(--accent2); }
+  .exhibition-status.upcoming { background: rgba(245,166,35,.2); color: #f5a623; }
+  .exhibition-link {
+    display: inline-block; margin-top: 6px; font-size: 10.5px; font-weight: 700;
+    color: var(--accent2); text-decoration: none;
+  }
+
   /* 안내 토스트(예: '프랜차이즈를 숨기고...') — 기존엔 bottom:28px 고정이라 모바일 CTA와 겹쳤음 */
   .app-toast {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
@@ -741,11 +881,17 @@
     /* 안내 토스트를 CTA·현위치 버튼보다 위쪽으로 — 기존 bottom:28px는 CTA와 같은 자리라 겹쳐 보였음.
        줄바꿈 없이 한 줄 알약 모양은 기존 그대로 유지(위치만 위로 올림). */
     .app-toast {
-      bottom: calc(18px + 52px + 12px + 44px + 10px + env(safe-area-inset-bottom));
+      bottom: calc(18px + 52px + 12px + 44px + 10px + 44px + 10px + env(safe-area-inset-bottom));
       max-width: calc(100vw - 24px);
     }
-    /* 현위치 — 네이버지도처럼 CTA 위 오른쪽에 작은 원형 버튼으로 독립 배치 */
+    /* 현위치 — 네이버지도처럼 CTA 위 오른쪽에 작은 원형 버튼으로 독립 배치.
+       큐레이션 피드 버튼이 이 버튼 '아래'(=CTA에 더 가깝게)에 오도록 오프셋을 크게 잡음. */
     .btn-locate-map {
+      display: flex; right: 16px;
+      bottom: calc(18px + 52px + 12px + 44px + 12px + env(safe-area-inset-bottom));
+    }
+    /* 큐레이션 피드 버튼 — 현위치 버튼 바로 아래(=CTA 바로 위) */
+    .btn-feed-map {
       display: flex; right: 16px;
       bottom: calc(18px + 52px + 12px + env(safe-area-inset-bottom));
     }
@@ -865,6 +1011,12 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7.5"></circle><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>
     </button>
 
+    <!-- 큐레이션 피드 진입 버튼 — 현위치 버튼 바로 아래, 뉴스피드 아이콘 -->
+    <button class="btn-feed-map" id="btn-curated-feed" onclick="openCuratedFeed()" aria-label="홍익인 큐레이션" title="홍익인 큐레이션">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"></rect><path d="M3 9h18M8 4v5"></path><path d="M11 13h7M11 16.5h7M6 13h1.5M6 16.5h1.5"></path></svg>
+      <span class="feed-dot" id="feed-dot" style="display:none"></span>
+    </button>
+
     <!-- 하단은 CTA 하나만 깔끔하게 유지. 즐겨찾기는 상단 헤더 하트로 이미 접근 가능해 별도 버튼을 두지 않는다. -->
     <div class="bottom-fab-row">
       <button class="btn-view-results" id="btn-view-results" onclick="openResultsModal()">
@@ -908,6 +1060,119 @@
       <div style="padding:24px 4px;text-align:center;color:var(--muted);font-size:13px">불러오는 중…</div>
     </div>
     <div id="subway-arrival-updated" style="flex:none;margin-top:8px;font-size:10.5px;color:var(--muted);text-align:center"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     큐레이션 피드 (CuratedFeed → CuratedCard → CuratedDetail)
+     인스타그램 카드뉴스와 연결되는 큐레이션 배너. #subway-modal과 같은 이유로
+     body 레벨(=.layout 밖)에 둬서 헤더에 가려 클릭 안 되는 문제를 원천 방지.
+     ══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="curated-modal" style="display:none" onclick="if(event.target===this)closeCuratedFeed()">
+  <div class="modal curated-modal-card" style="display:flex; flex-direction:column; width:min(440px, 94vw); max-height:82vh; padding:16px 0 14px;">
+    <div class="feed-handle"></div>
+
+    <!-- 헤더: 피드 화면/상세 화면 공용, 상세일 때만 뒤로가기 화살표 노출 -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex:none;padding:0 16px">
+      <button id="curated-back-btn" onclick="showCuratedFeedView()" style="display:none;width:28px;height:28px;border-radius:50%;border:none;background:var(--surface2);color:var(--text);cursor:pointer;font-size:14px;flex:none">←</button>
+      <h4 id="curated-modal-title" style="margin:0;display:flex;align-items:center;gap:7px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🗞️ 홍익인 큐레이션</h4>
+      <button onclick="closeCuratedFeed()" style="width:26px;height:26px;border-radius:50%;border:none;background:var(--surface2);color:var(--muted);cursor:pointer;font-size:13px;flex:none">✕</button>
+    </div>
+
+    <!-- 피드 화면: 가로 스크롤 카드 리스트 -->
+    <div id="curated-feed-view" style="overflow:hidden;flex:1;display:flex;flex-direction:column;">
+      <p style="margin:0 16px 10px;font-size:11.5px;color:var(--muted);line-height:1.5">
+        인스타그램에서 발견한 홍대 콘텐츠를 지도와 함께 보고, 마음에 드는 장소를 저장해보세요.
+      </p>
+      <div id="curated-card-scroll" class="curated-card-scroll"></div>
+    </div>
+
+    <!-- 상세 화면: 카드뉴스 대표 이미지·설명·장소 리스트·인스타그램 버튼 -->
+    <div id="curated-detail-view" style="display:none;overflow-y:auto;flex:1;padding:0 16px;"></div>
+  </div>
+</div>
+
+<!-- 여러 장소 코스 정보 배너 — 지도 위에서 '카페A → 소품샵B → 맛집C' 순서를 보여줌 -->
+<div class="course-banner" id="course-banner" style="display:none">
+  <div class="course-banner-head">
+    <span id="course-banner-title">코스</span>
+    <button onclick="closeCourseBanner()" aria-label="코스 닫기">✕</button>
+  </div>
+  <div class="course-banner-steps" id="course-banner-steps"></div>
+</div>
+
+<!-- 큐레이션 관리자 등록 폼 — 배포용으로 기본 숨김(관리자만 style="display:none" 지우고 사용).
+     실제 서버가 없는 정적 사이트라, '저장'은 이 브라우저 세션에만 남고 '내보내기'로 JSON 파일을 받아
+     main.html의 CURATIONS 배열에 직접 붙여넣는 방식 — 기존 '지도에서 불러오기 → 내보내기' 관리자 도구와 동일한 철학. -->
+<div class="modal-overlay" id="curated-admin-modal" style="display:none" onclick="if(event.target===this)closeCuratedAdmin()">
+  <div class="modal" style="display:flex; flex-direction:column; width:min(460px, 94vw); max-height:86vh;">
+    <div class="feed-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex:none">
+      <h4 style="margin:0">🗞️ 큐레이션 등록 (관리자)</h4>
+      <button onclick="closeCuratedAdmin()" style="width:26px;height:26px;border-radius:50%;border:none;background:var(--surface2);color:var(--muted);cursor:pointer;font-size:13px;flex:none">✕</button>
+    </div>
+    <div style="overflow-y:auto;flex:1" id="curated-admin-body">
+      <div class="form-group"><label>Instagram 게시물 URL</label><input type="text" id="ca-ig-url" placeholder="https://instagram.com/p/..."></div>
+      <div class="form-group"><label>대표 이미지 URL</label><input type="text" id="ca-thumb" placeholder="https://..."></div>
+      <div class="form-group"><label>제목</label><input type="text" id="ca-title" placeholder="홍대생이 추천하는 조용한 카페 5곳"></div>
+      <div class="form-group"><label>설명</label><textarea id="ca-desc" rows="2" placeholder="짧은 큐레이션 설명"></textarea></div>
+      <div class="form-group"><label>카테고리</label><input type="text" id="ca-category" placeholder="예: 카페 투어"></div>
+      <div class="form-group"><label>태그 (쉼표로 구분)</label><input type="text" id="ca-tags" placeholder="데이트, 홍대생추천, 숨은맛집"></div>
+      <div class="form-group">
+        <label>장소 리스트</label>
+        <div id="ca-places-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
+        <button type="button" class="chip" onclick="addCuratedAdminPlaceRow()" style="width:100%;text-align:center">+ 장소 추가</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px;flex:none">
+      <button class="chip" style="flex:1;text-align:center" onclick="saveCuratedAdminEntry()">이 세션에 저장</button>
+      <button class="chip" style="flex:1;text-align:center" onclick="exportCuratedEntries()">💾 전체 내보내기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     홍익대학교 전시·행사 배너 — 학교 핀 클릭 시 표시.
+     서울시 지하철 API 같은 공식 오픈API가 학교 쪽엔 없어서, 큐레이션 피드와 같은 방식
+     (직접 입력 + 세션 저장 + 내보내기)으로 관리한다. body 레벨에 둬서 헤더에 안 가림. ── -->
+<div class="modal-overlay" id="exhibition-modal" style="display:none" onclick="if(event.target===this)closeExhibitionBanner()">
+  <div class="modal" style="display:flex; flex-direction:column; width:min(440px, 92vw); max-height:78vh;">
+    <div class="feed-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex:none">
+      <h4 style="margin:0;display:flex;align-items:center;gap:7px">🎓 홍익대 전시·행사</h4>
+      <button onclick="closeExhibitionBanner()" style="width:26px;height:26px;border-radius:50%;border:none;background:var(--surface2);color:var(--muted);cursor:pointer;font-size:13px;flex:none">✕</button>
+    </div>
+    <p style="margin:0 0 8px;font-size:11px;color:var(--muted);line-height:1.5">
+      과별 졸업전시·기획전시 소식이에요. 학교 공식 API가 없어 운영자가 직접 등록해요.
+    </p>
+    <div id="exhibition-body" style="overflow-y:auto;flex:1"></div>
+  </div>
+</div>
+
+<!-- 전시 등록(관리자) — 배포용으로 기본 숨김. -->
+<div class="modal-overlay" id="exhibition-admin-modal" style="display:none" onclick="if(event.target===this)closeExhibitionAdmin()">
+  <div class="modal" style="display:flex; flex-direction:column; width:min(440px, 92vw); max-height:86vh;">
+    <div class="feed-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex:none">
+      <h4 style="margin:0">🎓 전시 등록 (관리자)</h4>
+      <button onclick="closeExhibitionAdmin()" style="width:26px;height:26px;border-radius:50%;border:none;background:var(--surface2);color:var(--muted);cursor:pointer;font-size:13px;flex:none">✕</button>
+    </div>
+    <div style="overflow-y:auto;flex:1">
+      <div class="form-group"><label>전시명</label><input type="text" id="ea-title" placeholder="예: 2026 회화과 졸업전시 《...》"></div>
+      <div class="form-group"><label>학과</label><input type="text" id="ea-dept" placeholder="예: 회화과"></div>
+      <div class="form-group" style="display:flex;gap:8px">
+        <div style="flex:1"><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:5px">시작일</label><input type="date" id="ea-start"></div>
+        <div style="flex:1"><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:5px">종료일</label><input type="date" id="ea-end"></div>
+      </div>
+      <div class="form-group"><label>장소</label><input type="text" id="ea-location" placeholder="예: 홍익대학교 현대미술관"></div>
+      <div class="form-group"><label>대표 이미지 URL (선택)</label><input type="text" id="ea-thumb" placeholder="https://..."></div>
+      <div class="form-group"><label>설명 (선택)</label><textarea id="ea-desc" rows="2" placeholder="짧은 소개"></textarea></div>
+      <div class="form-group"><label>관련 링크 (선택 — 인스타그램 등)</label><input type="text" id="ea-link" placeholder="https://instagram.com/p/..."></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px;flex:none">
+      <button class="chip" style="flex:1;text-align:center" onclick="saveExhibitionAdminEntry()">이 세션에 저장</button>
+      <button class="chip" style="flex:1;text-align:center" onclick="exportExhibitionEntries()">💾 전체 내보내기</button>
+    </div>
   </div>
 </div>
 
@@ -2450,7 +2715,7 @@ window.kakao && kakao.maps.load(() => {
       <rect x="15.3" y="3.6" width="0.9" height="4.6"/>
     </g>
   </svg>`;
-  new kakao.maps.Marker({
+  const schoolMarker = new kakao.maps.Marker({
     map, position: campusPosition, title: '홍익대학교', zIndex: 5,
     image: new kakao.maps.MarkerImage(
       'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(schoolPinSvg),
@@ -2458,6 +2723,7 @@ window.kakao && kakao.maps.load(() => {
       { offset: new kakao.maps.Point(schoolPinSize / 2, schoolPinSize * 1.3) }
     )
   });
+  kakao.maps.event.addListener(schoolMarker, 'click', () => openExhibitionBanner());
 
   document.getElementById('loading').style.display = 'none';
   applyLang(); // 저장된 언어 설정(있다면) 적용
@@ -3730,6 +3996,444 @@ function addStore() {
       body.innerHTML = `<div style="padding:24px 4px;text-align:center;color:var(--muted);font-size:13px">도착 정보를 불러오지 못했어요. 잠시 후 다시 시도해주세요.</div>`;
       if (updated) updated.textContent = '';
     }
+  }
+  </script>
+  <!-- ══════════════════════════════════════════════════════════
+       큐레이션 피드 — 인스타그램 카드뉴스 ↔ 지도 연결 기능
+       (CuratedFeed / CuratedCard / CuratedDetail / InstagramButton / PlaceCard / SaveButton)
+       React가 아닌 이 프로젝트의 vanilla JS 방식으로 구현 — main.html이 빌드 도구 없는
+       단일 정적 파일이라, 명세의 컴포넌트들을 렌더 함수로 옮겨 담았다.
+       ══════════════════════════════════════════════════════════ -->
+  <script>
+  // 지도 초기화 콜백 안의 BRAND_RED는 그 함수 안에서만 보여서, 여기서 쓸 전역 상수를 따로 둠(같은 값)
+  const BRAND_RED = '#e8362a';
+  // ── 데이터 구조 ──────────────────────────────────────────
+  // ⚠️ 아래 항목은 실제 인스타그램 게시물이 아닌 '자리표시(placeholder)' 예시입니다.
+  // instagramUrl 등은 존재하지 않는 더미 링크이니, 실제 등록은 관리자 폼(🗞️ 큐레이션 등록)으로
+  // 진짜 게시물 URL·이미지·장소를 입력해 대체해주세요 (없는 정보를 사실처럼 표시하지 않기 위함).
+  const CURATIONS = [
+    {
+      id: 'sample-1',
+      title: '[예시] 홍대생이 추천하는 조용한 카페 5곳',
+      thumbnail: '',
+      description: '이 카드는 실제 데이터가 아닌 화면 구성 예시입니다. 관리자 폼에서 진짜 큐레이션으로 교체해주세요.',
+      instagramUrl: '',
+      instagramPostId: '',
+      category: '카페 투어',
+      tags: ['예시', '데이트', '홍대생추천'],
+      places: [
+        { name: '(예시) 카페 A', latitude: 37.5533, longitude: 126.9236, saved: false, tag: '조용한' },
+        { name: '(예시) 카페 B', latitude: 37.5518, longitude: 126.9221, saved: false, tag: '작업하기 좋은' }
+      ]
+    }
+  ];
+
+  // ── 저장 상태 저장소(SaveButton) — 매장 즐겨찾기(bookmarks)와 같은 방식이지만 별도 네임스페이스 ──
+  let curatedSaves = JSON.parse(localStorage.getItem('curatedSaves') || '{}'); // { "curationId:placeIdx": true }
+  let curatedVisited = JSON.parse(localStorage.getItem('curatedVisited') || '{}');
+  function curatedSaveKey(curationId, idx) { return `${curationId}:${idx}`; }
+
+  // ── 사용자 행동 이벤트 트래킹 ──────────────────────────────
+  // 실제 Analytics 백엔드가 붙기 전까지는 콘솔 로그 + 내부 배열 적재만 함(허위로 "전송됨"이라 하지 않음).
+  // 나중에 GA4(window.gtag)나 Vercel Analytics(window.va)를 붙이면 자동으로 함께 전송되도록 훅을 열어둠.
+  window.curatedAnalyticsLog = [];
+  function trackCurationEvent(name, payload) {
+    const entry = { name, payload: payload || {}, t: Date.now() };
+    window.curatedAnalyticsLog.push(entry);
+    if (typeof window.gtag === 'function') window.gtag('event', name, payload || {});
+    if (typeof window.va === 'function') window.va('event', { name, ...payload });
+    console.debug('[curated-analytics]', name, payload || {});
+  }
+
+  function curatedFindById(id) { return CURATIONS.find(c => c.id === id); }
+
+  // ── CuratedCard: 카드 1개의 HTML ──────────────────────────
+  function curatedCardHTML(item) {
+    const tagsHTML = (item.tags || []).slice(0, 3).map(t => `<span class="curated-card-tag">#${t}</span>`).join('');
+    const bg = item.thumbnail ? `style="background-image:url('${item.thumbnail}')"` : '';
+    return `<div class="curated-card" onclick="openCuratedDetail('${item.id}')">
+      <div class="curated-card-thumb" ${bg}>
+        <div class="curated-card-overlay">
+          <div class="curated-card-tags">${tagsHTML}</div>
+          <div class="curated-card-title">${item.title}</div>
+        </div>
+      </div>
+      <div class="curated-card-body">
+        <p class="curated-card-desc">${item.description || ''}</p>
+        <button class="curated-card-cta" onclick="event.stopPropagation();openCuratedDetail('${item.id}')">지도에서 보기</button>
+      </div>
+    </div>`;
+  }
+
+  // ── CuratedFeed: 가로 스크롤 카드 리스트 렌더 ──────────────
+  function renderCuratedFeed() {
+    const scroll = document.getElementById('curated-card-scroll');
+    if (!scroll) return;
+    if (!CURATIONS.length) {
+      scroll.innerHTML = `<div class="curated-feed-empty">아직 등록된 큐레이션이 없어요.</div>`;
+      return;
+    }
+    scroll.innerHTML = CURATIONS.map(curatedCardHTML).join('');
+    trackCurationEvent('curation_feed_impression', { count: CURATIONS.length });
+  }
+
+  function openCuratedFeed() {
+    const overlay = document.getElementById('curated-modal');
+    if (!overlay) return;
+    overlay.style.display = 'flex';
+    showCuratedFeedView();
+    renderCuratedFeed();
+    trackCurationEvent('curation_feed_open');
+    const dot = document.getElementById('feed-dot');
+    if (dot) dot.style.display = 'none'; // 열어봤으니 '새 소식' 점 제거
+  }
+  function closeCuratedFeed() {
+    const overlay = document.getElementById('curated-modal');
+    if (overlay) overlay.style.display = 'none';
+  }
+  function showCuratedFeedView() {
+    document.getElementById('curated-feed-view').style.display = 'flex';
+    document.getElementById('curated-detail-view').style.display = 'none';
+    document.getElementById('curated-back-btn').style.display = 'none';
+    document.getElementById('curated-modal-title').textContent = '🗞️ 홍익인 큐레이션';
+  }
+
+  // ── SaveButton ─────────────────────────────────────────────
+  function curatedSaveButtonHTML(curationId, idx) {
+    const saved = !!curatedSaves[curatedSaveKey(curationId, idx)];
+    return `<button class="curated-save-btn ${saved ? 'saved' : ''}"
+      onclick="event.stopPropagation();toggleCuratedSave('${curationId}',${idx})" aria-label="저장">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="${saved ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M12 20.5 4.7 13a4.9 4.9 0 0 1 7-7l.3.4.3-.4a4.9 4.9 0 0 1 7 7Z"/></svg>
+    </button>`;
+  }
+  function toggleCuratedSave(curationId, idx) {
+    const key = curatedSaveKey(curationId, idx);
+    if (curatedSaves[key]) { delete curatedSaves[key]; }
+    else { curatedSaves[key] = true; trackCurationEvent('curation_place_save', { curationId, idx }); }
+    localStorage.setItem('curatedSaves', JSON.stringify(curatedSaves));
+    if (document.getElementById('curated-detail-view').style.display !== 'none') renderCuratedDetailBody(curationId);
+  }
+  function toggleCuratedVisited(curationId, idx) {
+    const key = curatedSaveKey(curationId, idx);
+    curatedVisited[key] = !curatedVisited[key];
+    if (curatedVisited[key]) trackCurationEvent('curation_visit_complete', { curationId, idx });
+    localStorage.setItem('curatedVisited', JSON.stringify(curatedVisited));
+    renderCuratedDetailBody(curationId);
+  }
+
+  // ── PlaceCard ────────────────────────────────────────────
+  function curatedPlaceCardHTML(place, curationId, idx) {
+    const visited = !!curatedVisited[curatedSaveKey(curationId, idx)];
+    const thumb = place.image ? `<img src="${place.image}" alt="">` : '📍';
+    return `<div class="curated-place-card" onclick="viewCuratedPlaceOnMap('${curationId}',${idx})">
+      <div class="curated-place-thumb">${thumb}</div>
+      <div class="curated-place-info">
+        <div class="curated-place-name">${place.name}${visited ? ' <span style=\'color:var(--accent2);font-size:10px;font-weight:800\'>· 다녀옴</span>' : ''}</div>
+        <div class="curated-place-meta">${place.tag ? '#' + place.tag : '지도에서 위치 보기'}</div>
+      </div>
+      ${curatedSaveButtonHTML(curationId, idx)}
+    </div>`;
+  }
+
+  // ── InstagramButton ──────────────────────────────────────
+  function curatedInstagramButtonHTML(url) {
+    if (!url) {
+      return `<button class="curated-ig-btn" disabled style="opacity:.5;cursor:not-allowed">인스타그램 링크가 아직 없어요</button>`;
+    }
+    return `<button class="curated-ig-btn" onclick="openCuratedInstagram('${url}')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1" fill="#fff" stroke="none"/></svg>
+      Instagram에서 카드뉴스 보기
+    </button>`;
+  }
+  function openCuratedInstagram(url) {
+    trackCurationEvent('curation_instagram_click', { url });
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  // ── CuratedDetail ────────────────────────────────────────
+  function openCuratedDetail(id) {
+    const item = curatedFindById(id);
+    if (!item) return;
+    document.getElementById('curated-feed-view').style.display = 'none';
+    document.getElementById('curated-detail-view').style.display = 'block';
+    document.getElementById('curated-back-btn').style.display = 'flex';
+    document.getElementById('curated-modal-title').textContent = item.title;
+    renderCuratedDetailBody(id);
+    trackCurationEvent('curation_card_click', { id });
+  }
+  function renderCuratedDetailBody(id) {
+    const item = curatedFindById(id);
+    const el = document.getElementById('curated-detail-view');
+    if (!item || !el) return;
+    const heroBg = item.thumbnail ? `<img src="${item.thumbnail}" alt="">` : '';
+    const placesHTML = (item.places || []).map((p, i) => curatedPlaceCardHTML(p, item.id, i)).join('');
+    const courseBtn = (item.places || []).length > 1
+      ? `<button class="curated-course-cta" onclick="viewCuratedCourseOnMap('${item.id}')">🗺️ 코스로 지도에서 한번에 보기</button>` : '';
+    el.innerHTML = `
+      <div class="curated-detail-hero">${heroBg}</div>
+      <h3 class="curated-detail-title">${item.title}</h3>
+      <p class="curated-detail-desc">${item.description || ''}</p>
+      ${courseBtn}
+      <div class="curated-place-list">${placesHTML || '<div class="curated-feed-empty">등록된 장소가 없어요.</div>'}</div>
+      ${curatedInstagramButtonHTML(item.instagramUrl)}
+    `;
+  }
+
+  // ── 지도 연결: 단일 장소 ──────────────────────────────────
+  let curatedMapMarkers = [];
+  function clearCuratedMapMarkers() {
+    curatedMapMarkers.forEach(m => m.setMap(null));
+    curatedMapMarkers = [];
+  }
+  function viewCuratedPlaceOnMap(curationId, idx) {
+    const item = curatedFindById(curationId);
+    const place = item && item.places && item.places[idx];
+    if (!place || !map) return;
+    closeCuratedFeed();
+    closeCourseBanner();
+    clearCuratedMapMarkers();
+    const pos = new kakao.maps.LatLng(place.latitude, place.longitude);
+    map.panTo(pos);
+    map.setLevel(3);
+    const marker = new kakao.maps.Marker({ map, position: pos, zIndex: 12 });
+    curatedMapMarkers.push(marker);
+    const overlay = new kakao.maps.CustomOverlay({
+      position: pos, yAnchor: 2.5, zIndex: 25,
+      content: `<div style="white-space:nowrap;font-size:11px;font-weight:700;background:${BRAND_RED};color:#fff;padding:5px 10px;border-radius:8px;font-family:'Pretendard',sans-serif;box-shadow:0 3px 10px rgba(0,0,0,.4)">📍 ${place.name}</div>`
+    });
+    overlay.setMap(map);
+    curatedMapMarkers.push({ setMap: (m) => overlay.setMap(m) });
+    trackCurationEvent('curation_map_view', { curationId, idx });
+  }
+
+  // ── 지도 연결: 코스(여러 장소 순서대로) ────────────────────
+  let curatedCoursePolyline = null;
+  function viewCuratedCourseOnMap(curationId) {
+    const item = curatedFindById(curationId);
+    if (!item || !map || !item.places || item.places.length < 2) return;
+    closeCuratedFeed();
+    clearCuratedMapMarkers();
+    if (curatedCoursePolyline) { curatedCoursePolyline.setMap(null); curatedCoursePolyline = null; }
+
+    const path = item.places.map(p => new kakao.maps.LatLng(p.latitude, p.longitude));
+    curatedCoursePolyline = new kakao.maps.Polyline({
+      map, path, strokeWeight: 4, strokeColor: BRAND_RED, strokeOpacity: 0.85, strokeStyle: 'shortdash'
+    });
+
+    item.places.forEach((p, i) => {
+      const pos = new kakao.maps.LatLng(p.latitude, p.longitude);
+      const overlay = new kakao.maps.CustomOverlay({
+        position: pos, yAnchor: 0.5, xAnchor: 0.5, zIndex: 20,
+        content: `<div style="width:26px;height:26px;border-radius:50%;background:${BRAND_RED};color:#fff;
+          display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;
+          border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.4);font-family:'Pretendard',sans-serif">${i + 1}</div>`
+      });
+      overlay.setMap(map);
+      curatedMapMarkers.push({ setMap: (m) => overlay.setMap(m) });
+    });
+
+    const bounds = new kakao.maps.LatLngBounds();
+    path.forEach(p => bounds.extend(p));
+    map.setBounds(bounds);
+
+    renderCourseBanner(item);
+    trackCurationEvent('curation_map_view', { curationId, course: true });
+  }
+
+  function renderCourseBanner(item) {
+    const banner = document.getElementById('course-banner');
+    const title = document.getElementById('course-banner-title');
+    const steps = document.getElementById('course-banner-steps');
+    if (!banner) return;
+    title.textContent = `🗺️ ${item.title.replace(/^\[예시\]\s*/, '')} 코스`;
+    steps.innerHTML = item.places.map((p, i) => `
+      <div class="course-step">
+        <span class="course-step-badge" onclick="focusCuratedCourseStep(${i})">${i + 1}</span>
+        <span class="course-step-name" onclick="focusCuratedCourseStep(${i})">${p.name}</span>
+        ${i < item.places.length - 1 ? '<span class="course-step-arrow">→</span>' : ''}
+      </div>`).join('');
+    banner.style.display = 'block';
+    banner.dataset.curationId = item.id;
+  }
+  function focusCuratedCourseStep(idx) {
+    const banner = document.getElementById('course-banner');
+    const item = curatedFindById(banner?.dataset.curationId);
+    const place = item && item.places[idx];
+    if (!place || !map) return;
+    map.panTo(new kakao.maps.LatLng(place.latitude, place.longitude));
+    map.setLevel(3);
+  }
+  function closeCourseBanner() {
+    const banner = document.getElementById('course-banner');
+    if (banner) banner.style.display = 'none';
+    if (curatedCoursePolyline) { curatedCoursePolyline.setMap(null); curatedCoursePolyline = null; }
+    clearCuratedMapMarkers();
+  }
+
+  // ── 관리자: 큐레이션 등록 폼 ──────────────────────────────
+  // 정적 사이트라 실제 DB 저장이 없음 — 이 브라우저 세션에 임시로 담아뒀다가 '내보내기'로
+  // JSON을 받아서, 운영자가 main.html의 CURATIONS 배열에 직접 붙여넣는 방식(기존 매장 추가 도구와 동일한 철학).
+  let curatedAdminDraftPlaces = [];
+  let curatedSessionEntries = [];
+  function openCuratedAdmin() { document.getElementById('curated-admin-modal').style.display = 'flex'; }
+  function closeCuratedAdmin() { document.getElementById('curated-admin-modal').style.display = 'none'; }
+  function addCuratedAdminPlaceRow() {
+    const idx = curatedAdminDraftPlaces.length;
+    curatedAdminDraftPlaces.push({ name: '', latitude: '', longitude: '', tag: '' });
+    renderCuratedAdminPlaceRows();
+  }
+  function renderCuratedAdminPlaceRows() {
+    const wrap = document.getElementById('ca-places-list');
+    if (!wrap) return;
+    wrap.innerHTML = curatedAdminDraftPlaces.map((p, i) => `
+      <div style="display:flex;gap:5px">
+        <input type="text" placeholder="장소명" value="${p.name}" oninput="curatedAdminDraftPlaces[${i}].name=this.value" style="flex:2">
+        <input type="text" placeholder="위도" value="${p.latitude}" oninput="curatedAdminDraftPlaces[${i}].latitude=this.value" style="flex:1">
+        <input type="text" placeholder="경도" value="${p.longitude}" oninput="curatedAdminDraftPlaces[${i}].longitude=this.value" style="flex:1">
+        <button type="button" onclick="curatedAdminDraftPlaces.splice(${i},1);renderCuratedAdminPlaceRows()" style="flex:none;width:28px;border:none;background:var(--surface2);border-radius:8px;color:var(--muted);cursor:pointer">✕</button>
+      </div>`).join('');
+  }
+  function saveCuratedAdminEntry() {
+    const title = document.getElementById('ca-title').value.trim();
+    if (!title) { alert('제목을 입력해주세요.'); return; }
+    const entry = {
+      id: 'draft-' + Date.now(),
+      title,
+      thumbnail: document.getElementById('ca-thumb').value.trim(),
+      description: document.getElementById('ca-desc').value.trim(),
+      instagramUrl: document.getElementById('ca-ig-url').value.trim(),
+      instagramPostId: '',
+      category: document.getElementById('ca-category').value.trim(),
+      tags: document.getElementById('ca-tags').value.split(',').map(s => s.trim()).filter(Boolean),
+      places: curatedAdminDraftPlaces
+        .filter(p => p.name && p.latitude && p.longitude)
+        .map(p => ({ name: p.name, latitude: parseFloat(p.latitude), longitude: parseFloat(p.longitude), saved: false, tag: p.tag || '' }))
+    };
+    CURATIONS.push(entry);
+    curatedSessionEntries.push(entry);
+    renderCuratedFeed();
+    const dot = document.getElementById('feed-dot');
+    if (dot) dot.style.display = 'block';
+    showToast(`🗞️ "${title}" 큐레이션을 이 세션에 추가했어요`);
+    ['ca-ig-url','ca-thumb','ca-title','ca-desc','ca-category','ca-tags'].forEach(id => { const e = document.getElementById(id); if (e) e.value=''; });
+    curatedAdminDraftPlaces = [];
+    renderCuratedAdminPlaceRows();
+  }
+  function exportCuratedEntries() {
+    if (curatedSessionEntries.length === 0) { alert('아직 이 세션에 등록한 큐레이션이 없어요.'); return; }
+    const blob = new Blob([JSON.stringify(curatedSessionEntries, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    const now = new Date();
+    const stamp = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
+    a.href = URL.createObjectURL(blob);
+    a.download = `curated_entries_${stamp}.json`;
+    a.click();
+    showToast(`💾 큐레이션 ${curatedSessionEntries.length}건을 파일로 내보냈어요`);
+  }
+  </script>
+  <!-- ══════════════════════════════════════════════════════════
+       홍익대 전시·행사 배너 — 학교 핀 클릭 시 표시.
+       공식 오픈API가 없어 큐레이션 피드와 같은 '직접 입력 + 세션저장 + 내보내기' 방식.
+       ══════════════════════════════════════════════════════════ -->
+  <script>
+  // ⚠️ 아래 항목은 실제 전시가 아닌 화면 구성 예시입니다. 관리자 폼(🎓 전시 등록)으로 실제 전시 정보로 교체해주세요.
+  const EXHIBITIONS = [
+    {
+      id: 'exh-sample-1',
+      title: '[예시] 2026 회화과 졸업전시',
+      dept: '회화과',
+      dateStart: '2026-01-01',
+      dateEnd: '2099-12-31', // 예시라 항상 '진행중'으로 보이게 넉넉히 잡아둠 — 실제 등록 시 정확한 종료일로 교체
+      location: '홍익대학교 현대미술관',
+      thumbnail: '',
+      description: '이 카드는 실제 데이터가 아닌 화면 구성 예시입니다.',
+      link: ''
+    }
+  ];
+  let exhibitionSessionEntries = [];
+
+  function exhibitionStatus(exh) {
+    const today = new Date().toISOString().slice(0, 10);
+    if (exh.dateStart <= today && today <= exh.dateEnd) return 'ongoing';
+    if (today < exh.dateStart) return 'upcoming';
+    return 'ended';
+  }
+  function exhibitionDateLabel(exh) {
+    const fmt = d => { const [y,m,dd] = d.split('-'); return `${m}.${dd}`; };
+    return `${fmt(exh.dateStart)} ~ ${fmt(exh.dateEnd)}`;
+  }
+  function exhibitionCardHTML(exh) {
+    const status = exhibitionStatus(exh);
+    const statusLabel = status === 'ongoing' ? '진행중' : status === 'upcoming' ? '예정' : '종료';
+    const thumb = exh.thumbnail ? `<img src="${exh.thumbnail}" alt="">` : '🎨';
+    const link = exh.link ? `<a class="exhibition-link" href="${exh.link}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();trackCurationEvent('exhibition_link_click',{id:'${exh.id}'})">자세히 보기 →</a>` : '';
+    return `<div class="exhibition-card">
+      <div class="exhibition-thumb">${thumb}</div>
+      <div class="exhibition-info">
+        <span class="exhibition-status ${status}">${statusLabel}</span>
+        <div class="exhibition-title">${exh.title}</div>
+        <div class="exhibition-meta">${exh.dept ? exh.dept + ' · ' : ''}${exhibitionDateLabel(exh)}<br>${exh.location || ''}</div>
+        ${link}
+      </div>
+    </div>`;
+  }
+  function openExhibitionBanner() {
+    const overlay = document.getElementById('exhibition-modal');
+    if (!overlay) return;
+    overlay.style.display = 'flex';
+    renderExhibitionBanner();
+    trackCurationEvent('exhibition_banner_open');
+  }
+  function closeExhibitionBanner() {
+    const overlay = document.getElementById('exhibition-modal');
+    if (overlay) overlay.style.display = 'none';
+  }
+  function renderExhibitionBanner() {
+    const body = document.getElementById('exhibition-body');
+    if (!body) return;
+    // 종료된 전시는 목록을 어지럽히니 기본적으로 숨기고, 진행중 → 예정 순으로 정렬
+    const visible = EXHIBITIONS.filter(e => exhibitionStatus(e) !== 'ended')
+      .sort((a, b) => (exhibitionStatus(a) === 'ongoing' ? 0 : 1) - (exhibitionStatus(b) === 'ongoing' ? 0 : 1) || a.dateStart.localeCompare(b.dateStart));
+    if (!visible.length) {
+      body.innerHTML = `<div class="curated-feed-empty">지금 진행 중이거나 예정된 전시가 없어요.</div>`;
+      return;
+    }
+    body.innerHTML = visible.map(exhibitionCardHTML).join('');
+  }
+
+  // ── 관리자: 전시 등록 ──────────────────────────────────────
+  function openExhibitionAdmin() { document.getElementById('exhibition-admin-modal').style.display = 'flex'; }
+  function closeExhibitionAdmin() { document.getElementById('exhibition-admin-modal').style.display = 'none'; }
+  function saveExhibitionAdminEntry() {
+    const title = document.getElementById('ea-title').value.trim();
+    const dateStart = document.getElementById('ea-start').value;
+    const dateEnd = document.getElementById('ea-end').value;
+    if (!title || !dateStart || !dateEnd) { alert('전시명과 시작일·종료일은 꼭 입력해주세요.'); return; }
+    const entry = {
+      id: 'exh-draft-' + Date.now(),
+      title, dateStart, dateEnd,
+      dept: document.getElementById('ea-dept').value.trim(),
+      location: document.getElementById('ea-location').value.trim(),
+      thumbnail: document.getElementById('ea-thumb').value.trim(),
+      description: document.getElementById('ea-desc').value.trim(),
+      link: document.getElementById('ea-link').value.trim(),
+    };
+    EXHIBITIONS.push(entry);
+    exhibitionSessionEntries.push(entry);
+    renderExhibitionBanner();
+    showToast(`🎓 "${title}" 전시를 이 세션에 추가했어요`);
+    ['ea-title','ea-dept','ea-start','ea-end','ea-location','ea-thumb','ea-desc','ea-link'].forEach(id => { const e = document.getElementById(id); if (e) e.value=''; });
+  }
+  function exportExhibitionEntries() {
+    if (exhibitionSessionEntries.length === 0) { alert('아직 이 세션에 등록한 전시가 없어요.'); return; }
+    const blob = new Blob([JSON.stringify(exhibitionSessionEntries, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    const now = new Date();
+    const stamp = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
+    a.href = URL.createObjectURL(blob);
+    a.download = `exhibition_entries_${stamp}.json`;
+    a.click();
+    showToast(`💾 전시 ${exhibitionSessionEntries.length}건을 파일로 내보냈어요`);
   }
   </script>
   <!-- 상단 ≡ 메뉴: 여닫기 + 바깥 클릭 시 닫기. 각 항목은 기존 전역 함수를 호출한다. -->
