@@ -100,6 +100,7 @@
   #btn-taste-top { box-shadow: 0 2px 10px rgba(var(--accent-rgb),.45); }
   #btn-taste-top:hover { filter:brightness(1.08); transform:translateY(-1px); }
   #btn-lang:active, #btn-save:active, #btn-rip:active, #btn-taste-top:active { transform: scale(.92); }
+  #btn-lang svg, #btn-rip svg, #btn-save svg, #btn-taste-top svg { width:20px; height:20px; display:block; }
   .topbar-search-row {
     position:relative; padding: 10px 16px; border-bottom: 1px solid var(--border);
     background: var(--surface);
@@ -135,7 +136,8 @@
     flex-shrink: 0; scrollbar-width: none;
   }
   .category-bar::-webkit-scrollbar { display: none; }
-  .category-bar .chip { flex: none; white-space: nowrap; padding: 6px 13px; font-size: 12px; }
+  .category-bar .chip { flex: none; white-space: nowrap; padding: 6px 13px; font-size: 12px; display: inline-flex; align-items: center; gap: 5px; }
+  .category-bar .chip svg, .category-bar .cat-toggle svg { width: 15px; height: 15px; flex: none; }
   /* 로컬 인디 레이어 토글 — 카테고리 칩(단일선택)과 달리 켜짐/꺼짐이 유지되는 별도 버튼이라 .chip이 아닌 .cat-toggle 사용 */
   .category-bar .cat-toggle {
     flex: none; white-space: nowrap; padding: 6px 13px; font-size: 12px;
@@ -646,7 +648,7 @@
     </div>
   </div>
   <div class="topbar-right">
-    <button class="btn-bookmarks" id="btn-taste-top" onclick="openTasteModal()" title="내 취향 찾기" style="background:var(--accent);border-color:var(--accent);color:#fff">🎯</button>
+    <button class="btn-bookmarks" id="btn-taste-top" onclick="openTasteModal()" title="내 취향 찾기" style="background:var(--accent);border-color:var(--accent);color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.6"></circle><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"></circle></svg></button>
     <button class="btn-bookmarks" id="btn-theme" onclick="cycleTheme()" title="테마 색상 바꾸기">
       <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
         <defs><clipPath id="theme-swatch-clip"><circle cx="10" cy="10" r="9"/></clipPath></defs>
@@ -657,9 +659,9 @@
         <circle cx="10" cy="10" r="9" fill="none" stroke="#fff" stroke-width="1.2"/>
       </svg>
     </button>
-    <button class="btn-bookmarks" id="btn-lang" onclick="cycleLang()" title="Language / 语言">🌐</button>
-    <button class="btn-bookmarks" id="btn-rip" onclick="showGoneStores()">🪦</button>
-    <button class="btn-directions" id="btn-save" onclick="showBookmarks()">♥</button>
+    <button class="btn-bookmarks" id="btn-lang" onclick="cycleLang()" title="Language / 语言"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><ellipse cx="12" cy="12" rx="4" ry="9"></ellipse><path d="M3.4 9.2h17.2M3.4 14.8h17.2"></path></svg></button>
+    <button class="btn-bookmarks" id="btn-rip" onclick="showGoneStores()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 21V10.5a6 6 0 0 1 12 0V21z"></path><path d="M4 21h16"></path><path d="M12 6.8v4.2M9.9 8.9h4.2"></path></svg></button>
+    <button class="btn-directions" id="btn-save" onclick="showBookmarks()"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20.6S3.4 15 3.4 8.9A4.9 4.9 0 0 1 12 6a4.9 4.9 0 0 1 8.6 2.9C20.6 15 12 20.6 12 20.6z"></path></svg></button>
   </div>
 </div>
 <div class="topbar-search-row">
@@ -671,13 +673,13 @@
 </div>
 
 <div class="category-bar" id="category-bar">
-  <button class="cat-toggle" id="chip-indie" onclick="toggleIndieOnly(this)" title="대형 프랜차이즈를 숨기고 홍대 로컬·인디 매장만 봅니다">🎸 로컬 인디</button>
+  <button class="cat-toggle" id="chip-indie" onclick="toggleIndieOnly(this)" title="대형 프랜차이즈를 숨기고 홍대 로컬·인디 매장만 봅니다"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l10-2v10"></path><circle cx="6.6" cy="18" r="2.4"></circle><circle cx="16.6" cy="16" r="2.4"></circle></svg>로컬 인디</button>
   <span class="cat-divider"></span>
-  <button class="chip" id="chip-restaurant" onclick="selectCategoryBar('restaurant', this)">🍜 음식점</button>
-  <button class="chip" id="chip-cafe" onclick="selectCategoryBar('cafe', this)">☕ 카페</button>
-  <button class="chip" id="chip-bar" onclick="selectCategoryBar('bar', this)">🍺 주점</button>
-  <button class="chip" onclick="selectCategoryBar('entertainment', this)">🎪 엔터테인먼트</button>
-  <button class="chip" onclick="selectCategoryBar('gone', this)">🪦 사라진 가게</button>
+  <button class="chip" id="chip-restaurant" onclick="selectCategoryBar('restaurant', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11h15a7.5 7.5 0 0 1-15 0z"></path><path d="M9 20h5"></path><path d="M14.5 4.5l3 4.5M17.5 3.5l1.6 5"></path><path d="M8 6.2c0 1-1 1.4-1 2.4M11.5 5.8c0 1-1 1.4-1 2.4"></path></svg>음식점</button>
+  <button class="chip" id="chip-cafe" onclick="selectCategoryBar('cafe', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h11v4.5a5.5 5.5 0 0 1-5.5 5.5h0A5.5 5.5 0 0 1 5 12.5z"></path><path d="M16 9.2h2.3a2.3 2.3 0 0 1 0 4.6H16"></path><path d="M4 21h13"></path><path d="M8 3c0 1.1-1 1.4-1 2.5M11.5 3c0 1.1-1 1.4-1 2.5"></path></svg>카페</button>
+  <button class="chip" id="chip-bar" onclick="selectCategoryBar('bar', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10h9v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"></path><path d="M16 12h2a2 2 0 0 1 2 2v1.5a2 2 0 0 1-2 2h-2"></path><path d="M7 10a2 2 0 0 1 .2-3.8 2.4 2.4 0 0 1 4.4-1 2.4 2.4 0 0 1 3.9 1 2 2 0 0 1 .3 3.8"></path></svg>주점</button>
+  <button class="chip" onclick="selectCategoryBar('entertainment', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="2"></rect><path d="M9.5 7v10" stroke-dasharray="1.6 1.8"></path><path d="M13.5 11h4"></path></svg>엔터테인먼트</button>
+  <button class="chip" onclick="selectCategoryBar('gone', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 21V10.5a5.5 5.5 0 0 1 11 0V21z"></path><path d="M5 21h14"></path><path d="M12 6.8v4.2M10 8.9h4"></path></svg>사라진 가게</button>
 </div>
 
 <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeSidebar()"></div>
@@ -793,7 +795,7 @@
 
     <!-- 배포용으로 숨김: 관리자(나)만 쓰는 업체 추가 도구라 일반 사용자한테는 안 보이게 함.
          다시 보이게 하려면 아래 style="display:none"만 지우면 됨. -->
-    <div class="map-controls"
+    <div class="map-controls" style="display:none">
       <button class="map-btn" id="btn-import" onclick="toggleImportMode()">📌 지도에서 불러오기</button>
       <button class="map-btn" id="btn-export" onclick="exportChanges()">💾 추가한 매장 내보내기 (<span id="export-count">0</span>)</button>
     </div>
@@ -1048,6 +1050,246 @@ let stores = [
   { id:1784424974838, name:"타오마라탕 합정본점", type:"restaurant", status:"unverified", lat:37.54924431762455, lng:126.91528545290839, rating:null, reviews:null, months:null, rent:null, score:null, insight:"카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 양화로6길 19. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.", reason:null, address:"서울 마포구 양화로6길 19", category:"음식점 > 중식", signatureMenu:"마라탕", tags:["매운맛","가성비"], kakaoId:"92793209", kakaoUrl:"http://place.map.kakao.com/92793209", naverUrl:"https://map.naver.com/p/search/%ED%83%80%EC%98%A4%EB%A7%88%EB%9D%BC%ED%83%95%20%ED%95%A9%EC%A0%95%EB%B3%B8%EC%A0%90%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%96%91%ED%99%94%EB%A1%9C6%EA%B8%B8%2019" },
 ];
 
+
+// ── 세션 병합: 합주·연습실 추가 + 심야영업 검증 결과 반영 (수동 확인 데이터) ──
+// 거대한 stores 배열을 직접 수정하지 않고 여기 한 곳에서 병합한다. 나중에 값만 고치면 됨.
+const EXTRA_STORES = [
+  {
+    "id": 1785239962656,
+    "kakaoId": "575653430",
+    "name": "제시뮤직 홍대 합주실",
+    "type": "practice",
+    "status": "unverified",
+    "lat": 37.5550952113332,
+    "lng": 126.920190529513,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 월드컵북로1길 18",
+    "category": "문화,예술 > 음악",
+    "kakaoUrl": "http://place.map.kakao.com/575653430",
+    "naverUrl": "https://map.naver.com/p/search/%EC%A0%9C%EC%8B%9C%EB%AE%A4%EC%A7%81%20%ED%99%8D%EB%8C%80%20%ED%95%A9%EC%A3%BC%EC%8B%A4%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%9B%94%EB%93%9C%EC%BB%B5%EB%B6%81%EB%A1%9C1%EA%B8%B8%2018",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 월드컵북로1길 18. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785239968999,
+    "kakaoId": "247424416",
+    "name": "제시뮤직 합정점",
+    "type": "practice",
+    "status": "unverified",
+    "lat": 37.550450192341,
+    "lng": 126.915759384349,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 양화로 64",
+    "category": "문화,예술 > 음악",
+    "kakaoUrl": "http://place.map.kakao.com/247424416",
+    "naverUrl": "https://map.naver.com/p/search/%EC%A0%9C%EC%8B%9C%EB%AE%A4%EC%A7%81%20%ED%95%A9%EC%A0%95%EC%A0%90%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%96%91%ED%99%94%EB%A1%9C%2064",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 양화로 64. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785240007187,
+    "kakaoId": "1747937001",
+    "name": "그라운드합주실 본점",
+    "type": "practice",
+    "status": "unverified",
+    "lat": 37.5560903052746,
+    "lng": 126.922128144086,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 양화로 147",
+    "category": "서비스,산업 > 전문대행 > 공간대여",
+    "kakaoUrl": "http://place.map.kakao.com/1747937001",
+    "naverUrl": "https://map.naver.com/p/search/%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C%ED%95%A9%EC%A3%BC%EC%8B%A4%20%EB%B3%B8%EC%A0%90%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%96%91%ED%99%94%EB%A1%9C%20147",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 양화로 147. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785240017630,
+    "kakaoId": "1127214076",
+    "name": "그라운드합주실 홍대1호점",
+    "type": "practice",
+    "status": "unverified",
+    "lat": 37.5585595116828,
+    "lng": 126.917519228369,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 월드컵북로 49",
+    "category": "서비스,산업 > 전문대행 > 공간대여",
+    "kakaoUrl": "http://place.map.kakao.com/1127214076",
+    "naverUrl": "https://map.naver.com/p/search/%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C%ED%95%A9%EC%A3%BC%EC%8B%A4%20%ED%99%8D%EB%8C%801%ED%98%B8%EC%A0%90%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%9B%94%EB%93%9C%EC%BB%B5%EB%B6%81%EB%A1%9C%2049",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 월드컵북로 49. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785240025946,
+    "kakaoId": "1193391307",
+    "name": "그라운드합주실 신촌1호점",
+    "type": "practice",
+    "status": "unverified",
+    "lat": 37.555999416805214,
+    "lng": 126.94097173842675,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 백범로1길 83",
+    "category": "서비스,산업 > 전문대행 > 공간대여",
+    "kakaoUrl": "http://place.map.kakao.com/1193391307",
+    "naverUrl": "https://map.naver.com/p/search/%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C%ED%95%A9%EC%A3%BC%EC%8B%A4%20%EC%8B%A0%EC%B4%8C1%ED%98%B8%EC%A0%90%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EB%B0%B1%EB%B2%94%EB%A1%9C1%EA%B8%B8%2083",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 백범로1길 83. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  }
+];
+stores.push(...EXTRA_STORES);
+
+// 엑셀로 직접 확인한 심야영업 정보. services에 'lateNight'를 더해 "🌙 심야영업" 필터·태그에 반영.
+// hours는 시:분이 명확한 곳만, hoursNote(휴무·L.O. 등 메모)는 운영자 참고용으로 데이터에 보존.
+const STORE_OVERRIDES = {
+  "1784422151560": {
+    "services": [
+      "lateNight"
+    ],
+    "hours": "17:00~05:00",
+    "hoursNote": "금·토는 06:00까지 연장 / L.O. 04:00(금·토 05:00)"
+  },
+  "1784422187517": {
+    "services": [
+      "lateNight"
+    ],
+    "hours": "18:00~02:00",
+    "hoursNote": "연중무휴(월~일 동일) / L.O. 01:30"
+  },
+  "1784422243790": {
+    "services": [
+      "lateNight"
+    ],
+    "hours": "19:00~02:00",
+    "hoursNote": "일부 플랫폼은 18:00~24:00로 표기 — 시간 변경된 듯, 재확인 권장"
+  },
+  "1784138558637": {
+    "services": [
+      "lateNight"
+    ],
+    "hours": "17:00~01:00",
+    "hoursNote": "월요일 정기휴무 / 화~목 24:00 마감·금·토 01:00 마감·일 15:00~23:00 (일요일 일찍 닫음)"
+  },
+  "1784422157519": {
+    "services": [
+      "lateNight"
+    ],
+    "hours": "18:30~05:00",
+    "hoursNote": "연중무휴(월~일 동일) / 새벽 시간대가 주력 / 입장 시 신분증 필수"
+  },
+  "1784422144087": {
+    "services": [
+      "lateNight"
+    ],
+    "hours": "17:00~05:00",
+    "hoursNote": "연중무휴 / 금·토는 08:00까지 연장 운영 / 1~3층 대형 포차"
+  },
+  "1784422252237": {
+    "services": [
+      "lateNight"
+    ],
+    "hours": "17:00~01:00",
+    "hoursNote": "토·일 15:00 오픈 / L.O. 00:30 / 일부 과거 자료에 '월요일 휴무' 표기 — 휴무여부 재확인 권장"
+  },
+  "1784422171753": {
+    "services": [
+      "lateNight"
+    ],
+    "hours": "15:00~03:00",
+    "hoursNote": "연중무휴 / 금요일 14:00 · 주말 12:00 오픈(낮술 가능)"
+  },
+  "1784422164833": {
+    "services": [
+      "lateNight"
+    ],
+    "hours": "17:00~01:30",
+    "hoursNote": "화요일 정기휴무 / L.O. 00:30 / 오픈 시간은 15:00~17:00로 상이 — 확인 필요"
+  },
+  "1784422296594": {
+    "services": [
+      "lateNight"
+    ],
+    "hours": "17:30~06:00",
+    "hoursNote": "연중무휴 / L.O. 05:00 / 헌팅포차(입장 나이 제한 있음)"
+  },
+  "1784270718971": {
+    "services": [
+      "lateNight"
+    ],
+    "hoursNote": "웹상 공식 영업시간 미확인 — 카카오맵/공식 인스타그램(@doze_seoul) 또는 DM 확인 필요"
+  },
+  "1784270733136": {
+    "services": [
+      "lateNight"
+    ],
+    "hours": "22:00~08:00",
+    "hoursNote": "목·금·토·일·공휴일만 운영 (월·화·수 휴무) / 사보타지1·2 별도 매장"
+  },
+  "1784422315617": {
+    "services": [
+      "lateNight"
+    ],
+    "hours": "22:00~06:00",
+    "hoursNote": "공식 계정은 오픈 시간(22시)만 공지 / 마감은 플랫폼 표기(새벽 6시) 기준 — 파티 일자별 상이"
+  },
+  "1784270693186": {
+    "services": [
+      "lateNight"
+    ],
+    "hoursNote": "연중무휴 21:00 오픈(공식 인스타그램) / 마감 시간 미공개 — 매장 확인 필요 / 같은 브랜드 '어썸레드'는 잔다리로 12 — 지점 구분 필요"
+  },
+  "1784270726412": {
+    "services": [
+      "lateNight"
+    ],
+    "hoursNote": "공식 인스타그램(@hongdae_xx)에 영업시간 미공지 — 매장 확인 필요 (새벽 늦은 시간대까지 운영으로 알려짐)"
+  },
+  "1784270682830": {
+    "services": [
+      "lateNight"
+    ],
+    "hoursNote": "공식 인스타그램·웹상 영업시간 미공지 — 매장 확인 필요"
+  },
+  "1784270739639": {
+    "services": [
+      "lateNight"
+    ],
+    "hoursNote": "목·금·토·일만 운영(22:00 오픈) / 월·화·수 해당 없음 / 마감 시간 미공지"
+  },
+  "1784182364776": {
+    "services": [
+      "lateNight"
+    ],
+    "hours": "11:30~02:00",
+    "hoursNote": "낮에는 카페 '제비다방', 밤에는 라이브펍 '취한제비'로 전환 / 공연은 주로 20~21시 시작"
+  }
+};
+stores.forEach(s => {
+  const o = STORE_OVERRIDES[s.id];
+  if (!o) return;
+  if (o.services) s.services = Array.from(new Set([...(s.services || []), ...o.services]));
+  if (o.hours) s.hours = o.hours;
+  if (o.hoursNote) s.hoursNote = o.hoursNote;
+});
+
 let map, markers = [], storeMarkers = [], clusterer, overlay, hoverOverlay, showMarkers = true;
 let indieOnly = localStorage.getItem('indieOnly') !== '0'; // 기본 켜짐(프랜차이즈 숨김). 사용자가 직접 끄면(=='0') 그때만 전체 표시
 let currentFilter = 'all', searchText = '', selectedId = null;
@@ -1119,7 +1361,7 @@ function cycleTheme() {
 const I18N = {
   ko: {
     langBtn: '🌐 한국어', search: '업소명 검색...', taste: '🎯 내 취향 찾기', hof: '🏅 홍대생 명예학식', michelin: '🍽️ 미쉐린 가이드',
-    all: '전체', browseCategories: '카테고리 보기', restaurant: '🍜 음식점', cafe: '☕ 카페', bar: '🍺 주점', liveclub: '🎤 라이브클럽', artsupply: '🎨 화방',
+    all: '전체', browseCategories: '카테고리 보기', restaurant: '음식점', cafe: '카페', bar: '주점', liveclub: '🎤 라이브클럽', artsupply: '🎨 화방',
     seogyo: '📍 서교동', yeonnam: '📍 연남동', hapjeong: '📍 합정동', sangsu: '📍 상수동',
     rip: '🪦 R.I.P', save: '♥ 저장', menuTitle: '메뉴',
     landingDesc: '취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.',
@@ -1130,7 +1372,7 @@ const I18N = {
   },
   en: {
     langBtn: '🌐 English', search: 'Search places...', taste: '🎯 Find my taste', hof: '🏅 Student favorites', michelin: '🍽️ Michelin Guide',
-    all: 'All', browseCategories: 'Categories', restaurant: '🍜 Restaurants', cafe: '☕ Cafes', bar: '🍺 Bars', liveclub: '🎤 Live Clubs', artsupply: '🎨 Art Supplies',
+    all: 'All', browseCategories: 'Categories', restaurant: 'Restaurants', cafe: 'Cafes', bar: 'Bars', liveclub: '🎤 Live Clubs', artsupply: '🎨 Art Supplies',
     seogyo: '📍 Seogyo-dong', yeonnam: '📍 Yeonnam-dong', hapjeong: '📍 Hapjeong-dong', sangsu: '📍 Sangsu-dong',
     rip: '🪦 R.I.P', save: '♥ Saved', menuTitle: 'Menu',
     landingDesc: 'Stop trusting reviews from people with different tastes.<br>We\'ll pick Hongdae spots that match yours.',
@@ -1141,7 +1383,7 @@ const I18N = {
   },
   zh: {
     langBtn: '🌐 中文', search: '搜索店铺...', taste: '🎯 寻找我的口味', hof: '🏅 学生推荐名店', michelin: '🍽️ 米其林指南',
-    all: '全部', browseCategories: '分类浏览', restaurant: '🍜 餐厅', cafe: '☕ 咖啡店', bar: '🍺 酒吧', liveclub: '🎤 livehouse', artsupply: '🎨 美术用品店',
+    all: '全部', browseCategories: '分类浏览', restaurant: '餐厅', cafe: '咖啡店', bar: '酒吧', liveclub: '🎤 livehouse', artsupply: '🎨 美术用品店',
     seogyo: '📍 西桥洞', yeonnam: '📍 延南洞', hapjeong: '📍 合井洞', sangsu: '📍 上水洞',
     rip: '🪦 R.I.P', save: '♥ 收藏', menuTitle: '菜单',
     landingDesc: '别再因为别人的口味而失望了。<br>我们只为你挑选合你口味的弘大店铺。',
@@ -1162,6 +1404,7 @@ function cycleLang() {
 function applyLang() {
   const t = I18N[currentLang];
   const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  const setChipText = (id, val) => { const el = document.getElementById(id); if (!el) return; const svg = el.querySelector('svg'); el.textContent = val; if (svg) el.insertBefore(svg, el.firstChild); };
   const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
 
   // 언어 버튼은 이제 지구본 아이콘만 사용 — 언어 바뀌어도 텍스트로 안 덮어씀
@@ -1171,9 +1414,9 @@ function applyLang() {
   setText('chip-hof', t.hof);
   setText('chip-michelin', t.michelin);
   setText('chip-all', t.all);
-  setText('chip-restaurant', t.restaurant);
-  setText('chip-cafe', t.cafe);
-  setText('chip-bar', t.bar);
+  setChipText('chip-restaurant', t.restaurant);
+  setChipText('chip-cafe', t.cafe);
+  setChipText('chip-bar', t.bar);
   setText('chip-liveclub', t.liveclub);
   setText('chip-artsupply', t.artsupply);
   setText('chip-seogyo', t.seogyo);
@@ -1333,10 +1576,10 @@ function catInfo(s) {
   if (s.type === 'animeshop') return { icon:'🎌', color:'#e83e8c', label:'애니메이션샵', labelEn:'Anime Shop' };
   if (s.type === 'practice') return { icon:'🎸', color:'#6d5acd', label:'합주·연습실', labelEn:'Band Practice' };
   if (s.type === 'entertainment') return { icon:'🔑', color:'#16a085', label:'엔터테인먼트', labelEn:'Entertainment' };
-  if (s.category && s.category.includes('카페')) return { icon:'☕', color:'#a9744f', label:'카페', labelEn:'Cafe' };
-  if (s.type === 'bar' || (s.category && /주점|맥주|호프/.test(s.category))) return { icon:'🍺', color:'#f5a623', label:'술집', labelEn:'Bar' };
+  if (s.category && s.category.includes('카페')) return { icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-.15em"><path d="M5 8h11v4.5a5.5 5.5 0 0 1-5.5 5.5h0A5.5 5.5 0 0 1 5 12.5z"/><path d="M16 9.2h2.3a2.3 2.3 0 0 1 0 4.6H16"/><path d="M4 21h13"/><path d="M8 3c0 1.1-1 1.4-1 2.5M11.5 3c0 1.1-1 1.4-1 2.5"/></svg>', color:'#a9744f', label:'카페', labelEn:'Cafe' };
+  if (s.type === 'bar' || (s.category && /주점|맥주|호프/.test(s.category))) return { icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-.15em"><path d="M7 10h9v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/><path d="M16 12h2a2 2 0 0 1 2 2v1.5a2 2 0 0 1-2 2h-2"/><path d="M7 10a2 2 0 0 1 .2-3.8 2.4 2.4 0 0 1 4.4-1 2.4 2.4 0 0 1 3.9 1 2 2 0 0 1 .3 3.8"/></svg>', color:'#f5a623', label:'술집', labelEn:'Bar' };
   if (s.type === 'retail') return { icon:'📌', color:'#93a8a2', label:'기타', labelEn:'Other' };
-  return { icon:'🍜', color:'var(--accent)', label:'맛집', labelEn:'Eat' };
+  return { icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-.15em"><path d="M4 11h15a7.5 7.5 0 0 1-15 0z"/><path d="M9 20h5"/><path d="M14.5 4.5l3 4.5M17.5 3.5l1.6 5"/><path d="M8 6.2c0 1-1 1.4-1 2.4M11.5 5.8c0 1-1 1.4-1 2.4"/></svg>', color:'var(--accent)', label:'맛집', labelEn:'Eat' };
 }
 
 function cuisineLabel(s) {
@@ -2161,6 +2404,7 @@ function selectStore(id) {
             <div style="font-size:12px;font-weight:700;color:var(--accent)">📍 ${dist}m</div>
             <div style="font-size:12px;color:#5c756d">🚶 도보 약 ${walk}분</div>
           </div>
+          ${s.hours ? `<div style="font-size:12px;color:#5c756d;margin-top:2px">🕐 ${s.hours}${(s.services||[]).includes('lateNight') ? ' <span style="color:var(--accent);font-weight:700">· 심야영업</span>' : ''}</div>` : ''}
         </div>
       </div>`;
 
