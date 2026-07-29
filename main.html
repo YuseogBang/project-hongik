@@ -798,7 +798,7 @@
 
     <!-- 배포용으로 숨김: 관리자(나)만 쓰는 업체 추가 도구라 일반 사용자한테는 안 보이게 함.
          다시 보이게 하려면 아래 style="display:none"만 지우면 됨. -->
-    <div class="map-controls" >
+    <div class="map-controls" style="display:none">
       <button class="map-btn" id="btn-import" onclick="toggleImportMode()">📌 지도에서 불러오기</button>
       <button class="map-btn" id="btn-export" onclick="exportChanges()">💾 추가한 매장 내보내기 (<span id="export-count">0</span>)</button>
     </div>
@@ -1962,6 +1962,9 @@ function verifyStoresWithKakao() {
 }
 
 function updateVerifyBanner() {
+  // 카카오 실존 검증 자체는 백그라운드에서 계속 돌아가지만(데이터 정확도를 위해 필요),
+  // 사용자에게는 더 이상 진행 배너를 보여주지 않는다. 필요하면 이 return 한 줄만 지우면 다시 보임.
+  return;
   const total = stores.filter(s => s.status === 'unverified').length + verifiedCount + removedCount;
   const done = verifiedCount + removedCount;
   let el = document.getElementById('verify-banner');
