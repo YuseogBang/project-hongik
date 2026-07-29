@@ -273,6 +273,25 @@
   }
   .btn-home:hover { border-color: var(--accent); color: var(--accent); }
   .btn-home:active { transform: scale(.92); }
+  /* 현위치 버튼 — 데스크톱에서는 숨기고(공간 부족·오버랩 방지), 모바일 하단 FAB 행에서만 노출 */
+  .btn-locate {
+    display: none;
+    position: absolute; bottom: 16px; left: 12px; z-index: 10;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); cursor: pointer;
+    align-items: center; justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,.3); transition: all .15s;
+  }
+  .btn-locate:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-locate:active { transform: scale(.92); }
+  .btn-locate.locating svg { animation: locatePulse 1s ease-in-out infinite; }
+  @keyframes locatePulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  /* 하단 FAB 3개(현위치·결과보기·홍대중심)를 감싸는 래퍼.
+     데스크톱: display:contents로 박스 자체를 없애서 기존 개별 position:absolute 배치를 그대로 유지(무변화).
+     모바일: 아래 미디어쿼리에서 진짜 flex row로 바뀌며 홍대맵 Mobile 디자인 컴프의 플로팅 바를 재현. */
+  .bottom-fab-row { display: contents; }
+  .congest-badge { position: absolute; bottom: calc(64px + env(safe-area-inset-bottom)); left: 12px; }
   .map-btn {
     background: var(--surface); border: 1px solid var(--border);
     color: var(--text); font-size: 11px; padding: 6px 12px;
@@ -618,6 +637,61 @@
     .detail-body, .store-item { font-size: 13px; }
     .store-item { padding: 9px 11px; }
     .item-name { font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* ── 홍대맵 Mobile 디자인 컴프 반영 ──────────────────────────────
+       상단바 두 줄(로고행+검색행)을 하나의 떠있는 유리 카드로, 카테고리 칩은
+       지도 위로 겹쳐 뜨는 알약들로, 하단 3버튼은 한 줄의 플로팅 바로 재구성한다.
+       구조(HTML)는 그대로 두고 모바일에서만 배치를 오버라이드하는 방식이라
+       데스크톱 레이아웃과 기존 기능(필터·검색·정렬 등)은 전혀 건드리지 않는다. */
+    .topbar, .topbar-search-row {
+      position: relative; z-index: 40;
+      background: rgba(43,7,12,.9);
+      -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+      border: 1px solid var(--border); border-radius: 20px;
+      margin: 8px 10px 0; box-shadow: 0 10px 30px rgba(0,0,0,.4);
+    }
+    .topbar { padding: 10px 12px; border-bottom: none; }
+    .topbar-search-row { margin-top: 6px; padding: 8px 10px; }
+    .search-box { background: var(--surface2); border-radius: 14px; }
+
+    .category-bar {
+      position: relative; z-index: 39; background: transparent; border-bottom: none;
+      padding: 8px 10px 4px;
+    }
+    .category-bar .chip, .category-bar .cat-toggle {
+      box-shadow: 0 3px 12px rgba(0,0,0,.35);
+      background: var(--surface);
+    }
+    .category-bar .chip.on { background: rgba(var(--accent-rgb),.28); }
+
+    /* 하단 FAB 3개를 실제 flex row로 전환 (데스크톱은 위 .bottom-fab-row{display:contents}로 무변화) */
+    .bottom-fab-row {
+      display: flex; align-items: center; gap: 10px;
+      position: fixed; left: 16px; right: 16px; z-index: 38;
+      bottom: calc(18px + env(safe-area-inset-bottom));
+    }
+    .bottom-fab-row .btn-locate,
+    .bottom-fab-row .btn-home {
+      position: static; display: flex; flex: none;
+      width: 52px; height: 52px;
+      background: rgba(43,7,12,.9);
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+      box-shadow: 0 5px 16px rgba(0,0,0,.45);
+    }
+    .bottom-fab-row .btn-view-results {
+      position: static; left: auto; bottom: auto; transform: none;
+      flex: 1; height: 56px; font-size: 15.5px;
+    }
+
+    /* 혼잡도 알약을 하단 FAB 바로 위, 화면 중앙에 띄워서 디자인 컴프의 CROWD PILL 위치 재현 */
+    .congest-badge {
+      left: 50% !important; bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+      transform: translateX(-50%);
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    }
+
+    /* 배지·FAB가 이 자리로 옮겨졌으니 피드백 링크는 원래 자리(왼쪽 하단)에 그대로 둔다 */
+    .feedback-link { z-index: 37; }
   }
 
   /* 아주 좁은 화면(구형 소형 스마트폰) 추가 여백 축소 */
@@ -673,13 +747,13 @@
 </div>
 
 <div class="category-bar" id="category-bar">
-  <button class="cat-toggle" id="chip-indie" onclick="toggleIndieOnly(this)" title="대형 프랜차이즈를 숨기고 홍대 로컬·인디 매장만 봅니다"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l10-2v10"></path><circle cx="6.6" cy="18" r="2.4"></circle><circle cx="16.6" cy="16" r="2.4"></circle></svg>로컬 인디</button>
+  <button class="cat-toggle" id="chip-indie" onclick="toggleIndieOnly(this)" title="대형 프랜차이즈를 숨기고 홍대 로컬·인디 매장만 봅니다"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.2"></circle><circle cx="12" cy="12" r="2.1"></circle><circle cx="12" cy="12" r="0.4" fill="currentColor" stroke="none"></circle><path d="M12 6.4v0M17.6 12h0M12 17.6v0M6.4 12h0" stroke-width="1.1" opacity="0.55"></path></svg>로컬 인디</button>
   <span class="cat-divider"></span>
-  <button class="chip" id="chip-restaurant" onclick="selectCategoryBar('restaurant', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11h15a7.5 7.5 0 0 1-15 0z"></path><path d="M9 20h5"></path><path d="M14.5 4.5l3 4.5M17.5 3.5l1.6 5"></path><path d="M8 6.2c0 1-1 1.4-1 2.4M11.5 5.8c0 1-1 1.4-1 2.4"></path></svg>음식점</button>
-  <button class="chip" id="chip-cafe" onclick="selectCategoryBar('cafe', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h11v4.5a5.5 5.5 0 0 1-5.5 5.5h0A5.5 5.5 0 0 1 5 12.5z"></path><path d="M16 9.2h2.3a2.3 2.3 0 0 1 0 4.6H16"></path><path d="M4 21h13"></path><path d="M8 3c0 1.1-1 1.4-1 2.5M11.5 3c0 1.1-1 1.4-1 2.5"></path></svg>카페</button>
-  <button class="chip" id="chip-bar" onclick="selectCategoryBar('bar', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10h9v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"></path><path d="M16 12h2a2 2 0 0 1 2 2v1.5a2 2 0 0 1-2 2h-2"></path><path d="M7 10a2 2 0 0 1 .2-3.8 2.4 2.4 0 0 1 4.4-1 2.4 2.4 0 0 1 3.9 1 2 2 0 0 1 .3 3.8"></path></svg>주점</button>
-  <button class="chip" onclick="selectCategoryBar('entertainment', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="2"></rect><path d="M9.5 7v10" stroke-dasharray="1.6 1.8"></path><path d="M13.5 11h4"></path></svg>엔터테인먼트</button>
-  <button class="chip" onclick="selectCategoryBar('gone', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 21V10.5a5.5 5.5 0 0 1 11 0V21z"></path><path d="M5 21h14"></path><path d="M12 6.8v4.2M10 8.9h4"></path></svg>사라진 가게</button>
+  <button class="chip" id="chip-restaurant" onclick="selectCategoryBar('restaurant', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13h16c0 4-3.6 7-8 7s-8-3-8-7ZM12 13V6M8 8l1.5 2M16 8l-1.5 2"></path></svg>음식점</button>
+  <button class="chip" id="chip-cafe" onclick="selectCategoryBar('cafe', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4ZM16 10h2a2 2 0 0 1 0 5h-2M8 6V4M12 6V4"></path></svg>카페</button>
+  <button class="chip" id="chip-bar" onclick="selectCategoryBar('bar', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h12l-5 7v6h3v2H8v-2h3v-6ZM8 7h8"></path></svg>주점</button>
+  <button class="chip" onclick="selectCategoryBar('entertainment', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.5V6l8-2v11M9 17.5a2.3 2.3 0 1 1-4.6 0 2.3 2.3 0 0 1 4.6 0ZM17 15a2.3 2.3 0 1 1-4.6 0 2.3 2.3 0 0 1 4.6 0Z"></path></svg>엔터테인먼트</button>
+  <button class="chip" onclick="selectCategoryBar('gone', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20v-9a6 6 0 0 1 12 0v9l-2-1.6-2 1.6-2-1.6L10 20l-2-1.6ZM9.5 11h.01M14.5 11h.01"></path></svg>사라진 가게</button>
 </div>
 
 <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeSidebar()"></div>
@@ -798,7 +872,7 @@
 
     <!-- 배포용으로 숨김: 관리자(나)만 쓰는 업체 추가 도구라 일반 사용자한테는 안 보이게 함.
          다시 보이게 하려면 아래 style="display:none"만 지우면 됨. -->
-    <div class="map-controls">
+    <div class="map-controls" style="display:none">
       <button class="map-btn" id="btn-import" onclick="toggleImportMode()">📌 지도에서 불러오기</button>
       <button class="map-btn" id="btn-export" onclick="exportChanges()">💾 추가한 매장 내보내기 (<span id="export-count">0</span>)</button>
     </div>
@@ -808,11 +882,19 @@
       이 지역에서 검색
     </button>
 
-    <button class="btn-home" onclick="resetView()" aria-label="홍대 중심으로 이동" title="홍대 중심">⌂</button>
+    <div class="bottom-fab-row">
+      <button class="btn-locate" id="btn-locate" onclick="locateMe(this)" aria-label="현위치" title="현위치">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7.5"></circle><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>
+      </button>
 
-    <button class="btn-view-results" id="btn-view-results" onclick="openResultsModal()">
-      가게 <span id="results-count">0</span>곳 보기
-    </button>
+      <button class="btn-view-results" id="btn-view-results" onclick="openResultsModal()">
+        가게 <span id="results-count">0</span>곳 보기
+      </button>
+
+      <button class="btn-home" onclick="resetView()" aria-label="홍대 중심으로 이동" title="홍대 중심">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"></path><path d="M6 10v9a1 1 0 0 0 1 1h4v-6h2v6h4a1 1 0 0 0 1-1v-9"></path></svg>
+      </button>
+    </div>
 
     <a class="feedback-link" href="https://forms.gle/gJBKqm8sU5CS5KEK7" target="_blank" rel="noopener noreferrer">📝 피드백·제보하기</a>
   </div>
@@ -1156,6 +1238,346 @@ const EXTRA_STORES = [
     "kakaoUrl": "http://place.map.kakao.com/1193391307",
     "naverUrl": "https://map.naver.com/p/search/%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C%ED%95%A9%EC%A3%BC%EC%8B%A4%20%EC%8B%A0%EC%B4%8C1%ED%98%B8%EC%A0%90%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EB%B0%B1%EB%B2%94%EB%A1%9C1%EA%B8%B8%2083",
     "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 백범로1길 83. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785289376391,
+    "kakaoId": "1772415237",
+    "name": "엑스이스케이프 홍대놀이터점",
+    "type": "play",
+    "status": "unverified",
+    "lat": 37.552635335148885,
+    "lng": 126.92266929214243,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 와우산로21길 20-5",
+    "category": "음식점 > 카페 > 테마카페",
+    "kakaoUrl": "http://place.map.kakao.com/1772415237",
+    "naverUrl": "https://map.naver.com/p/search/%EC%97%91%EC%8A%A4%EC%9D%B4%EC%8A%A4%EC%BC%80%EC%9D%B4%ED%94%84%20%ED%99%8D%EB%8C%80%EB%86%80%EC%9D%B4%ED%84%B0%EC%A0%90%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%99%80%EC%9A%B0%EC%82%B0%EB%A1%9C21%EA%B8%B8%2020-5",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로21길 20-5. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785289383183,
+    "kakaoId": "1654390566",
+    "name": "엑스이스케이프 상상마당점",
+    "type": "play",
+    "status": "unverified",
+    "lat": 37.5513479583469,
+    "lng": 126.921529897567,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 어울마당로 70",
+    "category": "가정,생활 > 여가시설 > 방탈출카페",
+    "kakaoUrl": "http://place.map.kakao.com/1654390566",
+    "naverUrl": "https://map.naver.com/p/search/%EC%97%91%EC%8A%A4%EC%9D%B4%EC%8A%A4%EC%BC%80%EC%9D%B4%ED%94%84%20%EC%83%81%EC%83%81%EB%A7%88%EB%8B%B9%EC%A0%90%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%96%B4%EC%9A%B8%EB%A7%88%EB%8B%B9%EB%A1%9C%2070",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 어울마당로 70. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785289406299,
+    "kakaoId": "1442041275",
+    "name": "딥띵커",
+    "type": "play",
+    "status": "unverified",
+    "lat": 37.5507299106941,
+    "lng": 126.920240450873,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 잔다리로 23",
+    "category": "가정,생활 > 여가시설 > 방탈출카페",
+    "kakaoUrl": "http://place.map.kakao.com/1442041275",
+    "naverUrl": "https://map.naver.com/p/search/%EB%94%A5%EB%9D%B5%EC%BB%A4%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%9E%94%EB%8B%A4%EB%A6%AC%EB%A1%9C%2023",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 잔다리로 23. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785289487521,
+    "kakaoId": "27369058",
+    "name": "리얼이스케이프챌린지",
+    "type": "play",
+    "status": "unverified",
+    "lat": 37.55417346486832,
+    "lng": 126.92711760256185,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 와우산로27길 21",
+    "category": "음식점 > 카페 > 테마카페",
+    "kakaoUrl": "http://place.map.kakao.com/27369058",
+    "naverUrl": "https://map.naver.com/p/search/%EB%A6%AC%EC%96%BC%EC%9D%B4%EC%8A%A4%EC%BC%80%EC%9D%B4%ED%94%84%EC%B1%8C%EB%A6%B0%EC%A7%80%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%99%80%EC%9A%B0%EC%82%B0%EB%A1%9C27%EA%B8%B8%2021",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로27길 21. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785289506784,
+    "kakaoId": "836115181",
+    "name": "데블다이스 홍대예술의거리점",
+    "type": "play",
+    "status": "unverified",
+    "lat": 37.5535158824572,
+    "lng": 126.921715487447,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 홍익로3길 20",
+    "category": "가정,생활 > 여가시설 > 보드카페 > 데블다이스",
+    "kakaoUrl": "http://place.map.kakao.com/836115181",
+    "naverUrl": "https://map.naver.com/p/search/%EB%8D%B0%EB%B8%94%EB%8B%A4%EC%9D%B4%EC%8A%A4%20%ED%99%8D%EB%8C%80%EC%98%88%EC%88%A0%EC%9D%98%EA%B1%B0%EB%A6%AC%EC%A0%90%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%ED%99%8D%EC%9D%B5%EB%A1%9C3%EA%B8%B8%2020",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 홍익로3길 20. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785289512562,
+    "kakaoId": "32375674",
+    "name": "데블다이스 홍대점",
+    "type": "play",
+    "status": "unverified",
+    "lat": 37.5549495465089,
+    "lng": 126.923358385336,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 어울마당로 116",
+    "category": "가정,생활 > 여가시설 > 보드카페 > 데블다이스",
+    "kakaoUrl": "http://place.map.kakao.com/32375674",
+    "naverUrl": "https://map.naver.com/p/search/%EB%8D%B0%EB%B8%94%EB%8B%A4%EC%9D%B4%EC%8A%A4%20%ED%99%8D%EB%8C%80%EC%A0%90%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%96%B4%EC%9A%B8%EB%A7%88%EB%8B%B9%EB%A1%9C%20116",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 어울마당로 116. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785289522912,
+    "kakaoId": "1081289191",
+    "name": "짱오락실 홍대점",
+    "type": "play",
+    "status": "unverified",
+    "lat": 37.5512756101346,
+    "lng": 126.921127098815,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 어울마당로 69",
+    "category": "가정,생활 > 여가시설 > 오락실 > 짱오락실",
+    "kakaoUrl": "http://place.map.kakao.com/1081289191",
+    "naverUrl": "https://map.naver.com/p/search/%EC%A7%B1%EC%98%A4%EB%9D%BD%EC%8B%A4%20%ED%99%8D%EB%8C%80%EC%A0%90%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%96%B4%EC%9A%B8%EB%A7%88%EB%8B%B9%EB%A1%9C%2069",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 어울마당로 69. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785289535167,
+    "kakaoId": "2047658640",
+    "name": "게임토피아",
+    "type": "play",
+    "status": "unverified",
+    "lat": 37.5491581871233,
+    "lng": 126.921011639646,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 어울마당로 46-1",
+    "category": "가정,생활 > 여가시설 > 오락실",
+    "kakaoUrl": "http://place.map.kakao.com/2047658640",
+    "naverUrl": "https://map.naver.com/p/search/%EA%B2%8C%EC%9E%84%ED%86%A0%ED%94%BC%EC%95%84%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%96%B4%EC%9A%B8%EB%A7%88%EB%8B%B9%EB%A1%9C%2046-1",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 어울마당로 46-1. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785289557659,
+    "kakaoId": "8016441",
+    "name": "KT&G상상마당 홍대",
+    "type": "play",
+    "status": "unverified",
+    "lat": 37.5510088755674,
+    "lng": 126.921068533254,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 어울마당로 65",
+    "category": "문화,예술 > 문화시설 > 공연장,연극극장",
+    "kakaoUrl": "http://place.map.kakao.com/8016441",
+    "naverUrl": "https://map.naver.com/p/search/KT%26G%EC%83%81%EC%83%81%EB%A7%88%EB%8B%B9%20%ED%99%8D%EB%8C%80%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%96%B4%EC%9A%B8%EB%A7%88%EB%8B%B9%EB%A1%9C%2065",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 어울마당로 65. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785289969195,
+    "kakaoId": "65894579",
+    "name": "뮤씨엄 홍대점",
+    "type": "play",
+    "status": "unverified",
+    "lat": 37.55773922444777,
+    "lng": 126.9264916573095,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 양화로 188",
+    "category": "문화,예술 > 문화시설 > 전시관",
+    "kakaoUrl": "http://place.map.kakao.com/65894579",
+    "naverUrl": "https://map.naver.com/p/search/%EB%AE%A4%EC%94%A8%EC%97%84%20%ED%99%8D%EB%8C%80%EC%A0%90%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%96%91%ED%99%94%EB%A1%9C%20188",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 양화로 188. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785290141872,
+    "kakaoId": "10368349",
+    "name": "땡스네이쳐카페",
+    "type": "cafe",
+    "status": "unverified",
+    "lat": 37.5535983096117,
+    "lng": 126.923759261108,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 홍익로 10",
+    "category": "음식점 > 카페",
+    "kakaoUrl": "http://place.map.kakao.com/10368349",
+    "naverUrl": "https://map.naver.com/p/search/%EB%95%A1%EC%8A%A4%EB%84%A4%EC%9D%B4%EC%B3%90%EC%B9%B4%ED%8E%98%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%ED%99%8D%EC%9D%B5%EB%A1%9C%2010",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 홍익로 10. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785290178272,
+    "kakaoId": "7862674",
+    "name": "매거진랜드",
+    "type": "cafe",
+    "status": "unverified",
+    "lat": 37.5522335865654,
+    "lng": 126.920107573045,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 잔다리로6길 17",
+    "category": "문화,예술 > 도서 > 서점",
+    "kakaoUrl": "http://place.map.kakao.com/7862674",
+    "naverUrl": "https://map.naver.com/p/search/%EB%A7%A4%EA%B1%B0%EC%A7%84%EB%9E%9C%EB%93%9C%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%9E%94%EB%8B%A4%EB%A6%AC%EB%A1%9C6%EA%B8%B8%2017",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 잔다리로6길 17. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785290557176,
+    "kakaoId": "977993220",
+    "name": "피자네버슬립스 합정상수점",
+    "type": "restaurant",
+    "status": "unverified",
+    "lat": 37.54859142916518,
+    "lng": 126.91831895917666,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 양화로6길 73",
+    "category": "음식점 > 양식 > 피자",
+    "kakaoUrl": "http://place.map.kakao.com/977993220",
+    "naverUrl": "https://map.naver.com/p/search/%ED%94%BC%EC%9E%90%EB%84%A4%EB%B2%84%EC%8A%AC%EB%A6%BD%EC%8A%A4%20%ED%95%A9%EC%A0%95%EC%83%81%EC%88%98%EC%A0%90%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%96%91%ED%99%94%EB%A1%9C6%EA%B8%B8%2073",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 양화로6길 73. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785290565094,
+    "kakaoId": "26966842",
+    "name": "콜린",
+    "type": "cafe",
+    "status": "unverified",
+    "lat": 37.54921184425959,
+    "lng": 126.92041181434162,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 어울마당로 45",
+    "category": "음식점 > 카페 > 테마카페",
+    "kakaoUrl": "http://place.map.kakao.com/26966842",
+    "naverUrl": "https://map.naver.com/p/search/%EC%BD%9C%EB%A6%B0%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%96%B4%EC%9A%B8%EB%A7%88%EB%8B%B9%EB%A1%9C%2045",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 어울마당로 45. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785290577725,
+    "kakaoId": "1283856138",
+    "name": "메타코미디클럽 홍대",
+    "type": "play",
+    "status": "unverified",
+    "lat": 37.5512718321649,
+    "lng": 126.92360319715,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 와우산로 76-1",
+    "category": "문화,예술 > 문화시설 > 공연장,연극극장",
+    "kakaoUrl": "http://place.map.kakao.com/1283856138",
+    "naverUrl": "https://map.naver.com/p/search/%EB%A9%94%ED%83%80%EC%BD%94%EB%AF%B8%EB%94%94%ED%81%B4%EB%9F%BD%20%ED%99%8D%EB%8C%80%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%99%80%EC%9A%B0%EC%82%B0%EB%A1%9C%2076-1",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로 76-1. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785290613070,
+    "kakaoId": "1626505090",
+    "name": "푸글렌 서울",
+    "type": "cafe",
+    "status": "unverified",
+    "lat": 37.5483935288776,
+    "lng": 126.922811732929,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 와우산로 43",
+    "category": "음식점 > 카페",
+    "kakaoUrl": "http://place.map.kakao.com/1626505090",
+    "naverUrl": "https://map.naver.com/p/search/%ED%91%B8%EA%B8%80%EB%A0%8C%20%EC%84%9C%EC%9A%B8%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%99%80%EC%9A%B0%EC%82%B0%EB%A1%9C%2043",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로 43. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
+    "reason": null
+  },
+  {
+    "id": 1785290922135,
+    "kakaoId": "895704994",
+    "name": "더리얼치즈버거",
+    "type": "restaurant",
+    "status": "unverified",
+    "lat": 37.5562533414999,
+    "lng": 126.927726719549,
+    "rating": null,
+    "reviews": null,
+    "months": null,
+    "rent": null,
+    "score": null,
+    "address": "서울 마포구 와우산로29길 48-29",
+    "category": "음식점 > 양식 > 햄버거",
+    "kakaoUrl": "http://place.map.kakao.com/895704994",
+    "naverUrl": "https://map.naver.com/p/search/%EB%8D%94%EB%A6%AC%EC%96%BC%EC%B9%98%EC%A6%88%EB%B2%84%EA%B1%B0%20%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%99%80%EC%9A%B0%EC%82%B0%EB%A1%9C29%EA%B8%B8%2048-29",
+    "insight": "카카오맵에서 불러온 업체입니다. 주소: 서울 마포구 와우산로29길 48-29. 영업 여부는 카카오맵 API에서 제공되지 않아 아래 링크에서 직접 확인이 필요합니다.",
     "reason": null
   }
 ];
@@ -2987,6 +3409,27 @@ function searchNearby() {
   }, { location: center, radius: 500 });
 }
 
+// 현위치 버튼 — 브라우저 GPS로 실제 위치를 받아와 지도를 그 위치로 이동.
+// 위치 정보가 없거나 거부되면 지어내지 않고 정직하게 안내만 하고 끝낸다.
+function locateMe(btn) {
+  if (!navigator.geolocation) { showToast('이 브라우저는 위치 확인을 지원하지 않아요'); return; }
+  if (btn) btn.classList.add('locating');
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      if (btn) btn.classList.remove('locating');
+      if (!map) return;
+      const here = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+      map.panTo(here);
+      map.setLevel(4);
+    },
+    (err) => {
+      if (btn) btn.classList.remove('locating');
+      showToast('위치 확인에 실패했어요. 브라우저 위치 권한을 확인해주세요');
+    },
+    { enableHighAccuracy: true, timeout: 8000 }
+  );
+}
+
 function resetView() {
   if (map) map.setCenter(new kakao.maps.LatLng(37.556670, 126.923610));
   if (map) map.setLevel(4);
@@ -3049,7 +3492,7 @@ function addStore() {
 }
 </script>
   <!-- 홍대 실시간 혼잡도 배지 -->
-  <div id="congestBadge" style="display:none;position:absolute;bottom:calc(64px + env(safe-area-inset-bottom));left:12px;z-index:10;
+  <div id="congestBadge" class="congest-badge" style="display:none;z-index:10;
     background:var(--surface);border:1px solid var(--border);color:var(--text);
     border-radius:9999px;padding:8px 14px;font-family:'Pretendard','Noto Sans KR',sans-serif;
     font-size:12px;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.3);
