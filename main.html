@@ -739,6 +739,7 @@
           <button class="chip" id="chip-liveclub" onclick="toggleDetailFilter('type:liveclub',this)">🎤 라이브클럽</button>
           <button class="chip" onclick="toggleDetailFilter('type:animeshop',this)">🎌 애니메이션샵</button>
           <button class="chip" id="chip-practice" onclick="toggleDetailFilter('type:practice',this)">🎸 합주·연습실</button>
+          <button class="chip" id="chip-play" onclick="toggleDetailFilter('type:play',this)">🎮 놀거리</button>
           <button class="chip" onclick="toggleDetailFilter('type:entertainment',this)">🎡 엔터테인먼트</button>
           <button class="chip" id="chip-artsupply" onclick="toggleDetailFilter('type:artsupply',this)">🎨 화방</button>
         </div>
@@ -863,6 +864,7 @@
           <option value="artsupply">화방</option>
           <option value="animeshop">애니메이션샵</option>
           <option value="practice">합주·연습실</option>
+          <option value="play">놀거리</option>
           <option value="entertainment">엔터테인먼트</option>
           <option value="retail">기타</option>
         </select>
@@ -931,7 +933,7 @@
 
 <script>
 // ── DATA ──────────────────────────────────────────────
-const TYPES = { restaurant:'음식점', cafe:'카페', bar:'주점', retail:'기타', liveclub:'라이브클럽', artsupply:'화방', club:'클럽', animeshop:'애니메이션샵', entertainment:'엔터테인먼트', practice:'합주·연습실' };
+const TYPES = { restaurant:'음식점', cafe:'카페', bar:'주점', retail:'기타', liveclub:'라이브클럽', artsupply:'화방', club:'클럽', animeshop:'애니메이션샵', entertainment:'엔터테인먼트', practice:'합주·연습실', play:'놀거리' };
 const STATUS = { open:'영업중', closed:'폐점', risk:'주의' };
 const REASONS = { traffic:'유동인구 부족', quality:'품질/경쟁력', rent:'임대료 부담', location:'입지 불리', trend:'트렌드 이탈' };
 
@@ -1577,6 +1579,7 @@ function catInfo(s) {
   if (s.type === 'artsupply') return { icon:'🎨', color:'#2980b9', label:'화방', labelEn:'Art Supplies' };
   if (s.type === 'animeshop') return { icon:'🎌', color:'#e83e8c', label:'애니메이션샵', labelEn:'Anime Shop' };
   if (s.type === 'practice') return { icon:'🎸', color:'#6d5acd', label:'합주·연습실', labelEn:'Band Practice' };
+  if (s.type === 'play') return { icon:'🎮', color:'#00a3a3', label:'놀거리', labelEn:'Play & Fun' };
   if (s.type === 'entertainment') return { icon:'🔑', color:'#16a085', label:'엔터테인먼트', labelEn:'Entertainment' };
   if (s.category && s.category.includes('카페')) return { icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-.15em"><path d="M5 8h11v4.5a5.5 5.5 0 0 1-5.5 5.5h0A5.5 5.5 0 0 1 5 12.5z"/><path d="M16 9.2h2.3a2.3 2.3 0 0 1 0 4.6H16"/><path d="M4 21h13"/><path d="M8 3c0 1.1-1 1.4-1 2.5M11.5 3c0 1.1-1 1.4-1 2.5"/></svg>', color:'#a9744f', label:'카페', labelEn:'Cafe' };
   if (s.type === 'bar' || (s.category && /주점|맥주|호프/.test(s.category))) return { icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-.15em"><path d="M7 10h9v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/><path d="M16 12h2a2 2 0 0 1 2 2v1.5a2 2 0 0 1-2 2h-2"/><path d="M7 10a2 2 0 0 1 .2-3.8 2.4 2.4 0 0 1 4.4-1 2.4 2.4 0 0 1 3.9 1 2 2 0 0 1 .3 3.8"/></svg>', color:'#f5a623', label:'술집', labelEn:'Bar' };
@@ -1621,6 +1624,7 @@ function menuEmoji(s) {
   if (s.type === 'club') return '🪩';
   if (s.type === 'animeshop') return '🎌';
   if (s.type === 'practice') return '🎸';
+  if (s.type === 'play') return '🎮';
   if (s.type === 'entertainment') return '🔑';
   if (s.type === 'artsupply') return '🎨';
   const menu = s.signatureMenu || '';
@@ -2611,6 +2615,7 @@ function selectCategoryBar(key, btn) {
     activeDetailFilters.add('type:animeshop');
     activeDetailFilters.add('type:artsupply');
     activeDetailFilters.add('type:practice');
+    activeDetailFilters.add('type:play');
     currentFilter = 'detailFilters';
   } else if (key === 'gone') {
     currentFilter = 'gone';
@@ -2892,6 +2897,7 @@ function importPlace(p) {
     }
     if (/애니메이션|피규어|굿즈|만화/i.test(catName)) return 'animeshop';
     if (/합주(실)?|연습실|녹음실|녹음\s*스튜디오|음악\s*연습|밴드\s*연습/i.test(catName)) return 'practice';
+    if (/방탈출|이스케이프|escape|보드게임|게임카페|오락실|게임장|아케이드|코인노래|노래방|VR|만화카페|만화방|볼링|당구|양궁|레이저\s*태그|방방|트램폴린|전시|갤러리|복합문화|체험/i.test(catName)) return 'play';
     if (/화방|미술\s*재료|화방용품/i.test(catName)) return 'artsupply';
     if (code === 'CE7') return 'cafe';
     if (code === 'FD6' || !code) {
