@@ -105,6 +105,14 @@
     background: var(--surface);
   }
   .topbar-search-row .search-box { margin-bottom: 0; max-width: 480px; }
+  /* 검색창 = 시안(mockup) 기준 크림색 알약. 유일한 .search-box 사용처라 전역으로 덮어써도 안전함. */
+  .search-box {
+    background: var(--text) !important; border: none !important; border-radius: 99px !important;
+    padding: 10px 16px !important;
+  }
+  .search-box svg { flex: none; }
+  .search-box input { color: #3d0f16 !important; font-weight: 500; }
+  .search-box input::placeholder { color: #9a7d80 !important; }
   .search-results {
     display:none; position:absolute; top:48px; left:16px; width:min(480px, calc(100vw - 32px));
     background:var(--surface); border:1px solid var(--border); border-radius:14px;
@@ -128,11 +136,14 @@
   .search-result-type { margin-left:auto; color:var(--muted); font-size:11px; flex:none; }
   .search-empty { padding:16px 14px; color:var(--muted); font-size:12px; text-align:center; }
 
-  /* ── 상단 액션(메뉴 + 하트) & 앱 메뉴 드롭다운 ───────────────────── */
-  /* 브랜드/시계 줄을 없앤 대신 검색줄을 맨 위로 올리고, 노치에 안 가리게 safe-area 여백 */
-  .topbar-search-row { display: flex; align-items: center; gap: 10px; padding-top: calc(10px + env(safe-area-inset-top)); }
-  .topbar-search-row .search-box { flex: 1; min-width: 0; margin-bottom: 0; }
-  .topbar-actions { display: flex; align-items: center; gap: 8px; flex: none; }
+  /* ── 상단: 로고 + 검색 + 메뉴/즐겨찾기를 한 장의 카드로 (홍대맵 시안 기준) ───── */
+  .topbar-search-row {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 10px 12px;
+    padding-top: calc(10px + env(safe-area-inset-top));
+  }
+  .topbar-search-row .logo-lockup { flex: none; order: 1; }
+  .topbar-search-row .search-box { flex: 1 1 240px; min-width: 0; margin-bottom: 0; order: 3; }
+  .topbar-actions { display: flex; align-items: center; gap: 8px; flex: none; order: 2; margin-left: auto; }
   .app-menu-wrap { position: relative; flex: none; }
   .app-menu-btn {
     width: 40px; height: 40px; border-radius: 50%; flex: none;
@@ -183,7 +194,7 @@
     border-color: var(--accent); color: #fff; font-weight: 700;
     background: rgba(var(--accent-rgb),.18);
   }
-  .category-bar .cat-divider { flex: none; width: 1px; align-self: stretch; margin: 2px 4px; background: var(--border); }
+  /* 칩 사이 간격을 시안처럼 균일하게 유지하기 위해 구분선(cat-divider)은 쓰지 않음 */
   /* 카테고리 칩 활성 = 볼드 + 골드(빨강인 로컬 인디와 역할 구분). 사이드바 상세필터 칩(.chip.on)은 그대로 빨강 유지. */
   .category-bar .chip.on {
     border: 2px solid var(--warn); color: var(--warn); font-weight: 800;
@@ -325,9 +336,22 @@
   .btn-locate:active { transform: scale(.92); }
   .btn-locate.locating svg { animation: locatePulse 1s ease-in-out infinite; }
   @keyframes locatePulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-  /* 하단 FAB 3개(현위치·결과보기·홍대중심)를 감싸는 래퍼.
+  /* 즐겨찾기(하단) — 위치 버튼과 동일한 스타일. 데스크톱에는 상단 하트가 이미 있어 모바일 하단 바에서만 노출 */
+  .btn-fab-save {
+    display: none;
+    position: absolute; bottom: 16px; right: 66px; z-index: 10;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); cursor: pointer;
+    align-items: center; justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,.3); transition: all .15s;
+  }
+  .btn-fab-save:hover { border-color: var(--accent); color: var(--accent2); }
+  .btn-fab-save:active { transform: scale(.92); }
+  /* 하단 FAB(현위치·결과보기·즐겨찾기)를 감싸는 래퍼 — 시안(mockup)의 3버튼 구성을 그대로 따름.
      데스크톱: display:contents로 박스 자체를 없애서 기존 개별 position:absolute 배치를 그대로 유지(무변화).
-     모바일: 아래 미디어쿼리에서 진짜 flex row로 바뀌며 홍대맵 Mobile 디자인 컴프의 플로팅 바를 재현. */
+     모바일: 아래 미디어쿼리에서 진짜 flex row로 바뀌며 홍대맵 Mobile 디자인 컴프의 플로팅 바를 재현.
+     '홍대 중심으로 이동'(btn-home)은 이 행 밖으로 분리해 데스크톱 전용 보조 버튼으로 남기고, 모바일에서는 숨겨 하단 버튼 수를 시안과 동일하게 3개로 유지한다. */
   .bottom-fab-row { display: contents; }
   .congest-badge { position: absolute; bottom: calc(64px + env(safe-area-inset-bottom)); left: 12px; }
   .map-btn {
@@ -369,15 +393,7 @@
   .btn-view-results:active { transform: translateX(-50%) scale(.96); }
   @keyframes fadeSlideUp { from { opacity:0; transform:translateX(-50%) translateY(10px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
 
-  /* 피드백·제보 링크 — 예전 범례가 있던 자리 */
-  .feedback-link {
-    position: absolute; bottom: calc(20px + env(safe-area-inset-bottom)); left: 12px; z-index: 10;
-    background: var(--surface); border: 1px solid var(--border); color: var(--text);
-    border-radius: var(--card-r); padding: 9px 13px; font-size: 11.5px; font-weight: 600;
-    text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
-    transition: all .15s; box-shadow: 0 2px 10px rgba(0,0,0,.25);
-  }
-  .feedback-link:hover { border-color: var(--accent); color: var(--accent2); background: var(--surface2); }
+  /* 피드백·제보 링크는 이제 ≡ 메뉴 안(.app-menu-item)에서 접근 — 지도 위에 별도로 띄우지 않아 하단 버튼과 겹치는 문제를 원천적으로 없앰 */
 
   /* DETAIL PANEL */
   .detail {
@@ -639,20 +655,14 @@
     /* iOS는 폰트 16px 미만 입력창에 포커스하면 화면을 자동 확대함 → 확대 방지 위해 16px로 통일 */
     #search-input, .search-box input, .form-group input, .form-group select,
     .form-group textarea, .picker-search-box input { font-size: 16px; }
-    .topbar { padding: 0 10px; gap: 8px; }
     .logo { font-size: 13px; }
-    .brand-logo { width: 26px !important; height: 17px !important; }
-    .logo-divider, .logo-en { display: none; }
-    .logo-kr { font-size: 13px; }
-    .topbar-right { gap: 6px; }
     .btn-bookmarks, .btn-directions, .btn-add {
       font-size: 11px; padding: 6px 9px;
     }
-    #btn-lang, #btn-save, #btn-rip, #btn-taste-top, #btn-theme {
+    #btn-save {
       width: 40px; min-width: 40px; max-width: 40px; height: 40px; font-size: 15px;
     }
 
-    .topbar-search-row { padding: 8px 10px; }
     .category-bar { padding: 7px 10px; gap: 6px; }
 
     .sidebar, .detail { width: 100vw; max-width: 100vw; }
@@ -676,21 +686,22 @@
     .store-item { padding: 9px 11px; }
     .item-name { font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    /* ── 홍대맵 Mobile 디자인 컴프 반영 ──────────────────────────────
-       상단바 두 줄(로고행+검색행)을 하나의 떠있는 유리 카드로, 카테고리 칩은
-       지도 위로 겹쳐 뜨는 알약들로, 하단 3버튼은 한 줄의 플로팅 바로 재구성한다.
+    /* ── 홍대맵 시안(mockup) 기준 모바일 카드 ──────────────────────────────
+       로고 + 검색 + 메뉴/즐겨찾기가 한 장의 떠있는 유리 카드 안에서 2줄로 배치되고,
+       카테고리 칩은 지도 위로 겹쳐 뜨는 알약들로, 하단 3버튼은 한 줄의 플로팅 바로 재구성한다.
        구조(HTML)는 그대로 두고 모바일에서만 배치를 오버라이드하는 방식이라
        데스크톱 레이아웃과 기존 기능(필터·검색·정렬 등)은 전혀 건드리지 않는다. */
-    .topbar, .topbar-search-row {
+    .topbar-search-row {
       position: relative; z-index: 40;
       background: rgba(43,7,12,.9);
       -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
       border: 1px solid var(--border); border-radius: 20px;
       margin: 8px 10px 0; box-shadow: 0 10px 30px rgba(0,0,0,.4);
+      margin-top: calc(8px + env(safe-area-inset-top)); padding: 10px 12px;
     }
-    .topbar { padding: 10px 12px; border-bottom: none; }
-    .topbar-search-row { margin-top: calc(6px + env(safe-area-inset-top)); padding: 8px 10px; }
-    .search-box { background: var(--surface2); border-radius: 14px; }
+    .brand-logo { width: 26px !important; height: 17px !important; }
+    .logo-en { display: none; }
+    .logo-kr { font-size: 13px; }
 
     .category-bar {
       position: relative; z-index: 39; background: transparent; border-bottom: none;
@@ -709,7 +720,7 @@
       bottom: calc(18px + env(safe-area-inset-bottom));
     }
     .bottom-fab-row .btn-locate,
-    .bottom-fab-row .btn-home {
+    .bottom-fab-row .btn-fab-save {
       position: static; display: flex; flex: none;
       width: 52px; height: 52px;
       background: rgba(43,7,12,.9);
@@ -720,6 +731,8 @@
       position: static; left: auto; bottom: auto; transform: none;
       flex: 1; height: 56px; font-size: 15.5px;
     }
+    /* '홍대 중심으로 이동'은 데스크톱 전용 보조 버튼이라 모바일에서는 숨겨 하단을 시안과 동일하게 3버튼으로 유지 */
+    .btn-home { display: none; }
 
     /* 혼잡도 알약을 하단 FAB 바로 위, 화면 중앙에 띄워서 디자인 컴프의 CROWD PILL 위치 재현 */
     .congest-badge {
@@ -727,14 +740,11 @@
       transform: translateX(-50%);
       -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     }
-
-    /* 배지·FAB가 이 자리로 옮겨졌으니 피드백 링크는 원래 자리(왼쪽 하단)에 그대로 둔다 */
-    .feedback-link { z-index: 37; }
   }
 
   /* 아주 좁은 화면(구형 소형 스마트폰) 추가 여백 축소 */
   @media (max-width: 380px) {
-    .topbar { gap: 5px; padding: 0 8px; }
+    .topbar-search-row { gap: 6px 8px; padding-left: 10px; padding-right: 10px; }
     .logo { font-size: 12px; }
   }
 </style>
@@ -742,10 +752,25 @@
 <body>
 
 <!-- TOP BAR -->
-<!-- 상단: 브랜드/시계 줄 제거 → 검색·카테고리를 맨 위로. 흩어져 있던 기능은 ≡ 메뉴로 통합. -->
+<!-- 로고 + 검색 + 메뉴/즐겨찾기를 한 장의 카드로 (홍대맵 시안 기준 디자인 시스템) -->
 <div class="topbar-search-row">
+  <div class="logo logo-lockup">
+    <svg class="brand-logo" width="30" height="18" viewBox="0 0 180 100" aria-label="Hongdae Map logo" role="img">
+      <defs><linearGradient id="header-logo-red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs>
+      <circle cx="55" cy="64" r="30" fill="none" stroke="url(#header-logo-red)" stroke-width="15"/>
+      <circle cx="137" cy="64" r="30" fill="none" stroke="url(#header-logo-red)" stroke-width="15"/>
+      <rect x="17" y="22" width="76" height="15" rx="7.5" fill="url(#header-logo-red)"/>
+      <rect x="48" y="0" width="15" height="30" rx="7.5" fill="url(#header-logo-red)"/>
+      <circle cx="137" cy="64" r="7" fill="url(#header-logo-red)"/>
+    </svg>
+    <span class="logo-divider"></span>
+    <div class="logo-text">
+      <div class="logo-kr">홍대맵</div>
+      <div class="logo-en">HONGDAE MAP</div>
+    </div>
+  </div>
   <div class="search-box">
-    <svg width="14" height="14" fill="none" stroke="#93a8a2" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <svg width="14" height="14" fill="none" stroke="#9a7d80" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="search-input" placeholder="업소명 검색..." oninput="filterList()">
   </div>
   <div class="topbar-actions">
@@ -760,6 +785,8 @@
         <div class="app-menu-sep"></div>
         <button class="app-menu-item" role="menuitem" onclick="appMenuAction(cycleLang)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3.4 9.2h17.2M3.4 14.8h17.2"/></svg>언어 · Language</button>
         <button class="app-menu-item" role="menuitem" onclick="appMenuAction(cycleTheme)"><svg viewBox="0 0 20 20" aria-hidden="true"><defs><clipPath id="menu-theme-clip"><circle cx="10" cy="10" r="9"/></clipPath></defs><g clip-path="url(#menu-theme-clip)"><rect x="0" y="0" width="10" height="20" fill="#e8362a"/><rect x="10" y="0" width="10" height="20" fill="#1833db"/></g><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>테마 색상</button>
+        <div class="app-menu-sep"></div>
+        <a class="app-menu-item" role="menuitem" href="https://forms.gle/gJBKqm8sU5CS5KEK7" target="_blank" rel="noopener noreferrer" onclick="appMenuAction()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>피드백·제보하기</a>
       </div>
     </div>
     <button class="btn-directions" id="btn-save" onclick="showBookmarks()" title="저장한 가게"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20.6S3.4 15 3.4 8.9A4.9 4.9 0 0 1 12 6a4.9 4.9 0 0 1 8.6 2.9C20.6 15 12 20.6 12 20.6z"></path></svg></button>
@@ -769,7 +796,6 @@
 
 <div class="category-bar" id="category-bar">
   <button class="cat-toggle" id="chip-indie" onclick="toggleIndieOnly(this)" title="대형 프랜차이즈를 숨기고 홍대 로컬·인디 매장만 봅니다"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.2"></circle><circle cx="12" cy="12" r="2.1"></circle><circle cx="12" cy="12" r="0.4" fill="currentColor" stroke="none"></circle><path d="M12 6.4v0M17.6 12h0M12 17.6v0M6.4 12h0" stroke-width="1.1" opacity="0.55"></path></svg>로컬 인디</button>
-  <span class="cat-divider"></span>
   <button class="chip" id="chip-restaurant" onclick="selectCategoryBar('restaurant', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13h16c0 4-3.6 7-8 7s-8-3-8-7ZM12 13V6M8 8l1.5 2M16 8l-1.5 2"></path></svg>음식점</button>
   <button class="chip" id="chip-cafe" onclick="selectCategoryBar('cafe', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4ZM16 10h2a2 2 0 0 1 0 5h-2M8 6V4M12 6V4"></path></svg>카페</button>
   <button class="chip" id="chip-bar" onclick="selectCategoryBar('bar', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h12l-5 7v6h3v2H8v-2h3v-6ZM8 7h8"></path></svg>주점</button>
@@ -903,6 +929,11 @@
       이 지역에서 검색
     </button>
 
+    <!-- 홍대 중심으로 이동 — 데스크톱 전용 보조 버튼(기존 자리). 모바일 하단 바는 시안대로 위치·CTA·즐겨찾기 3개만 유지. -->
+    <button class="btn-home" onclick="resetView()" aria-label="홍대 중심으로 이동" title="홍대 중심">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"></path><path d="M6 10v9a1 1 0 0 0 1 1h4v-6h2v6h4a1 1 0 0 0 1-1v-9"></path></svg>
+    </button>
+
     <div class="bottom-fab-row">
       <button class="btn-locate" id="btn-locate" onclick="locateMe(this)" aria-label="현위치" title="현위치">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7.5"></circle><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>
@@ -912,12 +943,11 @@
         가게 <span id="results-count">0</span>곳 보기
       </button>
 
-      <button class="btn-home" onclick="resetView()" aria-label="홍대 중심으로 이동" title="홍대 중심">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"></path><path d="M6 10v9a1 1 0 0 0 1 1h4v-6h2v6h4a1 1 0 0 0 1-1v-9"></path></svg>
+      <button class="btn-fab-save" id="btn-fab-save" onclick="showBookmarks()" aria-label="즐겨찾기 모아보기" title="즐겨찾기 모아보기">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5 4.7 13a4.9 4.9 0 0 1 7-7l.3.4.3-.4a4.9 4.9 0 0 1 7 7Z"></path></svg>
       </button>
     </div>
 
-    <a class="feedback-link" href="https://forms.gle/gJBKqm8sU5CS5KEK7" target="_blank" rel="noopener noreferrer">📝 피드백·제보하기</a>
   </div>
 
 
