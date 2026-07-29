@@ -190,17 +190,15 @@
     display: inline-flex; align-items: center; gap: 4px;
   }
   .category-bar .cat-toggle:hover { border-color: var(--muted); }
-  .category-bar .cat-toggle.on {
-    border-color: var(--accent); color: #fff; font-weight: 700;
-    background: rgba(var(--accent-rgb),.18);
-  }
-  /* 칩 사이 간격을 시안처럼 균일하게 유지하기 위해 구분선(cat-divider)은 쓰지 않음 */
-  /* 카테고리 칩 활성 = 볼드 + 골드(빨강인 로컬 인디와 역할 구분). 사이드바 상세필터 칩(.chip.on)은 그대로 빨강 유지. */
+  /* 활성 상태 = 시안(mockup)처럼 코랄 그라데이션으로 꽉 채움. 로컬 인디·음식점·카페·주점·엔터·사라진 가게 모두 동일 규칙. */
+  .category-bar .cat-toggle.on,
   .category-bar .chip.on {
-    border: 2px solid var(--warn); color: var(--warn); font-weight: 800;
-    background: rgba(245,166,35,.16); padding: 3px 9px;
+    border: 1px solid transparent; color: #fff; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    box-shadow: 0 3px 12px rgba(var(--accent-rgb),.45);
   }
-  .category-bar .chip.on svg { stroke: var(--warn); }
+  .category-bar .chip.on svg,
+  .category-bar .cat-toggle.on svg { stroke: #fff; }
 
   /* LAYOUT */
   .layout { display: flex; flex: 1; overflow: hidden; }
@@ -351,9 +349,10 @@
   /* 하단 FAB(현위치·결과보기·즐겨찾기)를 감싸는 래퍼 — 시안(mockup)의 3버튼 구성을 그대로 따름.
      데스크톱: display:contents로 박스 자체를 없애서 기존 개별 position:absolute 배치를 그대로 유지(무변화).
      모바일: 아래 미디어쿼리에서 진짜 flex row로 바뀌며 홍대맵 Mobile 디자인 컴프의 플로팅 바를 재현.
-     '홍대 중심으로 이동'(btn-home)은 이 행 밖으로 분리해 데스크톱 전용 보조 버튼으로 남기고, 모바일에서는 숨겨 하단 버튼 수를 시안과 동일하게 3개로 유지한다. */
+     '홍대 중심으로 이동'(btn-home)은 이 행 밖으로 분리해 데스크톱 전용 보조 버튼으로 남기고,
+     모바일에서는 위치·즐겨찾기·홍대중심을 모두 숨겨 하단에 '가게 N곳 보기' CTA 하나만 노출한다. */
   .bottom-fab-row { display: contents; }
-  .congest-badge { position: absolute; bottom: calc(64px + env(safe-area-inset-bottom)); left: 12px; }
+  /* '지금 홍대 [혼잡도]'는 더 이상 지도 위에 띄우지 않고 ≡ 메뉴 안(.app-menu-item)에 넣음 */
   .map-btn {
     background: var(--surface); border: 1px solid var(--border);
     color: var(--text); font-size: 11px; padding: 6px 12px;
@@ -362,21 +361,6 @@
   }
   .map-btn:hover { background: var(--surface2); }
   .map-btn.on { border-color: var(--accent2); color: var(--accent2); }
-  .btn-search-area {
-    position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 10;
-    height: 38px; padding: 0 18px; border-radius: 99px; border: none;
-    background: var(--text); color: var(--bg); font-size: 12.5px; font-weight: 700;
-    cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.4);
-    font-family: 'Pretendard', sans-serif; white-space: nowrap;
-    display: none; align-items: center; gap: 6px; transition: transform .15s, opacity .15s;
-    animation: fadeSlideIn .2s ease;
-  }
-  @keyframes fadeSlideIn { from { opacity:0; transform:translateX(-50%) translateY(-6px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
-  .btn-search-area:hover { transform: translateX(-50%) scale(1.03); }
-  .btn-search-area:active { transform: translateX(-50%) scale(.96); }
-  @media (max-width: 640px) {
-    .btn-search-area { height: 42px; font-size: 12px; top: 10px; }
-  }
 
   /* 필터를 고르면 바로 리스트가 뜨지 않고, "몇 개 나왔는지"부터 알려주는 플로팅 버튼 */
   .btn-view-results {
@@ -705,41 +689,28 @@
 
     .category-bar {
       position: relative; z-index: 39; background: transparent; border-bottom: none;
-      padding: 8px 10px 4px;
+      padding: 0 10px; margin-top: 10px;
     }
     .category-bar .chip, .category-bar .cat-toggle {
       box-shadow: 0 3px 12px rgba(0,0,0,.35);
       background: var(--surface);
     }
-    .category-bar .chip.on { background: rgba(245,166,35,.22); }
 
-    /* 하단 FAB 3개를 실제 flex row로 전환 (데스크톱은 위 .bottom-fab-row{display:contents}로 무변화) */
+    /* 하단은 '가게 N곳 보기' 버튼 하나만 깔끔하게 유지 (데스크톱은 위 .bottom-fab-row{display:contents}로 무변화) */
     .bottom-fab-row {
-      display: flex; align-items: center; gap: 10px;
+      display: flex; align-items: center;
       position: fixed; left: 16px; right: 16px; z-index: 38;
       bottom: calc(18px + env(safe-area-inset-bottom));
     }
+    /* 현위치·즐겨찾기 버튼은 모바일 하단에서 숨김 — 즐겨찾기는 상단 헤더 하트로 이미 접근 가능 */
     .bottom-fab-row .btn-locate,
-    .bottom-fab-row .btn-fab-save {
-      position: static; display: flex; flex: none;
-      width: 52px; height: 52px;
-      background: rgba(43,7,12,.9);
-      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-      box-shadow: 0 5px 16px rgba(0,0,0,.45);
-    }
+    .bottom-fab-row .btn-fab-save { display: none; }
     .bottom-fab-row .btn-view-results {
       position: static; left: auto; bottom: auto; transform: none;
       flex: 1; height: 56px; font-size: 15.5px;
     }
-    /* '홍대 중심으로 이동'은 데스크톱 전용 보조 버튼이라 모바일에서는 숨겨 하단을 시안과 동일하게 3버튼으로 유지 */
+    /* '홍대 중심으로 이동'은 데스크톱 전용 보조 버튼이라 모바일에서는 숨김 */
     .btn-home { display: none; }
-
-    /* 혼잡도 알약을 하단 FAB 바로 위, 화면 중앙에 띄워서 디자인 컴프의 CROWD PILL 위치 재현 */
-    .congest-badge {
-      left: 50% !important; bottom: calc(84px + env(safe-area-inset-bottom)) !important;
-      transform: translateX(-50%);
-      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-    }
   }
 
   /* 아주 좁은 화면(구형 소형 스마트폰) 추가 여백 축소 */
@@ -786,6 +757,7 @@
         <button class="app-menu-item" role="menuitem" onclick="appMenuAction(cycleLang)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3.4 9.2h17.2M3.4 14.8h17.2"/></svg>언어 · Language</button>
         <button class="app-menu-item" role="menuitem" onclick="appMenuAction(cycleTheme)"><svg viewBox="0 0 20 20" aria-hidden="true"><defs><clipPath id="menu-theme-clip"><circle cx="10" cy="10" r="9"/></clipPath></defs><g clip-path="url(#menu-theme-clip)"><rect x="0" y="0" width="10" height="20" fill="#e8362a"/><rect x="10" y="0" width="10" height="20" fill="#1833db"/></g><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>테마 색상</button>
         <div class="app-menu-sep"></div>
+        <button class="app-menu-item" id="congestBadge" role="menuitem" onclick="appMenuAction(showCongestForecast)"><span id="congestDot" style="width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none"></span>불러오는 중…</button>
         <a class="app-menu-item" role="menuitem" href="https://forms.gle/gJBKqm8sU5CS5KEK7" target="_blank" rel="noopener noreferrer" onclick="appMenuAction()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>피드백·제보하기</a>
       </div>
     </div>
@@ -924,16 +896,15 @@
       <button class="map-btn" id="btn-export" onclick="exportChanges()">💾 추가한 매장 내보내기 (<span id="export-count">0</span>)</button>
     </div>
 
-    <button class="btn-search-area" id="btn-search-area" onclick="searchThisArea()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line></svg>
-      이 지역에서 검색
-    </button>
+    <!-- '이 지역에서 검색' 버튼 제거함: 상단에 업소명 검색이 이미 있어 중복이라는 판단. 관련 JS(searchThisArea 등)는 null-safe라 그대로 둬도 에러 없음. -->
 
-    <!-- 홍대 중심으로 이동 — 데스크톱 전용 보조 버튼(기존 자리). 모바일 하단 바는 시안대로 위치·CTA·즐겨찾기 3개만 유지. -->
+    <!-- 홍대 중심으로 이동 — 데스크톱 전용 보조 버튼(기존 자리). 모바일에서는 숨김(아래 미디어쿼리). -->
     <button class="btn-home" onclick="resetView()" aria-label="홍대 중심으로 이동" title="홍대 중심">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"></path><path d="M6 10v9a1 1 0 0 0 1 1h4v-6h2v6h4a1 1 0 0 0 1-1v-9"></path></svg>
     </button>
 
+    <!-- 위치·즐겨찾기 버튼은 마크업만 남기고 모바일에서 CSS로 숨김(데스크톱은 원래부터 숨김) —
+         즐겨찾기는 상단 헤더 하트로 이미 접근 가능하고, 모바일 하단은 CTA 하나만 깔끔하게 노출한다. -->
     <div class="bottom-fab-row">
       <button class="btn-locate" id="btn-locate" onclick="locateMe(this)" aria-label="현위치" title="현위치">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7.5"></circle><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>
@@ -3542,28 +3513,27 @@ function addStore() {
   selectStore(newStore.id);
 }
 </script>
-  <!-- 홍대 실시간 혼잡도 배지 -->
-  <div id="congestBadge" class="congest-badge" style="display:none;z-index:10;
-    background:var(--surface);border:1px solid var(--border);color:var(--text);
-    border-radius:9999px;padding:8px 14px;font-family:'Pretendard',sans-serif;
-    font-size:12px;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.3);
-    cursor:pointer;white-space:nowrap;">불러오는 중…</div>
+  <!-- 홍대 실시간 혼잡도 — 이제 지도 위에 띄우지 않고 ≡ 메뉴 안의 항목(#congestBadge)을 채움 -->
   <script>
   (function(){
     const badge = document.getElementById('congestBadge');
-    const wrap = document.querySelector('.map-wrap');
-    if (wrap && badge) wrap.appendChild(badge); // 배지를 지도 영역 안으로 옮겨서 피드백 링크와 같은 기준으로 배치
+    const dot = document.getElementById('congestDot');
+    if (!badge) return;
     const color = {'여유':'#22c55e','보통':'#84cc16','약간 붐빔':'#f59e0b','붐빔':'#ef4444','매우 붐빔':'#b91c1c'};
+    let forecastData = null;
+    window.showCongestForecast = function(){
+      if (!forecastData) return;
+      alert((forecastData.message||'') + '\n\n[예보]\n' +
+        forecastData.forecast.map(f=>`${f.time} · ${f.level}`).join('\n'));
+    };
     (async function(){
       try {
         const d = await (await fetch('/api/congestion')).json();
         if (!d.ok) { badge.style.display='none'; return; }
         const c = color[d.level] || '#9ca3af';
-        badge.innerHTML = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;
-          background:${c};margin-right:7px;vertical-align:middle;box-shadow:0 0 6px ${c};"></span>지금 홍대 <b>${d.level}</b>`;
-        badge.style.display = 'block';
-        badge.onclick = () => alert((d.message||'') + '\n\n[예보]\n' +
-          d.forecast.map(f=>`${f.time} · ${f.level}`).join('\n'));
+        if (dot) { dot.style.background = c; dot.style.boxShadow = `0 0 6px ${c}`; }
+        badge.lastChild.textContent = `지금 홍대 ${d.level}`;
+        forecastData = d;
       } catch(e){ badge.style.display='none'; }
     })();
   })();
