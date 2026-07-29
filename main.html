@@ -720,6 +720,8 @@
         </div>
         <div class="filter-chips filter-group">
           <button class="chip" id="chip-openlate" onclick="toggleDetailFilter('attr:lateNight',this)">🌙 심야영업 (자정 이후)</button>
+          <button class="chip" id="chip-secondround" onclick="toggleDetailFilter('attr:secondRound',this)">🍻 2차·3차</button>
+          <button class="chip" id="chip-honbap" onclick="toggleDetailFilter('tag:혼밥',this)">🍽️ 혼밥하기 좋은</button>
         </div>
         <div class="filter-chips filter-group">
           <button class="chip" onclick="toggleDetailFilter('cafeSub:작업카공',this)">☕ 작업·카공</button>
@@ -1671,6 +1673,7 @@ const TAG_I18N = {
   '배달 가능': { en: 'Delivery', zh: '可外送' }, '주차 가능': { en: 'Parking', zh: '有停车场' },
   '휠체어 접근': { en: 'Wheelchair access', zh: '轮椅可通行' }, '반려동물 동반': { en: 'Pet friendly', zh: '可带宠物' },
   '심야 영업': { en: 'Late night', zh: '深夜营业' }, '매일 영업': { en: 'Open daily', zh: '每日营业' },
+  '2차·3차': { en: '2nd/3rd round', zh: '续摊好去处' },
   '브레이크타임 없음': { en: 'No break time', zh: '无休息时段' },
   // 취향 태그
   '매운맛': { en: 'Spicy', zh: '辣味' }, '혼밥': { en: 'Solo-friendly', zh: '适合独食' },
@@ -1761,9 +1764,15 @@ function localizeMenuText(text) {
   }).join(', ');
 }
 
+// 2차·3차 = 심야영업으로 확인된 '식당·술집' (클럽/라이브클럽 제외 — 술자리 옮기는 곳이 아니므로)
+function is2ndRound(s) {
+  return (s.services || []).includes('lateNight') && (s.type === 'bar' || s.type === 'restaurant');
+}
+
 function objectiveTasteTags(s) {
   const tags = [`#${s.dong || '홍대'}`];
   if (s.type === 'restaurant') tags.push(`#${cuisineLabel(s)}`);
+  if (is2ndRound(s)) tags.push('#2차·3차');
 
   (s.certifications || []).forEach(tag => tags.push(`#${tag}`));
   if (Number.isFinite(s.operatingMonths)) {
@@ -2561,7 +2570,12 @@ function matchesDetailFilter(s, key) {
     if (value === 'hallOfFame') return (s.certifications || []).includes('홍대생 명예학식');
     if (value === 'michelin') return (s.certifications || []).some(c => c.includes('미쉐린'));
   }
-  if (kind === 'attr') return (s.services || []).includes(value); // 심야영업(lateNight) 등 확인된 운영 속성
+  if (kind === 'attr') {
+    // 2차·3차 = 심야영업 '식당·술집'만 (클럽/라이브클럽은 술자리 옮기는 곳이 아니라 목적지라 제외)
+    if (value === 'secondRound') return is2ndRound(s);
+    return (s.services || []).includes(value); // 심야영업(lateNight) 등 확인된 운영 속성
+  }
+  if (kind === 'tag') return (s.tags || []).includes(value); // 기존 취향 태그(예: 혼밥) 재활용
   return false;
 }
 
