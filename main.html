@@ -239,6 +239,7 @@
   .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
   .sidebar-top { padding: 44px 14px 100px; border-bottom: 1px solid var(--border); }
   .search-box {
+    position: relative;
     display: flex; align-items: center; gap: 8px;
     background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
     padding: 7px 10px; margin-bottom: 10px;
@@ -478,6 +479,20 @@
     display: inline-block; margin-top: 6px; font-size: 10.5px; font-weight: 700;
     color: var(--accent2); text-decoration: none;
   }
+
+  /* ── 지하철 도착정보·학교 전시 배너 = 검색창과 같은 크림색 톤 ──
+     .modal 자체는 그대로 두고, 이 두 모달 안에서만 색상 변수를 다시 정의해서
+     내부의 모든 텍스트·구분선·아이콘 배경(동적으로 채워지는 내용 포함)이
+     자동으로 밝은 톤에 맞게 바뀌도록 함. */
+  #subway-modal .modal, #exhibition-modal .modal {
+    background: var(--text) !important; /* 검색창과 동일한 크림색(var(--text)) */
+    color: #3d0f16;
+    --muted: #9a7d80;
+    --border: #e4d5cc;
+    --surface2: #ece0d8;
+    --surface: #f0e6df;
+  }
+  #subway-modal .modal h4, #exhibition-modal .modal h4 { color: #3d0f16; }
 
   /* 안내 토스트(예: '프랜차이즈를 숨기고...') — 기존엔 bottom:28px 고정이라 모바일 CTA와 겹쳤음 */
   .app-toast {
@@ -930,7 +945,8 @@
   </div>
   <div class="search-box">
     <svg width="14" height="14" fill="none" stroke="#9a7d80" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" id="search-input" placeholder="업소명 검색..." oninput="filterList()">
+    <input type="text" id="search-input" placeholder="업소명 검색..." oninput="filterList()" autocomplete="off">
+    <div class="search-results" id="search-results"></div>
   </div>
   <div class="topbar-actions">
     <div class="app-menu-wrap">
@@ -951,7 +967,6 @@
     </div>
     <button class="btn-directions" id="btn-save" onclick="showBookmarks()" title="저장한 가게"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20.6S3.4 15 3.4 8.9A4.9 4.9 0 0 1 12 6a4.9 4.9 0 0 1 8.6 2.9C20.6 15 12 20.6 12 20.6z"></path></svg></button>
   </div>
-  <div class="search-results" id="search-results"></div>
 </div>
 
 <div class="category-bar" id="category-bar">
