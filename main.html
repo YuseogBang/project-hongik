@@ -209,15 +209,16 @@
 
   /* SIDEBAR */
   .sidebar {
-    position: fixed; top: 150px; left: 0; bottom: 0; width: 300px; z-index: 300;
+    position: fixed; top: 0; left: 0; bottom: 0; width: 300px; z-index: 300;
     background: var(--surface); border-right: 1px solid var(--border);
     display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden;
     transform: translateX(-100%); transition: transform .25s ease;
     box-shadow: 4px 0 24px rgba(0,0,0,.3);
+    padding-top: env(safe-area-inset-top);
   }
   .sidebar.open { transform: translateX(0); }
   .sidebar-close {
-    position: absolute; top: 10px; right: 10px; z-index: 1;
+    position: absolute; top: calc(10px + env(safe-area-inset-top)); right: 10px; z-index: 1;
     width: 26px; height: 26px; border-radius: 50%; border: none; cursor: pointer;
     background: var(--surface2); color: var(--muted); font-size: 13px;
   }
@@ -238,6 +239,21 @@
   }
   .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
   .sidebar-top { padding: 44px 14px 100px; border-bottom: 1px solid var(--border); }
+  /* 사이드바(상세 필터) 하단에 고정되는 'N곳 보기' 바 — 필터를 고를 때마다 실시간으로 건수 반영 */
+  .sidebar-results-bar {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 6;
+    padding: 16px 14px calc(14px + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, var(--surface) 55%, transparent);
+    pointer-events: none;
+  }
+  .sidebar-results-bar button {
+    pointer-events: auto;
+    display: block; width: 100%; height: 48px; border-radius: 99px; border: none; cursor: pointer;
+    background: linear-gradient(135deg, var(--accent2), var(--accent)); color: #fff;
+    font-size: 14px; font-weight: 800; font-family: 'Pretendard', sans-serif;
+    box-shadow: 0 8px 22px rgba(var(--accent-rgb),.4); transition: transform .12s;
+  }
+  .sidebar-results-bar button:active { transform: scale(.97); }
   .search-box {
     position: relative;
     display: flex; align-items: center; gap: 8px;
@@ -339,10 +355,11 @@
   .btn-locate-map:active { transform: scale(.92); }
   .btn-locate-map.locating svg { animation: locatePulse 1s ease-in-out infinite; }
   @keyframes locatePulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-  /* 큐레이션 피드 진입 버튼 — 현위치 버튼과 같은 스타일, 그 바로 아래에 배치 */
+  /* 큐레이션 피드 진입 버튼 — 데스크톱: 홈(중심이동) 버튼 바로 위. 모바일: 아래 미디어쿼리에서 재배치 */
   .btn-feed-map {
-    display: none;
-    position: absolute; z-index: 15;
+    display: flex;
+    position: absolute; z-index: 15; right: 16px;
+    bottom: calc(16px + 40px + 10px); /* .btn-home(40px, bottom:16px) 바로 위 */
     width: 44px; height: 44px; border-radius: 50%;
     background: var(--surface); border: 1px solid var(--border);
     color: var(--text); cursor: pointer;
@@ -480,19 +497,20 @@
     color: var(--accent2); text-decoration: none;
   }
 
-  /* ── 지하철 도착정보·학교 전시 배너 = 검색창과 같은 크림색 톤 ──
-     .modal 자체는 그대로 두고, 이 두 모달 안에서만 색상 변수를 다시 정의해서
-     내부의 모든 텍스트·구분선·아이콘 배경(동적으로 채워지는 내용 포함)이
-     자동으로 밝은 톤에 맞게 바뀌도록 함. */
-  #subway-modal .modal, #exhibition-modal .modal {
+  /* ── 지하철 도착정보·학교 전시 배너 = "내용" 영역만 검색창과 같은 크림색 톤 ──
+     헤더(제목·닫기버튼·안내문구)는 기존 다크 테마 그대로 두고, 리스트가 들어가는
+     내용 영역(#subway-arrival-body, #exhibition-body)만 감싸서 색을 바꾼다.
+     동적으로 채워지는 항목들(도착정보 행, 전시 카드)도 색상 변수 재정의 덕에 자동으로 맞춰짐. */
+  #subway-arrival-body, #exhibition-body {
     background: var(--text) !important; /* 검색창과 동일한 크림색(var(--text)) */
     color: #3d0f16;
     --muted: #9a7d80;
     --border: #e4d5cc;
     --surface2: #ece0d8;
     --surface: #f0e6df;
+    border-radius: 14px;
+    padding: 6px 10px;
   }
-  #subway-modal .modal h4, #exhibition-modal .modal h4 { color: #3d0f16; }
 
   /* 안내 토스트(예: '프랜차이즈를 숨기고...') — 기존엔 bottom:28px 고정이라 모바일 CTA와 겹쳤음 */
   .app-toast {
@@ -549,15 +567,16 @@
 
   /* DETAIL PANEL */
   .detail {
-    position: fixed; top: 52px; right: 0; bottom: 0; width: 320px; z-index: 600;
+    position: fixed; top: 0; right: 0; bottom: 0; width: 320px; z-index: 600;
     background: var(--surface); border-left: 1px solid var(--border);
     overflow-y: auto; display: flex; flex-direction: column;
     transform: translateX(100%); transition: transform .25s ease;
     box-shadow: -4px 0 24px rgba(0,0,0,.3);
+    padding-top: env(safe-area-inset-top);
   }
   .detail.open { transform: translateX(0); }
   .detail-close {
-    position: absolute; top: 10px; right: 10px; z-index: 1;
+    position: absolute; top: calc(10px + env(safe-area-inset-top)); right: 10px; z-index: 1;
     width: 26px; height: 26px; border-radius: 50%; border: none; cursor: pointer;
     background: var(--surface2); color: var(--muted); font-size: 13px;
   }
@@ -1266,6 +1285,10 @@
     <button id="sort-trigger-btn" onclick="openSortModal()" style="display:none !important;">🔀 정렬</button>
     <div id="empty-cat-notice" style="display:none;padding:8px 12px;font-size:10px;color:var(--muted)"></div>
     <div class="store-list" id="store-list" style="display:none"></div>
+    <!-- 필터를 고를 때마다 지금 몇 건이 걸리는지 사이드바 하단에 고정으로 보여줌 -->
+    <div class="sidebar-results-bar" id="sidebar-results-bar" style="display:none">
+      <button onclick="closeSidebarAndViewResults()">가게 <span id="sidebar-results-count">0</span>곳 보기</button>
+    </div>
   </div>
 
   <div class="detail" id="detail-panel">
@@ -3151,13 +3174,30 @@ function renderListImpl() {
 function updateResultsBar() {
   const bar = document.getElementById('btn-view-results');
   const countEl = document.getElementById('results-count');
-  if (!bar) return;
-  if (lastFilteredCount > 0) {
-    if (countEl) countEl.textContent = lastFilteredCount;
-    bar.style.display = 'flex';
-  } else {
-    bar.style.display = 'none';
+  if (bar) {
+    if (lastFilteredCount > 0) {
+      if (countEl) countEl.textContent = lastFilteredCount;
+      bar.style.display = 'flex';
+    } else {
+      bar.style.display = 'none';
+    }
   }
+  // 상세 필터 사이드바 하단 바도 같은 값으로 동기화 — 필터를 고르는 동안 몇 건인지 바로 보이게
+  const sideBar = document.getElementById('sidebar-results-bar');
+  const sideCountEl = document.getElementById('sidebar-results-count');
+  if (sideBar) {
+    if (lastFilteredCount > 0) {
+      if (sideCountEl) sideCountEl.textContent = lastFilteredCount;
+      sideBar.style.display = 'block';
+    } else {
+      sideBar.style.display = 'none';
+    }
+  }
+}
+// 사이드바 하단의 'N곳 보기' — 필터는 그대로 둔 채 사이드바만 닫고, 걸러진 결과를 리스트 시트로 보여줌
+function closeSidebarAndViewResults() {
+  closeSidebar();
+  openResultsModal();
 }
 
 function updateStats() {
