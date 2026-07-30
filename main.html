@@ -3137,7 +3137,11 @@ function renderListImpl() {
         return diff !== 0 ? diff : a.name.localeCompare(b.name, 'ko');
       });
     }
-    else if (listSort === 'distance') filtered.sort((a, b) => distToCampus(a) - distToCampus(b));
+    else if (listSort === 'distance') {
+      // 사용자가 위치를 켰으면 실제 내 위치 기준, 아직이면 캠퍼스 기준으로 대신 정렬(완전히 못 쓰게 막지 않기 위함)
+      const distFn = (userLat != null && userLng != null) ? distanceFromUser : distToCampus;
+      filtered.sort((a, b) => distFn(a) - distFn(b));
+    }
   }
 
   const emptyMsg = isTasteMode ? '취향에 맞는 매장이 아직 없어요 (취향 태그가 있는 가게들 중에서만 찾아요)'
@@ -3294,8 +3298,6 @@ function selectStore(id) {
       background:rgba(var(--accent-rgb),.16);border:1px solid var(--accent);color:var(--text);
       font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px;margin-bottom:10px">
       🎵 ${g[currentLang] || g.ko}${currentLang !== 'en' ? ` · ${g.en}` : ''}</div>` : '';
-    const dist = distToCampus(s);
-    const walk = Math.max(1, Math.round(dist / 70)); // 도보 약 70m/분 기준 추정치
     const tags = objectiveTasteTags(s).map(localizeTag);
     // 카드 B는 큐레이터 스토리만 보여주고, 공식 인증은 취향 태그(A)에서만 표시한다.
     const storyTags = s.storyTags || ['재학생 추천', `${s.dong} 골목 스토리`];
@@ -3331,11 +3333,15 @@ function selectStore(id) {
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             ${tags.map(t=>`<span style="background:#fdf0e4;color:#8a5a3a;font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px">${t}</span>`).join('')}
           </div>
-          <div style="display:flex;align-items:center;gap:14px">
-            <div style="font-size:12px;font-weight:700;color:var(--accent)">📍 ${dist}m</div>
-            <div style="font-size:12px;color:#5c756d">🚶 도보 약 ${walk}분</div>
+          <div data-distance-for="${s.id}">
+            <div class="dist-known" style="display:${distanceFromUser(s)==null?'none':'flex'};align-items:center;gap:14px">
+              <div style="font-size:12px;font-weight:700;color:var(--accent)">📍 <span class="dist-value">${distanceFromUser(s)==null?'':distanceLabel(distanceFromUser(s))}</span></div>
+              <div style="font-size:12px;color:#5c756d">🚶 도보 약 <span class="walk-value">${distanceFromUser(s)==null?'':Math.max(1, Math.round(distanceFromUser(s) / 70))}</span>분</div>
+            </div>
+            <div class="dist-unknown" onclick="locateMe(this)" style="cursor:pointer;display:${distanceFromUser(s)==null?'flex':'none'};align-items:center;gap:6px;font-size:11.5px;color:#5c756d;background:#f4efe9;padding:8px 12px;border-radius:9px;width:fit-content">
+              📍 위치를 켠 후 거리를 알 수 있어요 <span style="color:var(--accent);font-weight:700;text-decoration:underline">위치 켜기</span>
+            </div>
           </div>
-          <div data-distance-for="${s.id}" style="font-size:11.5px;font-weight:700;color:var(--accent2);display:${distanceFromUser(s)==null?'none':'block'}">🧭 내 위치에서 <span class="dist-value">${distanceFromUser(s)==null?'':distanceLabel(distanceFromUser(s))}</span></div>
           ${s.hours ? `<div style="font-size:12px;color:#5c756d;margin-top:2px">🕐 ${s.hours}${(s.services||[]).includes('lateNight') ? ' <span style="color:var(--accent);font-weight:700">· 심야영업</span>' : ''}</div>` : ''}
         </div>
       </div>`;
@@ -3916,10 +3922,15 @@ let userLocationOverlay = null;
 let userLocationWatchId = null;
 let userLat = null, userLng = null; // 사용자가 위치 권한을 동의했을 때만 값이 채워짐(동의 전엔 거리 표시 안 함)
 function ensureUserLocationOverlay(lat, lng) {
+  const hadLocationBefore = userLat != null;
   userLat = lat; userLng = lng;
   // 거리 표시는 사용자 동의(geolocation 허용) 이후에만 계산되므로, 위치가 갱신될 때마다
   // 지금 열려 있는 리스트/상세 화면의 거리 표기도 같이 새로고침
   refreshDistanceDisplays();
+  // '거리순' 정렬이 이미 선택돼 있었는데 그때는 위치를 몰라 캠퍼스 기준으로 정렬됐다면,
+  // 위치를 막 켠 이 시점에 한 번 다시 그려서 진짜 내 위치 기준 순서로 바꿔준다.
+  // (매번 위치가 갱신될 때마다 다시 그리면 스크롤이 계속 튀니, 최초 1회만)
+  if (!hadLocationBefore && listSort === 'distance') renderList();
   if (!map) return;
   if (userLocationOverlay) {
     userLocationOverlay.setPosition(new kakao.maps.LatLng(lat, lng));
@@ -3960,16 +3971,34 @@ function distanceLabel(meters) {
   return meters < 1000 ? `${meters}m` : `${(meters/1000).toFixed(1)}km`;
 }
 // 위치 권한을 늦게 동의해도(또는 이동해서 갱신돼도) 이미 열려 있는 화면의 거리 표기를 즉시 갱신.
-// 바깥 wrapper의 문구(예: "내 위치에서")는 그대로 두고, 안쪽 .dist-value 값만 새로 씀.
+// 두 가지 마크업을 다 지원함:
+//  ① 상세 패널: .dist-known(거리+도보시간) / .dist-unknown(위치 켜기 안내) 를 서로 토글
+//  ② 리스트 카드: data-distance-for 엘리먼트 자체를 보이기/숨기기 (더 단순한 배지)
 function refreshDistanceDisplays() {
   document.querySelectorAll('[data-distance-for]').forEach(el => {
     const id = Number(el.getAttribute('data-distance-for'));
     const s = stores.find(x => x.id === id);
     if (!s) return;
-    const d = distanceFromUser(s);
+    const meters = distanceFromUser(s);
+
+    const known = el.querySelector('.dist-known');
+    const unknown = el.querySelector('.dist-unknown');
+    if (known || unknown) {
+      // ① 상세 패널 스타일
+      if (known) {
+        known.style.display = meters == null ? 'none' : 'flex';
+        const dv = known.querySelector('.dist-value');
+        const wv = known.querySelector('.walk-value');
+        if (dv) dv.textContent = meters == null ? '' : distanceLabel(meters);
+        if (wv) wv.textContent = meters == null ? '' : Math.max(1, Math.round(meters / 70)); // 도보 약 70m/분 기준 추정치
+      }
+      if (unknown) unknown.style.display = meters == null ? 'flex' : 'none';
+      return;
+    }
+    // ② 리스트 카드 스타일(기존 단순 배지)
     const valueEl = el.querySelector('.dist-value') || el;
-    valueEl.textContent = d == null ? '' : distanceLabel(d);
-    el.style.display = d == null ? 'none' : '';
+    valueEl.textContent = meters == null ? '' : distanceLabel(meters);
+    el.style.display = meters == null ? 'none' : '';
   });
 }
 
