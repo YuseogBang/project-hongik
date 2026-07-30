@@ -3554,8 +3554,15 @@ function updateBackdrop() {
   document.getElementById('drawer-backdrop').classList.toggle('show', sidebarOpen || detailOpen);
 }
 function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
+  const sidebar = document.getElementById('sidebar');
+  const opening = !sidebar.classList.contains('open');
+  sidebar.classList.toggle('open');
   updateBackdrop();
+  // 사이드바를 열 때마다(새로고침 없이 나갔다 들어와도) '몰랐던 홍대 상식'을 새로 랜덤 선택
+  if (opening) {
+    triviaIdx = Math.floor(Math.random() * TRIVIA.length);
+    renderTrivia();
+  }
 }
 function closeSidebar() {
   document.getElementById('sidebar').classList.remove('open');
