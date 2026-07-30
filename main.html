@@ -324,7 +324,29 @@
 
   /* MAP */
   .map-wrap { flex: 1; position: relative; }
-  #map { width: 100%; height: 100%; }
+  /* ── 지도 자체 톤 정리 ──────────────────────────────────────
+     카카오맵 JS SDK는 구글맵과 달리 지도 스타일(JSON)로 POI를 숨기거나
+     색을 바꾸는 공식 기능이 없음(공식 문서 확인: clusterer/services/drawing
+     라이브러리만 제공). 대신 CSS 필터로 채도를 낮춰서 카카오 기본
+     아이콘·라벨을 시각적으로 차분하게 눌러주고, 우리가 만든 코랄색
+     마커/클러스터가 상대적으로 도드라지게 함.
+     ⚠️ 주의: 우리 마커도 같은 #map 안에 그려지기 때문에 이 필터 영향을
+     같이 받음 — 그래서 마커 색이 통째로 바뀌는 반전(invert) 방식 대신
+     '채도만 낮추는' 안전한 방식을 택함(우리 마커도 살짝 차분해질 뿐
+     색 자체가 깨지진 않음). 카카오맵 SDK를 실제 로드해서 눈으로 봐야
+     정확한 느낌을 알 수 있어서(이 환경은 오프라인이라 카카오 지도 렌더링을
+     직접 확인 못 함), 배포 후 강도가 과하거나 약하면 알려주세요.
+  */
+  #map {
+    width: 100%; height: 100%;
+    filter: grayscale(.55) brightness(1.03) contrast(1.08) saturate(.75);
+  }
+  /* 지도 위에 얹는 옅은 브랜드 톤 오버레이 — 채도를 낮춘 지도에 다크 마룬 색感을 살짝 더함 */
+  .map-tint {
+    position: absolute; inset: 0; z-index: 4; pointer-events: none;
+    background: linear-gradient(165deg, rgba(58,10,18,.14), rgba(20,3,7,.10));
+    mix-blend-mode: multiply;
+  }
 
   /* MAP OVERLAY BUTTONS */
   .map-controls {
@@ -1025,6 +1047,7 @@
     </div>
     <div class="import-mode-banner" id="import-banner">📌 지도를 클릭하면 주변 업체를 불러옵니다</div>
     <div id="map"></div>
+    <div class="map-tint" aria-hidden="true"></div>
 
     <!-- 배포용으로 숨김: 관리자(나)만 쓰는 업체 추가 도구라 일반 사용자한테는 안 보이게 함.
          다시 보이게 하려면 아래 style="display:none"만 지우면 됨. -->
