@@ -339,12 +339,12 @@
   */
   #map {
     width: 100%; height: 100%;
-    filter: grayscale(.85) brightness(1.05) contrast(1.12) saturate(.6);
+    filter: grayscale(.2) saturate(.85);
   }
-  /* 지도 위에 얹는 옅은 브랜드 톤 오버레이 — 채도를 낮춘 지도에 다크 마룬 색感을 살짝 더함 */
+  /* 지도 위에 얹는 아주 옅은 브랜드 톤 오버레이 — 톤만 살짝 맞추는 용도 */
   .map-tint {
     position: absolute; inset: 0; z-index: 4; pointer-events: none;
-    background: linear-gradient(165deg, rgba(58,10,18,.22), rgba(20,3,7,.16));
+    background: linear-gradient(165deg, rgba(58,10,18,.06), rgba(20,3,7,.04));
     mix-blend-mode: multiply;
   }
 
@@ -2131,7 +2131,7 @@ stores.forEach(s => {
   if (o.hoursNote) s.hoursNote = o.hoursNote;
 });
 
-let map, markers = [], storeMarkers = [], clusterer, overlay, hoverOverlay, showMarkers = true;
+let map, markers = [], storeMarkers = [], storeLabelOverlays = [], clusterer, overlay, hoverOverlay, showMarkers = true;
 let indieOnly = localStorage.getItem('indieOnly') !== '0'; // 기본 켜짐(프랜차이즈 숨김). 사용자가 직접 끄면(=='0') 그때만 전체 표시
 let currentFilter = 'all', searchText = '', selectedId = null;
 let boundsFilter = null; // '이 지역에서 검색' 클릭 시 현재 지도 화면(bounds)으로 한 번 좁혀서 보여줌
@@ -2931,6 +2931,20 @@ function makeLabelOverlay(s, pos, opts) {
   });
 }
 
+// 캐치테이블 참고: 우리가 선정한 곳은 흰 배경 이름표를 상시 노출해서 카카오 기본 라벨들 사이에서
+// 확실히 도드라지게 함. 마커 점 바로 옆(오른쪽)에 붙여서 마커와 한 세트로 보이게 배치.
+function makePersistentLabelOverlay(s, pos) {
+  return new kakao.maps.CustomOverlay({
+    position: pos, yAnchor: 0.5, xAnchor: -0.15, zIndex: 8,
+    content: `<div style="white-space:nowrap;font-size:11px;font-weight:700;
+      background:#ffffff;color:#1a1210;padding:4px 9px;border-radius:7px;
+      box-shadow:0 2px 7px rgba(0,0,0,.35);font-family:'Pretendard',sans-serif;
+      pointer-events:none;border:1px solid rgba(0,0,0,.06)">
+      ${s.name}
+    </div>`
+  });
+}
+
 // 마우스를 올렸을 때만 보이는 이름표 — 선택된 매장 라벨과는 별개
 function showHoverLabel(s, pos) {
   if (selectedId === s.id) return; // 이미 선택 라벨이 떠 있음
@@ -3008,10 +3022,16 @@ function renderMarkers() {
         border: '2px solid rgba(255,255,255,.6)'
       }]
     });
+    // 클러스터로 뭉쳐서 개별 마커가 안 보이는 줌 레벨에서는 이름표도 같이 숨김
+    // (캐치테이블 참고: 지도 전체를 어둡게 만드는 대신, 우리 마커+이름표만 또렷하게 키워서
+    //  카카오 기본 아이콘 사이에서 확실히 도드라지게 하는 방식)
+    kakao.maps.event.addListener(map, 'zoom_changed', updateStoreLabelVisibility);
   }
   clusterer.clear();
   storeMarkers.forEach(m => kakao.maps.event.removeListener(m));
   storeMarkers = [];
+  storeLabelOverlays.forEach(o => o.setMap(null));
+  storeLabelOverlays = [];
   if (overlay) { overlay.setMap(null); overlay = null; }
   if (hoverOverlay) { hoverOverlay.setMap(null); hoverOverlay = null; }
 
@@ -3026,13 +3046,13 @@ function renderMarkers() {
 
     const isSelected = selectedId === s.id;
     const isUnverified = s.status === 'unverified';
-    // 카카오 기본 업체 아이콘/라벨과 겹칠 확률과 면적을 줄이기 위해, 이모지+큰 원 대신 작은 점(dot)으로 단순화
-    const size = isSelected ? 16 : 10;
-    const strokeW = isSelected ? 2.5 : 1.5;
+    // 캐치테이블 참고: 우리가 선정한 곳은 크고 또렷한 점 + 흰 테두리로,
+    // 카카오 기본 업체 아이콘들 사이에서 확실히 튀도록 함
+    const size = isSelected ? 30 : 20;
+    const strokeW = isSelected ? 3.5 : 3;
     const strokeColor = '#ffffff';
-    const fillOpacity = isUnverified ? 0.7 : 1; // 미검증이어도 카테고리색은 유지하되 살짝 옅게
+    const fillOpacity = isUnverified ? 0.85 : 1; // 미검증이어도 카테고리색은 유지하되 살짝 옅게
 
-    // 카카오 기본 라벨과 안 겹치게, 아이콘을 이미지 마커로 그려서 클러스터러가 관리하게 함
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
       <circle cx="${size/2}" cy="${size/2}" r="${size/2 - strokeW}" fill="${color}"
         fill-opacity="${fillOpacity}" stroke="${strokeColor}" stroke-width="${strokeW}"/>
@@ -3052,6 +3072,10 @@ function renderMarkers() {
 
     storeMarkers.push(marker);
 
+    // 상시 이름표(캐치테이블 스타일) — 클러스터 안 되는 줌 레벨일 때만 지도에 붙임
+    const labelOverlay = makePersistentLabelOverlay(s, pos);
+    storeLabelOverlays.push(labelOverlay);
+
     if (isSelected) {
       overlay = makeLabelOverlay(s, pos, { zIndex: 20, outline: true });
       overlay.setMap(map);
@@ -3059,6 +3083,15 @@ function renderMarkers() {
   });
 
   if (showMarkers) clusterer.addMarkers(storeMarkers);
+  updateStoreLabelVisibility();
+}
+
+// 클러스터 되는 줌 레벨(멀리 축소)에서는 이름표가 뒤엉켜 오히려 지저분해지므로 숨기고,
+// 개별 마커가 보이는 레벨(가까이 확대)에서만 이름표를 붙임
+function updateStoreLabelVisibility() {
+  if (!map) return;
+  const showLabels = showMarkers && map.getLevel() < 3; // clusterer의 minLevel과 동일 기준
+  storeLabelOverlays.forEach(o => o.setMap(showLabels ? map : null));
 }
 
 function renderList(skipMarkers) {
@@ -3613,6 +3646,7 @@ function toggleMarkers() {
     if (showMarkers) clusterer.addMarkers(storeMarkers);
     else clusterer.clear();
   }
+  updateStoreLabelVisibility();
   document.getElementById('btn-markers').classList.toggle('on', showMarkers);
 }
 
