@@ -174,6 +174,37 @@
   .app-menu-sep { height: 1px; margin: 5px 8px; background: var(--border); }
 
   /* 지도 위에 항상 떠있는 카테고리 바 — 사이드바를 안 열어도 바로 필터링 가능하게 함 */
+  /* 상황 바 — 업종 칩(category-bar)보다 위에, 더 눈에 띄게.
+     업종은 어느 지도 앱에나 있지만 상황은 홍대맵에만 있으므로 위계를 올린다. */
+  .situation-bar {
+    display: flex; align-items: center; gap: 7px; overflow-x: auto;
+    padding: 10px 16px; background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0; scrollbar-width: none;
+  }
+  .situation-bar::-webkit-scrollbar { display: none; }
+  .situation-lead {
+    flex: none; font-size: 12px; font-weight: 800; color: var(--muted);
+    letter-spacing: .02em; padding-right: 2px;
+  }
+  .situation-chip {
+    flex: none; white-space: nowrap; padding: 7px 14px; font-size: 12.5px;
+    font-weight: 700; border-radius: 99px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--surface2);
+    color: var(--text); font-family: 'Pretendard', sans-serif;
+    transition: all .15s;
+  }
+  .situation-chip:hover { border-color: var(--accent); }
+  .situation-chip:active { transform: scale(.96); }
+  .situation-chip.on {
+    border-color: transparent; color: #fff; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    box-shadow: 0 3px 12px rgba(var(--accent-rgb),.45);
+  }
+  .situation-chip .sit-count {
+    font-size: 11px; font-weight: 700; opacity: .62; margin-left: 5px;
+  }
+
   .category-bar {
     display: flex; gap: 7px; overflow-x: auto; padding: 9px 16px;
     background: var(--surface); border-bottom: 1px solid var(--border);
@@ -1003,6 +1034,15 @@
     </div>
     <button class="btn-directions" id="btn-save" onclick="showBookmarks()" title="저장한 가게"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20.6S3.4 15 3.4 8.9A4.9 4.9 0 0 1 12 6a4.9 4.9 0 0 1 8.6 2.9C20.6 15 12 20.6 12 20.6z"></path></svg></button>
   </div>
+</div>
+
+<!-- 상황 바 — 홍대맵의 차별점.
+     다른 지도 앱은 전부 '업종'으로 찾게 한다(음식점/카페/주점). 그건 어디서나 똑같다.
+     '과제하다 지쳤을 때' 같은 상황 단위는 재학생 화자만 정의할 수 있고,
+     인스타 카드뉴스의 큐레이션 축과도 동일해서 두 채널이 한 몸으로 움직인다.
+     ⚠️ 각 칩은 이미 있는 필터를 조합할 뿐이라 새 데이터가 필요 없다. -->
+<div class="situation-bar" id="situation-bar">
+  <span class="situation-lead">지금</span>
 </div>
 
 <div class="category-bar" id="category-bar">
@@ -2904,6 +2944,7 @@ function processVerifyQueue() {
 
 // ── RENDER ────────────────────────────────────────────
 function renderAll() {
+  renderSituationBar();
   renderMarkers();
   renderList();
 }
@@ -2955,6 +2996,78 @@ function hideHoverLabel(id) {
 // 현재 필터(currentFilter/activeDetailFilters/boundsFilter 등) 조건에 맞는 매장만 골라냄.
 // 리스트(renderListImpl)와 지도 마커(renderMarkers) 둘 다 이 함수 하나만 씀 — 그래야 "지금 보이는 리스트"와
 // "지도 위 마커"가 항상 똑같은 걸 보여줌.
+/* ── 상황 기반 탐색 ────────────────────────────────────────
+   다른 지도 앱은 '업종'으로 찾게 한다. 그건 어디서나 똑같아서 차별점이 안 된다.
+   홍대맵은 '상황'으로 찾게 한다 — 재학생 화자만 정의할 수 있는 단위다.
+
+   ⚠️ 원칙: 새 데이터를 만들지 않는다. 이미 검증된 필드만 조합한다.
+     · tags       — 손으로 붙인 취향 태그 (혼밥/조용한 등)
+     · services   — 엑셀로 직접 확인한 운영 속성 (lateNight)
+     · distToCampus — 좌표 기반 계산값 (Haversine)
+     · type       — 업종
+   확인되지 않은 정보로 상황을 만들면 무조작 원칙에 어긋난다.
+
+   ※ '지금 안 붐비는 곳'은 넣지 않았다. /api/congestion 은 홍대 *지역 전체*의
+     혼잡도 하나만 주고 매장별 혼잡도가 아니라서, 매장 단위 판정이 불가능하다. */
+const SITUATIONS = {
+  study:   { label: '과제하다 지쳤을 때', hint: '조용히 앉아 있을 수 있는 곳',
+             match: s => (s.tags || []).includes('조용한') },
+  gap:     { label: '수업 사이 90분',     hint: '캠퍼스에서 걸어서 왕복 가능한 거리',
+             match: s => distToCampus(s) <= 500 },
+  lastcall:{ label: '막차 놓쳤을 때',     hint: '자정 이후에도 문을 여는 곳',
+             match: s => (s.services || []).includes('lateNight') },
+  alone:   { label: '혼자 먹을 때',       hint: '혼밥이 편한 곳',
+             match: s => (s.tags || []).includes('혼밥') },
+  band:    { label: '합주 끝나고',        hint: '합주실 주변에서 이어가기 좋은 곳',
+             match: s => s.type === 'practice' },
+  /* '프랜차이즈 없는 골목'은 뺐다.
+     141곳 중 프랜차이즈가 9곳뿐이라 132곳이 걸려 '전체'와 사실상 같았고,
+     로컬 인디 토글(chip-indie)이 이미 카테고리바에 있어 기능도 중복이다. */
+};
+
+let currentSituation = null;
+
+function situationCount(key) {
+  const conf = SITUATIONS[key];
+  if (!conf) return 0;
+  return stores.filter(s => s.status !== 'closed' && conf.match(s)).length;
+}
+
+function renderSituationBar() {
+  const bar = document.getElementById('situation-bar');
+  if (!bar) return;
+  const lead = `<span class="situation-lead">지금</span>`;
+  const chips = Object.entries(SITUATIONS).map(([key, conf]) => {
+    const n = situationCount(key);
+    if (n === 0) return ''; // 결과가 0인 상황은 아예 노출하지 않는다 (빈 화면을 주지 않기 위해)
+    const on = currentSituation === key ? ' on' : '';
+    return `<button class="situation-chip${on}" onclick="selectSituation('${key}')" title="${conf.hint}">`
+         + `${conf.label}<span class="sit-count">${n}</span></button>`;
+  }).join('');
+  bar.innerHTML = lead + chips;
+}
+
+function selectSituation(key) {
+  const conf = SITUATIONS[key];
+  if (!conf) return;
+
+  if (currentSituation === key) {          // 같은 칩을 다시 누르면 해제
+    currentSituation = null;
+    currentFilter = 'all';
+    showToast('전체 매장을 다시 보여줘요');
+  } else {
+    currentSituation = key;
+    currentFilter = 'situation';
+    boundsFilter = null;
+    activeDetailFilters.clear();
+    showToast(`${conf.label} — ${conf.hint}`);
+  }
+
+  document.querySelectorAll('.category-bar .chip').forEach(c => c.classList.remove('on'));
+  renderSituationBar();
+  renderList();
+}
+
 function getFilteredStores() {
   const dongFilters = ['서교동','연남동','합정동','상수동'];
   const isDongFilter = dongFilters.includes(currentFilter);
@@ -2975,6 +3088,12 @@ function getFilteredStores() {
     if (boundsFilter && !boundsFilter.contain(new kakao.maps.LatLng(s.lat, s.lng))) return false;
     // 로컬 인디 레이어가 켜져 있으면 대형 프랜차이즈는 어떤 필터에서든 공통으로 숨김
     if (indieOnly && isFranchise(s)) return false;
+
+    // 상황 모드 — 폐업 확인된 곳은 제외하고, 해당 상황 조건에 맞는 곳만
+    if (currentFilter === 'situation' && currentSituation) {
+      const conf = SITUATIONS[currentSituation];
+      return s.status !== 'closed' && conf.match(s);
+    }
 
     if (isTasteMode) return s.tags && matchScore(s) > 0; // 취향 모드는 unverified 여부와 무관하게 태그 매칭만 봄
     if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
@@ -3144,7 +3263,9 @@ function renderListImpl() {
     }
   }
 
-  const emptyMsg = isTasteMode ? '취향에 맞는 매장이 아직 없어요 (취향 태그가 있는 가게들 중에서만 찾아요)'
+  const emptyMsg = (currentFilter === 'situation' && currentSituation)
+      ? `'${SITUATIONS[currentSituation].label}'에 맞는 곳이 아직 없어요.<br>직접 확인한 곳만 보여주기 때문이에요.`
+    : isTasteMode ? '취향에 맞는 매장이 아직 없어요 (취향 태그가 있는 가게들 중에서만 찾아요)'
     : isBookmarkMode ? '저장한 장소가 아직 없어요'
     : isGoneMode ? '아직 등록된 "사라진 가게"가 없어요.'
     : isHallOfFameMode ? '아직 등록된 명예학식이 없어요.'
@@ -3391,7 +3512,7 @@ function selectStore(id) {
             <div style="font-size:12px;color:var(--text);line-height:1.5">“${c.text}”</div>
             <div style="font-size:10px;color:var(--muted);margin-top:4px">${c.date}</div>
           </div>`).join('')
-      : `<div style="font-size:12px;color:var(--muted);text-align:center;padding:14px 0">아직 남겨진 코멘트가 없어요.<br>이 가게를 좋아했다면 첫 코멘트를 남겨주세요.</div>`;
+      : `<div style="font-size:12px;color:var(--muted);text-align:center;padding:14px 0">아직 적어둔 메모가 없어요.</div>`;
 
     dc.innerHTML = `
       <div class="detail-body" style="padding:14px">
@@ -3411,14 +3532,26 @@ function selectStore(id) {
           </div>
         </div>
 
-        <div class="section-title" style="margin-top:14px">이 가게를 좋아했던 사람들의 코멘트</div>
+        <div class="section-title" style="margin-top:14px">내 메모</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">
+          이 메모는 <b style="color:var(--text)">이 브라우저에만</b> 저장돼요. 다른 사람에게는 보이지 않고,
+          브라우저 기록을 지우면 함께 사라집니다.
+        </div>
         <div>${commentsHtml}</div>
         <div style="display:flex;gap:6px;margin-top:8px">
-          <input type="text" id="comment-input-${s.id}" placeholder="여기서 자주 먹었던 메뉴, 추억을 남겨주세요"
+          <input type="text" id="comment-input-${s.id}" placeholder="기억해두고 싶은 걸 적어두세요"
             style="flex:1;padding:9px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;font-family:'Pretendard',sans-serif"
             onkeydown="if(event.key==='Enter')submitComment(${s.id})">
-          <button class="map-btn" onclick="submitComment(${s.id})">등록</button>
+          <button class="map-btn" onclick="submitComment(${s.id})">저장</button>
         </div>
+
+        <div class="section-title" style="margin-top:18px">이 가게에 대한 기억을 나눠주세요</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">
+          보내주신 이야기는 확인을 거쳐 이 카드에 실려요. 다른 사람에게도 보이는 건 이쪽입니다.
+        </div>
+        <button class="map-btn" style="width:100%" onclick="openReportForm('memory', ${s.id})">
+          추억 제보하기
+        </button>
       </div>`;
     return;
   }
@@ -3531,6 +3664,9 @@ function toggleIndieOnly(btn) {
 function selectCategoryBar(key, btn) {
   activeDetailFilters.clear();
   boundsFilter = null;
+  // 업종 칩을 고르면 상황 선택은 해제한다 (두 축이 동시에 켜져 있으면 결과가 왜 이런지 알 수 없음)
+  currentSituation = null;
+  renderSituationBar();
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
   if (btn) btn.classList.add('on');
   if (key === 'entertainment') {
@@ -3881,6 +4017,38 @@ function importPlace(p) {
   showToast(`✅ "${p.place_name}" 추가됨 — 영업 여부는 직접 확인해주세요`);
 }
 
+/* ── 참여형 제보 (구글폼) ──────────────────────────────────
+   정적 사이트라 서버 DB가 없다. 사용자가 남긴 내용은 localStorage에만 쌓여
+   본인 브라우저 밖으로 나가지 못한다. 그래서 '다른 사람에게도 보이는 참여'는
+   구글폼으로 받아 운영자가 확인한 뒤 반영하는 방식으로 처리한다.
+   → 무조작 원칙(확인된 것만 표시)과 무검수 UGC 자동게시 회피를 동시에 만족한다.
+
+   ⚠️ 아래 URL은 구글폼을 만든 뒤 교체해야 한다.
+   사전입력 링크 만드는 법:
+     구글폼 → 우측 상단 ⋮ → '미리 채워진 링크 가져오기' → 항목에 임시값 입력 →
+     생성된 URL의 entry.XXXX=임시값 부분에서 entry 번호를 확인해 아래에 대입 */
+const REPORT_FORM = {
+  base: 'https://docs.google.com/forms/d/e/폼ID를_여기에/viewform',
+  entry: {
+    kind:  'entry.0000000000',   // 제보 종류 (추억 / 신규매장 / 정보수정)
+    store: 'entry.1111111111',   // 대상 매장명
+  }
+};
+
+function openReportForm(kind, storeId) {
+  const s = (typeof stores !== 'undefined') ? stores.find(x => x.id === storeId) : null;
+  const kindLabel = { memory: '추억 제보', newStore: '새 매장 제보', fix: '정보 수정' }[kind] || '제보';
+
+  if (REPORT_FORM.base.includes('폼ID를_여기에')) {
+    showToast('제보 폼이 아직 연결되지 않았어요. 곧 열립니다.');
+    return;
+  }
+  const q = new URLSearchParams();
+  q.set(REPORT_FORM.entry.kind, kindLabel);
+  if (s) q.set(REPORT_FORM.entry.store, s.name);
+  window.open(`${REPORT_FORM.base}?usp=pp_url&${q.toString()}`, '_blank', 'noopener');
+}
+
 function showToast(msg) {
   let t = document.getElementById('toast');
   if (!t) {
@@ -4194,22 +4362,9 @@ function addStore() {
   // ⚠️ 아래 항목은 실제 인스타그램 게시물이 아닌 '자리표시(placeholder)' 예시입니다.
   // instagramUrl 등은 존재하지 않는 더미 링크이니, 실제 등록은 관리자 폼(🗞️ 큐레이션 등록)으로
   // 진짜 게시물 URL·이미지·장소를 입력해 대체해주세요 (없는 정보를 사실처럼 표시하지 않기 위함).
-  const CURATIONS = [
-    {
-      id: 'sample-1',
-      title: '[예시] 홍대생이 추천하는 조용한 카페 5곳',
-      thumbnail: '',
-      description: '이 카드는 실제 데이터가 아닌 화면 구성 예시입니다. 관리자 폼에서 진짜 큐레이션으로 교체해주세요.',
-      instagramUrl: '',
-      instagramPostId: '',
-      category: '카페 투어',
-      tags: ['예시', '데이트', '홍대생추천'],
-      places: [
-        { name: '(예시) 카페 A', latitude: 37.5533, longitude: 126.9236, saved: false, tag: '조용한' },
-        { name: '(예시) 카페 B', latitude: 37.5518, longitude: 126.9221, saved: false, tag: '작업하기 좋은' }
-      ]
-    }
-  ];
+  // 예시 데이터를 두면 방문자에게 '[예시]'가 그대로 노출되므로 비워둔다.
+  // 실제 큐레이션이 생기면 관리자 폼 → 내보내기로 받은 JSON을 여기에 붙여넣는다.
+  const CURATIONS = [];
 
   // ── 저장 상태 저장소(SaveButton) — 매장 즐겨찾기(bookmarks)와 같은 방식이지만 별도 네임스페이스 ──
   let curatedSaves = JSON.parse(localStorage.getItem('curatedSaves') || '{}'); // { "curationId:placeIdx": true }
@@ -4520,19 +4675,9 @@ function addStore() {
        ══════════════════════════════════════════════════════════ -->
   <script>
   // ⚠️ 아래 항목은 실제 전시가 아닌 화면 구성 예시입니다. 관리자 폼(🎓 전시 등록)으로 실제 전시 정보로 교체해주세요.
-  const EXHIBITIONS = [
-    {
-      id: 'exh-sample-1',
-      title: '[예시] 2026 회화과 졸업전시',
-      dept: '회화과',
-      dateStart: '2026-01-01',
-      dateEnd: '2099-12-31', // 예시라 항상 '진행중'으로 보이게 넉넉히 잡아둠 — 실제 등록 시 정확한 종료일로 교체
-      location: '홍익대학교 현대미술관',
-      thumbnail: '',
-      description: '이 카드는 실제 데이터가 아닌 화면 구성 예시입니다.',
-      link: ''
-    }
-  ];
+  // 예시 전시를 두면 '[예시] 2026 회화과 졸업전시'가 배너로 노출되므로 비워둔다.
+  // 실제 전시가 열리면 관리자 폼에서 등록한다.
+  const EXHIBITIONS = [];
   let exhibitionSessionEntries = [];
 
   function exhibitionStatus(exh) {
