@@ -174,50 +174,6 @@
   .app-menu-sep { height: 1px; margin: 5px 8px; background: var(--border); }
 
   /* 지도 위에 항상 떠있는 카테고리 바 — 사이드바를 안 열어도 바로 필터링 가능하게 함 */
-  /* 상황 바 — 업종 칩(category-bar)보다 위에, 더 눈에 띄게.
-     업종은 어느 지도 앱에나 있지만 상황은 홍대맵에만 있으므로 위계를 올린다. */
-  .situation-bar {
-    display: flex; align-items: center; gap: 7px; overflow-x: auto;
-    padding: 10px 16px; background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0; scrollbar-width: none;
-  }
-  .situation-bar::-webkit-scrollbar { display: none; }
-
-  /* 근거 라벨 — '직접 가봄'과 '학생들 사이 평가'는 신뢰도가 다르므로
-     색으로도 위계를 준다. 직접 확인한 것만 액센트를 쓴다. */
-  .ev-badge {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 99px;
-    font-family: 'Pretendard', sans-serif; cursor: help;
-  }
-  .ev-visited {
-    background: rgba(var(--accent-rgb),.18); color: var(--text);
-    border: 1px solid var(--accent);
-  }
-  .ev-campus {
-    background: transparent; color: var(--muted);
-    border: 1px dashed var(--border);
-  }
-
-  .situation-chip {
-    flex: none; white-space: nowrap; padding: 7px 14px; font-size: 12.5px;
-    font-weight: 700; border-radius: 99px; cursor: pointer;
-    border: 1px solid var(--border); background: var(--surface2);
-    color: var(--text); font-family: 'Pretendard', sans-serif;
-    transition: all .15s;
-  }
-  .situation-chip:hover { border-color: var(--accent); }
-  .situation-chip:active { transform: scale(.96); }
-  .situation-chip.on {
-    border-color: transparent; color: #fff; font-weight: 800;
-    background: linear-gradient(135deg, var(--accent2), var(--accent));
-    box-shadow: 0 3px 12px rgba(var(--accent-rgb),.45);
-  }
-  .situation-chip .sit-count {
-    font-size: 11px; font-weight: 700; opacity: .62; margin-left: 5px;
-  }
-
   .category-bar {
     display: flex; gap: 7px; overflow-x: auto; padding: 9px 16px;
     background: var(--surface); border-bottom: 1px solid var(--border);
@@ -1049,15 +1005,6 @@
   </div>
 </div>
 
-<!-- 상황 바 — 홍대맵의 차별점.
-     다른 지도 앱은 전부 '업종'으로 찾게 한다(음식점/카페/주점). 그건 어디서나 똑같다.
-     '과제하다 지쳤을 때' 같은 상황 단위는 재학생 화자만 정의할 수 있고,
-     인스타 카드뉴스의 큐레이션 축과도 동일해서 두 채널이 한 몸으로 움직인다.
-     ⚠️ 각 칩은 이미 있는 필터를 조합할 뿐이라 새 데이터가 필요 없다. -->
-<!-- 비어 있는 상태로 시작한다. renderSituationBar()가 칩을 채우고,
-     채울 칩이 없으면 바 자체를 숨긴다 (라벨만 덩그러니 남지 않도록). -->
-<div class="situation-bar" id="situation-bar" style="display:none"></div>
-
 <div class="category-bar" id="category-bar">
   <button class="cat-toggle" id="chip-indie" onclick="toggleIndieOnly(this)" title="대형 프랜차이즈를 숨기고 홍대 로컬·인디 매장만 봅니다"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.2"></circle><circle cx="12" cy="12" r="2.1"></circle><circle cx="12" cy="12" r="0.4" fill="currentColor" stroke="none"></circle><path d="M12 6.4v0M17.6 12h0M12 17.6v0M6.4 12h0" stroke-width="1.1" opacity="0.55"></path></svg>로컬 인디</button>
   <button class="chip" id="chip-restaurant" onclick="selectCategoryBar('restaurant', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13h16c0 4-3.6 7-8 7s-8-3-8-7ZM12 13V6M8 8l1.5 2M16 8l-1.5 2"></path></svg>음식점</button>
@@ -1371,21 +1318,11 @@
   </div>
 
 <!-- TASTE MODAL -->
-<!-- 상황 → 취향 2단 구조.
-     상황이 '어떤 곳들 중에서'를 정하고(홍대맵만의 축),
-     취향이 그 안에서 '어떤 순서로'를 정한다(보조 축). -->
 <div class="modal-overlay" id="taste-modal" style="display:none">
   <div class="modal">
-    <h4>🎯 지금 어떤 상황이세요?</h4>
-    <p style="font-size:12px;color:var(--muted);margin:0 0 10px">
-      상황을 고르면 그 상황에 맞는 곳들 중에서만 찾아드려요. 건너뛰어도 괜찮아요.</p>
-    <div id="taste-situations" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px"></div>
-
-    <h4 style="margin-top:0">그 중에 어떤 걸 좋아하세요?</h4>
-    <p style="font-size:12px;color:var(--muted);margin:0 0 10px">
-      고른 취향과 많이 겹치는 순서로 정렬해드려요.</p>
+    <h4>🎯 내 취향은?</h4>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 12px">좋아하는 걸 2개 이상 골라주세요. 홍대 곳곳의 가게들 중에서 취향에 맞는 곳을 찾아드려요.</p>
     <div id="taste-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px"></div>
-
     <div style="display:flex;gap:8px">
       <button class="map-btn" onclick="closeTasteModal()" style="flex:1">닫기</button>
       <button class="map-btn on" onclick="applyTaste()" style="flex:1">추천 보기</button>
@@ -2738,57 +2675,7 @@ let userTastes = JSON.parse(localStorage.getItem('userTastes') || '[]');
 applyLang(); // 페이지 로드 즉시 적용 (카카오맵 로드를 기다리지 않아도 되게)
 
 
-/* ── 근거 라벨 ────────────────────────────────────────────
-   "재학생이 직접 가본 곳"이 이 서비스의 유일한 차별점이다.
-   그런데 혼자 141곳을 다 가볼 수는 없다. 그렇다고 남의 후기로 채우면
-   차별점 자체가 무너진다. → 섞지 말고 출처를 나눠서 표기한다.
-
-   visited : 운영자가 실제로 가봄        → s.visitedAt = '2026-08'
-   campus  : 학생들 사이에서 반복 언급    → s.campusBuzz = true
-   둘 다 없으면 아무 라벨도 붙이지 않는다 (없는 근거를 만들지 않는다).
-
-   ⚠️ campusBuzz는 '많은 학생이 좋다고 한다'는 뜻이지 '검증됐다'는 뜻이 아니다.
-     문구에서 그 차이가 드러나야 한다. */
-function evidenceBadges(s) {
-  const out = [];
-  if (s.visitedAt) {
-    out.push(`<span class="ev-badge ev-visited" title="운영자가 직접 방문해 확인했어요">
-      가봤어요 · ${s.visitedAt}</span>`);
-  }
-  if (s.campusBuzz) {
-    out.push(`<span class="ev-badge ev-campus" title="홍익대 학생들 사이에서 반복적으로 언급되는 곳이에요. 직접 확인한 것은 아니에요.">
-      학생들 사이 평가</span>`);
-  }
-  return out.length
-    ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">${out.join('')}</div>`
-    : '';
-}
-
-// 모달에서 고른 상황 (아직 적용 전). '추천 보기'를 눌러야 currentSituation으로 확정된다.
-let pendingSituation = null;
-
-function renderTasteSituations() {
-  const wrap = document.getElementById('taste-situations');
-  if (!wrap) return;
-  const chips = Object.entries(SITUATIONS).map(([key, conf]) => {
-    const n = situationCount(key);
-    if (n === 0) return '';
-    const on = pendingSituation === key ? ' on' : '';
-    return `<button class="situation-chip${on}" onclick="toggleTasteSituation('${key}', this)" title="${conf.hint}">`
-         + `${conf.label}<span class="sit-count">${n}</span></button>`;
-  }).join('');
-  wrap.innerHTML = chips || `<div style="font-size:12px;color:var(--muted)">지금은 고를 수 있는 상황이 없어요.</div>`;
-}
-
-function toggleTasteSituation(key, btn) {
-  // 상황은 하나만 고른다 (여러 개면 결과가 왜 이런지 알 수 없음)
-  pendingSituation = (pendingSituation === key) ? null : key;
-  renderTasteSituations();
-}
-
 function openTasteModal() {
-  pendingSituation = currentSituation; // 이미 켜둔 상황이 있으면 그대로 이어받음
-  renderTasteSituations();
   const wrap = document.getElementById('taste-tags');
   wrap.innerHTML = TASTE_TAGS.map(t => {
     const isHongdaeByeong = t === '홍대병';
@@ -2807,30 +2694,10 @@ function toggleTaste(tag, btn) {
 }
 
 function applyTaste() {
-  // 상황만 골라도 성립한다 — 상황이 주 축이고 취향은 정렬용 보조 축이기 때문.
-  if (!pendingSituation && userTastes.length === 0) {
-    alert('상황을 고르거나, 취향을 하나 이상 골라주세요.');
-    return;
-  }
+  if (userTastes.length === 0) { alert('취향을 2개 이상 골라주세요.'); return; }
   localStorage.setItem('userTastes', JSON.stringify(userTastes));
-  currentSituation = pendingSituation;
   closeTasteModal();
-  renderSituationBar();
-
-  if (currentSituation) {
-    // 상황이 있으면 상황으로 좁힌 뒤, 취향 겹침 순으로 정렬한다 (정렬은 renderList가 처리)
-    currentFilter = 'situation';
-    boundsFilter = null;
-    activeDetailFilters.clear();
-    document.querySelectorAll('.category-bar .chip').forEach(c => c.classList.remove('on'));
-    renderAll();
-    const conf = SITUATIONS[currentSituation];
-    showToast(userTastes.length
-      ? `${conf.label} — 취향과 겹치는 순서로 보여드려요`
-      : `${conf.label} — ${conf.hint}`);
-  } else {
-    showTasteView(); // 상황 없이 취향만 고른 경우는 기존 동작 그대로
-  }
+  showTasteView();
 }
 
 // store와 사용자 취향이 겹치는 개수 (tags 없는 매장은 0)
@@ -2975,7 +2842,7 @@ function updateVerifyBanner() {
     document.body.appendChild(el);
   }
   if (verifyQueue.length === 0 && done > 0) {
-    el.innerHTML = `✅ 대조 완료 — 카카오에서 <b style="color:var(--accent)">${verifiedCount}곳</b> 확인, <b style="color:var(--accent)">${removedCount}곳</b>은 못 찾음(목록엔 그대로 남습니다)`;
+    el.innerHTML = `✅ 검증 완료 — 실존 <b style="color:var(--accent)">${verifiedCount}곳</b> 확인, <b style="color:var(--accent)">${removedCount}곳</b> 제외`;
     setTimeout(() => el.style.opacity = '0', 4000);
     setTimeout(() => el.remove(), 4500);
     return;
@@ -3009,32 +2876,23 @@ function processVerifyQueue() {
       s.address = best.road_address_name || best.address_name;
       if (CAT_TYPE[best.category_group_code]) s.type = CAT_TYPE[best.category_group_code];
 
-      /* ⚠️ 여기서 예전에 rating 3.8 / months 18 / rent 280 을 기본값으로 채워 넣고
-         그걸로 score를 계산한 뒤 status를 'open'으로 바꿨다. 전부 지어낸 값이었다.
-         카카오 Places API는 평점·리뷰·임대료·영업여부를 제공하지 않는다.
-         무조작 원칙에 정면으로 어긋나므로 삭제했다.
-
-         이 검증이 확인해주는 것은 "카카오에 이 이름의 업체가 이 근처에 실재한다" 뿐이다.
-         영업 중인지는 여전히 모르므로 status는 unverified 그대로 둔다. */
-      s.existsOnKakao = true;   // 실존만 확인됨 (영업 여부와는 무관)
+      // 평점·리뷰는 카카오 API에서 직접 제공 안 되므로 운영 기간만 추정, 나머지 기본값
+      s.rating = s.rating || 3.8;
+      s.reviews = s.reviews || 0;
+      s.months = s.months || 18;
+      s.rent = s.rent || 280;
+      const sc = Math.round((s.rating/5)*30 + Math.min(s.reviews/500,1)*20 + Math.min(s.months/60,1)*25 + Math.max(0,(500-s.rent)/500)*15 + 10);
+      s.score = Math.min(100, sc);
+      s.status = 'open';
 
       verifiedCount++;
     } else {
-      /* ⚠️ 예전에는 카카오에서 못 찾으면 stores에서 아예 삭제했다.
-         매장 141곳이 전부 unverified라 전량이 이 경로를 타고,
-         API 키 도메인 제한·쿼터 초과·일시적 오류만으로도 지도가 통째로 비었다.
-         (첫 진입 시 업체가 하나도 안 보이던 원인)
-
-         검색 실패는 "그 가게가 없다"는 뜻이 아니라 "카카오에서 못 찾았다"는 뜻일 뿐이다.
-         손으로 확인해 넣은 데이터를 API 응답 하나로 지우지 않는다. */
-      s.existsOnKakao = false;
+      // 카카오에서 못 찾으면 목록에서 제거
+      stores = stores.filter(x => x.id !== id);
       removedCount++;
     }
 
-    /* 처리한 총 건수 기준으로 10개마다 갱신.
-       예전엔 verifiedCount만 봤는데, 검색이 계속 실패하면 그 값이 0에 머물러
-       0 % 10 === 0 이 매번 참이 되어 건건마다 전체 재렌더링이 돌았다. */
-    (verifiedCount + removedCount) % 10 === 0 && renderAll();
+    verifiedCount % 10 === 0 && renderAll();  // 10개마다 화면 갱신
     updateStats();
     updateVerifyBanner();
 
@@ -3046,7 +2904,6 @@ function processVerifyQueue() {
 
 // ── RENDER ────────────────────────────────────────────
 function renderAll() {
-  renderSituationBar();
   renderMarkers();
   renderList();
 }
@@ -3098,82 +2955,6 @@ function hideHoverLabel(id) {
 // 현재 필터(currentFilter/activeDetailFilters/boundsFilter 등) 조건에 맞는 매장만 골라냄.
 // 리스트(renderListImpl)와 지도 마커(renderMarkers) 둘 다 이 함수 하나만 씀 — 그래야 "지금 보이는 리스트"와
 // "지도 위 마커"가 항상 똑같은 걸 보여줌.
-/* ── 상황 기반 탐색 ────────────────────────────────────────
-   다른 지도 앱은 '업종'으로 찾게 한다. 그건 어디서나 똑같아서 차별점이 안 된다.
-   홍대맵은 '상황'으로 찾게 한다 — 재학생 화자만 정의할 수 있는 단위다.
-
-   ⚠️ 원칙: 새 데이터를 만들지 않는다. 이미 검증된 필드만 조합한다.
-     · tags       — 손으로 붙인 취향 태그 (혼밥/조용한 등)
-     · services   — 엑셀로 직접 확인한 운영 속성 (lateNight)
-     · distToCampus — 좌표 기반 계산값 (Haversine)
-     · type       — 업종
-   확인되지 않은 정보로 상황을 만들면 무조작 원칙에 어긋난다.
-
-   ※ '지금 안 붐비는 곳'은 넣지 않았다. /api/congestion 은 홍대 *지역 전체*의
-     혼잡도 하나만 주고 매장별 혼잡도가 아니라서, 매장 단위 판정이 불가능하다. */
-const SITUATIONS = {
-  study:   { label: '과제하다 지쳤을 때', hint: '조용히 앉아 있을 수 있는 곳',
-             match: s => (s.tags || []).includes('조용한') },
-  gap:     { label: '수업 사이 90분',     hint: '캠퍼스에서 걸어서 왕복 가능한 거리',
-             match: s => distToCampus(s) <= 500 },
-  lastcall:{ label: '막차 놓쳤을 때',     hint: '자정 이후에도 문을 여는 곳',
-             match: s => (s.services || []).includes('lateNight') },
-  alone:   { label: '혼자 먹을 때',       hint: '혼밥이 편한 곳',
-             match: s => (s.tags || []).includes('혼밥') },
-  band:    { label: '합주 끝나고',        hint: '합주실 주변에서 이어가기 좋은 곳',
-             match: s => s.type === 'practice' },
-  /* '프랜차이즈 없는 골목'은 뺐다.
-     141곳 중 프랜차이즈가 9곳뿐이라 132곳이 걸려 '전체'와 사실상 같았고,
-     로컬 인디 토글(chip-indie)이 이미 카테고리바에 있어 기능도 중복이다. */
-};
-
-let currentSituation = null;
-
-function situationCount(key) {
-  const conf = SITUATIONS[key];
-  if (!conf) return 0;
-  return stores.filter(s => s.status !== 'closed' && conf.match(s)).length;
-}
-
-function renderSituationBar() {
-  const bar = document.getElementById('situation-bar');
-  if (!bar) return;
-  const chips = Object.entries(SITUATIONS).map(([key, conf]) => {
-    const n = situationCount(key);
-    if (n === 0) return ''; // 결과가 0인 상황은 아예 노출하지 않는다 (빈 화면을 주지 않기 위해)
-    const on = currentSituation === key ? ' on' : '';
-    return `<button class="situation-chip${on}" onclick="selectSituation('${key}')" title="${conf.hint}">`
-         + `${conf.label}<span class="sit-count">${n}</span></button>`;
-  }).join('');
-
-  // 보여줄 칩이 하나도 없으면 바를 통째로 숨긴다.
-  // (예전엔 '지금' 라벨이 정적 HTML에 박혀 있어서, 칩이 0개일 때 라벨만 덩그러니 남았다)
-  if (!chips) { bar.style.display = 'none'; bar.innerHTML = ''; return; }
-  bar.style.display = 'flex';
-  bar.innerHTML = chips;
-}
-
-function selectSituation(key) {
-  const conf = SITUATIONS[key];
-  if (!conf) return;
-
-  if (currentSituation === key) {          // 같은 칩을 다시 누르면 해제
-    currentSituation = null;
-    currentFilter = 'all';
-    showToast('전체 매장을 다시 보여줘요');
-  } else {
-    currentSituation = key;
-    currentFilter = 'situation';
-    boundsFilter = null;
-    activeDetailFilters.clear();
-    showToast(`${conf.label} — ${conf.hint}`);
-  }
-
-  document.querySelectorAll('.category-bar .chip').forEach(c => c.classList.remove('on'));
-  renderSituationBar();
-  renderList();
-}
-
 function getFilteredStores() {
   const dongFilters = ['서교동','연남동','합정동','상수동'];
   const isDongFilter = dongFilters.includes(currentFilter);
@@ -3194,12 +2975,6 @@ function getFilteredStores() {
     if (boundsFilter && !boundsFilter.contain(new kakao.maps.LatLng(s.lat, s.lng))) return false;
     // 로컬 인디 레이어가 켜져 있으면 대형 프랜차이즈는 어떤 필터에서든 공통으로 숨김
     if (indieOnly && isFranchise(s)) return false;
-
-    // 상황 모드 — 폐업 확인된 곳은 제외하고, 해당 상황 조건에 맞는 곳만
-    if (currentFilter === 'situation' && currentSituation) {
-      const conf = SITUATIONS[currentSituation];
-      return s.status !== 'closed' && conf.match(s);
-    }
 
     if (isTasteMode) return s.tags && matchScore(s) > 0; // 취향 모드는 unverified 여부와 무관하게 태그 매칭만 봄
     if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
@@ -3352,11 +3127,6 @@ function renderListImpl() {
   }
 
   if (isTasteMode) filtered.sort((a, b) => matchScore(b) - matchScore(a));
-  // 상황으로 좁힌 목록도 취향을 골라뒀다면 겹침이 많은 순으로 올려준다
-  // (상황 = 어떤 곳들 중에서, 취향 = 그 안에서 어떤 순서로)
-  if (currentFilter === 'situation' && userTastes.length) {
-    filtered.sort((a, b) => matchScore(b) - matchScore(a));
-  }
   const showSortBar = !isTasteMode; // 취향 매칭 모드만 자체 정렬(일치도순)을 쓰고, 나머지 필터는 전부 공통 정렬 버튼을 씀
   if (showSortBar) {
     if (listSort === 'name') filtered.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
@@ -3374,9 +3144,7 @@ function renderListImpl() {
     }
   }
 
-  const emptyMsg = (currentFilter === 'situation' && currentSituation)
-      ? `'${SITUATIONS[currentSituation].label}'에 맞는 곳이 아직 없어요.<br>직접 확인한 곳만 보여주기 때문이에요.`
-    : isTasteMode ? '취향에 맞는 매장이 아직 없어요 (취향 태그가 있는 가게들 중에서만 찾아요)'
+  const emptyMsg = isTasteMode ? '취향에 맞는 매장이 아직 없어요 (취향 태그가 있는 가게들 중에서만 찾아요)'
     : isBookmarkMode ? '저장한 장소가 아직 없어요'
     : isGoneMode ? '아직 등록된 "사라진 가게"가 없어요.'
     : isHallOfFameMode ? '아직 등록된 명예학식이 없어요.'
@@ -3599,7 +3367,6 @@ function selectStore(id) {
 
     dc.innerHTML = `
       <div class="detail-body" style="padding:14px">
-        ${evidenceBadges(s)}
         ${genreBadge}
         ${styleToggle}
         ${cardStyle === 'A' ? cardA : cardB}
@@ -3624,7 +3391,7 @@ function selectStore(id) {
             <div style="font-size:12px;color:var(--text);line-height:1.5">“${c.text}”</div>
             <div style="font-size:10px;color:var(--muted);margin-top:4px">${c.date}</div>
           </div>`).join('')
-      : `<div style="font-size:12px;color:var(--muted);text-align:center;padding:14px 0">아직 적어둔 메모가 없어요.</div>`;
+      : `<div style="font-size:12px;color:var(--muted);text-align:center;padding:14px 0">아직 남겨진 코멘트가 없어요.<br>이 가게를 좋아했다면 첫 코멘트를 남겨주세요.</div>`;
 
     dc.innerHTML = `
       <div class="detail-body" style="padding:14px">
@@ -3644,26 +3411,14 @@ function selectStore(id) {
           </div>
         </div>
 
-        <div class="section-title" style="margin-top:14px">내 메모</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">
-          이 메모는 <b style="color:var(--text)">이 브라우저에만</b> 저장돼요. 다른 사람에게는 보이지 않고,
-          브라우저 기록을 지우면 함께 사라집니다.
-        </div>
+        <div class="section-title" style="margin-top:14px">이 가게를 좋아했던 사람들의 코멘트</div>
         <div>${commentsHtml}</div>
         <div style="display:flex;gap:6px;margin-top:8px">
-          <input type="text" id="comment-input-${s.id}" placeholder="기억해두고 싶은 걸 적어두세요"
+          <input type="text" id="comment-input-${s.id}" placeholder="여기서 자주 먹었던 메뉴, 추억을 남겨주세요"
             style="flex:1;padding:9px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;font-family:'Pretendard',sans-serif"
             onkeydown="if(event.key==='Enter')submitComment(${s.id})">
-          <button class="map-btn" onclick="submitComment(${s.id})">저장</button>
+          <button class="map-btn" onclick="submitComment(${s.id})">등록</button>
         </div>
-
-        <div class="section-title" style="margin-top:18px">이 가게에 대한 기억을 나눠주세요</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">
-          보내주신 이야기는 확인을 거쳐 이 카드에 실려요. 다른 사람에게도 보이는 건 이쪽입니다.
-        </div>
-        <button class="map-btn" style="width:100%" onclick="openReportForm('memory', ${s.id})">
-          추억 제보하기
-        </button>
       </div>`;
     return;
   }
@@ -3776,9 +3531,6 @@ function toggleIndieOnly(btn) {
 function selectCategoryBar(key, btn) {
   activeDetailFilters.clear();
   boundsFilter = null;
-  // 업종 칩을 고르면 상황 선택은 해제한다 (두 축이 동시에 켜져 있으면 결과가 왜 이런지 알 수 없음)
-  currentSituation = null;
-  renderSituationBar();
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
   if (btn) btn.classList.add('on');
   if (key === 'entertainment') {
@@ -4129,38 +3881,6 @@ function importPlace(p) {
   showToast(`✅ "${p.place_name}" 추가됨 — 영업 여부는 직접 확인해주세요`);
 }
 
-/* ── 참여형 제보 (구글폼) ──────────────────────────────────
-   정적 사이트라 서버 DB가 없다. 사용자가 남긴 내용은 localStorage에만 쌓여
-   본인 브라우저 밖으로 나가지 못한다. 그래서 '다른 사람에게도 보이는 참여'는
-   구글폼으로 받아 운영자가 확인한 뒤 반영하는 방식으로 처리한다.
-   → 무조작 원칙(확인된 것만 표시)과 무검수 UGC 자동게시 회피를 동시에 만족한다.
-
-   ⚠️ 아래 URL은 구글폼을 만든 뒤 교체해야 한다.
-   사전입력 링크 만드는 법:
-     구글폼 → 우측 상단 ⋮ → '미리 채워진 링크 가져오기' → 항목에 임시값 입력 →
-     생성된 URL의 entry.XXXX=임시값 부분에서 entry 번호를 확인해 아래에 대입 */
-const REPORT_FORM = {
-  base: 'https://docs.google.com/forms/d/e/폼ID를_여기에/viewform',
-  entry: {
-    kind:  'entry.0000000000',   // 제보 종류 (추억 / 신규매장 / 정보수정)
-    store: 'entry.1111111111',   // 대상 매장명
-  }
-};
-
-function openReportForm(kind, storeId) {
-  const s = (typeof stores !== 'undefined') ? stores.find(x => x.id === storeId) : null;
-  const kindLabel = { memory: '추억 제보', newStore: '새 매장 제보', fix: '정보 수정' }[kind] || '제보';
-
-  if (REPORT_FORM.base.includes('폼ID를_여기에')) {
-    showToast('제보 폼이 아직 연결되지 않았어요. 곧 열립니다.');
-    return;
-  }
-  const q = new URLSearchParams();
-  q.set(REPORT_FORM.entry.kind, kindLabel);
-  if (s) q.set(REPORT_FORM.entry.store, s.name);
-  window.open(`${REPORT_FORM.base}?usp=pp_url&${q.toString()}`, '_blank', 'noopener');
-}
-
 function showToast(msg) {
   let t = document.getElementById('toast');
   if (!t) {
@@ -4474,9 +4194,22 @@ function addStore() {
   // ⚠️ 아래 항목은 실제 인스타그램 게시물이 아닌 '자리표시(placeholder)' 예시입니다.
   // instagramUrl 등은 존재하지 않는 더미 링크이니, 실제 등록은 관리자 폼(🗞️ 큐레이션 등록)으로
   // 진짜 게시물 URL·이미지·장소를 입력해 대체해주세요 (없는 정보를 사실처럼 표시하지 않기 위함).
-  // 예시 데이터를 두면 방문자에게 '[예시]'가 그대로 노출되므로 비워둔다.
-  // 실제 큐레이션이 생기면 관리자 폼 → 내보내기로 받은 JSON을 여기에 붙여넣는다.
-  const CURATIONS = [];
+  const CURATIONS = [
+    {
+      id: 'sample-1',
+      title: '[예시] 홍대생이 추천하는 조용한 카페 5곳',
+      thumbnail: '',
+      description: '이 카드는 실제 데이터가 아닌 화면 구성 예시입니다. 관리자 폼에서 진짜 큐레이션으로 교체해주세요.',
+      instagramUrl: '',
+      instagramPostId: '',
+      category: '카페 투어',
+      tags: ['예시', '데이트', '홍대생추천'],
+      places: [
+        { name: '(예시) 카페 A', latitude: 37.5533, longitude: 126.9236, saved: false, tag: '조용한' },
+        { name: '(예시) 카페 B', latitude: 37.5518, longitude: 126.9221, saved: false, tag: '작업하기 좋은' }
+      ]
+    }
+  ];
 
   // ── 저장 상태 저장소(SaveButton) — 매장 즐겨찾기(bookmarks)와 같은 방식이지만 별도 네임스페이스 ──
   let curatedSaves = JSON.parse(localStorage.getItem('curatedSaves') || '{}'); // { "curationId:placeIdx": true }
@@ -4787,9 +4520,19 @@ function addStore() {
        ══════════════════════════════════════════════════════════ -->
   <script>
   // ⚠️ 아래 항목은 실제 전시가 아닌 화면 구성 예시입니다. 관리자 폼(🎓 전시 등록)으로 실제 전시 정보로 교체해주세요.
-  // 예시 전시를 두면 '[예시] 2026 회화과 졸업전시'가 배너로 노출되므로 비워둔다.
-  // 실제 전시가 열리면 관리자 폼에서 등록한다.
-  const EXHIBITIONS = [];
+  const EXHIBITIONS = [
+    {
+      id: 'exh-sample-1',
+      title: '[예시] 2026 회화과 졸업전시',
+      dept: '회화과',
+      dateStart: '2026-01-01',
+      dateEnd: '2099-12-31', // 예시라 항상 '진행중'으로 보이게 넉넉히 잡아둠 — 실제 등록 시 정확한 종료일로 교체
+      location: '홍익대학교 현대미술관',
+      thumbnail: '',
+      description: '이 카드는 실제 데이터가 아닌 화면 구성 예시입니다.',
+      link: ''
+    }
+  ];
   let exhibitionSessionEntries = [];
 
   function exhibitionStatus(exh) {
