@@ -183,10 +183,23 @@
     flex-shrink: 0; scrollbar-width: none;
   }
   .situation-bar::-webkit-scrollbar { display: none; }
-  .situation-lead {
-    flex: none; font-size: 12px; font-weight: 800; color: var(--muted);
-    letter-spacing: .02em; padding-right: 2px;
+
+  /* 근거 라벨 — '직접 가봄'과 '학생들 사이 평가'는 신뢰도가 다르므로
+     색으로도 위계를 준다. 직접 확인한 것만 액센트를 쓴다. */
+  .ev-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 99px;
+    font-family: 'Pretendard', sans-serif; cursor: help;
   }
+  .ev-visited {
+    background: rgba(var(--accent-rgb),.18); color: var(--text);
+    border: 1px solid var(--accent);
+  }
+  .ev-campus {
+    background: transparent; color: var(--muted);
+    border: 1px dashed var(--border);
+  }
+
   .situation-chip {
     flex: none; white-space: nowrap; padding: 7px 14px; font-size: 12.5px;
     font-weight: 700; border-radius: 99px; cursor: pointer;
@@ -1041,9 +1054,9 @@
      '과제하다 지쳤을 때' 같은 상황 단위는 재학생 화자만 정의할 수 있고,
      인스타 카드뉴스의 큐레이션 축과도 동일해서 두 채널이 한 몸으로 움직인다.
      ⚠️ 각 칩은 이미 있는 필터를 조합할 뿐이라 새 데이터가 필요 없다. -->
-<div class="situation-bar" id="situation-bar">
-  <span class="situation-lead">지금</span>
-</div>
+<!-- 비어 있는 상태로 시작한다. renderSituationBar()가 칩을 채우고,
+     채울 칩이 없으면 바 자체를 숨긴다 (라벨만 덩그러니 남지 않도록). -->
+<div class="situation-bar" id="situation-bar" style="display:none"></div>
 
 <div class="category-bar" id="category-bar">
   <button class="cat-toggle" id="chip-indie" onclick="toggleIndieOnly(this)" title="대형 프랜차이즈를 숨기고 홍대 로컬·인디 매장만 봅니다"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.2"></circle><circle cx="12" cy="12" r="2.1"></circle><circle cx="12" cy="12" r="0.4" fill="currentColor" stroke="none"></circle><path d="M12 6.4v0M17.6 12h0M12 17.6v0M6.4 12h0" stroke-width="1.1" opacity="0.55"></path></svg>로컬 인디</button>
@@ -1358,11 +1371,21 @@
   </div>
 
 <!-- TASTE MODAL -->
+<!-- 상황 → 취향 2단 구조.
+     상황이 '어떤 곳들 중에서'를 정하고(홍대맵만의 축),
+     취향이 그 안에서 '어떤 순서로'를 정한다(보조 축). -->
 <div class="modal-overlay" id="taste-modal" style="display:none">
   <div class="modal">
-    <h4>🎯 내 취향은?</h4>
-    <p style="font-size:12px;color:var(--muted);margin:0 0 12px">좋아하는 걸 2개 이상 골라주세요. 홍대 곳곳의 가게들 중에서 취향에 맞는 곳을 찾아드려요.</p>
+    <h4>🎯 지금 어떤 상황이세요?</h4>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 10px">
+      상황을 고르면 그 상황에 맞는 곳들 중에서만 찾아드려요. 건너뛰어도 괜찮아요.</p>
+    <div id="taste-situations" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px"></div>
+
+    <h4 style="margin-top:0">그 중에 어떤 걸 좋아하세요?</h4>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 10px">
+      고른 취향과 많이 겹치는 순서로 정렬해드려요.</p>
     <div id="taste-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px"></div>
+
     <div style="display:flex;gap:8px">
       <button class="map-btn" onclick="closeTasteModal()" style="flex:1">닫기</button>
       <button class="map-btn on" onclick="applyTaste()" style="flex:1">추천 보기</button>
@@ -2715,7 +2738,57 @@ let userTastes = JSON.parse(localStorage.getItem('userTastes') || '[]');
 applyLang(); // 페이지 로드 즉시 적용 (카카오맵 로드를 기다리지 않아도 되게)
 
 
+/* ── 근거 라벨 ────────────────────────────────────────────
+   "재학생이 직접 가본 곳"이 이 서비스의 유일한 차별점이다.
+   그런데 혼자 141곳을 다 가볼 수는 없다. 그렇다고 남의 후기로 채우면
+   차별점 자체가 무너진다. → 섞지 말고 출처를 나눠서 표기한다.
+
+   visited : 운영자가 실제로 가봄        → s.visitedAt = '2026-08'
+   campus  : 학생들 사이에서 반복 언급    → s.campusBuzz = true
+   둘 다 없으면 아무 라벨도 붙이지 않는다 (없는 근거를 만들지 않는다).
+
+   ⚠️ campusBuzz는 '많은 학생이 좋다고 한다'는 뜻이지 '검증됐다'는 뜻이 아니다.
+     문구에서 그 차이가 드러나야 한다. */
+function evidenceBadges(s) {
+  const out = [];
+  if (s.visitedAt) {
+    out.push(`<span class="ev-badge ev-visited" title="운영자가 직접 방문해 확인했어요">
+      가봤어요 · ${s.visitedAt}</span>`);
+  }
+  if (s.campusBuzz) {
+    out.push(`<span class="ev-badge ev-campus" title="홍익대 학생들 사이에서 반복적으로 언급되는 곳이에요. 직접 확인한 것은 아니에요.">
+      학생들 사이 평가</span>`);
+  }
+  return out.length
+    ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">${out.join('')}</div>`
+    : '';
+}
+
+// 모달에서 고른 상황 (아직 적용 전). '추천 보기'를 눌러야 currentSituation으로 확정된다.
+let pendingSituation = null;
+
+function renderTasteSituations() {
+  const wrap = document.getElementById('taste-situations');
+  if (!wrap) return;
+  const chips = Object.entries(SITUATIONS).map(([key, conf]) => {
+    const n = situationCount(key);
+    if (n === 0) return '';
+    const on = pendingSituation === key ? ' on' : '';
+    return `<button class="situation-chip${on}" onclick="toggleTasteSituation('${key}', this)" title="${conf.hint}">`
+         + `${conf.label}<span class="sit-count">${n}</span></button>`;
+  }).join('');
+  wrap.innerHTML = chips || `<div style="font-size:12px;color:var(--muted)">지금은 고를 수 있는 상황이 없어요.</div>`;
+}
+
+function toggleTasteSituation(key, btn) {
+  // 상황은 하나만 고른다 (여러 개면 결과가 왜 이런지 알 수 없음)
+  pendingSituation = (pendingSituation === key) ? null : key;
+  renderTasteSituations();
+}
+
 function openTasteModal() {
+  pendingSituation = currentSituation; // 이미 켜둔 상황이 있으면 그대로 이어받음
+  renderTasteSituations();
   const wrap = document.getElementById('taste-tags');
   wrap.innerHTML = TASTE_TAGS.map(t => {
     const isHongdaeByeong = t === '홍대병';
@@ -2734,10 +2807,30 @@ function toggleTaste(tag, btn) {
 }
 
 function applyTaste() {
-  if (userTastes.length === 0) { alert('취향을 2개 이상 골라주세요.'); return; }
+  // 상황만 골라도 성립한다 — 상황이 주 축이고 취향은 정렬용 보조 축이기 때문.
+  if (!pendingSituation && userTastes.length === 0) {
+    alert('상황을 고르거나, 취향을 하나 이상 골라주세요.');
+    return;
+  }
   localStorage.setItem('userTastes', JSON.stringify(userTastes));
+  currentSituation = pendingSituation;
   closeTasteModal();
-  showTasteView();
+  renderSituationBar();
+
+  if (currentSituation) {
+    // 상황이 있으면 상황으로 좁힌 뒤, 취향 겹침 순으로 정렬한다 (정렬은 renderList가 처리)
+    currentFilter = 'situation';
+    boundsFilter = null;
+    activeDetailFilters.clear();
+    document.querySelectorAll('.category-bar .chip').forEach(c => c.classList.remove('on'));
+    renderAll();
+    const conf = SITUATIONS[currentSituation];
+    showToast(userTastes.length
+      ? `${conf.label} — 취향과 겹치는 순서로 보여드려요`
+      : `${conf.label} — ${conf.hint}`);
+  } else {
+    showTasteView(); // 상황 없이 취향만 고른 경우는 기존 동작 그대로
+  }
 }
 
 // store와 사용자 취향이 겹치는 개수 (tags 없는 매장은 0)
@@ -2882,7 +2975,7 @@ function updateVerifyBanner() {
     document.body.appendChild(el);
   }
   if (verifyQueue.length === 0 && done > 0) {
-    el.innerHTML = `✅ 검증 완료 — 실존 <b style="color:var(--accent)">${verifiedCount}곳</b> 확인, <b style="color:var(--accent)">${removedCount}곳</b> 제외`;
+    el.innerHTML = `✅ 대조 완료 — 카카오에서 <b style="color:var(--accent)">${verifiedCount}곳</b> 확인, <b style="color:var(--accent)">${removedCount}곳</b>은 못 찾음(목록엔 그대로 남습니다)`;
     setTimeout(() => el.style.opacity = '0', 4000);
     setTimeout(() => el.remove(), 4500);
     return;
@@ -2916,23 +3009,32 @@ function processVerifyQueue() {
       s.address = best.road_address_name || best.address_name;
       if (CAT_TYPE[best.category_group_code]) s.type = CAT_TYPE[best.category_group_code];
 
-      // 평점·리뷰는 카카오 API에서 직접 제공 안 되므로 운영 기간만 추정, 나머지 기본값
-      s.rating = s.rating || 3.8;
-      s.reviews = s.reviews || 0;
-      s.months = s.months || 18;
-      s.rent = s.rent || 280;
-      const sc = Math.round((s.rating/5)*30 + Math.min(s.reviews/500,1)*20 + Math.min(s.months/60,1)*25 + Math.max(0,(500-s.rent)/500)*15 + 10);
-      s.score = Math.min(100, sc);
-      s.status = 'open';
+      /* ⚠️ 여기서 예전에 rating 3.8 / months 18 / rent 280 을 기본값으로 채워 넣고
+         그걸로 score를 계산한 뒤 status를 'open'으로 바꿨다. 전부 지어낸 값이었다.
+         카카오 Places API는 평점·리뷰·임대료·영업여부를 제공하지 않는다.
+         무조작 원칙에 정면으로 어긋나므로 삭제했다.
+
+         이 검증이 확인해주는 것은 "카카오에 이 이름의 업체가 이 근처에 실재한다" 뿐이다.
+         영업 중인지는 여전히 모르므로 status는 unverified 그대로 둔다. */
+      s.existsOnKakao = true;   // 실존만 확인됨 (영업 여부와는 무관)
 
       verifiedCount++;
     } else {
-      // 카카오에서 못 찾으면 목록에서 제거
-      stores = stores.filter(x => x.id !== id);
+      /* ⚠️ 예전에는 카카오에서 못 찾으면 stores에서 아예 삭제했다.
+         매장 141곳이 전부 unverified라 전량이 이 경로를 타고,
+         API 키 도메인 제한·쿼터 초과·일시적 오류만으로도 지도가 통째로 비었다.
+         (첫 진입 시 업체가 하나도 안 보이던 원인)
+
+         검색 실패는 "그 가게가 없다"는 뜻이 아니라 "카카오에서 못 찾았다"는 뜻일 뿐이다.
+         손으로 확인해 넣은 데이터를 API 응답 하나로 지우지 않는다. */
+      s.existsOnKakao = false;
       removedCount++;
     }
 
-    verifiedCount % 10 === 0 && renderAll();  // 10개마다 화면 갱신
+    /* 처리한 총 건수 기준으로 10개마다 갱신.
+       예전엔 verifiedCount만 봤는데, 검색이 계속 실패하면 그 값이 0에 머물러
+       0 % 10 === 0 이 매번 참이 되어 건건마다 전체 재렌더링이 돌았다. */
+    (verifiedCount + removedCount) % 10 === 0 && renderAll();
     updateStats();
     updateVerifyBanner();
 
@@ -3036,7 +3138,6 @@ function situationCount(key) {
 function renderSituationBar() {
   const bar = document.getElementById('situation-bar');
   if (!bar) return;
-  const lead = `<span class="situation-lead">지금</span>`;
   const chips = Object.entries(SITUATIONS).map(([key, conf]) => {
     const n = situationCount(key);
     if (n === 0) return ''; // 결과가 0인 상황은 아예 노출하지 않는다 (빈 화면을 주지 않기 위해)
@@ -3044,7 +3145,12 @@ function renderSituationBar() {
     return `<button class="situation-chip${on}" onclick="selectSituation('${key}')" title="${conf.hint}">`
          + `${conf.label}<span class="sit-count">${n}</span></button>`;
   }).join('');
-  bar.innerHTML = lead + chips;
+
+  // 보여줄 칩이 하나도 없으면 바를 통째로 숨긴다.
+  // (예전엔 '지금' 라벨이 정적 HTML에 박혀 있어서, 칩이 0개일 때 라벨만 덩그러니 남았다)
+  if (!chips) { bar.style.display = 'none'; bar.innerHTML = ''; return; }
+  bar.style.display = 'flex';
+  bar.innerHTML = chips;
 }
 
 function selectSituation(key) {
@@ -3246,6 +3352,11 @@ function renderListImpl() {
   }
 
   if (isTasteMode) filtered.sort((a, b) => matchScore(b) - matchScore(a));
+  // 상황으로 좁힌 목록도 취향을 골라뒀다면 겹침이 많은 순으로 올려준다
+  // (상황 = 어떤 곳들 중에서, 취향 = 그 안에서 어떤 순서로)
+  if (currentFilter === 'situation' && userTastes.length) {
+    filtered.sort((a, b) => matchScore(b) - matchScore(a));
+  }
   const showSortBar = !isTasteMode; // 취향 매칭 모드만 자체 정렬(일치도순)을 쓰고, 나머지 필터는 전부 공통 정렬 버튼을 씀
   if (showSortBar) {
     if (listSort === 'name') filtered.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
@@ -3488,6 +3599,7 @@ function selectStore(id) {
 
     dc.innerHTML = `
       <div class="detail-body" style="padding:14px">
+        ${evidenceBadges(s)}
         ${genreBadge}
         ${styleToggle}
         ${cardStyle === 'A' ? cardA : cardB}
