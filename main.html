@@ -1010,6 +1010,7 @@
   <button class="chip" id="chip-restaurant" onclick="selectCategoryBar('restaurant', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13h16c0 4-3.6 7-8 7s-8-3-8-7ZM12 13V6M8 8l1.5 2M16 8l-1.5 2"></path></svg>음식점</button>
   <button class="chip" id="chip-cafe" onclick="selectCategoryBar('cafe', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4ZM16 10h2a2 2 0 0 1 0 5h-2M8 6V4M12 6V4"></path></svg>카페</button>
   <button class="chip" id="chip-bar" onclick="selectCategoryBar('bar', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h12l-5 7v6h3v2H8v-2h3v-6ZM8 7h8"></path></svg>주점</button>
+  <button class="chip" id="chip-studentzone" onclick="selectCategoryBar('studentzone', this)" title="홍대생 명예학식 + 총학생회 제휴 업체만 모아봅니다"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5-10-5Z"></path><path d="M6 10.5V16c0 1.5 2.5 3 6 3s6-1.5 6-3v-5.5"></path><path d="M22 8v6"></path></svg>홍대생 존</button>
   <button class="chip" onclick="selectCategoryBar('entertainment', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.5V6l8-2v11M9 17.5a2.3 2.3 0 1 1-4.6 0 2.3 2.3 0 0 1 4.6 0ZM17 15a2.3 2.3 0 1 1-4.6 0 2.3 2.3 0 0 1 4.6 0Z"></path></svg>엔터테인먼트</button>
   <button class="chip" onclick="selectCategoryBar('gone', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20v-9a6 6 0 0 1 12 0v9l-2-1.6-2 1.6-2-1.6L10 20l-2-1.6ZM9.5 11h.01M14.5 11h.01"></path></svg>사라진 가게</button>
 </div>
@@ -3641,6 +3642,11 @@ function selectCategoryBar(key, btn) {
     activeDetailFilters.add('type:artsupply');
     activeDetailFilters.add('type:practice');
     activeDetailFilters.add('type:play');
+    currentFilter = 'detailFilters';
+  } else if (key === 'studentzone') {
+    // 홍대생 존 = 홍대생 명예학식 + 총학생회 제휴 업체를 한 번에 모아 보여줌(같은 kind라 OR로 묶여 매칭됨)
+    activeDetailFilters.add('cert:hallOfFame');
+    activeDetailFilters.add('cert:affiliate');
     currentFilter = 'detailFilters';
   } else if (key === 'gone') {
     currentFilter = 'gone';
