@@ -999,9 +999,11 @@
         <div class="app-menu-sep"></div>
         <button class="app-menu-item" id="congestBadge" role="menuitem" onclick="appMenuAction(showCongestForecast)"><span id="congestDot" style="width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none"></span>불러오는 중…</button>
         <a class="app-menu-item" role="menuitem" href="https://forms.gle/gJBKqm8sU5CS5KEK7" target="_blank" rel="noopener noreferrer" onclick="appMenuAction()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>피드백·제보하기</a>
+        <a class="app-menu-item" id="admin-menu-link" role="menuitem" href="admin.html" hidden>관리자 도구</a>
       </div>
     </div>
     <button class="btn-directions" id="btn-save" onclick="showBookmarks()" title="저장한 가게"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20.6S3.4 15 3.4 8.9A4.9 4.9 0 0 1 12 6a4.9 4.9 0 0 1 8.6 2.9C20.6 15 12 20.6 12 20.6z"></path></svg></button>
+    <button class="btn-bookmarks" id="account-button" onclick="HongdaePlatform.openDialog()">로그인</button>
   </div>
 </div>
 
@@ -2750,6 +2752,7 @@ function toggleBookmark(id) {
   if (bookmarks[id]) delete bookmarks[id];
   else bookmarks[id] = true;
   localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  if (window.HongdaePlatform) window.HongdaePlatform.syncDefaultSave(id, !!bookmarks[id]);
   if (selectedId != null) selectStore(selectedId);
 }
 
@@ -4751,5 +4754,6 @@ function addStore() {
     }
   });
   </script>
+  <script src="platform.js"></script>
 </body>
 </html>
