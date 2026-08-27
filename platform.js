@@ -23,7 +23,7 @@
     if (adminLink) adminLink.hidden = !profile || profile.role !== 'admin';
   }
 
-  function openDialog() {
+  async function openDialog() {
     let dialog = $('#account-dialog');
     if (!dialog) {
       dialog = document.createElement('div');
@@ -37,15 +37,26 @@
       return;
     }
     if (!profile) {
-      dialog.innerHTML = '<form id="login-form" style="max-width:360px;width:100%;padding:24px;border-radius:16px;background:#3d0f16;border:1px solid #7a2534;color:#f5ece7"><h2 style="margin:0 0 8px">홍대맵 로그인</h2><p style="color:#c39298;font-size:13px;line-height:1.6">이메일로 로그인 링크를 보내드려요.</p><input required type="email" name="email" placeholder="email@example.com" style="width:100%;padding:12px;border-radius:8px;border:1px solid #7a2534;background:#2b070c;color:#fff"><button style="margin-top:10px;width:100%;padding:12px;border:0;border-radius:8px;background:#e8362a;color:#fff;font-weight:700">로그인 링크 받기</button><button type="button" id="dialog-close" style="margin-top:8px;width:100%;padding:8px;background:transparent;border:0;color:#c39298">닫기</button></form>';
+      dialog.innerHTML = `<section style="max-width:360px;width:100%;padding:24px;border-radius:16px;background:#3d0f16;border:1px solid #7a2534;color:#f5ece7">
+        <h2 style="margin:0 0 8px">홍대맵 로그인</h2>
+        <p style="color:#c39298;font-size:13px;line-height:1.6">아래 계정으로 바로 로그인할 수 있어요.</p>
+        <div style="display:grid;gap:10px;margin-top:12px">
+          <button id="login-google" style="padding:12px;border:0;border-radius:8px;background:#fff;color:#1f1f1f;font-weight:700">Google로 계속하기</button>
+          <button id="login-kakao" style="padding:12px;border:0;border-radius:8px;background:#fee500;color:#191600;font-weight:700">카카오로 계속하기</button>
+          <button id="login-naver" style="padding:12px;border:0;border-radius:8px;background:#03c75a;color:#fff;font-weight:700">네이버로 계속하기</button>
+        </div>
+        <button type="button" id="dialog-close" style="margin-top:14px;width:100%;padding:8px;background:transparent;border:0;color:#c39298">닫기</button>
+      </section>`;
       $('#dialog-close').onclick = () => dialog.remove();
-      $('#login-form').onsubmit = async (event) => {
-        event.preventDefault();
-        const email = new FormData(event.currentTarget).get('email');
-        const { error } = await client.auth.signInWithOtp({ email, options: { emailRedirectTo: location.href } });
-        notice(error ? error.message : '로그인 링크를 이메일로 보냈어요.');
-        if (!error) dialog.remove();
+      const signIn = (provider) => async () => {
+        const { error } = await client.auth.signInWithOAuth({ provider, options: { redirectTo: location.href } });
+        if (error) notice(error.message);
       };
+      $('#login-google').onclick = signIn('google');
+      $('#login-kakao').onclick = signIn('kakao');
+      // 네이버는 Supabase 기본 제공 목록에 없어서, Supabase 대시보드에 'custom:naver'라는 이름으로
+      // Custom OAuth Provider를 등록해야 이 버튼이 동작합니다. (SUPABASE_SETUP.md 참고)
+      $('#login-naver').onclick = signIn('custom:naver');
       return;
     }
     const { data: collections } = await client.from('collections').select('id,title,emoji,collection_places(count)').order('created_at');
