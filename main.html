@@ -967,14 +967,17 @@
   @media (max-width: 700px) {
     body { background: #17090b; }
     .topbar-search-row {
-      background: transparent;
-      border-color: transparent;
-      box-shadow: none;
+      background: rgba(43,7,12,.92);
+      border-color: rgba(255,255,255,.12);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
       margin-top: calc(4px + env(safe-area-inset-top));
       padding: 8px 12px;
     }
-    .topbar-search-row .logo-lockup,
-    .topbar-search-row .topbar-actions { display: none; }
+    .topbar-search-row .logo-lockup { display:flex; }
+    .topbar-search-row .topbar-actions { display:flex; }
+    .topbar-actions .app-menu-wrap,
+    .topbar-actions #btn-save { display:none; }
+    .topbar-actions #account-button { display:inline-flex; padding:7px 10px; font-size:11px; white-space:nowrap; }
     .topbar-search-row .search-box { flex-basis: 100%; }
 
     /* 첫 화면에는 탐색에 필요한 세 카테고리와 필터만 남긴다. */
@@ -986,6 +989,8 @@
       border-color: rgba(255,255,255,.18); color: var(--text);
     }
     .chip-filter svg { width: 15px; height: 15px; }
+    .search-box, .category-bar .chip, .category-bar .cat-toggle, .map-btn,
+    .modal, .sidebar, .detail, .result-card { border-radius: 18px; }
 
     .layout { bottom: calc(72px + env(safe-area-inset-bottom)); }
     .detail { bottom: calc(72px + env(safe-area-inset-bottom)); }
@@ -1093,7 +1098,7 @@
         <button class="app-menu-item" role="menuitem" onclick="appMenuAction(cycleTheme)"><svg viewBox="0 0 20 20" aria-hidden="true"><defs><clipPath id="menu-theme-clip"><circle cx="10" cy="10" r="9"/></clipPath></defs><g clip-path="url(#menu-theme-clip)"><rect x="0" y="0" width="10" height="20" fill="#e8362a"/><rect x="10" y="0" width="10" height="20" fill="#1833db"/></g><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>테마 색상</button>
         <div class="app-menu-sep"></div>
         <button class="app-menu-item" id="congestBadge" role="menuitem" onclick="appMenuAction(showCongestForecast)"><span id="congestDot" style="width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none"></span>불러오는 중…</button>
-        <a class="app-menu-item" role="menuitem" href="https://forms.gle/gJBKqm8sU5CS5KEK7" target="_blank" rel="noopener noreferrer" onclick="appMenuAction()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>피드백·제보하기</a>
+        <button class="app-menu-item" role="menuitem" onclick="appMenuAction(HongdaeFeedback.open)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1-4Z"/></svg>피드백·제보하기</button>
         <a class="app-menu-item" id="admin-menu-link" role="menuitem" href="admin.html" hidden>관리자 도구</a>
       </div>
     </div>
@@ -4860,5 +4865,6 @@ function addStore() {
   <script src="ui-redesign.js"></script>
   <script src="experience-ui.js"></script>
   <script src="journey-features.js"></script>
+  <script src="feedback-ui.js"></script>
 </body>
 </html>
