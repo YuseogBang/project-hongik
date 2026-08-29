@@ -88,7 +88,10 @@
       const action = button.dataset.tab;
       setActive(action);
       if (action === 'map') { closeDetail(); closeSidebar(); closeSurface(); }
-      if (action === 'feed') openCuratedFeed();
+      if (action === 'feed') {
+        if (window.HongdaeFeed?.open) window.HongdaeFeed.open();
+        else openCuratedFeed();
+      }
       if (action === 'save') { showBookmarks(); openResults(); }
       if (action === 'me') {
         if (window.HongdaeExperience?.openProfile) window.HongdaeExperience.openProfile();

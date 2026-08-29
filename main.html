@@ -989,14 +989,16 @@
       border-color: rgba(255,255,255,.18); color: var(--text);
     }
     .chip-filter svg { width: 15px; height: 15px; }
+    .category-bar .chip.on { background: var(--accent) !important; border-color: var(--accent) !important; color:#fff !important; box-shadow:0 4px 14px rgba(232,54,42,.4); }
+    .category-bar .chip-language { display:inline-flex !important; align-items:center; gap:5px; }
     .search-box, .category-bar .chip, .category-bar .cat-toggle, .map-btn,
     .modal, .sidebar, .detail, .result-card { border-radius: 18px; }
 
     .layout { bottom: calc(72px + env(safe-area-inset-bottom)); }
     .detail { bottom: calc(72px + env(safe-area-inset-bottom)); }
     .bottom-fab-row { bottom: calc(82px + env(safe-area-inset-bottom)); }
-    .btn-locate-map { bottom: calc(82px + 52px + 12px + 44px + 12px + env(safe-area-inset-bottom)); }
-    .btn-feed-map { bottom: calc(82px + 52px + 12px + env(safe-area-inset-bottom)); }
+    .btn-locate-map { bottom: calc(185px + env(safe-area-inset-bottom)); }
+    .btn-feed-map { bottom: calc(130px + env(safe-area-inset-bottom)); }
 
     .app-tabs {
       display: grid; grid-template-columns: repeat(4, 1fr); align-items: stretch;
@@ -4866,5 +4868,7 @@ function addStore() {
   <script src="experience-ui.js"></script>
   <script src="journey-features.js"></script>
   <script src="feedback-ui.js"></script>
+  <script src="mobile-polish.js"></script>
+  <script src="feed-ui.js"></script>
 </body>
 </html>
