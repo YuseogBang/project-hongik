@@ -2314,6 +2314,11 @@ stores.forEach(s => {
 });
 
 let map, markers = [], storeMarkers = [], storeLabelOverlays = [], clusterer, overlay, hoverOverlay, showMarkers = true;
+// 카카오맵 SDK의 load 콜백이 즉시 실행될 수 있으므로, 위치 상태는 지도 초기화보다 먼저 선언한다.
+// 그렇지 않으면 첫 목록 렌더에서 userLat의 TDZ(선언 전 접근) 오류가 날 수 있다.
+let userLocationOverlay = null;
+let userLocationWatchId = null;
+let userLat = null, userLng = null;
 let indieOnly = localStorage.getItem('indieOnly') !== '0'; // 기본 켜짐(프랜차이즈 숨김). 사용자가 직접 끄면(=='0') 그때만 전체 표시
 let currentFilter = 'all', searchText = '', selectedId = null;
 let boundsFilter = null; // '이 지역에서 검색' 클릭 시 현재 지도 화면(bounds)으로 한 번 좁혀서 보여줌
@@ -4113,9 +4118,6 @@ function searchNearby() {
 // 위치 정보가 없거나 거부되면 지어내지 않고 정직하게 안내만 하고 끝낸다.
 // 사용자 위치 표시 — 네이버지도의 파란 점처럼, 한 번 카메라만 이동하는 게 아니라
 // 지도 위에 내 위치를 계속 보여주는 마커. watchPosition으로 움직임에 따라 갱신된다.
-let userLocationOverlay = null;
-let userLocationWatchId = null;
-let userLat = null, userLng = null; // 사용자가 위치 권한을 동의했을 때만 값이 채워짐(동의 전엔 거리 표시 안 함)
 function ensureUserLocationOverlay(lat, lng) {
   const hadLocationBefore = userLat != null;
   userLat = lat; userLng = lng;
