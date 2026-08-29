@@ -2840,6 +2840,10 @@ function setCardStyle(style) {
 }
 
 function toggleBookmark(id) {
+  if (!localStorage.getItem('localSaveConsent') && window.HongdaeExperience?.requestSave) {
+    window.HongdaeExperience.requestSave(id);
+    return;
+  }
   if (bookmarks[id]) delete bookmarks[id];
   else bookmarks[id] = true;
   localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
@@ -4846,5 +4850,6 @@ function addStore() {
   <script src="platform.js"></script>
   <script src="ui-redesign.js"></script>
   <script src="experience-ui.js"></script>
+  <script src="journey-features.js"></script>
 </body>
 </html>
