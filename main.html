@@ -3465,6 +3465,7 @@ function selectStore(id) {
   selectedId = id;
   const s = stores.find(x=>x.id===id);
   if (!s) return;
+  if (window.HongdaeExperience) window.HongdaeExperience.recordView(id);
   renderList(); // renderList 안에서 renderMarkers도 같이 갱신됨 (선택 표시가 마커에도 반영됨)
   // 결과 피드에서 매장을 고르면, 피드에 가려지지 않고 바로 카드 배너로 넘어가게 피드는 닫음
   const sortModal = document.getElementById('sort-modal');
@@ -4844,5 +4845,6 @@ function addStore() {
   </script>
   <script src="platform.js"></script>
   <script src="ui-redesign.js"></script>
+  <script src="experience-ui.js"></script>
 </body>
 </html>
