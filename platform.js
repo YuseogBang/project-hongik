@@ -23,7 +23,7 @@
     if (adminLink) adminLink.hidden = !profile || profile.role !== 'admin';
   }
 
-  function openDialog() {
+  async function openDialog() {
     let dialog = $('#account-dialog');
     if (!dialog) {
       dialog = document.createElement('div');
