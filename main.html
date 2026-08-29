@@ -959,6 +959,10 @@
   /* ── 인터페이스 개선 시안: 지도에 집중하는 탐색 구조 ─────────────────── */
   .app-tabs { display: none; }
   .chip-filter { display: none; }
+  /* 모바일 전용 시트는 데스크톱 문서 흐름에 섞여 보이지 않게 한다. */
+  @media (min-width: 701px) {
+    .map-result-sheet, .profile-sheet { display: none !important; }
+  }
 
   @media (max-width: 700px) {
     body { background: #17090b; }
@@ -1005,6 +1009,11 @@
     .app-tab.active { color: #ff536c; }
     .app-tab.active::before { content: ''; position:absolute; top: 0; width: 28px; height: 2px; border-radius: 0 0 4px 4px; background: currentColor; }
     .app-tab.has-saves::after { content: ''; position:absolute; top: 17px; right: calc(50% - 17px); width: 5px; height: 5px; border-radius: 50%; background: #ff536c; border: 1px solid #210d10; }
+    body.map-results-open #btn-view-results,
+    body.map-results-open .btn-feed-map,
+    body.map-results-open .btn-locate-map { display: none !important; }
+    .sidebar.open ~ .app-tabs,
+    .detail.open ~ .app-tabs { display: none; }
 
     /* 필터를 적용한 뒤에도 지도를 떠나지 않고 가게를 넘겨볼 수 있는 결과 캐러셀 */
     .map-result-sheet, .profile-sheet {

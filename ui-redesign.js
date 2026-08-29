@@ -22,6 +22,7 @@
   function closeSurface() {
     document.querySelector('.map-result-sheet')?.classList.remove('open');
     document.querySelector('.profile-sheet')?.classList.remove('open');
+    document.body.classList.remove('map-results-open');
   }
 
   function openResults() {
@@ -44,6 +45,7 @@
       if (store && map && window.kakao) map.panTo(new kakao.maps.LatLng(store.lat, store.lng));
     }));
     sheet.classList.add('open');
+    document.body.classList.add('map-results-open');
     setActive('map');
   }
 
