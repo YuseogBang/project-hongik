@@ -1,0 +1,9 @@
+(() => {
+  function open() {
+    const dialog = document.createElement('div'); dialog.className = 'xp-overlay open';
+    dialog.innerHTML = `<form class="xp-sheet" style="max-width:460px;margin:auto;border-radius:24px"><div class="xp-handle"></div><div class="xp-top"><span class="xp-kicker">USER FEEDBACK</span><button type="button" class="xp-close">✕</button></div><h2 class="xp-title">홍대맵에 의견 남기기</h2><p class="xp-copy">제보와 아이디어는 관리자 화면으로 바로 전달돼요.</p><select name="type" style="width:100%;margin-top:16px;padding:12px;border-radius:14px;border:1px solid #7a2534;background:#2b070c;color:#fff"><option value="idea">기능 아이디어</option><option value="bug">오류 제보</option><option value="place">장소 제보</option><option value="other">기타</option></select><textarea required name="message" minlength="3" maxlength="2000" placeholder="어떤 점을 개선하면 좋을까요?" style="width:100%;min-height:120px;box-sizing:border-box;margin-top:9px;padding:12px;border-radius:14px;border:1px solid #7a2534;background:#2b070c;color:#fff"></textarea><input name="contact" maxlength="200" placeholder="답변 받을 이메일 (선택)" style="width:100%;box-sizing:border-box;margin-top:9px;padding:12px;border-radius:14px;border:1px solid #7a2534;background:#2b070c;color:#fff"><button class="xp-primary">보내기</button></form>`;
+    dialog.querySelector('.xp-close').onclick=()=>dialog.remove(); dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.remove()});
+    dialog.querySelector('form').onsubmit=async e=>{e.preventDefault();const data=Object.fromEntries(new FormData(e.currentTarget));const response=await fetch('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const result=await response.json().catch(()=>({}));if(!response.ok){alert(result.error||'전송에 실패했어요.');return}dialog.remove();showToast('의견을 보내주셔서 감사합니다!')}; document.body.append(dialog);
+  }
+  window.HongdaeFeedback={open};
+})();
