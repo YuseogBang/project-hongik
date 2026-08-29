@@ -88,7 +88,10 @@
       if (action === 'map') { closeDetail(); closeSidebar(); closeSurface(); }
       if (action === 'feed') openCuratedFeed();
       if (action === 'save') { showBookmarks(); openResults(); }
-      if (action === 'me') openProfile();
+      if (action === 'me') {
+        if (window.HongdaeExperience?.openProfile) window.HongdaeExperience.openProfile();
+        else openProfile();
+      }
     }));
     document.body.append(nav);
   }
@@ -100,7 +103,10 @@
     button.id = 'chip-filter';
     button.className = 'chip chip-filter';
     button.innerHTML = `${icons.filter}<span>필터</span>`;
-    button.addEventListener('click', toggleSidebar);
+    button.addEventListener('click', () => {
+      if (window.HongdaeExperience?.openFilters) window.HongdaeExperience.openFilters();
+      else toggleSidebar();
+    });
     bar.append(button);
   }
 
