@@ -17,6 +17,63 @@
     document.querySelector('[data-tab="save"]')?.classList.toggle('has-saves', saved);
   }
 
+  const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+
+  function closeSurface() {
+    document.querySelector('.map-result-sheet')?.classList.remove('open');
+    document.querySelector('.profile-sheet')?.classList.remove('open');
+  }
+
+  function openResults() {
+    closeSurface();
+    const items = getFilteredStores().slice(0, 12);
+    const sheet = document.querySelector('.map-result-sheet');
+    const title = currentFilter === 'taste' ? '내 취향 순위' : currentFilter === 'bookmarks' ? '저장한 가게' : '지금 볼 만한 가게';
+    sheet.querySelector('.map-result-title').textContent = title;
+    sheet.querySelector('.map-result-sub').textContent = `${items.length}곳 · 지도를 움직이지 않고 둘러보세요`;
+    sheet.querySelector('.result-carousel').innerHTML = items.length ? items.map((store) => {
+      const tags = (store.tags || []).slice(0, 3).map((tag) => `<span>#${escapeHtml(tag)}</span>`).join('');
+      const score = typeof matchPercent === 'function' && userTastes.length ? `<span class="result-match">취향 ${matchPercent(store)}%</span>` : '';
+      return `<button class="result-card" data-store-id="${store.id}"><div class="result-card-name"><span>${escapeHtml(store.name)}</span>${score}</div><div class="result-card-meta">${escapeHtml(store.category || TYPES[store.type] || '홍대 가게')} · ${escapeHtml(store.dong || '홍대')}</div><div class="result-card-tags">${tags || '<span>정보 업데이트 중</span>'}</div></button>`;
+    }).join('') : '<div style="color:var(--muted);padding:18px">조건에 맞는 가게가 없어요. 필터를 조금 넓혀보세요.</div>';
+    sheet.querySelectorAll('[data-store-id]').forEach((card) => card.addEventListener('click', () => {
+      const id = Number(card.dataset.storeId);
+      closeSurface();
+      selectStore(id);
+      const store = stores.find((item) => item.id === id);
+      if (store && map && window.kakao) map.panTo(new kakao.maps.LatLng(store.lat, store.lng));
+    }));
+    sheet.classList.add('open');
+    setActive('map');
+  }
+
+  function openProfile() {
+    closeSurface();
+    if (!userTastes.length) { openTasteModal(); return; }
+    const sheet = document.querySelector('.profile-sheet');
+    const savedCount = Object.keys(bookmarks || {}).length;
+    sheet.querySelector('.profile-sheet-note').textContent = `취향 ${userTastes.length}개 · 저장 ${savedCount}곳`;
+    sheet.querySelector('.profile-tastes').innerHTML = userTastes.map((tag) => `<span>#${escapeHtml(tag)}</span>`).join('');
+    sheet.classList.add('open');
+    setActive('me');
+  }
+
+  function addSurfaces() {
+    if (document.querySelector('.map-result-sheet')) return;
+    const results = document.createElement('section');
+    results.className = 'map-result-sheet';
+    results.innerHTML = '<div class="map-result-head"><strong class="map-result-title">지금 볼 만한 가게</strong><span class="map-result-sub"></span><button class="sheet-close" aria-label="결과 닫기">✕</button></div><div class="result-carousel"></div>';
+    results.querySelector('.sheet-close').addEventListener('click', closeSurface);
+    document.body.append(results);
+    const profile = document.createElement('section');
+    profile.className = 'profile-sheet';
+    profile.innerHTML = '<div class="profile-sheet-card"><div class="profile-sheet-top"><div class="profile-avatar">나</div><div><div class="profile-sheet-title">내 취향</div><div class="profile-sheet-note"></div></div><button class="sheet-close" aria-label="내 취향 닫기">✕</button></div><div class="profile-tastes"></div><div class="profile-actions"><button class="primary" data-action="taste">취향 조정하기</button><button data-action="saved">저장한 가게 보기</button></div></div>';
+    profile.querySelector('.sheet-close').addEventListener('click', closeSurface);
+    profile.querySelector('[data-action="taste"]').addEventListener('click', () => { closeSurface(); openTasteModal(); });
+    profile.querySelector('[data-action="saved"]').addEventListener('click', () => { showBookmarks(); openResults(); });
+    document.body.append(profile);
+  }
+
   function addNavigation() {
     if (document.querySelector('.app-tabs')) return;
     const nav = document.createElement('nav');
@@ -28,10 +85,10 @@
     nav.querySelectorAll('.app-tab').forEach((button) => button.addEventListener('click', () => {
       const action = button.dataset.tab;
       setActive(action);
-      if (action === 'map') { closeDetail(); closeSidebar(); }
+      if (action === 'map') { closeDetail(); closeSidebar(); closeSurface(); }
       if (action === 'feed') openCuratedFeed();
-      if (action === 'save') showBookmarks();
-      if (action === 'me') HongdaePlatform.openDialog();
+      if (action === 'save') { showBookmarks(); openResults(); }
+      if (action === 'me') openProfile();
     }));
     document.body.append(nav);
   }
@@ -50,8 +107,11 @@
   document.addEventListener('DOMContentLoaded', () => {
     addNavigation();
     addFilterButton();
+    addSurfaces();
     updateSaveDot();
   });
+
+  window.HongdaeUI = { openResults, openProfile };
 
   const originalToggleBookmark = window.toggleBookmark;
   window.toggleBookmark = function (id) {

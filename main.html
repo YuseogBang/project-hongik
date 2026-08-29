@@ -1005,6 +1005,41 @@
     .app-tab.active { color: #ff536c; }
     .app-tab.active::before { content: ''; position:absolute; top: 0; width: 28px; height: 2px; border-radius: 0 0 4px 4px; background: currentColor; }
     .app-tab.has-saves::after { content: ''; position:absolute; top: 17px; right: calc(50% - 17px); width: 5px; height: 5px; border-radius: 50%; background: #ff536c; border: 1px solid #210d10; }
+
+    /* 필터를 적용한 뒤에도 지도를 떠나지 않고 가게를 넘겨볼 수 있는 결과 캐러셀 */
+    .map-result-sheet, .profile-sheet {
+      display: none; position: fixed; z-index: 650; left: 0; right: 0;
+      bottom: calc(72px + env(safe-area-inset-bottom)); padding: 14px 0 18px;
+      background: linear-gradient(180deg, rgba(43,7,12,.18), rgba(43,7,12,.96) 22%);
+      pointer-events: none;
+    }
+    .map-result-sheet.open, .profile-sheet.open { display: block; }
+    .map-result-head, .result-carousel, .profile-sheet-card { pointer-events: auto; }
+    .map-result-head { display:flex; align-items:center; padding:0 18px 10px; color:var(--text); }
+    .map-result-title { font-size:15px; font-weight:800; letter-spacing:-.02em; }
+    .map-result-sub { margin-left:7px; color:var(--muted); font-size:11px; }
+    .sheet-close { margin-left:auto; width:30px; height:30px; border:1px solid var(--border); border-radius:50%; background:var(--surface); color:var(--muted); cursor:pointer; }
+    .result-carousel { display:flex; gap:10px; padding:0 18px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; }
+    .result-carousel::-webkit-scrollbar { display:none; }
+    .result-card { width:min(76vw,282px); min-height:132px; flex:none; scroll-snap-align:start; padding:15px; border:1px solid var(--border); border-radius:18px; background:var(--surface); box-shadow:0 14px 34px rgba(0,0,0,.5); color:var(--text); text-align:left; cursor:pointer; font-family:'Pretendard',sans-serif; }
+    .result-card:first-child { border-color:var(--accent); }
+    .result-card-name { display:flex; gap:7px; align-items:center; font-size:15px; font-weight:800; }
+    .result-match { margin-left:auto; color:#ff7185; font-size:11px; white-space:nowrap; }
+    .result-card-meta { margin-top:8px; color:var(--muted); font-size:12px; }
+    .result-card-tags { display:flex; gap:5px; margin-top:12px; overflow:hidden; }
+    .result-card-tags span { padding:4px 7px; border-radius:99px; background:var(--surface2); color:#d8b9bd; font-size:10px; white-space:nowrap; }
+
+    .profile-sheet { padding:12px 16px 18px; background:rgba(43,7,12,.9); }
+    .profile-sheet-card { padding:18px; border:1px solid var(--border); border-radius:20px; background:var(--surface); box-shadow:0 14px 36px rgba(0,0,0,.48); }
+    .profile-sheet-top { display:flex; align-items:center; gap:10px; }
+    .profile-avatar { width:38px; height:38px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg,var(--accent2),var(--accent)); color:#fff; font-weight:800; }
+    .profile-sheet-title { font-size:15px; font-weight:800; }
+    .profile-sheet-note { color:var(--muted); font-size:11px; margin-top:2px; }
+    .profile-tastes { display:flex; flex-wrap:wrap; gap:6px; margin:15px 0; }
+    .profile-tastes span { padding:6px 9px; border-radius:99px; background:rgba(232,54,42,.14); color:#ff93a2; font-size:11px; }
+    .profile-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .profile-actions button { padding:11px 8px; border:1px solid var(--border); border-radius:11px; background:var(--surface2); color:var(--text); font:650 12px 'Pretendard',sans-serif; cursor:pointer; }
+    .profile-actions button.primary { border-color:var(--accent); background:var(--accent); color:#fff; }
   }
 </style>
 </head>
@@ -1124,7 +1159,7 @@
 
     <!-- 하단은 CTA 하나만 깔끔하게 유지. 즐겨찾기는 상단 헤더 하트로 이미 접근 가능해 별도 버튼을 두지 않는다. -->
     <div class="bottom-fab-row">
-      <button class="btn-view-results" id="btn-view-results" onclick="openResultsModal()">
+      <button class="btn-view-results" id="btn-view-results" onclick="HongdaeUI.openResults()">
         가게 <span id="results-count">0</span>곳 보기
       </button>
     </div>
@@ -3412,7 +3447,7 @@ function updateResultsBar() {
 // 사이드바 하단의 'N곳 보기' — 필터는 그대로 둔 채 사이드바만 닫고, 걸러진 결과를 리스트 시트로 보여줌
 function closeSidebarAndViewResults() {
   closeSidebar();
-  openResultsModal();
+  HongdaeUI.openResults();
 }
 
 function updateStats() {
@@ -4197,7 +4232,7 @@ function searchThisArea() {
   if (!map) return;
   boundsFilter = map.getBounds();
   renderList();
-  openResultsModal();
+  HongdaeUI.openResults();
   const bar = document.getElementById('btn-search-area');
   if (bar) bar.style.display = 'none'; // 다음에 지도를 또 움직이기 전까진 다시 안 뜸
   if (typeof showToast === 'function') showToast('현재 화면에 보이는 매장만 표시했어요');
