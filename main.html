@@ -1168,7 +1168,7 @@
     </button>
 
     <!-- 큐레이션 피드 진입 버튼 — 현위치 버튼 바로 아래, 뉴스피드 아이콘 -->
-    <button class="btn-feed-map" id="btn-curated-feed" onclick="openCuratedFeed()" aria-label="홍익인 큐레이션" title="홍익인 큐레이션">
+    <button class="btn-feed-map" id="btn-curated-feed" onclick="window.HongdaeFeed?.open ? HongdaeFeed.open() : openCuratedFeed()" aria-label="홍익인 큐레이션" title="홍익인 큐레이션">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"></rect><path d="M3 9h18M8 4v5"></path><path d="M11 13h7M11 16.5h7M6 13h1.5M6 16.5h1.5"></path></svg>
       <span class="feed-dot" id="feed-dot" style="display:none"></span>
     </button>
@@ -1492,6 +1492,10 @@
     <div class="form-group">
       <label>대표 메뉴</label>
       <input type="text" id="f-signature-menu" placeholder="예: 들기름 막국수, 수육">
+    </div>
+    <div class="form-group">
+      <label>지금 이 자리엔 뭐가 있나요? (선택, 아는 만큼만)</label>
+      <input type="text" id="f-now-here" placeholder="예: 무인 아이스크림, 새로 생긴 카페 등">
     </div>
     <div class="form-group">
       <label>폐점 추정 원인</label>
@@ -2855,6 +2859,18 @@ function setCardStyle(style) {
   if (selectedId != null) selectStore(selectedId);
 }
 
+// 상세페이지 스티키 탭(정보/메뉴/리뷰) 전환. 히어로+탭 구조에서만 쓰인다(사라진 가게 카드는 탭이 없음).
+function switchDetailTab(btn, pane) {
+  const root = btn.closest('.detail-body');
+  if (!root) return;
+  root.querySelectorAll('.dh-tab-btn').forEach(b => {
+    const on = b === btn;
+    b.style.color = on ? 'var(--text)' : 'var(--muted)';
+    b.style.borderBottomColor = on ? 'var(--accent)' : 'transparent';
+  });
+  root.querySelectorAll('[data-pane]').forEach(p => { p.style.display = p.dataset.pane === pane ? 'block' : 'none'; });
+}
+
 function toggleBookmark(id) {
   if (!localStorage.getItem('localSaveConsent') && window.HongdaeExperience?.requestSave) {
     window.HongdaeExperience.requestSave(id);
@@ -2881,6 +2897,17 @@ function submitComment(storeId) {
   all[storeId].push({ text, date: new Date().toLocaleDateString('ko-KR') });
   localStorage.setItem('storeComments', JSON.stringify(all));
   selectStore(storeId); // 다시 그려서 새 코멘트 반영
+}
+
+// 헌화 — 사라진 가게를 기억하는 개인적인 표시. 여러 사용자를 집계하는 서버가 없어서
+// "이 기기에서 헌화했는지"만 저장한다(허수로 큰 숫자를 보여주지 않기 위함 — 프로필의 '헌화' 통계는
+// 내가 헌화한 가게 수를 보여줄 뿐, 전체 사용자 합산이 아니다).
+function toggleTribute(storeId, btn) {
+  const all = JSON.parse(localStorage.getItem('hongdaeTributes') || '{}');
+  if (all[storeId]) delete all[storeId];
+  else all[storeId] = Date.now();
+  localStorage.setItem('hongdaeTributes', JSON.stringify(all));
+  selectStore(storeId);
 }
 
 // ── 취향 매칭 (카테고리·특징을 리서치해 태그를 붙인 가게들 중에서 매칭) ──────
@@ -3529,22 +3556,38 @@ function selectStore(id) {
       </div>`;
     const bm = !!bookmarks[s.id];
 
+    // 상세페이지 = 사진 중심 풀히어로 + 스티키 탭(정보/메뉴/리뷰).
+    // 실사진 자산이 아직 없어서, s.photo가 있으면 그 사진을, 없으면 브랜드 그라디언트+이모지로 대신한다
+    // (피드 카드의 대표 이미지 자리와 같은 방식 — 나중에 사진이 채워지면 그대로 대체됨).
+    const heroMatch = (typeof matchPercent === 'function' && userTastes.length) ? `${matchPercent(s)}% 매칭 · ` : '';
+    const hero = `
+      <div style="position:relative;height:190px;overflow:hidden;${s.photo ? `background:url('${s.photo}') center/cover` : 'background:linear-gradient(135deg,#7d2937,#2b070c)'}">
+        ${!s.photo ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:54px;opacity:.92">${menuEmoji(s)}</div>` : ''}
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(0,0,0,.72) 100%)"></div>
+        <button onclick="toggleBookmark(${s.id})" style="position:absolute;top:14px;right:14px;z-index:2;width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:rgba(20,8,8,.55);backdrop-filter:blur(4px);color:${bm?'#ff5c46':'#fff'};font-size:16px">${bm?'♥':'♡'}</button>
+        ${genreBadge ? `<div style="position:absolute;top:14px;left:14px;z-index:2">${genreBadge}</div>` : ''}
+        <div style="position:absolute;left:0;right:0;bottom:0;z-index:2;padding:12px 16px 14px">
+          <div style="font-size:11px;font-weight:800;color:#ffb3a4;letter-spacing:.02em;margin-bottom:4px">${heroMatch}${info.label}</div>
+          <div style="font-size:20px;font-weight:900;color:#fff;letter-spacing:-.02em;text-shadow:0 2px 8px rgba(0,0,0,.4)">${s.name}</div>
+        </div>
+      </div>`;
+
+    const tabbar = `
+      <div style="position:sticky;top:0;z-index:5;display:flex;background:var(--surface);border-bottom:1px solid var(--border)">
+        <button class="dh-tab-btn" data-pane="info" onclick="switchDetailTab(this,'info')" style="flex:1;padding:12px 0;border:none;background:none;cursor:pointer;font-size:12.5px;font-weight:700;color:var(--text);border-bottom:2px solid var(--accent)">정보</button>
+        <button class="dh-tab-btn" data-pane="menu" onclick="switchDetailTab(this,'menu')" style="flex:1;padding:12px 0;border:none;background:none;cursor:pointer;font-size:12.5px;font-weight:700;color:var(--muted);border-bottom:2px solid transparent">메뉴</button>
+        <button class="dh-tab-btn" data-pane="review" onclick="switchDetailTab(this,'review')" style="flex:1;padding:12px 0;border:none;background:none;cursor:pointer;font-size:12.5px;font-weight:700;color:var(--muted);border-bottom:2px solid transparent">리뷰</button>
+      </div>`;
+
     const styleToggle = `
       <div style="display:flex;gap:4px;background:#fff;border-radius:999px;padding:4px;box-shadow:0 2px 10px rgba(20,60,50,.1);width:fit-content;margin-bottom:10px">
         <button onclick="setCardStyle('A')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Pretendard',sans-serif;background:${cardStyle==='A'?'var(--accent)':'transparent'};color:${cardStyle==='A'?'#fff':'#5c756d'}">취향 태그</button>
         <button onclick="setCardStyle('B')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Pretendard',sans-serif;background:${cardStyle==='B'?'var(--accent)':'transparent'};color:${cardStyle==='B'?'#fff':'#5c756d'}">Story</button>
       </div>`;
 
-    const cardA = `
-      <div style="background:#ffffff;border-radius:20px;box-shadow:0 10px 32px rgba(20,60,50,.14);overflow:hidden">
-        <div style="position:relative;height:110px;background:linear-gradient(135deg,#ffe8d9,#ffd4b8);display:flex;align-items:center;justify-content:center">
-          <div style="font-size:28px">${menuEmoji(s)}</div>
-          <div style="position:absolute;bottom:10px;left:12px;font-size:10px;font-weight:900;letter-spacing:.08em;color:#8a5a3a">MY TASTE PICK</div>
-          <div style="position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:5px;background:#fff;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700;color:${info.color}">${menuEmoji(s)} ${info.label} <span style="color:#93a8a2;font-weight:500">${info.labelEn}</span></div>
-          <button onclick="toggleBookmark(${s.id})" style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;background:${bm?'var(--accent)':'#fff'};color:${bm?'#fff':'var(--accent)'};font-size:14px;box-shadow:0 3px 10px rgba(20,60,50,.15)">${bm?'♥':'♡'}</button>
-        </div>
-        <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px">
-          <div style="font-size:17px;font-weight:900;color:#1c352e">${s.name}</div>
+    const infoTagsBlock = `
+      <div style="background:#ffffff;border-radius:18px;box-shadow:0 8px 24px rgba(20,60,50,.12);overflow:hidden">
+        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             ${tags.map(t=>`<span style="background:#fdf0e4;color:#8a5a3a;font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px">${t}</span>`).join('')}
           </div>
@@ -3561,37 +3604,34 @@ function selectStore(id) {
         </div>
       </div>`;
 
-    const cardB = `
-      <div style="background:#fff8f0;border-radius:22px;box-shadow:0 10px 32px rgba(140,30,20,.18);overflow:hidden;border:3px solid var(--accent)">
-        <div style="background:var(--accent);padding:10px 16px;display:flex;align-items:center;gap:8px">
-          <div style="font-family:'Pretendard',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:.7px">HONGDAE STORY</div>
-        </div>
-        <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:11px">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#ffe3cf,#ffd0b5);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;border:2px dashed #f0a080">${menuEmoji(s)}</div>
-            <div style="font-size:17px;font-weight:900;color:#6b1510;flex:1">${s.name}</div>
-          </div>
-          <div style="background:#fff0e6;border-radius:12px;padding:9px 10px">
-            <div style="font-size:10px;font-weight:900;color:#a43a2d;letter-spacing:.06em;margin-bottom:6px">STORY &amp; CERTIFICATION</div>
-            <div style="display:flex;gap:5px;flex-wrap:wrap">
-              ${storyTags.map(t=>`<span style="background:#fff;border:1.5px solid #f2b8ae;color:#c1382c;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px">✦ ${t}</span>`).join('')}
-            </div>
+    const infoStoryBlock = `
+      <div style="background:#fff8f0;border-radius:18px;box-shadow:0 8px 24px rgba(140,30,20,.14);overflow:hidden;border:2px solid var(--accent)">
+        <div style="padding:12px 16px;display:flex;flex-direction:column;gap:9px">
+          <div style="font-size:10px;font-weight:900;color:#a43a2d;letter-spacing:.06em">STORY &amp; CERTIFICATION</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            ${storyTags.map(t=>`<span style="background:#fff;border:1.5px solid #f2b8ae;color:#c1382c;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px">✦ ${t}</span>`).join('')}
           </div>
         </div>
       </div>`;
 
     dc.innerHTML = `
-      <div class="detail-body" style="padding:14px">
-        ${genreBadge}
-        ${styleToggle}
-        ${cardStyle === 'A' ? cardA : cardB}
-        ${cardStyle === 'A' ? `
+      <div class="detail-body" style="padding:0 0 16px">
+        ${hero}
+        ${tabbar}
+        <div data-pane="info" style="padding:14px">
+          ${styleToggle}
+          ${cardStyle === 'A' ? infoTagsBlock : infoStoryBlock}
           <div style="display:flex;gap:8px;margin-top:12px">
             <a href="${kakaoUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">카카오맵 확인 ↗</a>
             <a href="${naverUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">네이버지도 확인 ↗</a>
           </div>
-          ${signatureMenuSection}` : ''}
+        </div>
+        <div data-pane="menu" style="padding:14px;display:none">
+          ${signatureMenuSection}
+        </div>
+        <div data-pane="review" id="detail-review-pane" style="padding:14px;display:none"></div>
       </div>`;
+    if (window.HongdaeReview?.renderPane) window.HongdaeReview.renderPane();
     return;
   }
 
@@ -3608,11 +3648,27 @@ function selectStore(id) {
           </div>`).join('')
       : `<div style="font-size:12px;color:var(--muted);text-align:center;padding:14px 0">아직 남겨진 코멘트가 없어요.<br>이 가게를 좋아했다면 첫 코멘트를 남겨주세요.</div>`;
 
+    // 영업 기간 헤드라인 — months는 제보 폼에서 실제로 입력받은 값일 때만 존재(추정치를 지어내지 않음)
+    const durationLabel = s.months
+      ? (s.months >= 12 ? `${Math.floor(s.months / 12)}년${s.months % 12 ? ` ${s.months % 12}개월` : ''}` : `${s.months}개월`)
+      : null;
+    // 이 자리의 역사 — closedYear/nowHere 둘 다 실제로 확보된 값이 있을 때만 표시(없으면 그냥 생략)
+    const timelineSteps = [];
+    if (s.closedYear) timelineSteps.push(`${s.closedYear} · 폐업`);
+    if (s.nowHere) timelineSteps.push(`지금 이 자리는 ${s.nowHere}`);
+    const timelineHtml = timelineSteps.length
+      ? `<div style="margin-top:10px;padding:10px 12px;background:var(--surface2);border-radius:10px">
+          <div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.05em;margin-bottom:6px">이 자리의 역사</div>
+          <div style="display:flex;flex-direction:column;gap:5px">${timelineSteps.map(step => `<div style="font-size:12px;color:var(--text)">${step}</div>`).join('')}</div>
+        </div>` : '';
+    const tributed = !!JSON.parse(localStorage.getItem('hongdaeTributes') || '{}')[s.id];
+
     dc.innerHTML = `
       <div class="detail-body" style="padding:14px">
         <div style="background:#fff8f0;border-radius:22px;box-shadow:0 10px 32px rgba(140,30,20,.1);overflow:hidden;border:2px dashed #d8b8a8">
           <div style="background:#4a4038;padding:10px 16px;display:flex;align-items:center;gap:8px">
             <div style="font-family:'Pretendard',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:.7px">🪦 R.I.P</div>
+            ${durationLabel ? `<div style="margin-left:auto;font-size:11px;font-weight:700;color:#f0ddd0">${durationLabel} 영업</div>` : ''}
           </div>
           <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px">
             <div style="display:flex;align-items:center;gap:10px">
@@ -3623,6 +3679,11 @@ function selectStore(id) {
               </div>
             </div>
             ${s.memory ? `<div style="background:#fff0e6;border-radius:12px;padding:10px 12px;font-size:12px;color:#6b1510;line-height:1.6;font-style:italic">“${s.memory}”${s.reporter ? `<div style="margin-top:6px;font-size:10px;color:#a06a55;font-style:normal">— 제보: ${s.reporter}</div>` : ''}</div>` : ''}
+            ${timelineHtml}
+            <button onclick="toggleTribute(${s.id}, this)" data-tributed="${tributed ? '1' : '0'}"
+              style="margin-top:2px;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:10px;border:1px solid ${tributed ? '#c1382c' : '#d8b8a8'};background:${tributed ? '#c1382c' : '#fff'};color:${tributed ? '#fff' : '#6b1510'};font:700 12.5px Pretendard,sans-serif;cursor:pointer">
+              🕯️ ${tributed ? '헌화했어요' : '헌화하기'}
+            </button>
           </div>
         </div>
 
@@ -4293,6 +4354,7 @@ function addStore() {
     memory: status === 'closed' ? (memoText || null) : null,
     closedYear: closedYear || null,
     reporter: reporter || null,
+    nowHere: document.getElementById('f-now-here').value.trim() || null,
   };
   stores.push(newStore);
   trackAddition(newStore);
@@ -4867,8 +4929,10 @@ function addStore() {
   <script src="ui-redesign.js"></script>
   <script src="experience-ui.js"></script>
   <script src="journey-features.js"></script>
+  <script src="review-flow.js"></script>
   <script src="feedback-ui.js"></script>
   <script src="mobile-polish.js"></script>
   <script src="feed-ui.js"></script>
+  <script src="filter-sheet.js"></script>
 </body>
 </html>
