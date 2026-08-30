@@ -218,9 +218,10 @@
   }
   .sidebar.open { transform: translateX(0); }
   .sidebar-close {
-    position: absolute; top: calc(10px + env(safe-area-inset-top)); right: 10px; z-index: 1;
-    width: 26px; height: 26px; border-radius: 50%; border: none; cursor: pointer;
-    background: var(--surface2); color: var(--muted); font-size: 13px;
+    position: fixed; top: calc(10px + env(safe-area-inset-top)); right: 10px; z-index: 20;
+    min-width: 26px; height: 34px; padding: 0 12px; border-radius: 99px; border: 1px solid var(--border); cursor: pointer;
+    background: rgba(43,7,12,.92); color: var(--text); font: 700 12px 'Pretendard', sans-serif;
+    box-shadow: 0 4px 14px rgba(0,0,0,.28); backdrop-filter: blur(8px);
   }
   .menu-btn {
     background: none; border: none; color: var(--text);
@@ -593,9 +594,10 @@
   }
   .detail.open { transform: translateX(0); }
   .detail-close {
-    position: absolute; top: calc(10px + env(safe-area-inset-top)); right: 10px; z-index: 1;
-    width: 26px; height: 26px; border-radius: 50%; border: none; cursor: pointer;
-    background: var(--surface2); color: var(--muted); font-size: 13px;
+    position: fixed; top: calc(10px + env(safe-area-inset-top)); left: 10px; z-index: 20;
+    height: 36px; padding: 0 13px; border-radius: 99px; border: 1px solid rgba(255,255,255,.25); cursor: pointer;
+    background: rgba(43,7,12,.82); color: #fff; font: 700 12px 'Pretendard', sans-serif;
+    box-shadow: 0 4px 14px rgba(0,0,0,.3); backdrop-filter: blur(8px);
   }
   .detail::-webkit-scrollbar { width: 4px; }
   .detail::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
@@ -1338,7 +1340,7 @@
      .top-stack(z-index 40)보다 항상 아래에 깔림 — 이게 상세 패널이
      헤더에 가려 클릭이 안 먹히던 버그의 정확한 원인이었음. -->
   <div class="sidebar" id="sidebar">
-    <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+    <button class="sidebar-close" onclick="closeSidebar()" aria-label="필터를 닫고 지도로 돌아가기">← 지도</button>
     <div class="sidebar-top">
       <div class="trivia-card" id="trivia-card" onclick="nextTrivia()">
         <div class="trivia-stamp" aria-hidden="true">
@@ -1415,7 +1417,7 @@
   </div>
 
   <div class="detail" id="detail-panel">
-    <button class="detail-close" onclick="closeDetail()">✕</button>
+    <button class="detail-close" onclick="closeDetail()" aria-label="상세 정보를 닫고 지도로 돌아가기">← 지도</button>
     <div class="detail-empty" id="detail-empty">
       <div class="icon">📊</div>
       <div>업소를 선택하면<br>상세 분석이 나타납니다</div>
