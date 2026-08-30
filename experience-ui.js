@@ -37,13 +37,22 @@
     render(); overlay.classList.add('open');
   }
 
+  // 참고: 이 openFilters()는 filter-sheet.js가 로드되면 그 파일의 더 완전한 버전으로 교체됩니다.
+  // filter-sheet.js가 아직 배포되지 않았을 때를 대비한 대체(fallback) 화면이라, 여기도 태그를
+  // 눌렀을 때 켜진 상태가 눈에 보이도록 .on 표시를 맞춰둡니다(2026-08-30 버그 수정).
   function openFilters() {
     const sidebar = $('#sidebar');
     let summary = $('.xp-filter-summary', sidebar);
     if (!summary) { summary = document.createElement('div'); summary.className = 'xp-filter-summary'; sidebar.querySelector('.sidebar-top')?.prepend(summary); }
     const count = getFilteredStores().length;
-    summary.innerHTML = `<div style="font-size:12px;color:#c39298">지금 조건이면 <b>${count}곳</b>을 볼 수 있어요.</div><div class="xp-filter-actions"><button data-tag="혼밥">혼자</button><button data-tag="데이트">데이트</button><button data-tag="조용한">조용한</button><button data-tag="가성비">가성비</button><button class="reset" data-reset>초기화</button></div>`;
-    summary.querySelectorAll('[data-tag]').forEach((button) => button.onclick = () => { activeDetailFilters.clear(); activeDetailFilters.add(`tag:${button.dataset.tag}`); currentFilter = 'detailFilters'; renderList(); openFilters(); });
+    const isOn = (tag) => activeDetailFilters.has(`tag:${tag}`);
+    summary.innerHTML = `<div style="font-size:12px;color:#c39298">지금 조건이면 <b>${count}곳</b>을 볼 수 있어요.</div><div class="xp-filter-actions">${['혼밥', '데이트', '조용한', '가성비'].map((tag) => `<button data-tag="${tag}" class="${isOn(tag) ? 'on' : ''}" style="${isOn(tag) ? 'border-color:#e8362a;background:#e8362a;color:#fff' : ''}">${tag}${isOn(tag) ? ' ✓' : ''}</button>`).join('')}<button class="reset" data-reset>초기화</button></div>`;
+    summary.querySelectorAll('[data-tag]').forEach((button) => button.onclick = () => {
+      const tag = button.dataset.tag; const key = `tag:${tag}`;
+      if (activeDetailFilters.has(key)) { activeDetailFilters.delete(key); currentFilter = activeDetailFilters.size > 0 ? 'detailFilters' : 'all'; }
+      else { activeDetailFilters.add(key); currentFilter = 'detailFilters'; }
+      renderList(); openFilters();
+    });
     $('[data-reset]', summary).onclick = () => { activeDetailFilters.clear(); boundsFilter = null; currentFilter = 'all'; searchText = ''; const input = $('#search-input'); if (input) input.value = ''; renderList(); openFilters(); };
     if (!sidebar.classList.contains('open')) toggleSidebar();
   }
