@@ -46,8 +46,8 @@
       };
       return;
     }
-    const { data: collections } = await client.from('collections').select('id,title,emoji,collection_places(count)').order('created_at');
-    dialog.innerHTML = `<section style="max-width:420px;width:100%;max-height:calc(100vh - 40px);overflow:auto;padding:24px;border-radius:16px;background:#3d0f16;border:1px solid #7a2534;color:#f5ece7"><div style="position:sticky;top:-24px;z-index:1;display:flex;align-items:center;gap:8px;margin:-24px -24px 16px;padding:18px 24px 12px;background:#3d0f16;border-bottom:1px solid #7a2534"><h2 style="margin:0;flex:1">내 컬렉션</h2><button type="button" id="account-close" aria-label="내 컬렉션 나가기" style="padding:8px 11px;border:1px solid #7a2534;border-radius:99px;background:#2b070c;color:#f5ece7;font-weight:700">나가기 ✕</button></div><div style="margin:0 0 16px">${(collections || []).map(c => `<div style="padding:10px 0;border-bottom:1px solid #7a2534">${c.emoji} <b>${escapeHtml(c.title)}</b> <span style="color:#c39298;font-size:12px">${c.collection_places[0]?.count || 0}곳</span></div>`).join('') || '<p style="color:#c39298">아직 만든 컬렉션이 없어요.</p>'}</div><form id="collection-form" style="display:flex;gap:8px"><input name="title" required maxlength="60" placeholder="예: 데이트 후보" style="min-width:0;flex:1;padding:10px;border-radius:8px;border:1px solid #7a2534;background:#2b070c;color:#fff"><button style="padding:10px;border:0;border-radius:8px;background:#e8362a;color:#fff">만들기</button></form><button type="button" id="sign-out" style="width:100%;margin-top:12px;padding:10px;border:1px solid #7a2534;border-radius:10px;background:transparent;color:#c39298">로그아웃</button></section>`;
+    const { data: collections } = await client.from('collections').select('id,title,emoji,collection_places(place_id,places(name))').order('created_at');
+    dialog.innerHTML = `<section style="max-width:420px;width:100%;max-height:calc(100vh - 40px);overflow:auto;padding:24px;border-radius:16px;background:#3d0f16;border:1px solid #7a2534;color:#f5ece7"><div style="position:sticky;top:-24px;z-index:1;display:flex;align-items:center;gap:8px;margin:-24px -24px 16px;padding:18px 24px 12px;background:#3d0f16;border-bottom:1px solid #7a2534"><h2 style="margin:0;flex:1">내 컬렉션</h2><button type="button" id="account-close" aria-label="내 컬렉션 나가기" style="padding:8px 11px;border:1px solid #7a2534;border-radius:99px;background:#2b070c;color:#f5ece7;font-weight:700">나가기 ✕</button></div><p style="margin:0 0 12px;color:#c39298;font-size:12px">지도에서 ♥를 누르면 ‘저장한 가게’에 자동으로 추가돼요.</p><div style="margin:0 0 16px">${(collections || []).map(c => { const places = c.collection_places || []; return `<div style="padding:12px 0;border-bottom:1px solid #7a2534">${c.emoji} <b>${escapeHtml(c.title)}</b> <span style="color:#c39298;font-size:12px">${places.length}곳</span>${places.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px">${places.map(p => `<span style="padding:5px 8px;border-radius:99px;background:#2b070c;color:#f5ece7;font-size:11px">${escapeHtml(p.places?.name || '저장한 장소')}</span>`).join('')}</div>` : ''}</div>`; }).join('') || '<p style="color:#c39298">지도에서 ♥를 눌러 첫 장소를 저장해보세요.</p>'}</div><form id="collection-form" style="display:flex;gap:8px"><input name="title" required maxlength="60" placeholder="예: 데이트 후보" style="min-width:0;flex:1;padding:10px;border-radius:8px;border:1px solid #7a2534;background:#2b070c;color:#fff"><button style="padding:10px;border:0;border-radius:8px;background:#e8362a;color:#fff">만들기</button></form><button type="button" id="sign-out" style="width:100%;margin-top:12px;padding:10px;border:1px solid #7a2534;border-radius:10px;background:transparent;color:#c39298">로그아웃</button></section>`;
     $('#account-close').onclick = () => dialog.remove();
     $('#sign-out').onclick = async () => { await client.auth.signOut(); profile = null; dialog.remove(); renderAccount(); };
     $('#collection-form').onsubmit = async (event) => {
@@ -82,10 +82,10 @@
       notice('카카오 로그인을 완료하지 못했어요. 설정을 확인한 뒤 다시 시도해주세요.');
     }
     const { data: { user } } = await client.auth.getUser();
-    if (user) await loadProfile(user);
+    if (user) { await loadProfile(user); await syncDeviceSaves(); }
     client.auth.onAuthStateChange(async (_event, session) => {
       profile = null;
-      if (session?.user) await loadProfile(session.user);
+      if (session?.user) { await loadProfile(session.user); await syncDeviceSaves(); }
       else renderAccount();
     });
   }
@@ -112,5 +112,9 @@
       notice(error ? error.message : `${rows.length}개 매장을 데이터베이스에 반영했어요.`);
     }
   };
+  async function syncDeviceSaves() {
+    if (typeof bookmarks === 'undefined') return;
+    await Promise.all(Object.keys(bookmarks).map(placeId => window.HongdaePlatform.syncDefaultSave(Number(placeId), true)));
+  }
   window.addEventListener('DOMContentLoaded', init);
 })();
