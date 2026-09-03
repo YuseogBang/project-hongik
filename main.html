@@ -3544,12 +3544,16 @@ function selectStore(id) {
       : (s.signatureMenu || '').split(',').map(menu => menu.trim()).filter(Boolean)
     ).map(localizeMenuText);
     const signatureMenuSection = `
-      <div style="margin-top:10px;padding:11px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px">
+      <section data-place-menu style="margin-top:10px;padding:11px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:14px">
         <div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.06em;margin-bottom:7px">SIGNATURE MENU</div>
         ${signatureMenus.length
           ? `<div style="display:flex;flex-wrap:wrap;gap:6px">${signatureMenus.map(menu => `<span style="background:#fdf0e4;color:#8a5a3a;font-size:11px;font-weight:700;padding:4px 8px;border-radius:999px">${menu}</span>`).join('')}</div>`
           : '<div style="font-size:11px;color:var(--muted)">대표 메뉴 정보가 아직 없어요.</div>'}
-      </div>`;
+        <div style="display:flex;align-items:flex-start;gap:8px;margin-top:11px;padding:10px;border-radius:10px;background:rgba(var(--accent-rgb),.08);font-size:12px;line-height:1.5;color:var(--text)">
+          <span aria-hidden="true">🕐</span>
+          <span><b style="display:block;font-size:10px;color:var(--muted);letter-spacing:.05em">영업시간</b>${s.hours ? s.hours : '영업시간은 지도에서 다시 확인해주세요.'}</span>
+        </div>
+      </section>`;
     const bm = !!bookmarks[s.id];
 
     const styleToggle = `
@@ -3596,6 +3600,7 @@ function selectStore(id) {
           </div>
           <div style="background:#fff0e6;border-radius:12px;padding:9px 10px">
             <div style="font-size:10px;font-weight:900;color:#a43a2d;letter-spacing:.06em;margin-bottom:6px">STORY &amp; CERTIFICATION</div>
+            ${s.storyQuote && s.storySourceUrl ? `<blockquote style="margin:0 0 8px;color:#6b1510;font-size:12px;line-height:1.6">“${s.storyQuote}” <a href="${s.storySourceUrl}" target="_blank" rel="noopener noreferrer" style="color:#a43a2d;font-weight:800;text-decoration:underline">원문 ↗</a></blockquote>` : ''}
             <div style="display:flex;gap:5px;flex-wrap:wrap">
               ${storyTags.map(t=>`<span style="background:#fff;border:1.5px solid #f2b8ae;color:#c1382c;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px">✦ ${t}</span>`).join('')}
             </div>
