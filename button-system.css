@@ -1,0 +1,12 @@
+/* Icon set v1 button system: primary, ghost, icon-only and floating banner. */
+.btn-directions { background:linear-gradient(135deg,#ff5c46,#e8362a)!important; border:none!important; color:#fff!important; box-shadow:0 8px 22px rgba(232,54,42,.34); }
+.btn-bookmarks { background:#4f151e!important; border:1px solid #7a2534!important; color:#f5ece7!important; }
+.btn-bookmarks:hover { border-color:#e8362a!important; color:#fff!important; }
+.category-bar .chip, .category-bar .cat-toggle { border-color:#7a2534; background:#4f151e; color:#c9a5a5; }
+.category-bar .chip:hover, .category-bar .cat-toggle:hover { border-color:#e8362a; color:#fff; }
+.category-bar .chip.on, .category-bar .cat-toggle.on { background:linear-gradient(135deg,#ff5c46,#e8362a); border-color:#e8362a; color:#fff; box-shadow:0 6px 16px rgba(232,54,42,.3); }
+.gone-banner { border-style:dashed!important; border-color:rgba(232,54,42,.55)!important; background:#4f151e!important; }
+.gone-banner:hover { border-color:#e8362a!important; }
+.app-tab { transition:color .16s ease,transform .16s ease!important; }
+.app-tab.active { color:#e8362a!important; }
+.app-tab.active svg { filter:drop-shadow(0 4px 7px rgba(232,54,42,.3)); }
