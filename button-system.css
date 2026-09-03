@@ -10,3 +10,4 @@
 .app-tab { transition:color .16s ease,transform .16s ease!important; }
 .app-tab.active { color:#e8362a!important; }
 .app-tab.active svg { filter:drop-shadow(0 4px 7px rgba(232,54,42,.3)); }
+.detail-body .jf-card { margin:18px 8px 22px!important; padding:16px!important; }
