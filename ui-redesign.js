@@ -81,15 +81,12 @@
     const nav = document.createElement('nav');
     nav.className = 'app-tabs';
     nav.setAttribute('aria-label', '주요 메뉴');
-    nav.innerHTML = [['map', '지도'], ['feed', '피드'], ['save', '저장'], ['me', '나']]
+    nav.innerHTML = [['map', '지도'], ['feed', '피드'], ['save', '저장'], ['me', '프로필']]
       .map(([key, label]) => `<button class="app-tab ${key === 'map' ? 'active' : ''}" data-tab="${key}" aria-label="${label}">${icons[key]}<span>${label}</span></button>`)
       .join('');
     nav.querySelectorAll('.app-tab').forEach((button) => button.addEventListener('click', () => {
       const action = button.dataset.tab;
       setActive(action);
-      // 2026-08-30 버그 수정: 저장/취향 선택 등 배너(.xp-overlay)가 열린 채로 하단 탭(지도/피드/저장/나)을
-      // 눌러 다른 화면으로 이동해도 배너가 안 닫혀서 계속 화면 위에 남아있던 문제 — 탭 이동 시 항상 정리.
-      document.querySelector('.xp-overlay.open')?.classList.remove('open');
       if (action === 'map') { closeDetail(); closeSidebar(); closeSurface(); }
       if (action === 'feed') {
         if (window.HongdaeFeed?.open) window.HongdaeFeed.open();
