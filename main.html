@@ -3568,7 +3568,6 @@ function selectStore(id) {
         </div>
         <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px">
           <div style="font-size:17px;font-weight:900;color:#1c352e">${s.name}</div>
-          <button type="button" onclick="window.HongdaePlatform?.openCollectionPicker(${s.id})" style="width:100%;padding:10px 12px;border:1px solid var(--accent);border-radius:12px;background:#fff;color:var(--accent);font-weight:800;font-size:12px;cursor:pointer">♡ 컬렉션에 저장</button>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             ${tags.map(t=>`<span style="background:#fdf0e4;color:#8a5a3a;font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px">${t}</span>`).join('')}
           </div>
