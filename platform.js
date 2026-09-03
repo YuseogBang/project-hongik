@@ -39,10 +39,7 @@
     if (!profile) {
       dialog.innerHTML = '<section style="max-width:360px;width:100%;padding:24px;border-radius:22px;background:#3d0f16;border:1px solid #7a2534;color:#f5ece7"><h2 style="margin:0 0 8px">홍대맵 로그인</h2><p style="color:#c39298;font-size:13px;line-height:1.6">카카오 또는 Google 계정으로 저장 목록과 취향을 동기화할 수 있어요.</p><button type="button" id="login-kakao" style="margin-top:10px;width:100%;padding:12px;border:0;border-radius:12px;background:#fee500;color:#191600;font-weight:800">카카오로 계속하기</button><div style="display:flex;align-items:center;gap:8px;margin:14px 0;color:#8a5f66;font-size:11px"><span style="height:1px;flex:1;background:#7a2534"></span>또는<span style="height:1px;flex:1;background:#7a2534"></span></div><button type="button" id="login-google" style="width:100%;padding:12px;border:1px solid #d8c5c7;border-radius:12px;background:#fff;color:#2b070c;font-weight:800">Google 계정으로 계속하기</button><button type="button" id="dialog-close" style="margin-top:8px;width:100%;padding:8px;background:transparent;border:0;color:#c39298">닫기</button></section>';
       $('#dialog-close').onclick = () => dialog.remove();
-      $('#login-kakao').onclick = async () => {
-        const { error } = await client.auth.signInWithOAuth({ provider: 'kakao', options: { redirectTo: location.href, scopes: 'profile_nickname profile_image' } });
-        if (error) notice('카카오 로그인을 사용하려면 Supabase에 Kakao 제공자를 먼저 연결해주세요.');
-      };
+      $('#login-kakao').onclick = () => { location.assign('/api/kakao/start?next=/main.html'); };
       $('#login-google').onclick = async () => {
         const { error } = await client.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.href } });
         if (error) notice('Google 로그인을 사용하려면 Supabase에 Google 제공자를 먼저 연결해주세요.');
@@ -69,6 +66,18 @@
     if (!config?.configured) return renderAccount();
     const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
     client = createClient(config.url, config.anonKey);
+    const params = new URLSearchParams(location.search);
+    if (params.get('kakao') === 'done') {
+      const result = await fetch('/api/kakao/session', { credentials: 'same-origin' }).then(r => r.ok ? r.json() : null).catch(() => null);
+      history.replaceState({}, '', `${location.pathname}${location.hash}`);
+      if (result?.idToken) {
+        const { error } = await client.auth.signInWithIdToken({ provider: 'kakao', token: result.idToken });
+        if (error) notice('카카오 로그인 정보를 연결하지 못했어요. 잠시 후 다시 시도해주세요.');
+      } else notice('카카오 로그인 정보를 확인하지 못했어요. 다시 시도해주세요.');
+    } else if (params.get('kakao') === 'failed') {
+      history.replaceState({}, '', `${location.pathname}${location.hash}`);
+      notice('카카오 로그인을 완료하지 못했어요. 설정을 확인한 뒤 다시 시도해주세요.');
+    }
     const { data: { user } } = await client.auth.getUser();
     if (user) await loadProfile(user);
     client.auth.onAuthStateChange(async (_event, session) => {
