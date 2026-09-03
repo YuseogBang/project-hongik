@@ -3498,6 +3498,36 @@ function closeSidebarAndViewResults() {
   HongdaeUI.openResults();
 }
 
+// 1차 메뉴 조사: 대표 10곳에서 공개된 추가 메뉴만 노출한다.
+// 가격·구성은 바뀔 수 있으므로 실제 주문 전 지도/매장 메뉴를 다시 확인한다.
+const MENU_CATALOG = {
+  1784136773462:[['바질새우더블치즈버거','8,200원'],['바질새우치즈버거','6,400원'],['치즈버거','4,800원'],['더블치즈버거','6,600원'],['파인치즈버거','5,500원'],['핫BBQ치즈버거','5,800원'],['칠리스치즈스틱','3,900원']],
+  1784136796734:[['참치김밥',''],['소고기김밥',''],['더블치즈김밥',''],['꽃나물김밥',''],['명태김밥',''],['묵은지참치김밥','']],
+  1784136812466:[['삼선간짜장',''],['짬뽕',''],['유린기',''],['등심탕수육','']],
+  1784138528524:[['돼지곰탕 보통',''],['돼지곰탕 특',''],['김치만두',''],['주류·음료','']],
+  1784138558637:[['한우내장찜',''],['한우 육사시미','32,000원'],['수비드 된장 맥적',''],['치즈감자전',''],['전통주 페어링','']],
+  1784138699524:[['로스카츠 정식','16,000원'],['히레카츠 정식','17,000원'],['특로스카츠 정식','19,000원'],['모둠카츠정식','19,000원'],['가츠동','15,000원']],
+  1784138760149:[['마파두부',''],['카이란 소고기 볶음',''],['깐풍기',''],['하얀 짬뽕',''],['볶음밥','']],
+  1784182364776:[['아메리카노',''],['레몬티',''],['꼬레아노',''],['가래떡구이',''],['기네스',''],['산미구엘','']],
+  1784421978864:[['아메리카노',''],['카페라떼',''],['공명라떼 (아이스)',''],['우유생크림스콘','']],
+  1784421997386:[['자연도 소금빵 4개 세트','12,000원']]
+};
+stores.forEach(store=>{if(MENU_CATALOG[store.id])store.menuItems=MENU_CATALOG[store.id]});
+
+function openFullMenu(id) {
+  const store = stores.find(item=>item.id===id);
+  if (!store) return;
+  document.getElementById('place-menu-modal')?.remove();
+  const rows = (store.menuItems||[]).map(([name,price])=>`<li style="display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid #f0d9d3;font-size:14px;color:#41232a"><span>${name}</span>${price?`<b style="white-space:nowrap;color:#9a3b2e">${price}</b>`:''}</li>`).join('') || '<li style="padding:16px 0;color:#7f6868;line-height:1.55">추가 메뉴를 확인 중이에요. 지도 링크에서 최신 메뉴를 확인해 주세요.</li>';
+  const modal = document.createElement('div');
+  modal.id = 'place-menu-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:2500;display:flex;align-items:flex-end;background:rgba(33,8,12,.52);padding:14px;box-sizing:border-box';
+  modal.innerHTML = `<section role="dialog" aria-modal="true" aria-label="${store.name} 메뉴" style="width:min(100%,520px);margin:0 auto;border-radius:24px 24px 18px 18px;background:#fff9f5;box-shadow:0 -12px 36px rgba(25,0,0,.28);padding:18px"><div style="width:38px;height:4px;border-radius:99px;background:#dbc8c3;margin:0 auto 14px"></div><div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div><p style="margin:0;color:#a44436;font-size:11px;font-weight:900;letter-spacing:.08em">MENU</p><h3 style="margin:4px 0 0;color:#40151c;font-size:20px">${store.name}</h3></div><button type="button" data-close style="width:36px;height:36px;border:0;border-radius:50%;background:#f3e6e1;color:#5e2a31;font-size:19px;cursor:pointer">×</button></div><ul style="padding:0;margin:14px 0 8px;list-style:none;max-height:50vh;overflow:auto">${rows}</ul><p style="margin:10px 0 0;color:#876b6d;font-size:11px;line-height:1.5">공개 확인 메뉴 · 2026-09-03 기준 · 가격과 품절 여부는 방문 전 다시 확인해 주세요.</p></section>`;
+  modal.onclick = event=>{if(event.target===modal)modal.remove()};
+  modal.querySelector('[data-close]').onclick=()=>modal.remove();
+  document.body.append(modal);
+}
+
 function updateStats() {
   // 상단바 통계 UI(영업중/폐점/평균생존)는 제거했으므로 더 이상 DOM에 쓰지 않음.
   // 필요해지면 여기서 다시 계산해서 원하는 위치에 표시하면 됨.
@@ -3506,6 +3536,8 @@ function updateStats() {
 // ── SELECT STORE ──────────────────────────────────────
 function selectStore(id) {
   selectedId = id;
+  // 장소 상세는 한 화면에서 읽히도록 항상 개요 카드로 고정한다.
+  cardStyle = 'A';
   const s = stores.find(x=>x.id===id);
   if (!s) return;
   if (window.HongdaeExperience) window.HongdaeExperience.recordView(id);
@@ -3549,18 +3581,17 @@ function selectStore(id) {
         ${signatureMenus.length
           ? `<div style="display:flex;flex-wrap:wrap;gap:6px">${signatureMenus.map(menu => `<span style="background:#fdf0e4;color:#8a5a3a;font-size:11px;font-weight:700;padding:4px 8px;border-radius:999px">${menu}</span>`).join('')}</div>`
           : '<div style="font-size:11px;color:var(--muted)">대표 메뉴 정보가 아직 없어요.</div>'}
-        <div style="display:flex;align-items:flex-start;gap:8px;margin-top:11px;padding:10px;border-radius:10px;background:rgba(var(--accent-rgb),.08);font-size:12px;line-height:1.5;color:var(--text)">
-          <span aria-hidden="true">🕐</span>
-          <span><b style="display:block;font-size:10px;color:var(--muted);letter-spacing:.05em">영업시간</b>${s.hours ? s.hours : '영업시간은 지도에서 다시 확인해주세요.'}</span>
-        </div>
+        <button onclick="openFullMenu(${s.id})" style="margin-top:11px;border:1px solid #a85a55;border-radius:999px;background:#fff7f2;color:#8a3c35;padding:8px 12px;font:800 11px 'Pretendard',sans-serif;cursor:pointer">메뉴 보기 →</button>
+      </section>`;
+    const storySection = `
+      <section data-place-story style="margin-top:10px;padding:13px 14px;background:linear-gradient(135deg,#5b1722,#3b0d14);border:1px solid #8f3142;border-radius:14px;color:#fff4ed">
+        <div style="font-size:10px;font-weight:900;letter-spacing:.08em;color:#f0b5bd;margin-bottom:7px">HONGDAE STORY</div>
+        ${s.storyQuote && s.storySourceUrl
+          ? `<blockquote style="margin:0;color:#fff4ed;font-size:12px;line-height:1.65">“${s.storyQuote}” <a href="${s.storySourceUrl}" target="_blank" rel="noopener noreferrer" style="color:#ffb0a7;font-weight:800;text-decoration:underline">원문 ↗</a></blockquote>`
+          : `<p style="margin:0;color:#e8c8c5;font-size:12px;line-height:1.55">${s.storySummary || '이 장소의 이야기와 방문 기록을 수집하고 있어요.'}</p>`}
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:9px">${storyTags.map(t=>`<span style="border:1px solid #9d4352;color:#ffd8d1;font-size:10px;font-weight:700;padding:3px 7px;border-radius:999px">✦ ${t}</span>`).join('')}</div>
       </section>`;
     const bm = !!bookmarks[s.id];
-
-    const styleToggle = `
-      <div style="display:flex;gap:4px;background:#fff;border-radius:999px;padding:4px;box-shadow:0 2px 10px rgba(20,60,50,.1);width:fit-content;margin-bottom:10px">
-        <button onclick="setCardStyle('A')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Pretendard',sans-serif;background:${cardStyle==='A'?'var(--accent)':'transparent'};color:${cardStyle==='A'?'#fff':'#5c756d'}">취향 태그</button>
-        <button onclick="setCardStyle('B')" style="border:none;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;font-family:'Pretendard',sans-serif;background:${cardStyle==='B'?'var(--accent)':'transparent'};color:${cardStyle==='B'?'#fff':'#5c756d'}">Story</button>
-      </div>`;
 
     const cardA = `
       <div style="background:#ffffff;border-radius:20px;box-shadow:0 10px 32px rgba(20,60,50,.14);overflow:hidden">
@@ -3611,14 +3642,13 @@ function selectStore(id) {
     dc.innerHTML = `
       <div class="detail-body" style="padding:14px">
         ${genreBadge}
-        ${styleToggle}
-        ${cardStyle === 'A' ? cardA : cardB}
-        ${cardStyle === 'A' ? `
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <a href="${kakaoUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">카카오맵 확인 ↗</a>
-            <a href="${naverUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">네이버지도 확인 ↗</a>
-          </div>
-          ${signatureMenuSection}` : ''}
+        ${cardA}
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <a href="${kakaoUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">카카오맵 확인 ↗</a>
+          <a href="${naverUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">네이버지도 확인 ↗</a>
+        </div>
+        ${signatureMenuSection}
+        ${storySection}
       </div>`;
     return;
   }
