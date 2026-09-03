@@ -67,6 +67,19 @@
       if (error) return notice(error.message);
       openDialog();
     };
+    const editButton = document.createElement('button');
+    editButton.type = 'button'; editButton.textContent = '컬렉션 편집';
+    editButton.style.cssText = 'width:100%;margin-top:10px;padding:10px;border:1px solid #7a2534;border-radius:10px;background:transparent;color:#f5ece7;font-weight:700';
+    $('#collection-form').after(editButton);
+    editButton.onclick = openCollectionManager;
+  }
+
+  async function openCollectionManager() {
+    const { data: collections } = await client.from('collections').select('id,title,emoji,collection_places(place_id,places(name))').order('created_at');
+    let dialog = $('#account-dialog');
+    dialog.innerHTML = `<section style="max-width:420px;width:100%;max-height:calc(100vh - 40px);overflow:auto;padding:24px;border-radius:22px;background:#3d0f16;color:#f5ece7"><div style="display:flex;align-items:center;gap:10px"><h2 style="margin:0;flex:1">컬렉션 편집</h2><button id="manager-close" style="padding:8px 11px;border:1px solid #7a2534;border-radius:99px;background:#2b070c;color:#fff">나가기 ✕</button></div><p style="color:#c39298;font-size:12px">이름을 바꾼 뒤 저장을 누르세요.</p><div style="display:grid;gap:12px">${(collections || []).map(c => `<div style="padding:12px;border:1px solid #7a2534;border-radius:14px"><div style="display:flex;gap:8px"><input data-title="${c.id}" value="${escapeHtml(c.title)}" maxlength="60" style="min-width:0;flex:1;padding:10px;border-radius:9px;border:1px solid #7a2534;background:#2b070c;color:#fff"><button data-save="${c.id}" style="padding:8px 10px;border:0;border-radius:9px;background:#e8362a;color:#fff;font-weight:700">저장</button></div><div style="margin-top:8px;color:#c39298;font-size:12px">${(c.collection_places || []).map(p => escapeHtml(p.places?.name || '저장한 장소')).join(' · ') || '저장된 장소 없음'}</div></div>`).join('') || '<p style="color:#c39298">편집할 컬렉션이 없어요.</p>'}</div></section>`;
+    $('#manager-close').onclick = openDialog;
+    dialog.querySelectorAll('[data-save]').forEach(button => button.onclick = async () => { const input = dialog.querySelector(`[data-title="${button.dataset.save}"]`); const title = input.value.trim(); if (!title) return notice('이름을 입력해주세요.'); const { error } = await client.from('collections').update({ title }).eq('id', button.dataset.save); if (error) return notice(error.message); notice('컬렉션 이름을 바꿨어요.'); openCollectionManager(); });
   }
 
   function escapeHtml(value) { return String(value).replace(/[&<>'"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[c]); }
@@ -132,16 +145,7 @@
       notice(error ? error.message : `${rows.length}개 매장을 데이터베이스에 반영했어요.`);
     }
   };
-  const detailObserver = new MutationObserver(() => {
-    const detail = $('#detail-panel'); const bookmark = detail?.querySelector('button[onclick^="toggleBookmark"]');
-    if (!bookmark || detail.querySelector('.collection-add-button')) return;
-    const id = bookmark.getAttribute('onclick')?.match(/\d+/)?.[0]; if (!id) return;
-    const button = document.createElement('button'); button.className = 'collection-add-button'; button.textContent = '+ 컬렉션';
-    button.style.cssText = 'margin:10px 14px 0;padding:8px 10px;border:1px solid #7a2534;border-radius:99px;background:#fff;color:#7a2534;font-weight:700;font-size:12px';
-    button.onclick = () => window.HongdaePlatform.openCollectionPicker(Number(id));
-    bookmark.closest('div[style*="height:110px"]')?.after(button);
-  });
-  window.addEventListener('DOMContentLoaded', () => { applyButtonFeedback(); detailObserver.observe($('#detail-panel'), { childList: true, subtree: true }); });
+  window.addEventListener('DOMContentLoaded', () => { applyButtonFeedback(); });
   async function syncDeviceSaves() {
     if (typeof bookmarks === 'undefined') return;
     await Promise.all(Object.keys(bookmarks).map(placeId => window.HongdaePlatform.syncDefaultSave(Number(placeId), true)));
