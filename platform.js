@@ -115,6 +115,7 @@
 
   window.HongdaePlatform = {
     openDialog,
+    async signOut() { if (client) await client.auth.signOut(); profile = null; accountLabel = ''; renderAccount(); notice('로그아웃했어요.'); },
     async openCollectionPicker(placeId) {
       if (!client || !profile) return notice('로그인 후 컬렉션에 추가할 수 있어요.');
       const { data: collections } = await client.from('collections').select('id,title,emoji').order('created_at');
@@ -150,5 +151,16 @@
     if (typeof bookmarks === 'undefined') return;
     await Promise.all(Object.keys(bookmarks).map(placeId => window.HongdaePlatform.syncDefaultSave(Number(placeId), true)));
   }
+  const profileObserver = new MutationObserver(() => {
+    const sheet = document.querySelector('.xp-sheet');
+    if (!sheet || sheet.dataset.profileEnhanced || sheet.querySelector('.xp-title')?.textContent !== '내 취향 지도') return;
+    sheet.dataset.profileEnhanced = '1';
+    const reviews = JSON.parse(localStorage.getItem('hongdaeTagReviews') || '[]');
+    const history = document.createElement('div'); history.className = 'xp-history';
+    history.innerHTML = `<h4>내 방문 기록 · 리뷰</h4>${reviews.length ? reviews.slice(0, 4).map(r => `<p class="xp-copy">${typeof stores !== 'undefined' ? (stores.find(s => s.id === r.id)?.name || '가게') : '가게'} · ${r.score === 'again' ? '또 간다' : r.score === 'okay' ? '보통' : '아니다'}${r.tags?.length ? ` · ${r.tags.join(', ')}` : ''}</p>`).join('') : '<p class="xp-copy">아직 작성한 기록이 없어요.</p>'}`;
+    const logout = document.createElement('button'); logout.className = 'xp-secondary'; logout.textContent = '로그아웃'; logout.onclick = () => { sheet.closest('.xp-overlay')?.classList.remove('open'); window.HongdaePlatform.signOut(); };
+    sheet.append(history, logout);
+  });
+  window.addEventListener('DOMContentLoaded', () => profileObserver.observe(document.body, { childList: true, subtree: true }));
   window.addEventListener('DOMContentLoaded', init);
 })();
