@@ -2886,11 +2886,8 @@ function toggleBookmark(id) {
     window.HongdaeExperience.requestSave(id);
     return;
   }
-  if (bookmarks[id]) delete bookmarks[id];
-  else bookmarks[id] = true;
-  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-  if (window.HongdaePlatform) window.HongdaePlatform.syncDefaultSave(id, !!bookmarks[id]);
-  if (selectedId != null) selectStore(selectedId);
+  if (bookmarks[id]) return window.HongdaePlatform?.openDialog();
+  if (window.HongdaePlatform?.openCollectionPicker) return window.HongdaePlatform.openCollectionPicker(id);
 }
 
 // ── 사라진 가게 코멘트 (브라우저에 저장 — 북마크와 같은 방식) ──
