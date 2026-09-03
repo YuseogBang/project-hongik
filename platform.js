@@ -16,6 +16,14 @@
     button.title = client && profile ? '내 컬렉션' : '로그인';
   }
 
+  function applyButtonFeedback() {
+    if (document.querySelector('#hongdae-button-feedback')) return;
+    const style = document.createElement('style');
+    style.id = 'hongdae-button-feedback';
+    style.textContent = 'button, [role="button"] { transition:transform .14s ease, filter .14s ease, box-shadow .14s ease !important; } button:hover, [role="button"]:hover { filter:brightness(1.06); } button:active, [role="button"]:active { transform:scale(.96) !important; filter:brightness(.9); } button:focus-visible, [role="button"]:focus-visible { outline:2px solid #ff7165; outline-offset:2px; }';
+    document.head.appendChild(style);
+  }
+
   async function loadProfile(user) {
     const { data } = await client.from('profiles').select('id, display_name, role').eq('id', user.id).single();
     profile = data || null;
@@ -102,7 +110,7 @@
       if (!dialog) { dialog = document.createElement('div'); dialog.id = 'account-dialog'; dialog.style.cssText = 'position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:rgba(0,0,0,.6);padding:20px'; document.body.appendChild(dialog); }
       dialog.innerHTML = `<section style="max-width:360px;width:100%;padding:24px;border-radius:22px;background:#3d0f16;color:#f5ece7"><h2 style="margin-top:0">컬렉션에 추가</h2><div style="display:grid;gap:8px">${collections.map(c => `<button data-collection="${c.id}" style="padding:12px;border:1px solid #7a2534;border-radius:12px;background:#2b070c;color:#fff;text-align:left">${c.emoji} ${escapeHtml(c.title)}</button>`).join('')}</div><button id="picker-close" style="width:100%;margin-top:10px;padding:9px;border:0;background:transparent;color:#c39298">닫기</button></section>`;
       $('#picker-close').onclick = () => dialog.remove();
-      dialog.querySelectorAll('[data-collection]').forEach(button => button.onclick = async () => { const { error } = await client.from('collection_places').upsert({ collection_id: button.dataset.collection, place_id: placeId }); if (error) return notice(error.message); dialog.remove(); notice('컬렉션에 추가했어요.'); });
+      dialog.querySelectorAll('[data-collection]').forEach(button => button.onclick = async () => { const { error } = await client.from('collection_places').upsert({ collection_id: button.dataset.collection, place_id: placeId }); if (error) return notice(error.message); if (typeof bookmarks !== 'undefined') { bookmarks[placeId] = true; localStorage.setItem('bookmarks', JSON.stringify(bookmarks)); } dialog.remove(); if (typeof selectStore === 'function' && selectedId != null) selectStore(selectedId); notice('컬렉션에 저장했어요.'); });
     },
     async syncDefaultSave(placeId, saved) {
       if (!client || !profile) return;
@@ -133,7 +141,7 @@
     button.onclick = () => window.HongdaePlatform.openCollectionPicker(Number(id));
     bookmark.closest('div[style*="height:110px"]')?.after(button);
   });
-  window.addEventListener('DOMContentLoaded', () => detailObserver.observe($('#detail-panel'), { childList: true, subtree: true }));
+  window.addEventListener('DOMContentLoaded', () => { applyButtonFeedback(); detailObserver.observe($('#detail-panel'), { childList: true, subtree: true }); });
   async function syncDeviceSaves() {
     if (typeof bookmarks === 'undefined') return;
     await Promise.all(Object.keys(bookmarks).map(placeId => window.HongdaePlatform.syncDefaultSave(Number(placeId), true)));
