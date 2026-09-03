@@ -1,6 +1,7 @@
 (() => {
   let client = null;
   let profile = null;
+  let accountLabel = '';
   const $ = (selector) => document.querySelector(selector);
 
   function notice(message) {
@@ -11,13 +12,14 @@
   function renderAccount() {
     const button = $('#account-button');
     if (!button) return;
-    button.textContent = client && profile ? (profile.display_name || '내 계정').slice(0, 8) : '로그인';
+    button.textContent = client && profile ? (profile.display_name || accountLabel || '내 정보').slice(0, 8) : '로그인';
     button.title = client && profile ? '내 컬렉션' : '로그인';
   }
 
   async function loadProfile(user) {
     const { data } = await client.from('profiles').select('id, display_name, role').eq('id', user.id).single();
     profile = data || null;
+    accountLabel = user.user_metadata?.nickname || user.user_metadata?.name || user.user_metadata?.full_name || '';
     renderAccount();
     const adminLink = $('#admin-menu-link');
     if (adminLink) adminLink.hidden = !profile || profile.role !== 'admin';
