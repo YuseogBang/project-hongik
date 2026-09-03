@@ -72,7 +72,10 @@
       history.replaceState({}, '', `${location.pathname}${location.hash}`);
       if (result?.idToken) {
         const { error } = await client.auth.signInWithIdToken({ provider: 'kakao', token: result.idToken });
-        if (error) notice('카카오 로그인 정보를 연결하지 못했어요. 잠시 후 다시 시도해주세요.');
+        if (error) {
+          console.error('Kakao to Supabase login failed:', error);
+          notice(`카카오 로그인 연결 실패: ${error.message}`);
+        }
       } else notice('카카오 로그인 정보를 확인하지 못했어요. 다시 시도해주세요.');
     } else if (params.get('kakao') === 'failed') {
       history.replaceState({}, '', `${location.pathname}${location.hash}`);
