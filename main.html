@@ -3542,7 +3542,7 @@ function selectStore(id) {
       🎵 ${g[currentLang] || g.ko}${currentLang !== 'en' ? ` · ${g.en}` : ''}</div>` : '';
     const tags = objectiveTasteTags(s).map(localizeTag);
     // 카드 B는 큐레이터 스토리만 보여주고, 공식 인증은 취향 태그(A)에서만 표시한다.
-    const storyTags = s.storyTags || ['재학생 추천', `${s.dong} 골목 스토리`];
+    const storyTags = s.storyTags || ['재학생 추천', `${s.dong || '홍대'} 골목 스토리`];
     const signatureMenus = (Array.isArray(s.signatureMenu)
       ? s.signatureMenu
       : (s.signatureMenu || '').split(',').map(menu => menu.trim()).filter(Boolean)
