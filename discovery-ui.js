@@ -55,13 +55,15 @@
       body = `<p class="discovery-intro" style="margin-top:14px">#${escapeHtml(selectedTheme.tag)}${selectedTheme.type ? ' · ' + escapeHtml(selectedTheme.type === 'restaurant' ? '음식점' : selectedTheme.type === 'cafe' ? '카페' : '주점') : ''} 기준 · 등록된 장소 ${matches.length}곳. 방문 전 영업 여부를 확인해 주세요.</p><div class="discovery-list">${matches.length ? matches.map((store) => `<button type="button" class="discovery-place" data-place="${store.id}">${escapeHtml(store.name)}<small>${escapeHtml(store.dong || '홍대')} · ${escapeHtml(store.category || store.type)}</small></button>`).join('') : '<p class="discovery-intro">조건에 맞는 장소가 아직 없어요.</p>'}</div><button type="button" class="discovery-apply" data-back>다른 리스트 보기</button>`;
     } else {
       body = `<div class="discovery-tabs"><button type="button" data-tab="curation" class="${tab === 'curation' ? 'on' : ''}">홍대 리스트</button><button type="button" data-tab="taste" class="${tab === 'taste' ? 'on' : ''}">내 취향 선택</button></div>`;
-      if (tab === 'curation') body += `<p class="discovery-intro">이름은 유쾌하게, 목록은 실제 등록 장소와 태그로 만들었어요. 영업 여부는 방문 전에 확인해 주세요.</p>${themes.map((theme, index) => `<button type="button" class="discovery-theme" data-theme="${index}">${escapeHtml(theme.title)} <span>${themePlaces(theme).length}곳 →</span><small>${escapeHtml(theme.detail)}</small></button>`).join('')}`;
+      if (tab === 'curation') body += `<p class="discovery-intro">이름은 유쾌하게, 목록은 실제 등록 장소와 태그로 만들었어요. 영업 여부는 방문 전에 확인해 주세요.</p><button type="button" class="discovery-theme" data-passport>🦋 홍대병 도감 <span>기록하기 →</span><small>공연·화방·밤의 홍대를 하나씩 발견해 보세요</small></button>${themes.map((theme, index) => `<button type="button" class="discovery-theme" data-theme="${index}">${escapeHtml(theme.title)} <span>${themePlaces(theme).length}곳 →</span><small>${escapeHtml(theme.detail)}</small></button>`).join('')}<div id="research-curation-entry"></div>`;
       else body += `<p class="discovery-intro">여기서 고른 취향만 이 기기에 저장됩니다. 지도 추천에 반영되며 언제든 수정할 수 있어요.</p><div class="discovery-tags">${TASTE_TAGS.map((tag) => `<button type="button" data-taste="${escapeHtml(tag)}" class="${draftTastes.includes(tag) ? 'on' : ''}" aria-pressed="${draftTastes.includes(tag)}">${tag === '홍대병' ? '🦋 ' : ''}${escapeHtml(tag)}</button>`).join('')}</div><button type="button" class="discovery-apply" data-apply>취향 저장하고 장소 보기</button>`;
     }
     root.innerHTML = `<section class="discovery-panel">${header}${body}</section>`;
     root.querySelector('.discovery-close').onclick = close;
     root.querySelectorAll('[data-tab]').forEach((button) => button.onclick = () => { tab = button.dataset.tab; render(); });
     root.querySelectorAll('[data-theme]').forEach((button) => button.onclick = () => { selectedTheme = themes[Number(button.dataset.theme)]; render(); });
+    root.querySelector('[data-passport]')?.addEventListener('click', () => window.HongdaeSpecial?.openPassport());
+    window.HongdaeResearch?.renderEntry(root.querySelector('#research-curation-entry'));
     root.querySelector('[data-back]')?.addEventListener('click', () => { selectedTheme = null; render(); });
     root.querySelectorAll('[data-place]').forEach((button) => button.onclick = () => { close(); selectStore(Number(button.dataset.place)); });
     root.querySelectorAll('[data-taste]').forEach((button) => button.onclick = () => { const tag = button.dataset.taste; draftTastes = draftTastes.includes(tag) ? draftTastes.filter((item) => item !== tag) : [...draftTastes, tag]; render(); });
@@ -79,5 +81,5 @@
     entry.querySelector('[data-open-taste]').onclick = () => open('taste');
     document.body.append(root);
   });
-  window.HongdaeDiscovery = { open };
+  window.HongdaeDiscovery = { open, close };
 })();
