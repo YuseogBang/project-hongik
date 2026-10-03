@@ -1454,19 +1454,6 @@
     <div id="detail-content" style="display:none"></div>
   </div>
 
-<!-- TASTE MODAL -->
-<div class="modal-overlay" id="taste-modal" style="display:none">
-  <div class="modal">
-    <h4>🎯 내 취향은?</h4>
-    <p style="font-size:12px;color:var(--muted);margin:0 0 12px">좋아하는 걸 2개 이상 골라주세요. 홍대 곳곳의 가게들 중에서 취향에 맞는 곳을 찾아드려요.</p>
-    <div id="taste-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px"></div>
-    <div style="display:flex;gap:8px">
-      <button class="map-btn" onclick="closeTasteModal()" style="flex:1">닫기</button>
-      <button class="map-btn on" onclick="applyTaste()" style="flex:1">추천 보기</button>
-    </div>
-  </div>
-</div>
-
 <!-- ADD MODAL -->
 <div class="modal-overlay" id="modal" style="display:none">
   <div class="modal">
@@ -2918,28 +2905,7 @@ applyLang(); // 페이지 로드 즉시 적용 (카카오맵 로드를 기다리
 
 
 function openTasteModal() {
-  const wrap = document.getElementById('taste-tags');
-  wrap.innerHTML = TASTE_TAGS.map(t => {
-    const isHongdaeByeong = t === '홍대병';
-    const label = isHongdaeByeong ? '🦋 홍대병' : t;
-    const specialStyle = isHongdaeByeong ? 'border-color:#8e44ad;' : '';
-    return `<button class="chip ${userTastes.includes(t)?'on':''}" style="${specialStyle}" onclick="toggleTaste('${t}', this)">${label}</button>`;
-  }).join('');
-  document.getElementById('taste-modal').style.display = 'flex';
-}
-function closeTasteModal() { document.getElementById('taste-modal').style.display = 'none'; }
-
-function toggleTaste(tag, btn) {
-  if (userTastes.includes(tag)) userTastes = userTastes.filter(t => t !== tag);
-  else userTastes.push(tag);
-  btn.classList.toggle('on');
-}
-
-function applyTaste() {
-  if (userTastes.length === 0) { alert('취향을 2개 이상 골라주세요.'); return; }
-  localStorage.setItem('userTastes', JSON.stringify(userTastes));
-  closeTasteModal();
-  showTasteView();
+  window.HongdaeDiscovery?.open('taste');
 }
 
 // store와 사용자 취향이 겹치는 개수 (tags 없는 매장은 0)
