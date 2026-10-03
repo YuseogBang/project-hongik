@@ -1,0 +1,16 @@
+{
+  "id": "/main.html",
+  "name": "홍대맵",
+  "short_name": "홍대맵",
+  "description": "홍대의 장소를 취향에 맞게 찾아보는 지도",
+  "start_url": "/main.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#2b070c",
+  "theme_color": "#2b070c",
+  "lang": "ko",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

@@ -27,7 +27,9 @@
 
   function openResults() {
     closeSurface();
-    const items = getFilteredStores().slice(0, 12);
+    const filtered = getFilteredStores();
+    if (currentFilter === 'taste') filtered.sort((a, b) => matchScore(b) - matchScore(a));
+    const items = filtered.slice(0, 12);
     const sheet = document.querySelector('.map-result-sheet');
     const title = currentFilter === 'taste' ? '내 취향 순위' : currentFilter === 'bookmarks' ? '저장한 가게' : '지금 볼 만한 가게';
     sheet.querySelector('.map-result-title').textContent = title;
