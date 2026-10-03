@@ -32,7 +32,7 @@
   root.className = 'discovery-dialog';
   root.setAttribute('role', 'dialog');
   root.setAttribute('aria-modal', 'true');
-  root.setAttribute('aria-label', '큐레이션과 내 취향');
+  root.setAttribute('aria-label', '홍대 리스트와 내 취향');
   root.addEventListener('click', (event) => { if (event.target === root) close(); });
 
   function close() { root.classList.remove('open'); }
@@ -48,19 +48,18 @@
     root.querySelector('.discovery-close')?.focus();
   }
   function render() {
-    const header = `<div class="discovery-head"><h2>${selectedTheme ? escapeHtml(selectedTheme.title) : '내 홍대 찾기'}</h2><button class="discovery-close" type="button" aria-label="닫기">닫기 ✕</button></div>`;
+    const header = `<div class="discovery-head"><h2>${selectedTheme ? escapeHtml(selectedTheme.title) : tab === 'taste' ? '내 취향 선택' : '홍대 리스트'}</h2><button class="discovery-close" type="button" aria-label="닫기">닫기 ✕</button></div>`;
     let body;
     if (selectedTheme) {
       const matches = themePlaces(selectedTheme);
       body = `<p class="discovery-intro" style="margin-top:14px">#${escapeHtml(selectedTheme.tag)}${selectedTheme.type ? ' · ' + escapeHtml(selectedTheme.type === 'restaurant' ? '음식점' : selectedTheme.type === 'cafe' ? '카페' : '주점') : ''} 기준 · 등록된 장소 ${matches.length}곳. 방문 전 영업 여부를 확인해 주세요.</p><div class="discovery-list">${matches.length ? matches.map((store) => `<button type="button" class="discovery-place" data-place="${store.id}">${escapeHtml(store.name)}<small>${escapeHtml(store.dong || '홍대')} · ${escapeHtml(store.category || store.type)}</small></button>`).join('') : '<p class="discovery-intro">조건에 맞는 장소가 아직 없어요.</p>'}</div><button type="button" class="discovery-apply" data-back>다른 리스트 보기</button>`;
     } else {
-      body = `<div class="discovery-tabs"><button type="button" data-tab="curation" class="${tab === 'curation' ? 'on' : ''}">홍대 리스트</button><button type="button" data-tab="taste" class="${tab === 'taste' ? 'on' : ''}">내 취향 선택</button></div>`;
+      body = '';
       if (tab === 'curation') body += `<p class="discovery-intro">이름은 유쾌하게, 목록은 실제 등록 장소와 태그로 만들었어요. 영업 여부는 방문 전에 확인해 주세요.</p><button type="button" class="discovery-theme" data-passport>🦋 홍대병 도감 <span>기록하기 →</span><small>공연·화방·밤의 홍대를 하나씩 발견해 보세요</small></button>${themes.map((theme, index) => `<button type="button" class="discovery-theme" data-theme="${index}">${escapeHtml(theme.title)} <span>${themePlaces(theme).length}곳 →</span><small>${escapeHtml(theme.detail)}</small></button>`).join('')}<div id="research-curation-entry"></div>`;
       else body += `<p class="discovery-intro">여기서 고른 취향만 이 기기에 저장됩니다. 지도 추천에 반영되며 언제든 수정할 수 있어요.</p><div class="discovery-tags">${TASTE_TAGS.map((tag) => `<button type="button" data-taste="${escapeHtml(tag)}" class="${draftTastes.includes(tag) ? 'on' : ''}" aria-pressed="${draftTastes.includes(tag)}">${tag === '홍대병' ? '🦋 ' : ''}${escapeHtml(tag)}</button>`).join('')}</div><button type="button" class="discovery-apply" data-apply>취향 저장하고 장소 보기</button>`;
     }
     root.innerHTML = `<section class="discovery-panel">${header}${body}</section>`;
     root.querySelector('.discovery-close').onclick = close;
-    root.querySelectorAll('[data-tab]').forEach((button) => button.onclick = () => { tab = button.dataset.tab; render(); });
     root.querySelectorAll('[data-theme]').forEach((button) => button.onclick = () => { selectedTheme = themes[Number(button.dataset.theme)]; render(); });
     root.querySelector('[data-passport]')?.addEventListener('click', () => window.HongdaeSpecial?.openPassport());
     window.HongdaeResearch?.renderEntry(root.querySelector('#research-curation-entry'));
@@ -71,14 +70,6 @@
   }
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
   document.addEventListener('DOMContentLoaded', () => {
-    const bar = document.querySelector('#category-bar');
-    if (!bar) return;
-    const entry = document.createElement('div');
-    entry.className = 'discovery-entry';
-    entry.innerHTML = '<button type="button" data-open-curation>홍대 리스트</button><button type="button" data-open-taste>내 취향 선택</button>';
-    bar.append(entry);
-    entry.querySelector('[data-open-curation]').onclick = () => open('curation');
-    entry.querySelector('[data-open-taste]').onclick = () => open('taste');
     document.body.append(root);
   });
   window.HongdaeDiscovery = { open, close };

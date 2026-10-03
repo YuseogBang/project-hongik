@@ -53,11 +53,11 @@
 
   function openProfile() {
     closeSurface();
-    if (!userTastes.length) { openTasteModal(); return; }
     const sheet = document.querySelector('.profile-sheet');
     const savedCount = Object.keys(bookmarks || {}).length;
     sheet.querySelector('.profile-sheet-note').textContent = `취향 ${userTastes.length}개 · 저장 ${savedCount}곳`;
-    sheet.querySelector('.profile-tastes').innerHTML = userTastes.map((tag) => `<span>#${escapeHtml(tag)}</span>`).join('');
+    sheet.querySelector('.profile-tastes').innerHTML = userTastes.length ? userTastes.map((tag) => `<span>#${escapeHtml(tag)}</span>`).join('') : '<span>아직 선택한 취향이 없어요.</span>';
+    sheet.querySelector('[data-action="taste"]').textContent = userTastes.length ? '취향 조정하기' : '내 취향 선택하기';
     sheet.classList.add('open');
     setActive('me');
   }
@@ -71,7 +71,7 @@
     document.body.append(results);
     const profile = document.createElement('section');
     profile.className = 'profile-sheet';
-    profile.innerHTML = '<div class="profile-sheet-card"><div class="profile-sheet-top"><div class="profile-avatar">나</div><div><div class="profile-sheet-title">내 취향</div><div class="profile-sheet-note"></div></div><button class="sheet-close" aria-label="내 취향 닫기">✕</button></div><div class="profile-tastes"></div><div class="profile-actions"><button class="primary" data-action="taste">취향 조정하기</button><button data-action="saved">저장한 가게 보기</button></div></div>';
+    profile.innerHTML = '<div class="profile-sheet-card"><div class="profile-sheet-top"><div class="profile-avatar">나</div><div><div class="profile-sheet-title">내 프로필</div><div class="profile-sheet-note"></div></div><button class="sheet-close" aria-label="내 프로필 닫기">✕</button></div><div class="profile-tastes"></div><div class="profile-actions"><button class="primary" data-action="taste">취향 조정하기</button><button data-action="saved">저장한 가게 보기</button></div></div>';
     profile.querySelector('.sheet-close').addEventListener('click', closeSurface);
     profile.querySelector('[data-action="taste"]').addEventListener('click', () => { closeSurface(); openTasteModal(); });
     profile.querySelector('[data-action="saved"]').addEventListener('click', () => { showBookmarks(); openResults(); });
