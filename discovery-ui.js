@@ -1,9 +1,13 @@
 (() => {
   const themes = [
-    { title: '조용한 카페', detail: '대화하거나 쉬어가기 좋은 공간', type: 'cafe', tag: '조용한' },
-    { title: '혼자 먹는 한 끼', detail: '혼자 들르기 좋은 음식점', type: 'restaurant', tag: '혼밥' },
-    { title: '홍대의 밤', detail: '술과 함께 머무는 장소', type: 'bar', tag: '술안주' }
+    { title: '🦋 홍대병 체크리스트', detail: '홍대병 태그가 붙은 공간을 한데 모았어요', tag: '홍대병' },
+    { title: '🍚 혼밥도 풀코스', detail: '혼밥 태그가 붙은 음식점', type: 'restaurant', tag: '혼밥' },
+    { title: '☕ 조용한 척 오래 있기', detail: '조용한 태그가 붙은 카페', type: 'cafe', tag: '조용한' },
+    { title: '💸 통장 눈치 안 보는 한 끼', detail: '가성비 태그가 붙은 음식점', type: 'restaurant', tag: '가성비' },
+    { title: '🌙 딱 한 잔만, 진짜?', detail: '술안주 태그가 붙은 주점', type: 'bar', tag: '술안주' },
+    { title: '📸 사진 먼저, 주문은 나중', detail: '인스타감성 태그가 붙은 카페', type: 'cafe', tag: '인스타감성' }
   ];
+  const themePlaces = (theme) => stores.filter((store) => store.status !== 'closed' && (!theme.type || store.type === theme.type) && (store.tags || []).includes(theme.tag));
   const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   const style = document.createElement('style');
   style.textContent = `
@@ -15,7 +19,7 @@
     .discovery-panel{width:min(100%,460px);max-height:min(82vh,760px);overflow:auto;padding:22px;border:1px solid var(--border);border-radius:24px;background:var(--bg);color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.4)}
     .discovery-head{display:flex;align-items:center;gap:12px}.discovery-head h2{font-size:21px;margin:0;flex:1}.discovery-close{border:1px solid var(--border);border-radius:99px;padding:7px 10px;background:var(--surface);color:var(--text);font:700 12px Pretendard,sans-serif}
     .discovery-tabs{display:flex;gap:7px;margin:18px 0}.discovery-tabs button{flex:1;padding:11px;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--muted);font:700 13px Pretendard,sans-serif}.discovery-tabs button.on{border-color:var(--accent);background:var(--accent);color:#fff}
-    .discovery-intro{color:var(--muted);font-size:12px;line-height:1.55;margin:0 0 14px}.discovery-theme{width:100%;display:block;text-align:left;margin:8px 0;padding:16px;border:1px solid var(--border);border-radius:15px;background:var(--surface);color:var(--text);font:700 15px Pretendard,sans-serif}.discovery-theme small{display:block;margin-top:6px;color:var(--muted);font-size:11px;font-weight:500}.discovery-theme span{float:right;color:var(--accent2);font-size:12px}
+    .discovery-intro{color:var(--muted);font-size:12px;line-height:1.55;margin:0 0 14px}.discovery-theme{width:100%;display:block;text-align:left;margin:8px 0;padding:16px;border:1px solid var(--border);border-radius:15px;background:var(--surface);color:var(--text);font:700 15px Pretendard,sans-serif}.discovery-theme small{display:block;margin-top:6px;color:var(--muted);font-size:11px;font-weight:500}.discovery-theme span{float:right;color:var(--accent2);font-size:12px;font-weight:800}.discovery-theme:first-of-type{border-color:var(--accent)}
     .discovery-tags{display:flex;flex-wrap:wrap;gap:8px}.discovery-tags button{padding:10px 13px;border:1px solid var(--border);border-radius:99px;background:var(--surface);color:var(--text);font:600 12px Pretendard,sans-serif}.discovery-tags button.on{border-color:var(--accent);background:var(--accent);color:#fff}.discovery-apply{width:100%;margin-top:18px;padding:14px;border:0;border-radius:13px;background:var(--accent);color:#fff;font:700 14px Pretendard,sans-serif}.discovery-list{display:grid;gap:8px}.discovery-place{width:100%;text-align:left;padding:13px;border:1px solid var(--border);border-radius:13px;background:var(--surface);color:var(--text);font:700 13px Pretendard,sans-serif}.discovery-place small{display:block;margin-top:5px;color:var(--muted);font-size:11px;font-weight:500}
     @media(min-width:701px){.discovery-dialog{align-items:center}.discovery-entry button:hover,.discovery-theme:hover,.discovery-place:hover{border-color:var(--accent)}}
   `;
@@ -33,6 +37,9 @@
 
   function close() { root.classList.remove('open'); }
   function open(nextTab = 'curation') {
+    document.querySelector('.map-result-sheet')?.classList.remove('open');
+    document.body.classList.remove('map-results-open');
+    if (document.querySelector('#sidebar')?.classList.contains('open')) closeSidebar();
     tab = nextTab;
     selectedTheme = null;
     draftTastes = [...userTastes];
@@ -44,12 +51,12 @@
     const header = `<div class="discovery-head"><h2>${selectedTheme ? escapeHtml(selectedTheme.title) : '내 홍대 찾기'}</h2><button class="discovery-close" type="button" aria-label="닫기">닫기 ✕</button></div>`;
     let body;
     if (selectedTheme) {
-      const matches = stores.filter((store) => store.status !== 'closed' && store.type === selectedTheme.type && (store.tags || []).includes(selectedTheme.tag));
-      body = `<p class="discovery-intro" style="margin-top:14px">등록된 장소의 유형과 태그로 모은 ${matches.length}곳입니다. 방문 전 영업 여부를 확인해 주세요.</p><div class="discovery-list">${matches.length ? matches.map((store) => `<button type="button" class="discovery-place" data-place="${store.id}">${escapeHtml(store.name)}<small>${escapeHtml(store.dong || '홍대')} · ${escapeHtml(store.category || store.type)}</small></button>`).join('') : '<p class="discovery-intro">조건에 맞는 장소가 아직 없어요.</p>'}</div><button type="button" class="discovery-apply" data-back>다른 모음 보기</button>`;
+      const matches = themePlaces(selectedTheme);
+      body = `<p class="discovery-intro" style="margin-top:14px">#${escapeHtml(selectedTheme.tag)}${selectedTheme.type ? ' · ' + escapeHtml(selectedTheme.type === 'restaurant' ? '음식점' : selectedTheme.type === 'cafe' ? '카페' : '주점') : ''} 기준 · 등록된 장소 ${matches.length}곳. 방문 전 영업 여부를 확인해 주세요.</p><div class="discovery-list">${matches.length ? matches.map((store) => `<button type="button" class="discovery-place" data-place="${store.id}">${escapeHtml(store.name)}<small>${escapeHtml(store.dong || '홍대')} · ${escapeHtml(store.category || store.type)}</small></button>`).join('') : '<p class="discovery-intro">조건에 맞는 장소가 아직 없어요.</p>'}</div><button type="button" class="discovery-apply" data-back>다른 리스트 보기</button>`;
     } else {
-      body = `<div class="discovery-tabs"><button type="button" data-tab="curation" class="${tab === 'curation' ? 'on' : ''}">테마별 장소</button><button type="button" data-tab="taste" class="${tab === 'taste' ? 'on' : ''}">내 취향 선택</button></div>`;
-      if (tab === 'curation') body += `<p class="discovery-intro">실제 등록된 장소를 태그 기준으로 모았습니다. 홍익인 추천 콘텐츠는 확인된 자료가 등록되면 별도로 표시됩니다.</p>${themes.map((theme, index) => `<button type="button" class="discovery-theme" data-theme="${index}">${escapeHtml(theme.title)} <span>장소 보기 →</span><small>${escapeHtml(theme.detail)}</small></button>`).join('')}`;
-      else body += `<p class="discovery-intro">원하는 취향을 골라 주세요. 이 기기에 저장되고 추천 순위에 반영됩니다.</p><div class="discovery-tags">${TASTE_TAGS.map((tag) => `<button type="button" data-taste="${escapeHtml(tag)}" class="${draftTastes.includes(tag) ? 'on' : ''}" aria-pressed="${draftTastes.includes(tag)}">${escapeHtml(tag)}</button>`).join('')}</div><button type="button" class="discovery-apply" data-apply>취향 저장하고 장소 보기</button>`;
+      body = `<div class="discovery-tabs"><button type="button" data-tab="curation" class="${tab === 'curation' ? 'on' : ''}">홍대 리스트</button><button type="button" data-tab="taste" class="${tab === 'taste' ? 'on' : ''}">내 취향 선택</button></div>`;
+      if (tab === 'curation') body += `<p class="discovery-intro">이름은 유쾌하게, 목록은 실제 등록 장소와 태그로 만들었어요. 영업 여부는 방문 전에 확인해 주세요.</p>${themes.map((theme, index) => `<button type="button" class="discovery-theme" data-theme="${index}">${escapeHtml(theme.title)} <span>${themePlaces(theme).length}곳 →</span><small>${escapeHtml(theme.detail)}</small></button>`).join('')}`;
+      else body += `<p class="discovery-intro">여기서 고른 취향만 이 기기에 저장됩니다. 지도 추천에 반영되며 언제든 수정할 수 있어요.</p><div class="discovery-tags">${TASTE_TAGS.map((tag) => `<button type="button" data-taste="${escapeHtml(tag)}" class="${draftTastes.includes(tag) ? 'on' : ''}" aria-pressed="${draftTastes.includes(tag)}">${tag === '홍대병' ? '🦋 ' : ''}${escapeHtml(tag)}</button>`).join('')}</div><button type="button" class="discovery-apply" data-apply>취향 저장하고 장소 보기</button>`;
     }
     root.innerHTML = `<section class="discovery-panel">${header}${body}</section>`;
     root.querySelector('.discovery-close').onclick = close;
@@ -66,7 +73,7 @@
     if (!bar) return;
     const entry = document.createElement('div');
     entry.className = 'discovery-entry';
-    entry.innerHTML = '<button type="button" data-open-curation>테마별 장소</button><button type="button" data-open-taste>내 취향 선택</button>';
+    entry.innerHTML = '<button type="button" data-open-curation>홍대 리스트</button><button type="button" data-open-taste>내 취향 선택</button>';
     bar.append(entry);
     entry.querySelector('[data-open-curation]').onclick = () => open('curation');
     entry.querySelector('[data-open-taste]').onclick = () => open('taste');
