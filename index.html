@@ -3,12 +3,55 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hongdae Map — 홍대의 모든 가게, 지도 위에서 한눈에</title>
+<title>홍대맵 — 오늘 갈 곳을 지도에서 찾자</title>
+<meta name="description" content="홍대의 음식점, 카페, 공연 공간을 지도에서 둘러보고 취향에 맞는 장소를 찾아보세요.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjZmYxODNjIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiNlNjAwMjUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZjM2NTQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjI0IiBmaWxsPSJ1cmwoI2cpIi8+PHN2ZyB4PSIxNCIgeT0iMzAiIHdpZHRoPSI3MiIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDE4MCAxMDAiPjxjaXJjbGUgY3g9IjU1IiBjeT0iNjQiIHI9IjMwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMTUiLz48Y2lyY2xlIGN4PSIxMzciIGN5PSI2NCIgcj0iMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxNSIvPjxyZWN0IHg9IjE3IiB5PSIyMiIgd2lkdGg9Ijc2IiBoZWlnaHQ9IjE1IiByeD0iNy41IiBmaWxsPSIjZmZmIi8+PHJlY3QgeD0iNDgiIHk9IjAiIHdpZHRoPSIxNSIgaGVpZ2h0PSIzMCIgcng9IjcuNSIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjEzNyIgY3k9IjY0IiByPSI3IiBmaWxsPSIjZmZmIi8+PC9zdmc+PC9zdmc+">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
+
+  html{scroll-behavior:smooth}
+  :focus-visible{outline:3px solid #ffb0a4;outline-offset:4px}
+  .skip-link{position:fixed;top:-60px;left:16px;z-index:200;background:#fff;color:#2b070c;padding:10px 14px;border-radius:8px}
+  .skip-link:focus{top:12px}
+  .hero{min-height:100vh;padding:112px 24px 84px;background:radial-gradient(ellipse 55% 70% at 78% 20%,rgba(232,54,42,.18),transparent 72%)}
+  .hero-inner{max-width:1200px;min-height:calc(100vh - 196px);margin:auto;display:grid;grid-template-columns:minmax(340px,.88fr) minmax(0,1.12fr);gap:clamp(36px,5vw,78px);align-items:center}
+  .hero-copy{position:relative;z-index:1}
+  .hero-kicker{display:inline-flex;align-items:center;gap:10px;color:#ff9d91;font-size:13px;font-weight:700;letter-spacing:.07em}
+  .hero-kicker::before{content:'';width:24px;height:2px;background:#e8362a}
+  .hero h1{margin:28px 0 0;font-size:clamp(46px,5.2vw,76px);font-weight:800;line-height:1.12;letter-spacing:-.055em;text-wrap:balance}
+  .hero h1 em{font-style:normal;color:#ff6c5d}
+  .hero-lede{max-width:29em;margin:26px 0 0;color:#d6b7b5;font-size:clamp(17px,1.55vw,20px);line-height:1.7}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:36px}
+  .hero-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 25px;border-radius:13px;font-size:16px;font-weight:700;transition:transform .2s,background .2s}
+  .hero-actions a:hover{transform:translateY(-2px)}
+  .hero-primary{background:#e8362a;color:#fff;box-shadow:0 10px 30px rgba(232,54,42,.25)}
+  .hero-primary:hover{background:#c92b20;color:#fff}
+  .hero-secondary{border:1px solid #8b454e;background:#42131b}
+  .hero-secondary:hover{color:#fff;background:#53202a}
+  .hero-note{margin:18px 0 0;color:#b79091;font-size:12px}
+  .hero-preview{position:relative;min-width:0;padding:18px 20px 30px 0}
+  .hero-preview::before{content:'';position:absolute;inset:0 0 16px 18px;border:1px solid rgba(255,139,126,.45);border-radius:25px;transform:rotate(3deg)}
+  .preview-window{position:relative;overflow:hidden;border:1px solid #99505a;border-radius:18px;background:#311016;box-shadow:0 28px 80px rgba(0,0,0,.48)}
+  .preview-bar{height:54px;display:flex;align-items:center;gap:10px;padding:0 18px;border-bottom:1px solid #6a2933;color:#f5ece7;font-size:13px;font-weight:800}
+  .preview-brand{color:#ff5c46;font-size:25px;line-height:1}
+  .preview-search{margin-left:auto;min-width:40%;padding:9px 14px;border:1px solid #6a2933;border-radius:99px;background:#481c26;color:#cdaeb0;font-size:12px;font-weight:500}
+  .preview-filters{display:flex;gap:7px;overflow:hidden;padding:12px 16px;white-space:nowrap;border-bottom:1px solid #6a2933}
+  .preview-filters span{padding:7px 12px;border:1px solid #76404a;border-radius:99px;color:#e3c8c6;font-size:11px}
+  .preview-filters span:first-child{background:#e8362a;border-color:#e8362a;color:#fff}
+  .preview-map{position:relative;height:375px;overflow:hidden;background-color:#f2e8df;background-image:linear-gradient(30deg,transparent 47%,#fff 48%,#fff 51%,transparent 52%),linear-gradient(118deg,transparent 46%,#fff 47%,#fff 52%,transparent 53%),linear-gradient(90deg,rgba(164,141,128,.16) 1px,transparent 1px),linear-gradient(rgba(164,141,128,.16) 1px,transparent 1px);background-size:190px 125px,250px 175px,38px 38px,38px 38px}
+  .preview-map::before{content:'';position:absolute;left:56%;top:-16%;width:22px;height:145%;background:#b4d7c5;transform:rotate(32deg);border-left:6px solid #e2efe5;border-right:6px solid #e2efe5}
+  .preview-map::after{content:'';position:absolute;left:-10%;top:49%;width:125%;height:18px;background:#e4c578;transform:rotate(-14deg);border-top:5px solid #f5dfaa;border-bottom:5px solid #f5dfaa}
+  .preview-street{position:absolute;z-index:1;color:#857772;font-size:11px;font-weight:700;letter-spacing:.03em}
+  .preview-pin{position:absolute;z-index:2;display:grid;place-items:center;width:30px;height:30px;border:3px solid #fff;border-radius:50%;background:#e8362a;color:#fff;font-size:10px;font-weight:800;box-shadow:0 4px 12px rgba(74,16,20,.35)}
+  .preview-pin.p1{left:21%;top:18%}.preview-pin.p2{left:73%;top:24%}.preview-pin.p3{left:44%;top:57%}.preview-pin.p4{left:80%;top:70%}
+  .preview-place{position:absolute;z-index:3;left:7%;bottom:22px;width:min(290px,72%);padding:15px 18px;border:1px solid #e3d2cb;border-radius:14px;background:#fff;color:#321b1d;box-shadow:0 12px 30px rgba(57,24,20,.2)}
+  .preview-place strong{display:block;font-size:14px}.preview-place span{display:block;margin-top:6px;color:#716566;font-size:12px}
+  .preview-caption{position:relative;margin:16px 0 0 18px;color:#c99fa0;font-size:12px}
+  @media(max-width:860px){.hero{padding:112px 20px 70px}.hero-inner{display:block;min-height:0}.hero-copy{max-width:650px}.hero-preview{max-width:680px;margin:54px auto 0}}
+  @media(max-width:480px){.hero{padding:104px 16px 56px}.hero h1{font-size:clamp(42px,12vw,56px)}.hero-actions a{width:100%}.hero-preview{padding:10px 12px 20px 0;margin-top:42px}.preview-map{height:300px}.preview-search{min-width:0;width:48%}.preview-caption{margin-left:6px}}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}[data-reveal]{opacity:1;transform:none}}
+
   body{margin:0;background:#2b070c;color:#f5ece7;font-family:'Pretendard',sans-serif;-webkit-font-smoothing:antialiased;word-break:keep-all}
   a{color:#f5ece7;text-decoration:none}
   a:hover{color:#ff5c46}
@@ -26,6 +69,7 @@
 </style>
 </head>
 <body>
+<a class="skip-link" href="#top">본문으로 바로가기</a>
 <div style="min-height:100vh;background:#2b070c;overflow-x:hidden">
 
 <header style="position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(20,16,16,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(58,42,42,.6)">
@@ -43,64 +87,36 @@
     <a class="navlink" href="#feat-memory">추억 아카이브</a>
     <a class="navlink" href="#feat-busking">버스킹·이벤트</a>
     <a class="navlink" href="#feat-subculture">서브컬처</a>
-    <a href="main.html" class="hover-darken" style="background:#e8362a;color:#fff;font-weight:700;font-size:13px;padding:9px 18px;border-radius:99px;box-shadow:0 2px 10px rgba(232,54,42,.4)">앱 실행하기</a>
+    <a href="main.html" class="hover-darken" style="background:#e8362a;color:#fff;font-weight:700;font-size:13px;padding:9px 18px;border-radius:99px;box-shadow:0 2px 10px rgba(232,54,42,.4)">지도 열기</a>
   </nav>
 </header>
 
-<section id="top" style="position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 24px 80px;background:radial-gradient(55% 45% at 50% -5%, rgba(232,54,42,.30) 0%, rgba(232,54,42,0) 65%)">
-  <svg data-reveal width="150" height="83" viewBox="0 0 180 100" role="img" aria-label="Hongdae Map" style="margin-bottom:22px;filter:drop-shadow(0 0 6px rgba(255,54,84,.9)) drop-shadow(0 0 18px rgba(255,24,60,.5));animation:neonFlicker 6s infinite">
-    <circle cx="55" cy="64" r="30" fill="none" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
-    <circle cx="137" cy="64" r="30" fill="none" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
-    <path d="M24 29.5 H86" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
-    <path d="M55.5 7 V22" stroke="#ff6b7e" stroke-width="7" stroke-linecap="round"/>
-    <circle cx="137" cy="64" r="5" fill="#ff6b7e"/>
-  </svg>
-  <div data-reveal style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#ff8a7a;background:rgba(232,54,42,.12);border:1px solid rgba(232,54,42,.35);border-radius:99px;padding:7px 16px;margin-bottom:28px">
-    <span style="width:7px;height:7px;border-radius:50%;background:#e8362a;animation:pulse 1.6s infinite"></span>
-    홍대 상권 데이터, 계속 업데이트 중 (베타)
-  </div>
-  <h1 data-reveal style="margin:0;font-size:clamp(40px,6.4vw,76px);font-weight:800;line-height:1.18;letter-spacing:-.03em;text-wrap:pretty">홍대의 모든 가게,<br>지도 위에서 한눈에</h1>
-  <p data-reveal style="margin:26px 0 0;font-size:clamp(17px,2vw,22px);line-height:1.6;color:#c39298;text-wrap:pretty">취향 다른 사람들 리뷰에 실망하는 건 이제 그만.<br>내 입맛에 딱 맞는 홍대 매장만 골라드려요.</p>
-  <div data-reveal style="display:flex;gap:12px;margin-top:40px;flex-wrap:wrap;justify-content:center">
-    <button onclick="openSheet()" style="cursor:pointer;border:none;white-space:nowrap;background:#e8362a;color:#fff;font-weight:700;font-size:17px;padding:16px 34px;border-radius:14px;box-shadow:0 6px 24px rgba(232,54,42,.45)" class="hover-darken">지금 시작하기</button>
-    <a href="#feat-map" style="white-space:nowrap;background:#4f151e;border:1px solid #7a2534;color:#f5ece7;font-weight:600;font-size:17px;padding:16px 30px;border-radius:14px" class="hover-red">기능 살펴보기</a>
-  </div>
 
-  <div data-reveal style="margin-top:76px;width:min(920px,94vw);border-radius:20px;border:1px solid #7a2534;background:#3d0f16;box-shadow:0 30px 80px rgba(0,0,0,.55);overflow:hidden;animation:float1 7s ease-in-out infinite">
-    <div style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-bottom:1px solid #7a2534;background:#3d0f16">
-      <span style="width:10px;height:10px;border-radius:50%;background:#7a2534"></span><span style="width:10px;height:10px;border-radius:50%;background:#7a2534"></span><span style="width:10px;height:10px;border-radius:50%;background:#7a2534"></span>
-      <span style="margin-left:10px;font-family:'DM Mono',monospace;font-size:11px;color:#c39298;white-space:nowrap">hongdae-map.app</span>
+<section id="top" class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy" data-reveal>
+      <div class="hero-kicker">홍대를 고르는 새로운 방법</div>
+      <h1>오늘 갈 곳,<br><em>지도에서 찾자.</em></h1>
+      <p class="hero-lede">음식점부터 카페, 공연 공간까지. 홍대의 장소를 지도에서 둘러보고 내 취향에 맞게 골라보세요.</p>
+      <div class="hero-actions">
+        <a class="hero-primary" href="main.html">지도로 가게 찾기 ↗</a>
+        <a class="hero-secondary" href="#feat-map">기능 살펴보기</a>
+      </div>
+      <p class="hero-note">설치 없이 바로 이용 · 매장 정보는 계속 업데이트 중</p>
     </div>
-    <div style="display:grid;grid-template-columns:240px 1fr;height:380px" class="hero-grid">
-      <div style="border-right:1px solid #7a2534;padding:12px;display:flex;flex-direction:column;gap:8px;background:#3d0f16;text-align:left">
-        <div style="display:flex;align-items:center;gap:8px;background:#4f151e;border:1px solid #7a2534;border-radius:8px;padding:8px 10px;font-size:12px;color:#c39298">🔍 매장 검색…</div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap">
-          <span style="font-size:10px;padding:4px 10px;border-radius:99px;background:#e8362a;color:#fff;font-weight:600">전체</span>
-          <span style="font-size:10px;padding:4px 10px;border-radius:99px;border:1px solid #7a2534;color:#c39298">카페</span>
-          <span style="font-size:10px;padding:4px 10px;border-radius:99px;border:1px solid #7a2534;color:#c39298">식당</span>
-          <span style="font-size:10px;padding:4px 10px;border-radius:99px;border:1px solid #7a2534;color:#c39298">주점</span>
-        </div>
-        <div style="border:1px solid #7a2534;border-radius:12px;padding:10px 12px;background:#4f151e">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="flex:none;width:7px;height:7px;border-radius:50%;background:#2e7d32;box-shadow:0 0 6px #2e7d32"></span><span style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">옥동식 서교점</span></div>
-          <div style="font-size:10px;color:#c39298;font-family:'DM Mono',monospace;white-space:nowrap">한식 · 맑은 돼지곰탕</div>
-        </div>
-        <div style="border:1px solid #7a2534;border-radius:12px;padding:10px 12px;background:#4f151e">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="flex:none;width:7px;height:7px;border-radius:50%;background:#a9744f;box-shadow:0 0 6px #a9744f"></span><span style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">테일러커피 연남1호점</span></div>
-          <div style="font-size:10px;color:#c39298;font-family:'DM Mono',monospace;white-space:nowrap">카페 · 크림모카</div>
-        </div>
-        <div style="border:1px solid #7a2534;border-radius:12px;padding:10px 12px;background:#4f151e">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="flex:none;width:7px;height:7px;border-radius:50%;background:#f5a623;box-shadow:0 0 6px #f5a623"></span><span style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">진진</span></div>
-          <div style="font-size:10px;color:#c39298;font-family:'DM Mono',monospace;white-space:nowrap">중식 · 미쉐린 빕구르망</div>
+    <div class="hero-preview" data-reveal role="img" aria-label="홍대맵의 지도 탐색 기능을 설명하는 미리보기">
+      <div class="preview-window">
+        <div class="preview-bar"><span class="preview-brand">ㅎㅇ</span> 홍대맵 <span class="preview-search">⌕ 가게 검색</span></div>
+        <div class="preview-filters"><span>전체</span><span>음식점</span><span>카페</span><span>공연·문화</span><span>저장한 곳</span></div>
+        <div class="preview-map">
+          <span class="preview-street" style="left:16%;top:30%">연남동</span>
+          <span class="preview-street" style="left:62%;top:55%">서교동</span>
+          <span class="preview-street" style="left:35%;top:78%">홍익대학교</span>
+          <span class="preview-pin p1">●</span><span class="preview-pin p2">●</span><span class="preview-pin p3">●</span><span class="preview-pin p4">●</span>
+          <div class="preview-place"><strong>지도에서 찾고, 취향으로 고르기</strong><span>장소를 누르면 상세 정보와 저장 기능을 볼 수 있어요.</span></div>
         </div>
       </div>
-      <div style="position:relative;background:linear-gradient(135deg,#221a1a 0%,#181212 55%,#241b1b 100%)">
-        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(156,138,133,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(156,138,133,.07) 1px,transparent 1px);background-size:44px 44px"></div>
-        <div style="position:absolute;left:22%;top:28%;width:16px;height:16px;border-radius:50% 50% 50% 0;background:#00e5ff;transform:rotate(-45deg);box-shadow:0 3px 10px rgba(0,0,0,.5)"></div>
-        <div style="position:absolute;left:48%;top:52%;width:16px;height:16px;border-radius:50% 50% 50% 0;background:#e8362a;transform:rotate(-45deg);box-shadow:0 3px 10px rgba(0,0,0,.5)"></div>
-        <div style="position:absolute;left:66%;top:30%;width:16px;height:16px;border-radius:50% 50% 50% 0;background:#00e5ff;transform:rotate(-45deg);box-shadow:0 3px 10px rgba(0,0,0,.5)"></div>
-        <div style="position:absolute;left:35%;top:66%;width:16px;height:16px;border-radius:50% 50% 50% 0;background:#00e5ff;transform:rotate(-45deg);box-shadow:0 3px 10px rgba(0,0,0,.5)"></div>
-        <div style="position:absolute;left:52%;top:34%;white-space:nowrap;background:#3d0f16;border:1px solid #e8362a;border-radius:10px;padding:8px 12px;font-size:11px;box-shadow:0 8px 26px rgba(0,0,0,.5)"><b>옥동식 서교점</b><span style="color:#c39298"> · 홍대 대표 맛집</span></div>
-      </div>
+      <p class="preview-caption">MAP PREVIEW · 실제 가게 정보는 앱에서 확인</p>
     </div>
   </div>
 </section>
@@ -119,11 +135,11 @@
       <span style="font-size:12px;padding:6px 14px;border-radius:99px;border:1px solid #7a2534;color:#c39298">🏅 명예학식</span>
     </div>
     <div style="border:1px solid #7a2534;border-radius:14px;padding:13px 15px;background:#4f151e">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:#e8362a;box-shadow:0 0 6px #e8362a"></span><span style="font-size:14px;font-weight:600;flex:1">고기꾼김춘배 홍대본점</span><span style="font-size:11px;color:#c39298;font-family:'DM Mono',monospace">서교동</span></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:#e8362a;box-shadow:0 0 6px #e8362a"></span><span style="font-size:14px;font-weight:600;flex:1">고기꾼김춘배 홍대본점</span><span style="font-size:11px;color:#c39298;font-family:'Pretendard',sans-serif">서교동</span></div>
       <div style="font-size:12px;color:#c39298">🥩 오겹살, 생갈비</div>
     </div>
     <div style="border:1px solid #7a2534;border-radius:14px;padding:13px 15px;background:#4f151e">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:#a9744f;box-shadow:0 0 6px #a9744f"></span><span style="font-size:14px;font-weight:600;flex:1">앤티크커피 연남점</span><span style="font-size:11px;color:#c39298;font-family:'DM Mono',monospace">연남동</span></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:#a9744f;box-shadow:0 0 6px #a9744f"></span><span style="font-size:14px;font-weight:600;flex:1">앤티크커피 연남점</span><span style="font-size:11px;color:#c39298;font-family:'Pretendard',sans-serif">연남동</span></div>
       <div style="font-size:12px;color:#c39298">☕ 더티앤크림 커피, 수제 케이크</div>
     </div>
   </div>
@@ -174,12 +190,12 @@
       </div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="display:flex;align-items:center;gap:12px;background:#4f151e;border:1px solid #7a2534;border-radius:12px;padding:11px 14px">
-          <span style="font-family:'DM Mono',monospace;font-size:12px;color:#c39298;white-space:nowrap;flex:none">시간 미정</span>
+          <span style="font-family:'Pretendard',sans-serif;font-size:12px;color:#c39298;white-space:nowrap;flex:none">시간 미정</span>
           <span style="flex:1;min-width:0"><span style="display:block;font-size:13px;font-weight:600">인디 뮤지션 라인업</span><span style="display:block;font-size:11px;color:#c39298">레드로드 · 구역별 공연 정보</span></span>
           <span style="font-size:10px;padding:3px 9px;border-radius:99px;border:1px solid #7a2534;color:#c39298;white-space:nowrap;flex:none">준비중</span>
         </div>
         <div style="display:flex;align-items:center;gap:12px;background:#4f151e;border:1px solid #7a2534;border-radius:12px;padding:11px 14px">
-          <span style="font-family:'DM Mono',monospace;font-size:12px;color:#c39298;white-space:nowrap;flex:none">시간 미정</span>
+          <span style="font-family:'Pretendard',sans-serif;font-size:12px;color:#c39298;white-space:nowrap;flex:none">시간 미정</span>
           <span style="flex:1;min-width:0"><span style="display:block;font-size:13px;font-weight:600">거리 공연 · 이벤트</span><span style="display:block;font-size:11px;color:#c39298">걷고싶은거리 · 야간 공연</span></span>
           <span style="font-size:10px;padding:3px 9px;border-radius:99px;border:1px solid #7a2534;color:#c39298;white-space:nowrap;flex:none">준비중</span>
         </div>
@@ -231,7 +247,7 @@
 <section style="padding:170px 24px;text-align:center;background:radial-gradient(50% 60% at 50% 110%, rgba(232,54,42,.25) 0%, rgba(232,54,42,0) 70%)">
   <h2 data-reveal style="margin:0;font-size:clamp(34px,5vw,60px);font-weight:800;line-height:1.25;letter-spacing:-.03em">홍대에서 뭐 먹을지,<br>이제 고민하지 마세요</h2>
   <div data-reveal style="margin-top:38px">
-    <button onclick="openSheet()" style="cursor:pointer;border:none;display:inline-block;white-space:nowrap;background:#e8362a;color:#fff;font-weight:700;font-size:18px;padding:18px 44px;border-radius:16px;box-shadow:0 8px 30px rgba(232,54,42,.45)" class="hover-darken">Hongdae Map 시작하기</button>
+    <a href="main.html" style="display:inline-block;white-space:nowrap;background:#e8362a;color:#fff;font-weight:700;font-size:18px;padding:18px 44px;border-radius:16px;box-shadow:0 8px 30px rgba(232,54,42,.45)" class="hover-darken">지도로 가게 찾기 ↗</a>
   </div>
 </section>
 
@@ -258,24 +274,6 @@
   </div>
 </footer>
 
-<div id="backdrop" onclick="closeSheet()" style="position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);transition:opacity .3s ease;opacity:0;pointer-events:none"></div>
-<div style="position:fixed;left:0;right:0;bottom:0;z-index:401;display:flex;justify-content:center;pointer-events:none">
-  <div id="sheet" style="pointer-events:none;touch-action:none;width:min(560px,100vw);background:#3d0f16;border:1px solid #7a2534;border-bottom:none;border-radius:24px 24px 0 0;box-shadow:0 -20px 60px rgba(0,0,0,.6);padding:14px 28px 36px;transform:translateY(105%);transition:transform .38s cubic-bezier(.2,.8,.2,1)">
-    <div style="width:44px;height:5px;border-radius:99px;background:#7a2534;margin:0 auto 22px"></div>
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
-      <svg width="40" height="25" viewBox="0 0 180 100" role="img" aria-label="Hongdae Map logo"><defs><linearGradient id="slogo" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs><circle cx="55" cy="62" r="31" fill="none" stroke="url(#slogo)" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="url(#slogo)" stroke-width="16"/><path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="url(#slogo)"/></svg>
-      <div>
-        <div style="font-size:18px;font-weight:800;letter-spacing:-.3px">Hongdae Map 시작하기</div>
-        <div style="font-size:13px;color:#c39298;margin-top:2px">설치 없이 웹에서 바로 사용할 수 있어요</div>
-      </div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <a href="main.html" style="display:flex;align-items:center;justify-content:center;white-space:nowrap;background:#e8362a;color:#fff;font-weight:700;font-size:16px;padding:15px;border-radius:14px;box-shadow:0 4px 16px rgba(232,54,42,.4)" class="hover-darken">웹에서 바로 열기</a>
-      <button onclick="closeSheetToFeatures()" style="cursor:pointer;white-space:nowrap;background:#4f151e;border:1px solid #7a2534;color:#f5ece7;font-weight:600;font-size:15px;padding:14px;border-radius:14px" class="hover-red">기능 먼저 살펴보기</button>
-    </div>
-    <div style="text-align:center;font-size:11px;color:#6f5f5a;margin-top:16px;font-family:'DM Mono',monospace">홍대 상권 데이터 · 베타 버전</div>
-  </div>
-</div>
 
 </div>
 
@@ -283,7 +281,6 @@
   @media (max-width: 860px) {
     .two-col { grid-template-columns: 1fr !important; gap: 40px !important; }
     .route-grid { grid-template-columns: 1fr !important; }
-    .hero-grid { grid-template-columns: 1fr !important; height: auto !important; }
     header nav { gap: 14px !important; }
     header nav a:not(:last-child) { display: none; }
   }
@@ -291,7 +288,6 @@
     header { padding: 0 16px !important; }
     header nav a:last-child { font-size: 12px !important; padding: 8px 14px !important; }
     section { padding-left: 16px !important; padding-right: 16px !important; }
-    #sheet { padding-left: 20px !important; padding-right: 20px !important; }
   }
 </style>
 
@@ -311,27 +307,7 @@
   }, { threshold: 0.15 });
   revealEls.forEach(el => io.observe(el));
 
-  // 하단 시트 (앱 시작하기)
-  function openSheet() {
-    document.getElementById('backdrop').style.opacity = '1';
-    document.getElementById('backdrop').style.pointerEvents = 'auto';
-    const sheet = document.getElementById('sheet');
-    sheet.style.pointerEvents = 'auto';
-    sheet.style.transform = 'translateY(0)';
-  }
-  function closeSheet() {
-    document.getElementById('backdrop').style.opacity = '0';
-    document.getElementById('backdrop').style.pointerEvents = 'none';
-    const sheet = document.getElementById('sheet');
-    sheet.style.pointerEvents = 'none';
-    sheet.style.transform = 'translateY(105%)';
-  }
-  function closeSheetToFeatures() {
-    closeSheet();
-    const el = document.getElementById('feat-map');
-    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 60, behavior: 'smooth' });
-  }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+
 </script>
 </body>
 </html>
