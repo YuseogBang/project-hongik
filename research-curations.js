@@ -57,9 +57,10 @@
     let store = stores.find((entry) => String(entry.kakaoId) === String(place.id));
     if (!store) {
       const address = place.road_address_name || place.address_name;
+      const dong = (place.address_name || '').match(/(서교동|연남동|합정동|상수동|동교동)/)?.[1] || '홍대';
       store = { id: -Number(place.id), kakaoId: place.id, name: place.place_name,
         type: kind === 'ramen' ? 'restaurant' : 'bar', status: 'unverified',
-        lat: Number(place.y), lng: Number(place.x), address, category: place.category_name,
+        lat: Number(place.y), lng: Number(place.x), address, dong, category: place.category_name,
         kakaoUrl: place.place_url, naverUrl: `https://map.naver.com/p/search/${encodeURIComponent(place.place_name + ' ' + address)}`,
         rating: null, reviews: null, months: null, rent: null, score: null, tags: [],
         insight: '카카오 장소 검색에서 위치를 확인했습니다. 현재 영업 여부는 방문 전에 확인해 주세요.' };
