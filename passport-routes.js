@@ -1,0 +1,133 @@
+(() => {
+  const VISITED_KEY = 'hongdaePassportVisited';
+  const chapters = [
+    { id: 'art', title: { ko: '손에 물감 묻는 날', en: 'Art supply day', zh: '沾上颜料的一天' }, types: ['artsupply'] },
+    { id: 'live', title: { ko: '공연장 맨 앞줄', en: 'Front row at a live show', zh: '现场演出的第一排' }, types: ['liveclub'] },
+    { id: 'night', title: { ko: '밤의 홍대 입문', en: 'Hongdae after dark', zh: '弘大夜生活入门' }, types: ['club'] }
+  ];
+  const copy = {
+    ko: { passport:'🦋 홍대병 도감', passportNav:'🦋 도감', routeNav:'코스 추천', passportIntro:'‘가봤어요’는 본인이 남기는 개인 방문 기록이며 이 기기에만 저장됩니다. 업체가 확인한 공식 방문 인증은 아닙니다.', visited:'가봤어요', mark:'가봤어요 표시', progress:'내 방문 기록', close:'닫기', route:'내 홍대 코스', routeIntro:'누구의 눈으로 홍대를 볼까요? 장소 태그와 가까운 위치를 기준으로 순서를 만들어요.', visitor:'처음 온 여행자', visitorDesc:'홍대의 공연·예술 공간부터', explorer:'새로운 곳 찾는 여행자', explorerDesc:'프랜차이즈 밖의 로컬 장소', student:'늘 다니던 길 밖으로', studentDesc:'내 취향에 맞는 새로운 장소', noTaste:'먼저 취향을 고르면 아직 가보지 않은 장소로 코스를 만들어요.', chooseTaste:'내 취향 고르기', routeNote:'등록 장소와 직선거리로 만든 탐색 순서입니다. 영업 여부·도보 시간·가격은 방문 전에 확인해 주세요.', start:'첫 장소 지도에서 보기', reason:'추천 이유', empty:'조건에 맞는 장소가 아직 없어요.' },
+    en: { passport:'🦋 Hongdae Passport', passportNav:'🦋 Passport', routeNav:'Route ideas', passportIntro:'“Visited” is your personal log saved on this device. It is not an officially verified visit.', visited:'Visited', mark:'Mark visited', progress:'My visit log', close:'Close', route:'My Hongdae route', routeIntro:'Choose how you want to explore. We order tagged places by proximity.', visitor:'First-time visitor', visitorDesc:'Live music and creative spaces', explorer:'Beyond the chains', explorerDesc:'Local places beyond familiar brands', student:'Off your usual path', studentDesc:'New places matching your tastes', noTaste:'Choose your tastes first to build a route to places you have not visited.', chooseTaste:'Choose my tastes', routeNote:'An exploration order based on place tags and straight-line distance. Check opening hours, walking time and prices before you go.', start:'View first place on map', reason:'Why this place', empty:'No matching places yet.' },
+    zh: { passport:'🦋 弘大探索图鉴', passportNav:'🦋 图鉴', routeNav:'路线推荐', passportIntro:'“去过”是保存在此设备的个人记录，并非商家核实的到访认证。', visited:'去过', mark:'标记去过', progress:'我的到访记录', close:'关闭', route:'我的弘大路线', routeIntro:'选择探索方式。路线按地点标签和距离排序。', visitor:'初次到访', visitorDesc:'演出与创意空间', explorer:'寻找新地方', explorerDesc:'连锁店之外的本地空间', student:'走出熟悉路线', studentDesc:'符合个人喜好的新地点', noTaste:'请先选择喜好，再推荐尚未去过的地点。', chooseTaste:'选择我的喜好', routeNote:'根据地点标签和直线距离生成探索顺序。营业时间、步行时间和价格请出发前确认。', start:'在地图上查看第一站', reason:'推荐原因', empty:'暂时没有符合条件的地点。' }
+  };
+  const language = () => copy[typeof currentLang === 'undefined' ? 'ko' : currentLang] || copy.ko;
+  const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
+  const visitedIds = () => { try { return new Set(JSON.parse(localStorage.getItem(VISITED_KEY) || '[]').map(Number)); } catch { return new Set(); } };
+  const passportPlaces = () => stores.filter((place) => place.status !== 'closed' && (place.tags || []).includes('홍대병'));
+  const chapterPlaces = (chapter) => passportPlaces().filter((place) => chapter.types.includes(place.type));
+  const progress = () => ({ visited: passportPlaces().filter((place) => visitedIds().has(place.id)).length, total: passportPlaces().length });
+  const radians = (degrees) => degrees * Math.PI / 180;
+  function meters(a, b) {
+    if (!a || !b || !Number.isFinite(a.lat) || !Number.isFinite(a.lng) || !Number.isFinite(b.lat) || !Number.isFinite(b.lng)) return Infinity;
+    const lat = radians(b.lat - a.lat), lng = radians(b.lng - a.lng);
+    const h = Math.sin(lat / 2) ** 2 + Math.cos(radians(a.lat)) * Math.cos(radians(b.lat)) * Math.sin(lng / 2) ** 2;
+    return 12742000 * Math.asin(Math.min(1, Math.sqrt(h)));
+  }
+
+  const style = document.createElement('style');
+  style.textContent = `
+    .hs-overlay{position:fixed;inset:0;z-index:950;display:none;align-items:flex-end;justify-content:center;padding:12px;background:rgba(12,2,5,.75);font-family:Pretendard,sans-serif}.hs-overlay.open{display:flex}
+    .hs-panel{width:min(100%,500px);max-height:min(86vh,780px);overflow:auto;padding:22px;border:1px solid var(--border);border-radius:24px;background:var(--bg);color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+    .hs-head{display:flex;align-items:center;gap:12px}.hs-head h2{flex:1;font-size:21px;margin:0}.hs-close{padding:8px 11px;border:1px solid var(--border);border-radius:99px;background:var(--surface);color:var(--text);font:700 12px Pretendard,sans-serif}
+    .hs-intro{margin:12px 0 16px;color:var(--muted);font-size:12px;line-height:1.6}.hs-progress{height:7px;margin:10px 0 19px;border-radius:99px;background:var(--surface2);overflow:hidden}.hs-progress span{display:block;height:100%;background:var(--accent)}
+    .hs-chapter{margin:15px 0}.hs-chapter h3{font-size:15px;margin:0 0 8px}.hs-chapter h3 small{float:right;color:var(--muted);font-size:11px}.hs-place{display:flex;align-items:center;gap:10px;margin:7px 0;padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}.hs-place-info{flex:1;min-width:0}.hs-place-name{display:block;color:var(--text);font:700 13px Pretendard,sans-serif;cursor:pointer}.hs-place small{display:block;margin-top:4px;color:var(--muted);font-size:11px}.hs-stamp{flex:none;padding:8px 10px;border:1px solid var(--border);border-radius:99px;background:transparent;color:var(--muted);font:700 11px Pretendard,sans-serif}.hs-stamp.on{border-color:var(--accent);background:var(--accent);color:#fff}
+    .hs-modes{display:grid;gap:9px}.hs-mode{width:100%;text-align:left;padding:15px;border:1px solid var(--border);border-radius:15px;background:var(--surface);color:var(--text);font:700 14px Pretendard,sans-serif}.hs-mode small{display:block;margin-top:5px;color:var(--muted);font-size:11px;font-weight:500}.hs-mode.on{border-color:var(--accent);box-shadow:inset 3px 0 var(--accent)}.hs-route-step{width:100%;display:flex;gap:11px;align-items:flex-start;margin:8px 0;padding:13px;border:1px solid var(--border);border-radius:13px;background:var(--surface);color:var(--text);text-align:left;font:700 13px Pretendard,sans-serif}.hs-route-step b{color:var(--accent2)}.hs-route-step span{min-width:0}.hs-route-step small{display:block;margin-top:5px;color:var(--muted);font-size:11px;font-weight:500}.hs-cta{width:100%;margin-top:13px;padding:13px;border:0;border-radius:12px;background:var(--accent);color:#fff;font:700 13px Pretendard,sans-serif}
+    @media(min-width:701px){.hs-overlay{align-items:center}}
+  `;
+  document.head.append(style);
+  const root = document.createElement('div');
+  root.className = 'hs-overlay';
+  root.setAttribute('role', 'dialog');
+  root.setAttribute('aria-modal', 'true');
+  root.addEventListener('click', (event) => { if (event.target === root) close(); });
+  function close() { root.classList.remove('open'); }
+  function show(content) {
+    window.HongdaeDiscovery?.close?.();
+    document.querySelector('.map-result-sheet')?.classList.remove('open');
+    document.body.classList.remove('map-results-open');
+    if (document.querySelector('#sidebar')?.classList.contains('open')) closeSidebar();
+    root.innerHTML = `<section class="hs-panel">${content}</section>`;
+    root.classList.add('open');
+    root.querySelector('.hs-close').onclick = close;
+    root.querySelector('.hs-close').focus();
+  }
+  const head = (title) => `<div class="hs-head"><h2>${escapeHtml(title)}</h2><button type="button" class="hs-close">${escapeHtml(language().close)} ✕</button></div>`;
+  function openPassport() {
+    const t = language(), visited = visitedIds(), p = progress();
+    const sections = chapters.map((chapter) => {
+      const places = chapterPlaces(chapter);
+      return `<section class="hs-chapter"><h3>${escapeHtml(chapter.title[currentLang] || chapter.title.ko)}<small>${places.filter((place) => visited.has(place.id)).length}/${places.length}</small></h3>${places.map((place) => `<div class="hs-place"><div class="hs-place-info"><button type="button" class="hs-place-name" data-place="${place.id}">${escapeHtml(place.name)}</button><small>${escapeHtml(place.dong || '홍대')} · ${escapeHtml(place.category || place.type)}</small></div><button type="button" class="hs-stamp ${visited.has(place.id) ? 'on' : ''}" data-stamp="${place.id}" aria-pressed="${visited.has(place.id)}">${escapeHtml(visited.has(place.id) ? t.visited : t.mark)}</button></div>`).join('')}</section>`;
+    }).join('');
+    show(`${head(t.passport)}<p class="hs-intro">${escapeHtml(t.passportIntro)}<br>${escapeHtml(t.progress)} ${p.visited}/${p.total}</p><div class="hs-progress"><span style="width:${p.total ? Math.round(p.visited / p.total * 100) : 0}%"></span></div>${sections}`);
+    root.querySelectorAll('[data-stamp]').forEach((button) => button.onclick = () => {
+      const ids = visitedIds(), id = Number(button.dataset.stamp);
+      if (ids.has(id)) ids.delete(id); else ids.add(id);
+      localStorage.setItem(VISITED_KEY, JSON.stringify([...ids]));
+      openPassport();
+    });
+    root.querySelectorAll('[data-place]').forEach((button) => button.onclick = () => { close(); selectStore(Number(button.dataset.place)); });
+  }
+
+  const modes = [
+    { id:'visitor', title:'visitor', detail:'visitorDesc' },
+    { id:'explorer', title:'explorer', detail:'explorerDesc' },
+    { id:'student', title:'student', detail:'studentDesc' }
+  ];
+  const preferred = (place) => (place.tags || []).filter((tag) => userTastes.includes(tag));
+  function baseScore(place, mode, visited) {
+    const tags = place.tags || [];
+    const taste = preferred(place).length;
+    if (mode === 'visitor') return (tags.includes('홍대병') ? 7 : 0) + (['artsupply','liveclub'].includes(place.type) ? 5 : 0) + taste;
+    if (mode === 'explorer') return (tags.includes('로컬단골') ? 6 : 0) + (tags.includes('노포') ? 5 : 0) + (tags.includes('홍대병') ? 2 : 0) + taste;
+    return taste * 5 + (!visited.has(place.id) ? 4 : 0) + (tags.includes('홍대병') ? 1 : 0);
+  }
+  function buildRoute(mode) {
+    if (mode === 'student' && !userTastes.length) return [];
+    const visited = visitedIds();
+    const candidates = stores.filter((place) => place.status !== 'closed' && Number.isFinite(place.lat) && Number.isFinite(place.lng) && !isFranchise(place) && (mode !== 'student' || (!visited.has(place.id) && preferred(place).length > 0)));
+    const route = [], start = { lat: 37.5513, lng: 126.9256 };
+    for (let step = 0; step < 3; step++) {
+      const anchor = route.at(-1) || start;
+      const ranked = candidates.filter((place) => !route.some((picked) => picked.id === place.id)).map((place) => {
+        const distance = meters(anchor, place);
+        const diversity = route.some((picked) => picked.type === place.type) ? -5 : 4;
+        const score = baseScore(place, mode, visited) + diversity - distance / 450 - (distance > 1800 ? 8 : 0);
+        return { place, score };
+      }).sort((a, b) => b.score - a.score || a.place.id - b.place.id);
+      if (!ranked.length) break;
+      route.push(ranked[0].place);
+    }
+    return route;
+  }
+  function reason(place, mode) {
+    const tags = preferred(place);
+    if (mode === 'student' && tags.length) return `#${tags.join(' #')}`;
+    const source = (place.tags || []).find((tag) => mode === 'visitor' ? tag === '홍대병' : mode === 'explorer' ? ['로컬단골','노포'].includes(tag) : tag === '홍대병');
+    return source ? `#${source}` : place.category || place.type;
+  }
+  function openRoute(mode = 'visitor') {
+    const t = language(), route = buildRoute(mode);
+    const modeButtons = modes.map((item) => `<button type="button" class="hs-mode ${mode === item.id ? 'on' : ''}" data-mode="${item.id}" aria-pressed="${mode === item.id}">${escapeHtml(t[item.title])}<small>${escapeHtml(t[item.detail])}</small></button>`).join('');
+    const steps = route.map((place, index) => `<button type="button" class="hs-route-step" data-place="${place.id}"><b>${index + 1}</b><span>${escapeHtml(place.name)}<small>${escapeHtml(place.dong || '홍대')} · ${escapeHtml(place.category || place.type)} · ${escapeHtml(t.reason)}: ${escapeHtml(reason(place, mode))}</small></span></button>`).join('');
+    show(`${head(t.route)}<p class="hs-intro">${escapeHtml(t.routeIntro)}</p><div class="hs-modes">${modeButtons}</div>${mode === 'student' && !userTastes.length ? `<p class="hs-intro">${escapeHtml(t.noTaste)}</p><button type="button" class="hs-cta" data-choose-taste>${escapeHtml(t.chooseTaste)}</button>` : `<div style="margin-top:18px">${steps || `<p class="hs-intro">${escapeHtml(t.empty)}</p>`}</div>`}<p class="hs-intro">${escapeHtml(t.routeNote)}</p>${route.length ? `<button type="button" class="hs-cta" data-start>${escapeHtml(t.start)}</button>` : ''}`);
+    root.querySelectorAll('[data-mode]').forEach((button) => button.onclick = () => openRoute(button.dataset.mode));
+    root.querySelectorAll('[data-place]').forEach((button) => button.onclick = () => { close(); selectStore(Number(button.dataset.place)); });
+    root.querySelector('[data-start]')?.addEventListener('click', () => { close(); selectStore(route[0].id); });
+    root.querySelector('[data-choose-taste]')?.addEventListener('click', () => { close(); window.HongdaeDiscovery?.open('taste'); });
+  }
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
+  document.addEventListener('DOMContentLoaded', () => {
+    document.body.append(root);
+    const bar = document.querySelector('#category-bar');
+    const entry = document.createElement('div');
+    entry.className = 'discovery-entry';
+    entry.innerHTML = '<button type="button" data-passport></button><button type="button" data-route></button>';
+    bar?.append(entry);
+    const updateLabels = () => { entry.querySelector('[data-passport]').textContent = language().passportNav; entry.querySelector('[data-route]').textContent = language().routeNav; };
+    updateLabels();
+    window.addEventListener('hongdae:language-change', updateLabels);
+    entry.querySelector('[data-passport]').onclick = openPassport;
+    entry.querySelector('[data-route]').onclick = () => openRoute();
+  });
+  window.HongdaeSpecial = { openPassport, openRoute, progress, buildRoute, close };
+})();
