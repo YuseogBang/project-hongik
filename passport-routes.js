@@ -113,7 +113,7 @@
     root.querySelectorAll('[data-mode]').forEach((button) => button.onclick = () => openRoute(button.dataset.mode));
     root.querySelectorAll('[data-place]').forEach((button) => button.onclick = () => { close(); selectStore(Number(button.dataset.place)); });
     root.querySelector('[data-start]')?.addEventListener('click', () => { close(); selectStore(route[0].id); });
-    root.querySelector('[data-choose-taste]')?.addEventListener('click', () => { close(); window.HongdaeDiscovery?.open('taste'); });
+    root.querySelector('[data-choose-taste]')?.addEventListener('click', () => { close(); window.HongdaeExperience?.openProfile(); });
   }
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
   document.addEventListener('DOMContentLoaded', () => {

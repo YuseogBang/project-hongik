@@ -93,18 +93,18 @@
     font-family:'Pretendard', sans-serif; white-space:nowrap;
   }
   .btn-bookmarks:hover { border-color:var(--accent); color:#fff; }
-  #btn-lang, #btn-save, #btn-rip, #btn-taste-top, #btn-theme {
+  #btn-lang, #btn-curation, #btn-rip, #btn-taste-top, #btn-theme {
     display:inline-flex; align-items:center; justify-content:center; text-align:center;
     width:40px; min-width:40px; max-width:40px; height:40px; border-radius:50%;
     flex-shrink:0; flex-grow:0; padding:0; overflow:hidden; font-size:16px;
     transition: background .15s, transform .15s, box-shadow .15s;
   }
   #btn-lang:hover, #btn-rip:hover, #btn-theme:hover { background: var(--surface2); }
-  #btn-save:hover { border-color:#a03446; box-shadow:0 4px 12px rgba(0,0,0,.35); }
+  #btn-curation:hover { border-color:#a03446; box-shadow:0 4px 12px rgba(0,0,0,.35); }
   #btn-taste-top { box-shadow: 0 2px 10px rgba(var(--accent-rgb),.45); }
   #btn-taste-top:hover { filter:brightness(1.08); transform:translateY(-1px); }
-  #btn-lang:active, #btn-save:active, #btn-rip:active, #btn-taste-top:active { transform: scale(.92); }
-  #btn-lang svg, #btn-rip svg, #btn-save svg, #btn-taste-top svg { width:20px; height:20px; display:block; }
+  #btn-lang:active, #btn-curation:active, #btn-rip:active, #btn-taste-top:active { transform: scale(.92); }
+  #btn-lang svg, #btn-rip svg, #btn-curation svg, #btn-taste-top svg { width:20px; height:20px; display:block; }
   .topbar-search-row {
     position:relative; padding: 10px 16px; border-bottom: 1px solid var(--border);
     background: var(--surface);
@@ -867,7 +867,7 @@
     .btn-bookmarks, .btn-directions, .btn-add {
       font-size: 11px; padding: 6px 9px;
     }
-    #btn-save {
+    #btn-curation {
       width: 40px; min-width: 40px; max-width: 40px; height: 40px; font-size: 15px;
     }
 
@@ -995,8 +995,8 @@
     }
     .topbar-search-row .logo-lockup { display:flex; }
     .topbar-search-row .topbar-actions { display:flex; }
-    .topbar-actions .app-menu-wrap,
-    .topbar-actions #btn-save { display:none; }
+    .topbar-actions .app-menu-wrap { display:none; }
+    .topbar-actions #btn-curation { display:inline-flex; }
     .topbar-actions #account-button { display:inline-flex; padding:7px 10px; font-size:11px; white-space:nowrap; }
     .topbar-search-row .search-box { flex-basis: 100%; }
 
@@ -1115,7 +1115,6 @@
       </button>
       <div class="app-menu" id="app-menu" role="menu">
         <button class="app-menu-item" role="menuitem" onclick="appMenuAction(toggleSidebar)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>상세 필터</button>
-        <button class="app-menu-item" role="menuitem" onclick="appMenuAction(openTasteModal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/></svg>내 취향 찾기</button>
         <button class="app-menu-item" role="menuitem" onclick="appMenuAction(showGoneStores)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V10.5a6 6 0 0 1 12 0V21z"/><path d="M4 21h16"/><path d="M12 6.8v4.2M9.9 8.9h4.2"/></svg>사라진 가게</button>
         <div class="app-menu-sep"></div>
         <button class="app-menu-item" role="menuitem" onclick="appMenuAction(cycleLang)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3.4 9.2h17.2M3.4 14.8h17.2"/></svg>언어 · Language</button>
@@ -1126,7 +1125,7 @@
         <a class="app-menu-item" id="admin-menu-link" role="menuitem" href="admin.html" hidden>관리자 도구</a>
       </div>
     </div>
-    <button class="btn-directions" id="btn-save" onclick="showBookmarks()" title="저장한 가게"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20.6S3.4 15 3.4 8.9A4.9 4.9 0 0 1 12 6a4.9 4.9 0 0 1 8.6 2.9C20.6 15 12 20.6 12 20.6z"></path></svg></button>
+    <button class="btn-directions" id="btn-curation" onclick="HongdaeDiscovery.open('curation')" title="홍대 리스트" aria-label="홍대 리스트"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg></button>
     <button class="btn-bookmarks" id="account-button" onclick="HongdaePlatform.openDialog()">로그인</button>
   </div>
 </div>

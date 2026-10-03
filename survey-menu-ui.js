@@ -30,7 +30,7 @@
   function hours(store) {
     const record = store.surveyMenu;
     if (!record?.hours) return '';
-    return `<section class="survey-hours"><div class="survey-eyebrow">조사된 운영시간</div><div style="margin-top:6px;font-size:12px;line-height:1.55">${escapeHtml(record.hours)}</div><p class="survey-meta">${escapeHtml(record.checked)} 카카오맵 표시 기준 · 공휴일 시간이 섞였을 수 있어요. <a href="${escapeHtml(record.source)}" target="_blank" rel="noopener noreferrer">현재 정보 확인 ↗</a></p></section>`;
+    return `<section class="survey-hours"><div class="survey-eyebrow">영업시간</div><div style="margin-top:6px;font-size:12px;line-height:1.55">${escapeHtml(record.hours)}</div><p class="survey-meta">${escapeHtml(record.checked)} 카카오맵 표시 기준 · 공휴일 시간이 섞였을 수 있어요. <a href="${escapeHtml(record.source)}" target="_blank" rel="noopener noreferrer">현재 정보 확인 ↗</a></p></section>`;
   }
   function rows(menu) {
     return menu.map(([name, price, recommended]) => `<div class="survey-row"><span>${escapeHtml(name)}${recommended ? '<small class="survey-rec">★</small>' : ''}</span><b>${won(price)}</b></div>`).join('');
@@ -39,7 +39,7 @@
     const record = store.surveyMenu;
     if (!record?.menu?.length) return '';
     const count = record.menu.length;
-    return `<section class="survey-board" data-place-menu><div class="survey-eyebrow">MENU BOARD</div><div class="survey-board-head"><strong>메뉴판</strong><small>${count}개 메뉴 · ${escapeHtml(record.checked)} 조사</small></div>${rows(record.menu.slice(0, 6))}${count > 6 ? `<button type="button" class="survey-more" onclick="openFullMenu(${store.id})">전체 ${count}개 메뉴 보기 →</button>` : ''}<p class="survey-meta">조사 당시 카카오맵 공개 메뉴입니다. 가격·품절 여부는 방문 전에 확인해 주세요. <a href="${escapeHtml(record.source)}" target="_blank" rel="noopener noreferrer">출처 ↗</a></p></section>`;
+    return `<section class="survey-board" data-place-menu><div class="survey-eyebrow">MENU BOARD</div><div class="survey-board-head"><strong>메뉴판</strong></div>${rows(record.menu.slice(0, 6))}${count > 6 ? `<button type="button" class="survey-more" onclick="openFullMenu(${store.id})">전체 메뉴 보기 →</button>` : ''}<p class="survey-meta">가격·품절 여부는 방문 전에 확인해 주세요. <a href="${escapeHtml(record.source)}" target="_blank" rel="noopener noreferrer">현재 메뉴 확인 ↗</a></p></section>`;
   }
   function open(store) {
     const record = store.surveyMenu;
@@ -51,7 +51,7 @@
     modal.setAttribute('role', 'dialog');
     modal.setAttribute('aria-modal', 'true');
     modal.setAttribute('aria-label', `${store.name} 메뉴판`);
-    modal.innerHTML = `<section class="survey-modal-panel"><div class="survey-modal-head"><div><div class="survey-eyebrow">MENU BOARD</div><h2>${escapeHtml(store.name)}</h2></div><button type="button" data-close aria-label="닫기">✕</button></div><p class="survey-meta">${escapeHtml(record.checked)} 조사 · ${record.menu.length}개 메뉴 · 가격과 품절 여부는 방문 전 확인해 주세요.</p>${rows(record.menu)}<p class="survey-meta"><a href="${escapeHtml(record.source)}" target="_blank" rel="noopener noreferrer">카카오맵에서 현재 정보 확인 ↗</a></p></section>`;
+    modal.innerHTML = `<section class="survey-modal-panel"><div class="survey-modal-head"><div><div class="survey-eyebrow">MENU BOARD</div><h2>${escapeHtml(store.name)}</h2></div><button type="button" data-close aria-label="닫기">✕</button></div><p class="survey-meta">가격과 품절 여부는 방문 전 확인해 주세요.</p>${rows(record.menu)}<p class="survey-meta"><a href="${escapeHtml(record.source)}" target="_blank" rel="noopener noreferrer">카카오맵에서 현재 메뉴 확인 ↗</a></p></section>`;
     modal.addEventListener('click', (event) => { if (event.target === modal) modal.remove(); });
     modal.querySelector('[data-close]').onclick = () => modal.remove();
     document.body.append(modal);

@@ -38,7 +38,7 @@
       sidebar.querySelector('.sidebar-top')?.prepend(summary);
     }
     summary.innerHTML = `<div style="font-size:12px;color:#c39298">지금 조건이면 <b>${getFilteredStores().length}곳</b>을 볼 수 있어요.</div><div class="xp-filter-actions"><button type="button" data-taste>내 취향 ${userTastes.length ? '수정' : '선택'} →</button><button type="button" class="reset" data-reset>필터 초기화</button></div>`;
-    $('[data-taste]', summary).onclick = openTasteModal;
+    $('[data-taste]', summary).onclick = openProfile;
     $('[data-reset]', summary).onclick = () => {
       activeDetailFilters.clear(); boundsFilter = null; currentFilter = 'all'; searchText = '';
       const input = $('#search-input'); if (input) input.value = '';
@@ -48,9 +48,8 @@
   }
 
   function openProfile() {
-    if (!userTastes.length) { openTasteJourney(); return; }
     const overlay = ensureOverlay(); const history = readHistory(); const saved = Object.keys(bookmarks || {}).length;
-    overlay.innerHTML = `<div class="xp-sheet"><div class="xp-handle"></div><div class="xp-top"><span class="xp-kicker">MY HONGDAE</span><button class="xp-close">✕</button></div><h2 class="xp-title">내 취향 지도</h2><p class="xp-copy">선택한 취향 태그를 기준으로 장소를 추천해요.</p><div class="xp-profile-stats"><div><b>${userTastes.length}</b><span>취향</span></div><div><b>${saved}</b><span>저장</span></div><div><b>${history.length}</b><span>최근 탐색</span></div></div><div class="xp-tags">${userTastes.map((tag) => `<span>#${escapeHtml(tag)}</span>`).join('')}</div><button class="xp-primary" data-edit>취향 다시 고르기</button><button class="xp-secondary" data-saved>저장한 가게 보기</button><div class="xp-history"><h4>최근 본 가게</h4>${history.length ? history.slice(0, 4).map((item) => `<button data-store="${item.id}"><span>${escapeHtml(item.name)}</span><small>다시 보기 ›</small></button>`).join('') : '<p class="xp-copy">아직 둘러본 가게가 없어요.</p>'}</div></div>`;
+    overlay.innerHTML = `<div class="xp-sheet"><div class="xp-handle"></div><div class="xp-top"><span class="xp-kicker">MY HONGDAE</span><button class="xp-close">✕</button></div><h2 class="xp-title">내 프로필</h2><p class="xp-copy">취향을 고르고 저장한 장소를 관리해요.</p><div class="xp-profile-stats"><div><b>${userTastes.length}</b><span>취향</span></div><div><b>${saved}</b><span>저장</span></div><div><b>${history.length}</b><span>최근 탐색</span></div></div><div class="xp-tags">${userTastes.length ? userTastes.map((tag) => `<span>#${escapeHtml(tag)}</span>`).join('') : '<p class="xp-copy">아직 선택한 취향이 없어요.</p>'}</div><button class="xp-primary" data-edit>${userTastes.length ? '취향 다시 고르기' : '내 취향 선택하기'}</button><button class="xp-secondary" data-saved>저장한 가게 보기</button><div class="xp-history"><h4>최근 본 가게</h4>${history.length ? history.slice(0, 4).map((item) => `<button data-store="${item.id}"><span>${escapeHtml(item.name)}</span><small>다시 보기 ›</small></button>`).join('') : '<p class="xp-copy">아직 둘러본 가게가 없어요.</p>'}</div></div>`;
     $('.xp-close', overlay).onclick = close; $('[data-edit]', overlay).onclick = () => { close(); openTasteJourney(); }; $('[data-saved]', overlay).onclick = () => { close(); showBookmarks(); HongdaeUI.openResults(); }; overlay.querySelectorAll('[data-store]').forEach((button) => button.onclick = () => { close(); selectStore(Number(button.dataset.store)); }); overlay.classList.add('open');
   }
 
