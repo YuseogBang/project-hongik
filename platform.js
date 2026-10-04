@@ -3,6 +3,7 @@
   let profile = null;
   let signedInUser = null;
   let accountLabel = '';
+  let profileVersion = 0;
   let finishReady;
   const ready = new Promise(resolve => { finishReady = resolve; });
   const announceAuth = () => window.dispatchEvent(new Event('hongdae-auth-changed'));
@@ -30,15 +31,20 @@
   }
 
   async function loadProfile(user) {
+    const version = ++profileVersion;
     signedInUser = user;
+    profile = null;
+    const adminLink = $('#admin-menu-link');
+    if (adminLink) adminLink.hidden = true;
     const { data, error } = await client.from('profiles').select('id, display_name, role').eq('id', user.id).maybeSingle();
+    if (version !== profileVersion || signedInUser?.id !== user.id) return false;
     if (error) console.error('Profile lookup failed:', error);
     profile = data || null;
     accountLabel = user.user_metadata?.nickname || user.user_metadata?.name || user.user_metadata?.full_name || '';
     renderAccount();
     announceAuth();
-    const adminLink = $('#admin-menu-link');
     if (adminLink) adminLink.hidden = !profile || profile.role !== 'admin';
+    return true;
   }
 
   async function openDialog() {
@@ -68,16 +74,16 @@
     if (collectionsError || !profile) {
       dialog.innerHTML = '<section style="max-width:360px;width:100%;padding:24px;border-radius:16px;background:#3d0f16;color:#f5ece7;font-family:Pretendard,sans-serif"><h2>로그인은 완료됐어요</h2><p style="line-height:1.6;color:#c39298">개인 컬렉션을 불러오지 못했습니다. 관리자에게 데이터베이스의 profiles 및 collections 설정을 확인해 달라고 알려주세요.</p><button type="button" id="account-retry">다시 시도</button><button type="button" id="sign-out">로그아웃</button></section>';
       $('#account-retry').onclick = openDialog;
-      $('#sign-out').onclick = async () => { await client.auth.signOut(); signedInUser = null; profile = null; dialog.remove(); renderAccount(); announceAuth(); };
+      $('#sign-out').onclick = async () => { await client.auth.signOut(); profileVersion++; signedInUser = null; profile = null; dialog.remove(); renderAccount(); announceAuth(); };
       return;
     }
     const provider = signedInUser.app_metadata?.provider === 'kakao' ? '카카오' : signedInUser.app_metadata?.provider === 'google' ? 'Google' : '계정';
     const identity = signedInUser.email ? `${provider} · ${escapeHtml(signedInUser.email)}` : `${provider} · 이메일 미제공`;
     const separateAccountNote = signedInUser.email ? '' : '<p style="margin:2px 0 12px;color:#e5a8a5;font-size:11px;line-height:1.5">카카오와 Google로 로그인하면 저장 목록이 각각 다른 계정에 저장돼요.</p>';
     const adminAction = profile?.role === 'admin' ? '<a href="admin.html" style="display:block;margin-top:10px;padding:10px;border:1px solid #a66a66;border-radius:10px;color:#fff;text-align:center;text-decoration:none;font:700 12px Pretendard,sans-serif">관리자 화면 열기 →</a>' : '';
-    dialog.innerHTML = `<section style="max-width:420px;width:100%;max-height:calc(100vh - 40px);overflow:auto;padding:24px;border-radius:16px;background:#3d0f16;border:1px solid #7a2534;color:#f5ece7"><div style="position:sticky;top:-24px;z-index:1;display:flex;align-items:center;gap:8px;margin:-24px -24px 16px;padding:18px 24px 12px;background:#3d0f16;border-bottom:1px solid #7a2534"><h2 style="margin:0;flex:1">내 컬렉션</h2><button type="button" id="account-close" aria-label="내 컬렉션 나가기" style="padding:8px 11px;border:1px solid #7a2534;border-radius:99px;background:#2b070c;color:#f5ece7;font-weight:700">나가기 ✕</button></div><p style="margin:0 0 3px;color:#f5ece7;font-size:12px;font-weight:700">${identity}</p>${separateAccountNote}<p style="margin:0 0 12px;color:#c39298;font-size:12px">지도에서 ♥를 누르면 ‘저장한 가게’에 자동으로 추가돼요.</p><div style="margin:0 0 16px">${(collections || []).map(c => { const places = c.collection_places || []; return `<div style="padding:12px 0;border-bottom:1px solid #7a2534">${c.emoji} <b>${escapeHtml(c.title)}</b> <span style="color:#c39298;font-size:12px">${places.length}곳</span>${places.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px">${places.map(p => `<span style="padding:5px 8px;border-radius:99px;background:#2b070c;color:#f5ece7;font-size:11px">${escapeHtml(p.places?.name || '저장한 장소')}</span>`).join('')}</div>` : ''}</div>`; }).join('') || '<p style="color:#c39298">지도에서 ♥를 눌러 첫 장소를 저장해보세요.</p>'}</div><form id="collection-form" style="display:flex;gap:8px"><input name="title" required maxlength="60" placeholder="예: 데이트 후보" style="min-width:0;flex:1;padding:10px;border-radius:8px;border:1px solid #7a2534;background:#2b070c;color:#fff"><button style="padding:10px;border:0;border-radius:8px;background:#e8362a;color:#fff">만들기</button></form>${adminAction}<button type="button" id="sign-out" style="width:100%;margin-top:12px;padding:10px;border:1px solid #7a2534;border-radius:10px;background:transparent;color:#c39298">로그아웃</button></section>`;
+    dialog.innerHTML = `<section style="max-width:420px;width:100%;max-height:calc(100vh - 40px);overflow:auto;padding:24px;border-radius:16px;background:#3d0f16;border:1px solid #7a2534;color:#f5ece7"><div style="position:sticky;top:-24px;z-index:1;display:flex;align-items:center;gap:8px;margin:-24px -24px 16px;padding:18px 24px 12px;background:#3d0f16;border-bottom:1px solid #7a2534"><h2 style="margin:0;flex:1">내 컬렉션</h2><button type="button" id="account-close" aria-label="내 컬렉션 나가기" style="padding:8px 11px;border:1px solid #7a2534;border-radius:99px;background:#2b070c;color:#f5ece7;font-weight:700">나가기 ✕</button></div><p style="margin:0 0 3px;color:#f5ece7;font-size:12px;font-weight:700">${identity}</p>${separateAccountNote}<p style="margin:0 0 12px;color:#c39298;font-size:12px">지도에서 ♥를 누르면 ‘저장한 가게’에 자동으로 추가돼요.</p><div style="margin:0 0 16px">${(collections || []).map(c => { const places = c.collection_places || []; return `<div style="padding:12px 0;border-bottom:1px solid #7a2534">${escapeHtml(c.emoji || '📍')} <b>${escapeHtml(c.title)}</b> <span style="color:#c39298;font-size:12px">${places.length}곳</span>${places.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px">${places.map(p => `<span style="padding:5px 8px;border-radius:99px;background:#2b070c;color:#f5ece7;font-size:11px">${escapeHtml(p.places?.name || '저장한 장소')}</span>`).join('')}</div>` : ''}</div>`; }).join('') || '<p style="color:#c39298">지도에서 ♥를 눌러 첫 장소를 저장해보세요.</p>'}</div><form id="collection-form" style="display:flex;gap:8px"><input name="title" required maxlength="60" placeholder="예: 데이트 후보" style="min-width:0;flex:1;padding:10px;border-radius:8px;border:1px solid #7a2534;background:#2b070c;color:#fff"><button style="padding:10px;border:0;border-radius:8px;background:#e8362a;color:#fff">만들기</button></form>${adminAction}<button type="button" id="sign-out" style="width:100%;margin-top:12px;padding:10px;border:1px solid #7a2534;border-radius:10px;background:transparent;color:#c39298">로그아웃</button></section>`;
     $('#account-close').onclick = () => dialog.remove();
-    $('#sign-out').onclick = async () => { await client.auth.signOut(); signedInUser = null; profile = null; dialog.remove(); renderAccount(); announceAuth(); };
+    $('#sign-out').onclick = async () => { await client.auth.signOut(); profileVersion++; signedInUser = null; profile = null; dialog.remove(); renderAccount(); announceAuth(); };
     $('#collection-form').onsubmit = async (event) => {
       event.preventDefault();
       const title = new FormData(event.currentTarget).get('title').trim();
@@ -129,7 +135,7 @@
       if(_event==='INITIAL_SESSION')return;
       setTimeout(async () => {
         if (session?.user) { await loadProfile(session.user); await syncDeviceSaves(); }
-        else { signedInUser = null; profile = null; renderAccount(); announceAuth(); }
+        else { profileVersion++; signedInUser = null; profile = null; renderAccount(); announceAuth(); }
       }, 0);
     });
   }
@@ -139,20 +145,22 @@
     whenReady: () => ready,
     getClient: () => client,
     getUser: () => signedInUser,
-    async signOut() { if(typeof bookmarks!=='undefined'){bookmarks={};localStorage.setItem('bookmarks','{}');localStorage.setItem('bookmarksOwner','guest');if(typeof renderAll==='function')renderAll();} if (client) await client.auth.signOut(); signedInUser = null; profile = null; accountLabel = ''; renderAccount(); announceAuth(); notice('로그아웃했어요.'); },
+    async signOut() { if(typeof bookmarks!=='undefined'){bookmarks={};localStorage.setItem('bookmarks','{}');localStorage.setItem('bookmarksOwner','guest');if(typeof renderAll==='function')renderAll();} if (client) await client.auth.signOut(); profileVersion++; signedInUser = null; profile = null; accountLabel = ''; renderAccount(); announceAuth(); notice('로그아웃했어요.'); },
     async openCollectionPicker(placeId) {
       if (!client || !profile) return notice('로그인 후 컬렉션에 추가할 수 있어요.');
       const { data: collections } = await client.from('collections').select('id,title,emoji').order('created_at');
       if (!collections?.length) return notice('내 컬렉션에서 먼저 컬렉션을 만들어주세요.');
       let dialog = $('#account-dialog');
       if (!dialog) { dialog = document.createElement('div'); dialog.id = 'account-dialog'; dialog.style.cssText = 'position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:rgba(0,0,0,.6);padding:20px'; document.body.appendChild(dialog); }
-      dialog.innerHTML = `<section style="max-width:360px;width:100%;padding:24px;border-radius:22px;background:#3d0f16;color:#f5ece7"><h2 style="margin-top:0">컬렉션에 추가</h2><div style="display:grid;gap:8px">${collections.map(c => `<button data-collection="${c.id}" style="padding:12px;border:1px solid #7a2534;border-radius:12px;background:#2b070c;color:#fff;text-align:left">${c.emoji} ${escapeHtml(c.title)}</button>`).join('')}</div><button id="picker-close" style="width:100%;margin-top:10px;padding:9px;border:0;background:transparent;color:#c39298">닫기</button></section>`;
+      dialog.innerHTML = `<section style="max-width:360px;width:100%;padding:24px;border-radius:22px;background:#3d0f16;color:#f5ece7"><h2 style="margin-top:0">컬렉션에 추가</h2><div style="display:grid;gap:8px">${collections.map(c => `<button data-collection="${c.id}" style="padding:12px;border:1px solid #7a2534;border-radius:12px;background:#2b070c;color:#fff;text-align:left">${escapeHtml(c.emoji || '📍')} ${escapeHtml(c.title)}</button>`).join('')}</div><button id="picker-close" style="width:100%;margin-top:10px;padding:9px;border:0;background:transparent;color:#c39298">닫기</button></section>`;
       $('#picker-close').onclick = () => dialog.remove();
       dialog.querySelectorAll('[data-collection]').forEach(button => button.onclick = async () => { const { error } = await client.from('collection_places').upsert({ collection_id: button.dataset.collection, place_id: placeId }); if (error) return notice(error.message); if (typeof bookmarks !== 'undefined') { bookmarks[placeId] = true; localStorage.setItem('bookmarks', JSON.stringify(bookmarks)); } window.HongdaeReviews?.logInterest(placeId, 'save'); dialog.remove(); if (typeof selectStore === 'function' && selectedId != null) selectStore(selectedId); notice('컬렉션에 저장했어요.'); });
     },
     async syncDefaultSave(placeId, saved) {
       if (!client || !profile){notice('계정 정보를 확인하지 못했어요. 다시 로그인해 주세요.');return false;}
+      const ownerId = profile.id;
       const { data: collection, error: collectionError } = await client.from('collections').select('id').eq('owner_id', profile.id).eq('title', '저장한 가게').limit(1).maybeSingle();
+      if (signedInUser?.id !== ownerId || profile?.id !== ownerId) return false;
       if (collectionError){notice('계정 저장 목록을 확인하지 못했어요.');return false;}
       let collectionId = collection?.id;
       if (!collectionId) {
@@ -160,7 +168,9 @@
         if (error){notice('저장 목록을 만들지 못했어요.');return false;}
         collectionId = data.id;
       }
+      if (signedInUser?.id !== ownerId || profile?.id !== ownerId) return false;
       const result=saved?await client.from('collection_places').upsert({collection_id:collectionId,place_id:placeId}):await client.from('collection_places').delete().eq('place_id',placeId);
+      if (signedInUser?.id !== ownerId || profile?.id !== ownerId) return false;
       if(result.error){notice('계정 저장에 실패했어요. 장소 등록과 서버 연결을 확인해 주세요.');return false;}return true;
     },
     async importPlaces(places) {
@@ -173,15 +183,24 @@
   window.addEventListener('DOMContentLoaded', () => { applyButtonFeedback(); });
   async function syncDeviceSaves() {
     if(typeof bookmarks==='undefined'||!signedInUser||!client)return;
+    const ownerId = signedInUser.id;
     const owner=localStorage.getItem('bookmarksOwner');
     const device=(!owner||owner==='guest'||owner===signedInUser.id)?{...bookmarks}:{};
     // Cloud reads never import another account's cached saves.
     const {data,error}=await client.from('collections').select('id,collection_places(place_id)').eq('owner_id',signedInUser.id);
+    if (signedInUser?.id !== ownerId) return;
     if(error){notice('저장 목록을 불러오지 못했어요.');return;}
     const merged={};for(const c of data||[])for(const p of c.collection_places||[])merged[p.place_id]=true;
-    for(const id of Object.keys(device))if(device[id]&&!merged[id]){if(await window.HongdaePlatform.syncDefaultSave(Number(id),true))merged[id]=true;}
+    for (const id of Object.keys(device)) {
+      if (!device[id] || merged[id]) continue;
+      if (signedInUser?.id !== ownerId) return;
+      // Keep device bookmarks intact if importing one of them fails.
+      if (!await window.HongdaePlatform.syncDefaultSave(Number(id), true)) return;
+      merged[id] = true;
+    }
+    if (signedInUser?.id !== ownerId) return;
     bookmarks=merged;localStorage.setItem('bookmarks',JSON.stringify(merged));localStorage.setItem('bookmarksOwner',signedInUser.id);
-    const pending=Number(localStorage.getItem('pendingSaveId'));if(pending){localStorage.removeItem('pendingSaveId');if(await window.HongdaePlatform.syncDefaultSave(pending,true)){bookmarks[pending]=true;localStorage.setItem('bookmarks',JSON.stringify(bookmarks));}}
+    const pending=Number(localStorage.getItem('pendingSaveId'));if(pending){if(await window.HongdaePlatform.syncDefaultSave(pending,true)){if(signedInUser?.id !== ownerId)return;localStorage.removeItem('pendingSaveId');bookmarks[pending]=true;localStorage.setItem('bookmarks',JSON.stringify(bookmarks));}}
     if(typeof renderAll==='function')renderAll();
   }
   const profileObserver = new MutationObserver(() => {

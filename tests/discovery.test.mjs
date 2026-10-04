@@ -75,3 +75,52 @@ test('Data arriving before map readiness cannot create a clusterer for the wrong
 function recommendations(seed={}){const values=new Map(Object.entries(seed));const ctx={window:{dispatchEvent(){},addEventListener(){}},document:{addEventListener(){}},localStorage:{getItem:k=>values.get(k)||null,setItem:(k,v)=>values.set(k,v)},Event:class {},Date};vm.createContext(ctx);vm.runInContext(fs.readFileSync('recommendation-profile.js','utf8'),ctx);return {api:ctx.window.HongdaeRecommendations,values};}
 test('Shared preference ranking changes feed priority with the selected mood and explains the match',()=>{const {api}=recommendations();const items=[{id:1,tags:['조용한'],status:'open',type:'cafe'},{id:2,tags:['시끌벅적'],status:'open',type:'bar'},{id:3,tags:['조용한'],status:'closed',type:'cafe'}];api.save({tags:['조용한'],budget:'any',company:'solo',explore:'balanced',walk:1200});assert.deepEqual(Array.from(api.rank(items),s=>s.id),[1]);assert.ok(api.explain(items[0]).includes('#조용한'));api.save({tags:['시끌벅적'],budget:'any',company:'friends',explore:'balanced',walk:600});assert.deepEqual(Array.from(api.rank(items),s=>s.id),[2]);});
 test('Budget preference excludes unknown or expensive restaurant meals and preserves non-food exploration',()=>{const {api,values}=recommendations();api.save({tags:['덕후'],budget:'10000',company:'solo',explore:'new',walk:600});assert.equal(api.eligible({type:'restaurant',surveyMenu:{menu:[['라멘',12000],['공기밥',1000]]}}),false);assert.equal(api.eligible({type:'restaurant'}),false);assert.equal(api.eligible({type:'restaurant',surveyMenu:{menu:[['돈카츠',9000]]}}),true);assert.equal(api.eligible({type:'retail'}),true);assert.equal(JSON.parse(values.get('userTastes'))[0],'덕후');assert.equal(api.profile().walk,600);});
+
+test('Mangwon import rejects another branch even when the name and address appear compatible',()=>{
+ const ctx={window:{HONGDAE_MANGWON_RESEARCH:{places:[]}},document:{createElement:()=>({addEventListener(){},setAttribute(){}}),head:{append(){}},addEventListener(){}}};
+ vm.createContext(ctx);vm.runInContext(fs.readFileSync('research-curations.js','utf8'),ctx);
+ const match=ctx.window.HongdaeResearch.matchingPlace;
+ const wrong={id:'2',place_name:'독백',road_address_name:'서울 마포구 포은로 66',x:'126.90',y:'37.55'};
+ const right={...wrong,id:'1'};
+ assert.equal(match([wrong],'독백','서울 마포구 포은로 66','1'),undefined);
+ assert.equal(match([wrong,right],'독백','서울 마포구 포은로 66','1').id,'1');
+ assert.equal(match([{...right,x:'127.1'}],'독백','서울 마포구 포은로 66','1'),undefined);
+});
+
+test('Research data preserves uncertain branches outside active map imports and variable prices',()=>{
+ const ctx={window:{}};vm.createContext(ctx);vm.runInContext(fs.readFileSync('mangwon-research-data.js','utf8'),ctx);
+ const data=ctx.window.HONGDAE_MANGWON_RESEARCH;
+ assert.equal(data.places.length,36);
+ assert.equal(new Set(data.places.map(p=>p.kakaoId)).size,36);
+ assert.ok(data.held.some(p=>p.name==='빈브라더스'));
+ assert.ok(!data.places.some(p=>p.name==='모을 / 모울'));
+ const variable=data.places.find(p=>p.name==='책바').menu.find(row=>row[3]==='변동가격');
+ assert.equal(variable[1],null);
+ assert.equal(data.places.find(p=>p.name==='제로헌드레드').hours.includes('토 미기재'),true);
+});
+
+test('A delayed prior account profile cannot overwrite the current user or restore its admin controls',async()=>{
+ const source=fs.readFileSync('platform.js','utf8');const body=source.slice(source.indexOf('  async function loadProfile('),source.indexOf('  async function openDialog('));
+ const requests=new Map();const admin={hidden:false};const ctx={console,client:{from:()=>({select:()=>({eq:(_,id)=>({maybeSingle:()=>new Promise(resolve=>requests.set(id,resolve))})})})},$:()=>admin,renderAccount(){},announceAuth(){}};
+ vm.createContext(ctx);vm.runInContext("let signedInUser=null,profile=null,profileVersion=0,accountLabel='';"+body+';this.loadProfile=loadProfile;this.state=()=>({signedInUser,profile});',ctx);
+ const old=ctx.loadProfile({id:'old',user_metadata:{}});const current=ctx.loadProfile({id:'current',user_metadata:{}});
+ requests.get('current')({data:{id:'current',role:'user'},error:null});await current;
+ requests.get('old')({data:{id:'old',role:'admin'},error:null});assert.equal(await old,false);
+ assert.equal(ctx.state().profile.id,'current');assert.equal(admin.hidden,true);
+});
+
+test('Failed device bookmark import retains the local list for another attempt',async()=>{
+ const source=fs.readFileSync('platform.js','utf8');
+ const body=source.slice(source.indexOf('  async function syncDeviceSaves()'),source.indexOf('  const profileObserver'));
+ const values=new Map([['bookmarksOwner','guest'],['bookmarks','{"42":true}']]);
+ const ctx={localStorage:{getItem:k=>values.get(k)||null,setItem:(k,v)=>values.set(k,v)},client:{from:()=>({select:()=>({eq:async()=>({data:[],error:null})})})},window:{HongdaePlatform:{syncDefaultSave:async()=>false}},notice(){},renderAll(){}};
+ vm.createContext(ctx);vm.runInContext('let bookmarks={42:true},signedInUser={id:"user"};'+body+';this.sync=syncDeviceSaves;this.saved=()=>bookmarks;',ctx);
+ await ctx.sync();assert.equal(ctx.saved()[42],true);assert.equal(values.get('bookmarks'),'{"42":true}');assert.equal(values.get('bookmarksOwner'),'guest');
+});
+
+test('Corrupt or incorrectly shaped device data cannot stop map startup',()=>{
+ const source=fs.readFileSync('main.html','utf8');const body=source.slice(source.indexOf('function readDeviceData('),source.indexOf('let bookmarks = readDeviceData'));
+ const values=new Map([['broken','{'],['array','{}'],['object','[]'],['valid','{"42":true}']]);const ctx={localStorage:{getItem:k=>values.get(k)||null}};
+ vm.createContext(ctx);vm.runInContext(body+';this.read=readDeviceData;',ctx);
+ assert.equal(Object.keys(ctx.read('broken',{})).length,0);assert.ok(Array.isArray(ctx.read('array',[])));assert.equal(Array.isArray(ctx.read('object',{})),false);assert.equal(ctx.read('valid',{})[42],true);
+});

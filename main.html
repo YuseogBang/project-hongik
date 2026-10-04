@@ -2635,7 +2635,14 @@ function exportChanges() {
 
 // ── 매장 카드 디자인 (Claude Design 시안 반영) ──────────
 let cardStyle = localStorage.getItem('cardStyle') || 'A';
-let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '{}');
+function readDeviceData(key, fallback) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key));
+    if (Array.isArray(fallback)) return Array.isArray(value) ? value : fallback;
+    return value && typeof value === 'object' && !Array.isArray(value) ? value : fallback;
+  } catch { return fallback; }
+}
+let bookmarks = readDeviceData('bookmarks', {});
 
 // 카테고리 문자열 -> 아이콘/색/라벨 (실제 category 필드 기반, 지어내지 않음)
 // ── 로컬 인디 레이어 ───────────────────────────────────
@@ -2943,14 +2950,14 @@ async function toggleBookmark(id) {
 
 // ── 사라진 가게 코멘트 (브라우저에 저장 — 북마크와 같은 방식) ──
 function loadComments(storeId) {
-  const all = JSON.parse(localStorage.getItem('storeComments') || '{}');
+  const all = readDeviceData('storeComments', {});
   return all[storeId] || [];
 }
 function submitComment(storeId) {
   const input = document.getElementById(`comment-input-${storeId}`);
   const text = input.value.trim();
   if (!text) return;
-  const all = JSON.parse(localStorage.getItem('storeComments') || '{}');
+  const all = readDeviceData('storeComments', {});
   if (!all[storeId]) all[storeId] = [];
   all[storeId].push({ text, date: new Date().toLocaleDateString('ko-KR') });
   localStorage.setItem('storeComments', JSON.stringify(all));
@@ -2959,7 +2966,7 @@ function submitComment(storeId) {
 
 // ── 취향 매칭 (카테고리·특징을 리서치해 태그를 붙인 가게들 중에서 매칭) ──────
 const TASTE_TAGS = ['매운맛','혼밥','데이트','인스타감성','조용한','시끌벅적','가성비','술안주','디저트','로컬단골','홍대병','노포','빈티지','구제','독립출판','바이닐','덕후','문구','소품','라이브음악','재즈','전통시장','친환경','제로웨이스트'];
-let userTastes = JSON.parse(localStorage.getItem('userTastes') || '[]');
+let userTastes = readDeviceData('userTastes', []);
 applyLang(); // 페이지 로드 즉시 적용 (카카오맵 로드를 기다리지 않아도 되게)
 
 
@@ -3002,6 +3009,18 @@ let pickerEl = null;
 let pickerLatlng = null;
 
 // ── MAP INIT ──────────────────────────────────────────
+// Show a recoverable state when the map SDK is blocked or fails to initialize.
+setTimeout(() => {
+  const loading = document.getElementById('loading');
+  if (!loading || loading.style.display === 'none') return;
+  loading.querySelector('p').textContent = '지도를 불러오지 못했어요. 연결을 확인하고 다시 시도해 주세요.';
+  const retry = document.createElement('button');
+  retry.type = 'button';
+  retry.className = 'btn';
+  retry.textContent = '다시 불러오기';
+  retry.onclick = () => window.location.reload();
+  loading.append(retry);
+}, 15000);
 window.kakao && kakao.maps.load(async () => {
   await HongdaeMap.ready();
   const container = document.getElementById('map');
@@ -4660,8 +4679,8 @@ function addStore() {
   const CURATIONS = [];
 
   // ── 저장 상태 저장소(SaveButton) — 매장 즐겨찾기(bookmarks)와 같은 방식이지만 별도 네임스페이스 ──
-  let curatedSaves = JSON.parse(localStorage.getItem('curatedSaves') || '{}'); // { "curationId:placeIdx": true }
-  let curatedVisited = JSON.parse(localStorage.getItem('curatedVisited') || '{}');
+  let curatedSaves = readDeviceData('curatedSaves', {}); // { "curationId:placeIdx": true }
+  let curatedVisited = readDeviceData('curatedVisited', {});
   function curatedSaveKey(curationId, idx) { return `${curationId}:${idx}`; }
 
   // ── 사용자 행동 이벤트 트래킹 ──────────────────────────────
@@ -5082,19 +5101,20 @@ function addStore() {
   });
   </script>
   <script src="recommendation-profile.js?v=20261004-onboarding"></script>
-  <script src="platform.js?v=20261004-managed"></script>
+  <script src="platform.js?v=20261004-account-race-managed"></script>
   <script src="ui-redesign.js?v=20261004-mangwon"></script>
   <script src="experience-ui.js?v=20261004-onboarding"></script>
   <script src="discovery-ui.js?v=20261004-onboarding"></script>
   <script src="journey-features.js?v=20261004-mangwon"></script>
   <script src="place-reviews.js"></script>
   <script src="passport-routes.js?v=20261004-onboarding"></script>
-  <script src="research-curations.js?v=20261004-mangwon-match"></script>
+  <script src="mangwon-research-data.js?v=20261004-kakao-details"></script>
+  <script src="research-curations.js?v=20261004-kakao-details"></script>
   <script src="archive-places.js?v=20261004-mangwon"></script>
   <script src="workbook-curations.js?v=20261004-local"></script>
   <script src="survey-menu-data.js"></script>
   <script src="managed-places.js?v=20261004-managed"></script>
-  <script src="survey-menu-ui.js"></script>
+  <script src="survey-menu-ui.js?v=20261004-mangwon"></script>
   <script src="feedback-ui.js"></script>
   <script src="mobile-polish.js"></script>
   <script src="feed-ui.js?v=20261004-onboarding"></script>
