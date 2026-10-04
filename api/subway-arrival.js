@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   try {
     const station = (req.query.station || '홍대입구').toString();
-    const apiKey = process.env.SEOUL_API_KEY;
+    const apiKey = process.env.SEOUL_API_KEY?.trim();
 
     if (!apiKey) {
       // 키가 아직 설정 안 됐을 때도 앱이 에러로 죽지 않고, 배너에 안내 문구가 뜨도록 200으로 응답
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     const data = await upstream.json();
 
     // 서울시 API는 에러도 200 OK로 내려주고 errorMessage 필드로 구분함
-    const result = data?.errorMessage || data?.RESULT || {};
+    const result = data?.errorMessage || data?.RESULT || data || {};
     const code = result.code || result.CODE;
     if (code && !['INFO-000','INFO-200'].includes(code)) {
       res.status(200).json({
@@ -30,13 +30,17 @@ export default async function handler(req, res) {
       return;
     }
 
+    if (!Array.isArray(data.realtimeArrivalList) && code !== 'INFO-200') {
+      res.status(200).json({ok:false,error:'서울시 도착정보 응답 형식을 확인하고 있어요.',upstreamCode:code || null,responseFields:Object.keys(data || {}).slice(0,10)});
+      return;
+    }
     const rawList = data.realtimeArrivalList || [];
     const list = rawList.map(t => ({
       subwayId: t.subwayId,       // 노선 코드 (예: 1002 = 2호선)
       trainLineNm: t.trainLineNm, // "성수행 - 신촌 방면" 같은 상세 문구
       arvlMsg2: t.arvlMsg2,       // "전역 도착", "3분 후" 등 요약 상태
       arvlMsg3: t.arvlMsg3,       // 도착지 방면
-      arvlCd: t.arvlCd,           // 0=전역도착, 1=도착, 2=출발, 3=전전역 등
+      arvlCd: t.arvlCd,           // 0=진입, 1=도착, 2=출발, 3=전역출발, 4=전역진입, 5=전역도착
       barvlDt: t.barvlDt,         // 도착까지 남은 초
       updnLine: t.updnLine,       // 상행/하행 또는 내선/외선
       statnNm: t.statnNm,         // 역명

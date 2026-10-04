@@ -1,1 +1,23 @@
-{"checkedAt":"2026-10-04","sources":[{"name":"홍익대학교 현대미술관","url":"https://homa.hongik.ac.kr/homa/index.do"}],"events":[],"note":"공식 출처에서 제목·기간·장소가 모두 확인된 행사만 등록. 예시 행사는 표시하지 않음."}
+{
+  "checkedAt": "2026-10-04",
+  "sources": [
+    {
+      "name": "홍익대학교 현대미술관",
+      "url": "https://homa.hongik.ac.kr/homa/index.do"
+    }
+  ],
+  "events": [
+    {
+      "id": "homa-157604",
+      "title": "홍익대학교 일반대학원 조소과, 판화과 2학기 석사학위청구전",
+      "dept": "조소과·판화과",
+      "dateStart": "2026-09-28",
+      "dateEnd": "2026-10-02",
+      "location": "현대미술관 제1관 전실 · 문헌관 4층",
+      "description": "월~금 10:00~18:00. 종료된 전시는 진행·예정 피드에서 제외됩니다.",
+      "link": "https://homa.hongik.ac.kr/homa/0302.do?articleNo=157604&mode=view",
+      "checkedAt": "2026-10-04"
+    }
+  ],
+  "note": "공식 출처에서 제목·기간·장소가 모두 확인된 행사만 등록. 예시 행사는 표시하지 않음."
+}

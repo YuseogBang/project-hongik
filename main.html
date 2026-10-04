@@ -4489,8 +4489,9 @@ function addStore() {
 
   function subwayArrivalTimeLabel(t) {
     const secs = parseInt(t.barvlDt, 10);
-    if (t.arvlCd === '0' || t.arvlMsg2 === '전역 도착') return '전역 도착';
-    if (t.arvlCd === '1' || t.arvlMsg2 === '도착') return '곧 도착';
+    if (String(t.arvlCd) === '0') return '진입 중';
+    if (String(t.arvlCd) === '5' || t.arvlMsg2 === '전역 도착') return '전역 도착';
+    if (String(t.arvlCd) === '1' || t.arvlMsg2 === '도착') return '곧 도착';
     if (!isNaN(secs) && secs > 0) {
       const m = Math.floor(secs / 60), s = secs % 60;
       return m > 0 ? `${m}분 ${s}초 후` : `${s}초 후`;
