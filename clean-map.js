@@ -14,7 +14,8 @@
       this.raw = new maplibregl.Map({container,center:ll(options.center),zoom:20-options.level,
         maxBounds:[[126.905,37.543],[126.939,37.572]],minZoom:14,maxZoom:19,
         dragRotate:false,touchPitch:false,renderWorldCopies:false,
-        style:{version:8,sources:{district:{type:'raster',tiles:[`https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}@2x.png?key=${encodeURIComponent(basemapKey)}`],tileSize:256,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> © <a href="https://carto.com/attributions" target="_blank">CARTO</a>'}},layers:[{id:'background',type:'raster',source:'district',paint:{'raster-saturation':-.15}}]}});
+        attributionControl:{compact:true},
+        style:{version:8,sources:{district:{type:'raster',tiles:[`https://a.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}@2x.png?key=${encodeURIComponent(basemapKey)}`],tileSize:256,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> © <a href="https://carto.com/attributions" target="_blank">CARTO</a>'}},layers:[{id:'background',type:'raster',source:'district',paint:{'raster-saturation':.15}}]}});
       this.raw.touchZoomRotate.disableRotation();
       this.listeners = new globalThis.Map();
       this.raw.on('error', e => console.warn('Hongdae map data:', e.error?.message));
@@ -40,6 +41,8 @@
     constructor(o={}) {this.position=o.position;this.el=document.createElement('button');this.el.type='button';this.el.className='hm-place-pin';this.el.title=o.title||'';this.el.setAttribute('aria-label',o.title||'지도 장소');
       if(o.image){const img=document.createElement('img');img.src=o.image.src;img.width=o.image.size.width;img.height=o.image.size.height;img.alt='';this.el.append(img)}
       else this.el.textContent='📍';this.el.style.zIndex=o.zIndex||1;
+      // Keep pin taps from starting a map gesture or reaching the map click handler.
+      for(const name of ['pointerdown','mousedown','touchstart','click']) this.el.addEventListener(name,e=>e.stopPropagation());
       this.raw=new maplibregl.Marker({element:this.el}).setLngLat(ll(this.position));if(o.map)this.setMap(o.map);}
     setMap(map){this.map=map;if(map)this.raw.addTo(map.raw);else this.raw.remove()}
     getPosition(){return this.position}
@@ -48,7 +51,7 @@
     off(name,fn){if(name&&fn)this.el.removeEventListener(name,fn)}
   }
   class Overlay {
-    constructor(o={}){this.position=o.position;this.el=document.createElement('div');this.el.className='hm-overlay';this.el.style.zIndex=o.zIndex||8;
+    constructor(o={}){this.position=o.position;this.el=document.createElement('div');this.el.className='hm-overlay';this.el.style.pointerEvents='none';this.el.style.zIndex=o.zIndex||8;
       if(typeof o.content==='string')this.el.innerHTML=o.content;else if(o.content)this.el.append(o.content);
       this.raw=new maplibregl.Marker({element:this.el,anchor:o.xAnchor<0?'left':o.yAnchor>1?'bottom':'center',offset:o.yAnchor>1?[0,-22]:o.xAnchor<0?[8,0]:[0,0]}).setLngLat(ll(this.position));if(o.map)this.setMap(o.map);}
     setMap(map){this.map=map;if(map)this.raw.addTo(map.raw);else this.raw.remove()}
