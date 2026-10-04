@@ -17,6 +17,7 @@
         attributionControl:{compact:true},
         style:{version:8,sources:{district:{type:'raster',tiles:[`https://a.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}@2x.png?key=${encodeURIComponent(basemapKey)}`],tileSize:256,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> © <a href="https://carto.com/attributions" target="_blank">CARTO</a>'}},layers:[{id:'background',type:'raster',source:'district',paint:{'raster-saturation':.15}}]}});
       this.raw.touchZoomRotate.disableRotation();
+      this.raw.once('load',()=>{const credit=container.querySelector('details.maplibregl-ctrl-attrib');if(credit)credit.open=false;});
       this.listeners = new globalThis.Map();
       this.raw.on('error', e => console.warn('Hongdae map data:', e.error?.message));
       new ResizeObserver(() => this.raw.resize()).observe(container);
