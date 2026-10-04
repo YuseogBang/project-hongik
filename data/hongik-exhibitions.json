@@ -4,6 +4,10 @@
     {
       "name": "홍익대학교 현대미술관",
       "url": "https://homa.hongik.ac.kr/homa/index.do"
+    },
+    {
+      "name": "홍익대학교 뉴스센터",
+      "url": "https://www.hongik.ac.kr/kr/newscenter/news.do"
     }
   ],
   "events": [
@@ -16,6 +20,22 @@
       "location": "현대미술관 제1관 전실 · 문헌관 4층",
       "description": "월~금 10:00~18:00. 종료된 전시는 진행·예정 피드에서 제외됩니다.",
       "link": "https://homa.hongik.ac.kr/homa/0302.do?articleNo=157604&mode=view",
+      "checkedAt": "2026-10-04"
+    },
+    {
+      "id": "hongik-museum-80th-2026",
+      "title": "홍익미술 — 시대의 부표, 시대의 아이콘",
+      "dept": "홍익대학교 박물관",
+      "dateStart": "2026-09-01",
+      "dateEnd": "2027-01-19",
+      "location": "홍익대학교 문헌관(MH동) 3층 박물관 전시실",
+      "description": "개교 80주년 특별기획전. 홍익미술 관련 소장품과 기록 자료를 함께 소개합니다.",
+      "link": "https://www.hongik.ac.kr/kr/newscenter/news.do?articleNo=156968&mode=view",
+      "tags": [
+        "전시",
+        "미술",
+        "아카이브"
+      ],
       "checkedAt": "2026-10-04"
     }
   ],
