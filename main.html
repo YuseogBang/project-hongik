@@ -1095,8 +1095,12 @@
 .place-dismiss{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;border:0;background:#fff;color:#8a3c35;font-size:14px;box-shadow:0 3px 10px rgba(20,60,50,.15)}
 .place-identity-content{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px}.place-identity-content h3{margin:0;font-size:17px;font-weight:900;color:#1c352e}.place-feature-tags{display:flex;gap:6px;flex-wrap:wrap}.place-feature-tags span{background:#fdf0e4;color:#8a5a3a;font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px}.place-description{margin:0;font-size:12px;line-height:1.65;color:#5c756d}
 .place-story-card{margin-top:10px;padding:13px 14px;background:linear-gradient(135deg,#5b1722,#3b0d14);border:1px solid #8f3142;border-radius:14px;color:#fff4ed}.place-section-label{font-size:10px;font-weight:900;letter-spacing:.08em;color:#f0b5bd;margin-bottom:7px}.place-story-card p{margin:0;color:#e8c8c5;font-size:12px;line-height:1.55}.place-footer-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.place-footer-actions .map-btn{flex:1;text-align:center;font-size:11px;text-decoration:none;padding:11px 8px;border-radius:12px}
+.place-identity-content p{margin:0;font-size:12px;line-height:1.65;color:#5c756d}
+#exhibition-body{background:transparent!important;padding:0}
+#exhibition-modal .place-identity-card .map-btn{background:#fff1e8;color:#8a3c35;border:1px solid #edc9b6;font-weight:700}
+#exhibition-modal .place-identity-card{flex-shrink:0}
 .station-detail-card #subway-arrival-body{min-height:100px;padding:12px 0}.station-detail-card #subway-arrival-updated{color:#c39298!important}
-@media(max-width:700px){#landmark-guide-modal,#subway-modal{align-items:flex-end;padding-bottom:calc(12px + env(safe-area-inset-bottom));}.landmark-detail-card{width:min(520px,96vw)!important;border-radius:24px 24px 16px 16px!important}}
+@media(max-width:700px){#landmark-guide-modal,#subway-modal,#exhibition-modal{align-items:flex-end;padding-bottom:calc(12px + env(safe-area-inset-bottom));}.landmark-detail-card{width:min(520px,96vw)!important;border-radius:24px 24px 16px 16px!important}}
 </style>
 </head>
 <body>
@@ -2503,6 +2507,7 @@ function selectLanguage(lang) {
   document.getElementById('language-modal').style.display='none';
   document.documentElement.lang=lang;applyLang();updateMapLanguage();
   if(map)renderAll();
+  updateMapLanguage();
   window.dispatchEvent(new Event('hongdae:language-change'));
 }
 function cycleLang() {
