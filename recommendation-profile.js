@@ -6,7 +6,7 @@
     {title:'어떤 감각의 공간이 좋나요?',subtitle:'사진에 담고 싶은 곳, 조용히 머무는 곳, 나만 아는 골목.',tags:['조용한','시끌벅적','인스타감성','데이트','가성비','로컬단골','노포','홍대병']}
   ];
   const read=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'null')||{version:1,tags:[],budget:'any',explore:'balanced',company:'solo',walk:1200}}catch{return {version:1,tags:[],budget:'any',explore:'balanced',company:'solo',walk:1200}}};
-  const tastes=()=>{try{return typeof userTastes!=='undefined'?userTastes:JSON.parse(localStorage.getItem('userTastes')||'[]')}catch{return []}};
+  const tastes=()=>{try{const value=typeof userTastes!=='undefined'?userTastes:JSON.parse(localStorage.getItem('userTastes')||'[]');return Array.isArray(value)?value.filter(tag=>typeof tag==='string'):[]}catch{return []}};
   function profile(){return {...read(),tags:tastes()}}
   const meals=s=>(s.surveyMenu?.menu||[]).filter(([n,p])=>Number.isFinite(p)&&p>0&&p<=10000&&/라멘|우동|국수|냉면|덮밥|볶음밥|비빔밥|국밥|곰탕|설렁탕|찌개|백반|정식|돈까스|돈카츠|버거|샌드위치|오니기리|주먹밥|김밥|카레|소바|짜장|짬뽕|토스트/.test(n)&&!/추가|공기밥|사이드|감자튀김|음료|2인|3인|4인|인 이상|미니|고기\s*마요|곁들임/.test(n));
   function eligible(s){return s.status!=='closed' && (profile().budget!=='10000'||!['restaurant','food'].includes(s.type)||meals(s).length>0)}
