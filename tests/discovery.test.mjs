@@ -108,3 +108,12 @@ test('A delayed prior account profile cannot overwrite the current user or resto
  requests.get('old')({data:{id:'old',role:'admin'},error:null});assert.equal(await old,false);
  assert.equal(ctx.state().profile.id,'current');assert.equal(admin.hidden,true);
 });
+
+test('Failed device bookmark import retains the local list for another attempt',async()=>{
+ const source=fs.readFileSync('platform.js','utf8');
+ const body=source.slice(source.indexOf('  async function syncDeviceSaves()'),source.indexOf('  const profileObserver'));
+ const values=new Map([['bookmarksOwner','guest'],['bookmarks','{"42":true}']]);
+ const ctx={localStorage:{getItem:k=>values.get(k)||null,setItem:(k,v)=>values.set(k,v)},client:{from:()=>({select:()=>({eq:async()=>({data:[],error:null})})})},window:{HongdaePlatform:{syncDefaultSave:async()=>false}},notice(){},renderAll(){}};
+ vm.createContext(ctx);vm.runInContext('let bookmarks={42:true},signedInUser={id:"user"};'+body+';this.sync=syncDeviceSaves;this.saved=()=>bookmarks;',ctx);
+ await ctx.sync();assert.equal(ctx.saved()[42],true);assert.equal(values.get('bookmarks'),'{"42":true}');assert.equal(values.get('bookmarksOwner'),'guest');
+});

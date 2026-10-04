@@ -191,7 +191,13 @@
     if (signedInUser?.id !== ownerId) return;
     if(error){notice('저장 목록을 불러오지 못했어요.');return;}
     const merged={};for(const c of data||[])for(const p of c.collection_places||[])merged[p.place_id]=true;
-    for(const id of Object.keys(device))if(device[id]&&!merged[id]){if(signedInUser?.id!==ownerId)return;if(await window.HongdaePlatform.syncDefaultSave(Number(id),true))merged[id]=true;}
+    for (const id of Object.keys(device)) {
+      if (!device[id] || merged[id]) continue;
+      if (signedInUser?.id !== ownerId) return;
+      // Keep device bookmarks intact if importing one of them fails.
+      if (!await window.HongdaePlatform.syncDefaultSave(Number(id), true)) return;
+      merged[id] = true;
+    }
     if (signedInUser?.id !== ownerId) return;
     bookmarks=merged;localStorage.setItem('bookmarks',JSON.stringify(merged));localStorage.setItem('bookmarksOwner',signedInUser.id);
     const pending=Number(localStorage.getItem('pendingSaveId'));if(pending){if(await window.HongdaePlatform.syncDefaultSave(pending,true)){if(signedInUser?.id !== ownerId)return;localStorage.removeItem('pendingSaveId');bookmarks[pending]=true;localStorage.setItem('bookmarks',JSON.stringify(bookmarks));}}
