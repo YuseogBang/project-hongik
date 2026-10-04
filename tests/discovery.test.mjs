@@ -44,3 +44,10 @@ test('Budget meal recommendations exclude sides, drinks, shared dishes and missi
  const result=meal({surveyMenu:{menu:[['돈카츠 정식',10000],['라멘',10500],['미니우동',3000],['공기밥 추가',1000],['고기 마요 덮밥',3000],['김치찌개 2인 이상',9000],['국밥',null],['김밥',4500],['감자튀김',4000],['콜라',2000]]}});
  assert.deepEqual(Array.from(result,r=>r[0]),['돈카츠 정식','김밥']);
 });
+
+test('Franchise exclusion supports explicit data and case-insensitive names without treating every branch as a chain',()=>{
+ const html=fs.readFileSync('main.html','utf8');const source=html.slice(html.indexOf('const FRANCHISE_BRANDS'),html.indexOf('// 클럽/라이브클럽'));const ctx={};vm.createContext(ctx);vm.runInContext(source,ctx);
+ assert.equal(ctx.isFranchise({name:'BBQ 홍대점'}),true);
+ assert.equal(ctx.isFranchise({name:'제제집 본점'}),false);
+ assert.equal(ctx.isFranchise({name:'확인 브랜드',franchise:true}),true);
+});
