@@ -6,11 +6,11 @@
     const match = String(value || '').match(/([가-힣0-9]+(?:로|길))\s*([0-9]+(?:-[0-9]+)?)(?:\s|$)/);
     return match ? normalize(match[1] + match[2]) : '';
   };
-  const usable = (value) => value && !/확인 불가|미기재|검색되지 않음/.test(value);
+  const usable = (value) => value && !/확인 불가|미기재|검색되지 않음|미조회/.test(value);
   const cleanName = (name) => String(name).replace(/\s*\([^)]*게시글[^)]*\)/g, '').trim();
   const group = (row) => /클럽|공연장|방탈출|보드게임/.test(row.category) ? '문화·놀이' : /술집|주점|바\b|호프|맥주|이자카야|포차/.test(row.category) ? '주점' : /카페|커피|디저트|베이커리|제과/.test(row.category) ? '카페' : '식사';
   const mapType = (row) => /클럽/.test(row.category) ? 'club' : /공연장/.test(row.category) ? 'liveclub' : /방탈출|보드게임/.test(row.category) ? 'play' : group(row) === '주점' ? 'bar' : group(row) === '카페' ? 'cafe' : 'restaurant';
-  let dataPromise, records = [], query = '', selectedGroup = '전체', shown = 35;
+  let dataPromise, records = [], query = '', selectedGroup = '전체', shown = 35, honorOnly = false;
   const style = document.createElement('style');
   style.textContent = `
     .wb-overlay{position:fixed;inset:0;z-index:970;display:none;align-items:flex-end;justify-content:center;padding:12px;background:rgba(12,2,5,.72);font-family:Pretendard,sans-serif}.wb-overlay.open{display:flex}
@@ -27,6 +27,7 @@
   function close() { root.classList.remove('open'); }
   function attach(row, store) {
     store.boardResearch = row;
+    if(row.hallOfFame&&store.status!=='closed'){store.certifications=Array.from(new Set([...(store.certifications||[]),'홍대생 명예학식']));store.hallOfFameBasis=row.hallOfFameBasis;}
     if (!store.hours && usable(row.hours)) {
       store.hours = row.hours;
       store.hoursNote = '게시판 업체 정리 · 2026-10-04 조사, 방문 전 확인';
@@ -46,6 +47,7 @@
         const store = stores.find((entry) => entry.id === row.id);
         if (store) attach(row, store);
       });
+      if(typeof renderAll==='function')renderAll();
       return rows;
     }).catch((error) => { dataPromise = null; throw error; });
     return dataPromise;
@@ -100,21 +102,22 @@
     close(); window.HongdaeDiscovery?.close?.(); selectStore(store.id);
   }
   function renderList() {
-    const filtered = records.filter((row) => (selectedGroup === '전체' || group(row) === selectedGroup) && normalize(`${row.name} ${row.category} ${row.menu}`).includes(normalize(query)));
+    const filtered = records.filter((row) => (!honorOnly || row.hallOfFame) && (selectedGroup === '전체' || group(row) === selectedGroup) && normalize(`${row.name} ${row.category} ${row.menu}`).includes(normalize(query)));
     const host = root.querySelector('.wb-results');
-    host.innerHTML = `<p class="wb-status">${filtered.length}곳 · 언급 글 수 순 · 영업시간과 메뉴는 2026-10-04 조사 자료</p>${filtered.slice(0, shown).map((row) => `<button type="button" class="wb-place" data-row="${row.id}" ${row.status === 'closed' ? 'disabled' : ''}>${escapeHtml(row.name)}<em>${row.status === 'closed' ? '폐업 기록' : row.mentions ? `${row.mentions}회 언급` : '게시판 수집'}</em><small>${escapeHtml(row.category)} · ${escapeHtml(row.address || '주소 미확인')}</small></button>`).join('')}${filtered.length > shown ? '<button type="button" class="wb-more">더 보기</button>' : ''}`;
+    host.innerHTML = `<p class="wb-status">${filtered.length}곳 · 언급 글 수 순 · 영업시간과 메뉴는 2026-10-04 조사 자료</p>${filtered.slice(0, shown).map((row) => `<button type="button" class="wb-place" data-row="${row.id}" ${row.status === 'closed' ? 'disabled' : ''}>${escapeHtml(row.name)}<em>${row.status === 'closed' ? '폐업 기록' : row.mentions ? `${row.mentions}회 언급(자료별 최대)` : '게시판 수집'}</em><small>${escapeHtml(row.category)} · ${escapeHtml(row.address || '주소 미확인')}</small></button>`).join('')}${filtered.length > shown ? '<button type="button" class="wb-more">더 보기</button>' : ''}`;
     host.querySelectorAll('[data-row]').forEach((button) => button.onclick = () => choose(records.find((row) => row.id === Number(button.dataset.row)), button));
     host.querySelector('.wb-more')?.addEventListener('click', () => { shown += 35; renderList(); });
   }
   function render() {
-    root.innerHTML = `<section class="wb-panel"><div class="wb-head"><h2>🍽️ 홍대생 맛집 게시판</h2><button type="button" class="wb-close">닫기 ✕</button></div><p class="wb-intro">사용자가 제공한 게시판 정리 126곳입니다. 새 장소는 누를 때 카카오 검색으로 상호와 주소를 대조합니다. 게시판 언급 횟수는 추천 점수나 카카오 평점이 아닙니다.</p><input class="wb-search" type="search" placeholder="업체·메뉴 검색" aria-label="업체와 메뉴 검색"><div class="wb-tabs">${['전체','식사','카페','주점','문화·놀이'].map((item) => `<button type="button" data-group="${item}" class="${selectedGroup === item ? 'on' : ''}">${item}</button>`).join('')}</div><p class="wb-status" role="status"></p><div class="wb-results"></div></section>`;
+    root.innerHTML = `<section class="wb-panel"><div class="wb-head"><h2>🍽️ ${honorOnly?'홍대생 명예학식':'홍대생 맛집 게시판'}</h2><button type="button" class="wb-close">닫기 ✕</button></div><p class="wb-intro">사용자가 제공한 게시판 정리 ${records.length}곳입니다. 새 장소는 누를 때 카카오 검색으로 상호와 주소를 대조합니다. 중복 기간의 언급 수는 합산하지 않았습니다. 명예학식은 자주 언급 업체 시트의 3회 이상 기준입니다.</p><input class="wb-search" type="search" placeholder="업체·메뉴 검색" aria-label="업체와 메뉴 검색"><div class="wb-tabs">${['전체','식사','카페','주점','문화·놀이'].map((item) => `<button type="button" data-group="${item}" class="${selectedGroup === item ? 'on' : ''}">${item}</button>`).join('')}</div><p class="wb-status" role="status"></p><div class="wb-results"></div></section>`;
     root.querySelector('.wb-close').onclick = close;
     root.querySelector('.wb-search').value = query;
     root.querySelector('.wb-search').oninput = (event) => { query = event.target.value; shown = 35; renderList(); };
     root.querySelectorAll('[data-group]').forEach((button) => button.onclick = () => { selectedGroup = button.dataset.group; shown = 35; render(); });
     renderList();
   }
-  async function open() {
+  async function open(onlyHonor=false) {
+    honorOnly=onlyHonor;
     window.HongdaeDiscovery?.close?.();
     window.HongdaeResearch?.close?.();
     root.classList.add('open');
@@ -124,11 +127,11 @@
   }
   function renderEntry(host) {
     if (!host) return;
-    host.innerHTML = '<button type="button" class="discovery-theme" data-board>🍽️ 홍대생 맛집 게시판 <span>126곳 →</span><small>제공된 엑셀의 업체·메뉴·영업시간을 찾아보세요</small></button>';
+    host.innerHTML = '<button type="button" class="discovery-theme" data-board>🍽️ 홍대생 맛집 게시판 <span>추가 자료 포함 →</span><small>제공된 엑셀의 업체·메뉴·영업시간을 찾아보세요</small></button>';
     host.querySelector('[data-board]').onclick = open;
   }
   document.addEventListener('DOMContentLoaded', () => document.body.append(root));
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
   load().catch(() => {});
-  window.HongdaeWorkbook = { open, close, renderEntry, load };
+  window.HongdaeWorkbook = { open, openHonor:()=>open(true), close, renderEntry, load };
 })();

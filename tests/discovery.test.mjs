@@ -30,3 +30,11 @@ test('Each district station requests its own Seoul arrival endpoint',async()=>{
     await ctx.handler({query:{station}},res);assert.ok(requested.endsWith('/'+encodeURIComponent(station)));
   }
 });
+
+test('Historical workbook keeps unique venues, separate evidence, and frequent-place classification',()=>{
+ const rows=JSON.parse(fs.readFileSync('data/hongdae-board-venues.json','utf8'));
+ assert.equal(new Set(rows.map(r=>r.id)).size,rows.length);
+ assert.equal(rows.filter(r=>r.hallOfFame).length,42);
+ const sources=rows.flatMap(r=>r.sources||[]);assert.equal(sources.length,174);
+ for(const row of rows.filter(r=>r.sources?.length)){assert.ok(row.mentions>=Math.max(...row.sources.map(s=>s.mentions||0)));assert.ok(row.sources.every(s=>s.periodStart==='2024-06-01'&&s.periodEnd==='2026-06-30'));}
+});
