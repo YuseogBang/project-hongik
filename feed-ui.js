@@ -13,7 +13,7 @@
   async function open(){
     const token=++generation;
     let root=document.querySelector('.hf-feed');if(!root){root=document.createElement('section');root.className='hf-feed';document.body.append(root)}
-    const all=stores.filter(s=>s.status!=='closed' && Number.isFinite(s.lat));
+    const all=stores.filter(s=>s.status!=='closed' && (!indieOnly||!isFranchise(s)) && Number.isFinite(s.lat));
     const personal=all.filter(s=>userTastes.some(t=>(s.tags||[]).includes(t))).sort((a,b)=>matchScore(b)-matchScore(a));
     const season=all.filter(seasonal), saved=all.filter(s=>bookmarks[s.id]);
     root.innerHTML=`<header class="hf-head"><div class="hf-head-top"><div><h2 class="hf-title">홍대에서 오늘</h2><p class="hf-sub">새 소식 · 계절 메뉴 · 내 취향</p></div><button class="hf-close" aria-label="피드를 닫고 지도로 돌아가기">← 지도</button></div><div class="hf-filter">${[['today','오늘 소식'],['season','계절 메뉴'],['taste','내 취향'],['saved','저장한 곳']].map(([id,title])=>`<button data-section="${id}" class="${section===id?'on':''}">${title}</button>`).join('')}</div></header><main class="hf-list"></main>`;
