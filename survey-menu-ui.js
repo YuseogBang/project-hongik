@@ -37,7 +37,11 @@
   }
   function board(store) {
     const record = store.surveyMenu;
-    if (!record?.menu?.length) return '';
+    if (!record?.menu?.length) {
+      const research = store.boardResearch;
+      if (!research?.menu && !research?.price) return '';
+      return `<section class="survey-board" data-place-menu><div class="survey-eyebrow">BOARD RESEARCH · 2026-10-04</div><div class="survey-board-head"><strong>메뉴판</strong></div>${research.menu ? `<div class="survey-row"><span>${escapeHtml(research.menu)}</span></div>` : ''}${research.price ? `<div class="survey-row"><span>${escapeHtml(research.price)}</span></div>` : ''}<p class="survey-meta">제공된 게시판 업체 정리 기준입니다. 현재 가격·영업 여부는 카카오맵과 매장에서 확인해 주세요.</p></section>`;
+    }
     const count = record.menu.length;
     return `<section class="survey-board" data-place-menu><div class="survey-eyebrow">MENU BOARD</div><div class="survey-board-head"><strong>메뉴판</strong></div>${rows(record.menu.slice(0, 6))}${count > 6 ? `<button type="button" class="survey-more" onclick="openFullMenu(${store.id})">전체 메뉴 보기 →</button>` : ''}<p class="survey-meta">가격·품절 여부는 방문 전에 확인해 주세요. <a href="${escapeHtml(record.source)}" target="_blank" rel="noopener noreferrer">현재 메뉴 확인 ↗</a></p></section>`;
   }
