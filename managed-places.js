@@ -12,7 +12,7 @@
       for(const key of ['name','type','status','address','category'])if(row[key]!=null)store[key]=row[key];
       if(inArea(row)){store.lat=row.lat;store.lng=row.lng;}
       if(Array.isArray(row.tags))store.tags=row.tags.filter(t=>typeof t==='string');
-      for(const key of ['hours','signatureMenu','dong','franchise','memory','insight','kakaoId'])if(source[key]!=null)store[key]=source[key];
+      for(const key of ['hours','signatureMenu','dong','franchise','memory','insight','kakaoId'])if(source[key]!=null && source[key]!=='')store[key]=source[key];
       if(/^https?:\/\//.test(source.kakaoUrl||''))store.kakaoUrl=source.kakaoUrl;
       if(source.editorial && source.franchise==null)delete store.franchise;
       if(source.editorial){store.hoursNote='관리자가 확인한 영업시간';store.menuSourceNote='관리자가 확인한 메뉴';
