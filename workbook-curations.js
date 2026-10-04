@@ -8,7 +8,8 @@
   };
   const usable = (value) => value && !/확인 불가|미기재|검색되지 않음/.test(value);
   const cleanName = (name) => String(name).replace(/\s*\([^)]*게시글[^)]*\)/g, '').trim();
-  const group = (row) => /술집|주점|바\b|맥주|이자카야|포차/.test(row.category) ? '주점' : /카페|디저트|베이커리/.test(row.category) ? '카페' : '식사';
+  const group = (row) => /클럽|공연장|방탈출|보드게임/.test(row.category) ? '문화·놀이' : /술집|주점|바\b|호프|맥주|이자카야|포차/.test(row.category) ? '주점' : /카페|커피|디저트|베이커리|제과/.test(row.category) ? '카페' : '식사';
+  const mapType = (row) => /클럽/.test(row.category) ? 'club' : /공연장/.test(row.category) ? 'liveclub' : /방탈출|보드게임/.test(row.category) ? 'play' : group(row) === '주점' ? 'bar' : group(row) === '카페' ? 'cafe' : 'restaurant';
   let dataPromise, records = [], query = '', selectedGroup = '전체', shown = 35;
   const style = document.createElement('style');
   style.textContent = `
@@ -67,6 +68,7 @@
     });
   }
   async function choose(row, button) {
+    if (row.status === 'closed') return;
     const existing = stores.find((store) => store.id === row.id);
     if (existing) { close(); window.HongdaeDiscovery?.close?.(); selectStore(existing.id); return; }
     button.disabled = true;
@@ -84,7 +86,7 @@
     let store = stores.find((entry) => String(entry.kakaoId) === String(place.id));
     if (!store) {
       const address = place.road_address_name || place.address_name;
-      store = { id:row.id, name:place.place_name, type:group(row) === '주점' ? 'bar' : group(row) === '카페' ? 'cafe' : 'restaurant',
+      store = { id:row.id, name:place.place_name, type:mapType(row),
         status:'unverified', lat:Number(place.y), lng:Number(place.x), address,
         dong:(place.address_name || '').match(/(서교동|연남동|합정동|상수동|동교동)/)?.[1] || '홍대',
         category:place.category_name || row.category, kakaoId:place.id, kakaoUrl:place.place_url,
@@ -100,12 +102,12 @@
   function renderList() {
     const filtered = records.filter((row) => (selectedGroup === '전체' || group(row) === selectedGroup) && normalize(`${row.name} ${row.category} ${row.menu}`).includes(normalize(query)));
     const host = root.querySelector('.wb-results');
-    host.innerHTML = `<p class="wb-status">${filtered.length}곳 · 언급 글 수 순 · 영업시간과 메뉴는 2026-10-04 조사 자료</p>${filtered.slice(0, shown).map((row) => `<button type="button" class="wb-place" data-row="${row.id}">${escapeHtml(row.name)}<em>${row.mentions ? `${row.mentions}회 언급` : '게시판 수집'}</em><small>${escapeHtml(row.category)} · ${escapeHtml(row.address || '주소 미확인')}</small></button>`).join('')}${filtered.length > shown ? '<button type="button" class="wb-more">더 보기</button>' : ''}`;
+    host.innerHTML = `<p class="wb-status">${filtered.length}곳 · 언급 글 수 순 · 영업시간과 메뉴는 2026-10-04 조사 자료</p>${filtered.slice(0, shown).map((row) => `<button type="button" class="wb-place" data-row="${row.id}" ${row.status === 'closed' ? 'disabled' : ''}>${escapeHtml(row.name)}<em>${row.status === 'closed' ? '폐업 기록' : row.mentions ? `${row.mentions}회 언급` : '게시판 수집'}</em><small>${escapeHtml(row.category)} · ${escapeHtml(row.address || '주소 미확인')}</small></button>`).join('')}${filtered.length > shown ? '<button type="button" class="wb-more">더 보기</button>' : ''}`;
     host.querySelectorAll('[data-row]').forEach((button) => button.onclick = () => choose(records.find((row) => row.id === Number(button.dataset.row)), button));
     host.querySelector('.wb-more')?.addEventListener('click', () => { shown += 35; renderList(); });
   }
   function render() {
-    root.innerHTML = `<section class="wb-panel"><div class="wb-head"><h2>🍽️ 홍대생 맛집 게시판</h2><button type="button" class="wb-close">닫기 ✕</button></div><p class="wb-intro">사용자가 제공한 게시판 정리 126곳입니다. 새 장소는 누를 때 카카오 검색으로 상호와 주소를 대조합니다. 게시판 언급 횟수는 추천 점수나 카카오 평점이 아닙니다.</p><input class="wb-search" type="search" placeholder="업체·메뉴 검색" aria-label="업체와 메뉴 검색"><div class="wb-tabs">${['전체','식사','카페','주점'].map((item) => `<button type="button" data-group="${item}" class="${selectedGroup === item ? 'on' : ''}">${item}</button>`).join('')}</div><p class="wb-status" role="status"></p><div class="wb-results"></div></section>`;
+    root.innerHTML = `<section class="wb-panel"><div class="wb-head"><h2>🍽️ 홍대생 맛집 게시판</h2><button type="button" class="wb-close">닫기 ✕</button></div><p class="wb-intro">사용자가 제공한 게시판 정리 126곳입니다. 새 장소는 누를 때 카카오 검색으로 상호와 주소를 대조합니다. 게시판 언급 횟수는 추천 점수나 카카오 평점이 아닙니다.</p><input class="wb-search" type="search" placeholder="업체·메뉴 검색" aria-label="업체와 메뉴 검색"><div class="wb-tabs">${['전체','식사','카페','주점','문화·놀이'].map((item) => `<button type="button" data-group="${item}" class="${selectedGroup === item ? 'on' : ''}">${item}</button>`).join('')}</div><p class="wb-status" role="status"></p><div class="wb-results"></div></section>`;
     root.querySelector('.wb-close').onclick = close;
     root.querySelector('.wb-search').value = query;
     root.querySelector('.wb-search').oninput = (event) => { query = event.target.value; shown = 35; renderList(); };
