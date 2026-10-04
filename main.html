@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl.css">
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
 <script src="clean-map.js"></script>
-<style>.hm-place-pin{padding:10px!important;touch-action:manipulation;border:0!important;background:transparent!important;cursor:pointer;line-height:0}.hm-place-pin img{display:block;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(74,30,30,.18))}.hm-place-pin:focus-visible{outline:3px solid #ffb85c;border-radius:50%}.hm-place-pin:hover img{filter:drop-shadow(0 2px 5px rgba(232,54,42,.5))}.hm-cluster{padding:0!important;width:38px;height:38px;border-radius:50%;background:#e8362a!important;color:#fff;font:700 13px Pretendard,sans-serif;border:2px solid #fff!important;line-height:34px}.hm-overlay{font-family:Pretendard,sans-serif}.maplibregl-ctrl-bottom-right{bottom:88px!important}.maplibregl-ctrl-attrib{font:10px Pretendard,sans-serif!important}.maplibregl-canvas:focus-visible{outline:2px solid #e8362a}</style>
+<style>.hm-place-pin{padding:10px!important;touch-action:manipulation;border:0!important;background:transparent!important;cursor:pointer;line-height:0}.hm-place-pin img{display:block;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(74,30,30,.18))}.hm-place-pin:focus-visible{outline:3px solid #ffb85c;border-radius:50%}.hm-place-pin:hover img{filter:drop-shadow(0 2px 5px rgba(232,54,42,.5))}.hm-cluster{padding:0!important;width:38px;height:38px;border-radius:50%;background:#e8362a!important;color:#fff;font:700 13px Pretendard,sans-serif;border:2px solid #fff!important;line-height:34px}.hm-overlay{font-family:Pretendard,sans-serif}.district-landmark{display:flex;align-items:center;gap:4px;white-space:nowrap;padding:5px 8px;border-radius:9px;border:1px solid #ffffff;background:rgba(255,253,246,.94);color:var(--landmark-color);font:800 12px Pretendard,sans-serif;box-shadow:0 2px 6px rgba(50,40,20,.12);pointer-events:none}.district-landmark span{font-size:14px}.maplibregl-ctrl-bottom-right{bottom:88px!important}.maplibregl-ctrl-attrib{font:10px Pretendard,sans-serif!important}.maplibregl-canvas:focus-visible{outline:2px solid #e8362a}</style>
 
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
@@ -3030,6 +3030,7 @@ window.kakao && kakao.maps.load(async () => {
     )
   });
   HongdaeMap.event.addListener(schoolMarker, 'click', () => openExhibitionBanner());
+  addDistrictLandmarks();
 
   document.getElementById('loading').style.display = 'none';
   applyLang(); // 저장된 언어 설정(있다면) 적용
@@ -3146,6 +3147,33 @@ function processVerifyQueue() {
     // 카카오 API 쿼터 보호: 100ms 간격
     setTimeout(processVerifyQueue, 100);
   }, { location: latlng, radius: 200, size: 1 });
+}
+
+// Orientation labels use existing verified coordinates or Kakao place search results.
+function addDistrictLandmarks() {
+  const add = (name, lat, lng, icon, color) => {
+    const label = new HongdaeMap.CustomOverlay({
+      map, position:new kakao.maps.LatLng(lat,lng), yAnchor:1.8, zIndex:6,
+      content:`<div class="district-landmark" style="--landmark-color:${color}"><span>${icon}</span>${name}</div>`
+    });
+    return label;
+  };
+  add('홍대입구역',HONGDAE_ENTRANCE.lat,HONGDAE_ENTRANCE.lng,'🚇','#3179a4');
+  add('홍익대학교',HONGIK.lat,HONGIK.lng,'🎓','#6650a8');
+  const cultural = stores.find(s=>s.kakaoId==='8016441');
+  if(cultural) add('상상마당',cultural.lat,cultural.lng,'🎭','#a45677');
+  const places = new kakao.maps.services.Places();
+  const requests = [
+    {query:'합정역',match:n=>/^합정역(?:\s|$)/.test(n),icon:'🚇',color:'#3179a4'},
+    {query:'상수역',match:n=>/^상수역(?:\s|$)/.test(n),icon:'🚇',color:'#3179a4'},
+    {query:'홍익문화공원',match:n=>n==='홍익문화공원',icon:'🌳',color:'#40815b'},
+    {query:'경의선숲길 연남동',match:n=>n.includes('경의선숲길'),icon:'🌳',color:'#40815b'}
+  ];
+  requests.forEach(request=>places.keywordSearch(request.query,(results,status)=>{
+    if(status!==kakao.maps.services.Status.OK)return;
+    const found=results.find(p=>request.match(p.place_name)&&Number(p.y)>=37.543&&Number(p.y)<=37.572&&Number(p.x)>=126.905&&Number(p.x)<=126.939);
+    if(found)add(request.query==='경의선숲길 연남동'?'경의선숲길':request.query,Number(found.y),Number(found.x),request.icon,request.color);
+  },{location:new kakao.maps.LatLng(HONGDAE_ENTRANCE.lat,HONGDAE_ENTRANCE.lng),radius:2500,size:10}));
 }
 
 // ── RENDER ────────────────────────────────────────────
@@ -4944,7 +4972,7 @@ function addStore() {
     }
   });
   </script>
-  <script src="platform.js"></script>
+  <script src="platform.js?v=20261004-pin-position"></script>
   <script src="ui-redesign.js"></script>
   <script src="experience-ui.js"></script>
   <script src="discovery-ui.js"></script>
