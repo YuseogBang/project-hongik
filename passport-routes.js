@@ -6,7 +6,7 @@
     { id: 'night', title: { ko: '밤의 홍대 입문', en: 'Hongdae after dark', zh: '弘大夜生活入门' }, types: ['club'] }
   ];
   const copy = {
-    ko: { passport:'🦋 홍대병 도감', passportNav:'🦋 도감', routeNav:'코스 추천', passportIntro:'‘가봤어요’는 본인이 남기는 개인 방문 기록이며 이 기기에만 저장됩니다. 업체가 확인한 공식 방문 인증은 아닙니다.', visited:'가봤어요', mark:'가봤어요 표시', progress:'내 방문 기록', close:'닫기', route:'내 홍대 코스', routeIntro:'누구의 눈으로 홍대를 볼까요? 장소 태그와 가까운 위치를 기준으로 순서를 만들어요.', visitor:'처음 온 여행자', visitorDesc:'홍대의 공연·예술 공간부터', explorer:'새로운 곳 찾는 여행자', explorerDesc:'프랜차이즈 밖의 로컬 장소', student:'늘 다니던 길 밖으로', studentDesc:'내 취향에 맞는 새로운 장소', noTaste:'먼저 취향을 고르면 아직 가보지 않은 장소로 코스를 만들어요.', chooseTaste:'내 취향 고르기', routeNote:'등록 장소와 직선거리로 만든 탐색 순서입니다. 영업 여부·도보 시간·가격은 방문 전에 확인해 주세요.', start:'첫 장소 지도에서 보기', reason:'추천 이유', empty:'조건에 맞는 장소가 아직 없어요.' },
+    ko: { passport:'🦋 홍대병 도감', passportNav:'🦋 도감', routeNav:'코스 추천', passportIntro:'‘가봤어요’는 본인이 남기는 개인 방문 기록이며 이 기기에만 저장됩니다. 업체가 확인한 공식 방문 인증은 아닙니다.', visited:'가봤어요', mark:'가봤어요 표시', progress:'내 방문 기록', close:'닫기', route:'내 홍대 코스', routeIntro:'관심사·동행·이동 범위를 고르면 등록된 태그와 장소 설명으로 코스를 만들어요. 출발 기준은 홍대입구역이에요.', visitor:'처음 온 여행자', visitorDesc:'홍대의 공연·예술 공간부터', explorer:'새로운 곳 찾는 여행자', explorerDesc:'프랜차이즈 밖의 로컬 장소', student:'늘 다니던 길 밖으로', studentDesc:'내 취향에 맞는 새로운 장소', noTaste:'먼저 취향을 고르면 아직 가보지 않은 장소로 코스를 만들어요.', chooseTaste:'내 취향 고르기', routeNote:'등록 장소와 직선거리로 만든 탐색 순서입니다. 영업 여부·도보 시간·가격은 방문 전에 확인해 주세요.', start:'첫 장소 지도에서 보기', reason:'추천 이유', empty:'조건에 맞는 장소가 아직 없어요.' },
     en: { passport:'🦋 Hongdae Passport', passportNav:'🦋 Passport', routeNav:'Route ideas', passportIntro:'“Visited” is your personal log saved on this device. It is not an officially verified visit.', visited:'Visited', mark:'Mark visited', progress:'My visit log', close:'Close', route:'My Hongdae route', routeIntro:'Choose how you want to explore. We order tagged places by proximity.', visitor:'First-time visitor', visitorDesc:'Live music and creative spaces', explorer:'Beyond the chains', explorerDesc:'Local places beyond familiar brands', student:'Off your usual path', studentDesc:'New places matching your tastes', noTaste:'Choose your tastes first to build a route to places you have not visited.', chooseTaste:'Choose my tastes', routeNote:'An exploration order based on place tags and straight-line distance. Check opening hours, walking time and prices before you go.', start:'View first place on map', reason:'Why this place', empty:'No matching places yet.' },
     zh: { passport:'🦋 弘大探索图鉴', passportNav:'🦋 图鉴', routeNav:'路线推荐', passportIntro:'“去过”是保存在此设备的个人记录，并非商家核实的到访认证。', visited:'去过', mark:'标记去过', progress:'我的到访记录', close:'关闭', route:'我的弘大路线', routeIntro:'选择探索方式。路线按地点标签和距离排序。', visitor:'初次到访', visitorDesc:'演出与创意空间', explorer:'寻找新地方', explorerDesc:'连锁店之外的本地空间', student:'走出熟悉路线', studentDesc:'符合个人喜好的新地点', noTaste:'请先选择喜好，再推荐尚未去过的地点。', chooseTaste:'选择我的喜好', routeNote:'根据地点标签和直线距离生成探索顺序。营业时间、步行时间和价格请出发前确认。', start:'在地图上查看第一站', reason:'推荐原因', empty:'暂时没有符合条件的地点。' }
   };
@@ -44,6 +44,7 @@
     .hs-head{display:flex;align-items:center;gap:12px}.hs-head h2{flex:1;font-size:21px;margin:0}.hs-close{padding:8px 11px;border:1px solid var(--border);border-radius:99px;background:var(--surface);color:var(--text);font:700 12px Pretendard,sans-serif}
     .hs-intro{margin:12px 0 16px;color:var(--muted);font-size:12px;line-height:1.6}.hs-progress{height:7px;margin:10px 0 19px;border-radius:99px;background:var(--surface2);overflow:hidden}.hs-progress span{display:block;height:100%;background:var(--accent)}
     .hs-chapter{margin:15px 0}.hs-chapter h3{font-size:15px;margin:0 0 8px}.hs-chapter h3 small{float:right;color:var(--muted);font-size:11px}.hs-place{display:flex;align-items:center;gap:10px;margin:7px 0;padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}.hs-place-info{flex:1;min-width:0}.hs-place-name{display:block;color:var(--text);font:700 13px Pretendard,sans-serif;cursor:pointer}.hs-place small{display:block;margin-top:4px;color:var(--muted);font-size:11px}.hs-stamp{flex:none;padding:8px 10px;border:1px solid var(--border);border-radius:99px;background:transparent;color:var(--muted);font:700 11px Pretendard,sans-serif}.hs-stamp.on{border-color:var(--accent);background:var(--accent);color:#fff}
+    [data-route-questions] select{max-width:100%;padding:8px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:13px Pretendard,sans-serif}[data-route-questions] label{display:flex;align-items:center;justify-content:space-between;gap:10px}
     .hs-modes{display:grid;gap:9px}.hs-mode{width:100%;text-align:left;padding:15px;border:1px solid var(--border);border-radius:15px;background:var(--surface);color:var(--text);font:700 14px Pretendard,sans-serif}.hs-mode small{display:block;margin-top:5px;color:var(--muted);font-size:11px;font-weight:500}.hs-mode.on{border-color:var(--accent);box-shadow:inset 3px 0 var(--accent)}.hs-route-step{width:100%;display:flex;gap:11px;align-items:flex-start;margin:8px 0;padding:13px;border:1px solid var(--border);border-radius:13px;background:var(--surface);color:var(--text);text-align:left;font:700 13px Pretendard,sans-serif}.hs-route-step b{color:var(--accent2)}.hs-route-step span{min-width:0}.hs-route-step small{display:block;margin-top:5px;color:var(--muted);font-size:11px;font-weight:500}.hs-cta{width:100%;margin-top:13px;padding:13px;border:0;border-radius:12px;background:var(--accent);color:#fff;font:700 13px Pretendard,sans-serif}
     .hs-panel{background:linear-gradient(155deg,#321017 0%,var(--bg) 38%)}.hs-summary{display:flex;align-items:center;gap:14px;padding:15px 16px;border:1px solid #925363;border-radius:18px;background:radial-gradient(circle at 88% 5%,rgba(255,198,106,.17),transparent 48%),#421721}.hs-summary-mark{width:60px;height:60px;flex:none;display:grid;place-items:center;border:3px double #ffcf86;border-radius:50%;background:linear-gradient(145deg,#e94137,#7a1830);box-shadow:0 0 0 4px rgba(255,205,136,.12),0 8px 20px rgba(0,0,0,.25);color:#fff;font:900 23px Pretendard,sans-serif}.hs-summary strong{display:block;font-size:17px}.hs-summary small{display:block;margin-top:5px;color:#f3c8c2;font-size:11px}.hs-summary .hs-progress{margin:9px 0 0}.hs-summary .hs-progress span{background:linear-gradient(90deg,#f45748,#ffd27a)}
     .hs-chapter{padding:14px;border:1px solid #75424b;border-radius:18px;background:rgba(67,21,30,.72)}.hs-chapter-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}.hs-chapter-head h3{margin:2px 0 3px;font-size:15px}.hs-chapter-head small{display:block;color:#cda8a6;font-size:11px}.hs-chapter-kicker{color:#ffba8e;font-size:9px;font-weight:900;letter-spacing:.14em}.hs-chapter-state{margin-left:auto;flex:none;padding:5px 8px;border:1px solid #896368;border-radius:99px;color:#c7a5a7;font-size:10px;font-weight:800}.hs-chapter-state.on{border-color:#ffd27a;background:rgba(255,210,122,.16);color:#ffd27a}.hs-medal{position:relative;width:55px;height:55px;flex:none;display:grid;place-items:center;border:3px double #896870;border-radius:50%;background:linear-gradient(145deg,#5e3540,#2b1520);box-shadow:inset 0 3px 9px rgba(0,0,0,.28);filter:saturate(.55)}.hs-medal:before{content:'✦';position:absolute;top:-8px;right:-5px;color:#b8959a;font-size:16px}.hs-medal span{font-size:25px}.hs-medal.earned{border-color:#ffe0a0;background:linear-gradient(145deg,#ffcf70,#e84e3a 55%,#9c2441);box-shadow:0 0 0 4px rgba(255,209,122,.14),0 8px 20px rgba(250,113,61,.27);filter:none;animation:hs-badge-pop .48s ease-out}.hs-medal.earned:before{color:#ffe3a2}.hs-chapter-track{height:5px;margin:0 0 12px;border-radius:99px;background:#65343e;overflow:hidden}.hs-chapter-track span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#f45748,#ffd27a)}
@@ -103,26 +104,36 @@
     if (mode === 'explorer') return (tags.includes('로컬단골') ? 6 : 0) + (tags.includes('노포') ? 5 : 0) + (tags.includes('홍대병') ? 2 : 0) + taste;
     return taste * 5 + (!visited.has(place.id) ? 4 : 0) + (tags.includes('홍대병') ? 1 : 0);
   }
+  const routeThemes = {
+    all:{title:'취향대로 둘러보기',pattern:null},
+    geek:{title:'덕후 루트',pattern:/애니메|피규어|굿즈|만화|보드게임/},
+    vintage:{title:'빈티지 & 구제 루트',pattern:/빈티지|구제|중고의류/},
+    books:{title:'독립출판 & 바이닐 투어',pattern:/독립출판|독립서점|책방|바이닐|LP|음반|레코드/},
+    music:{title:'라이브 & 음악 루트',pattern:/라이브|재즈|공연|음악|LP|바이닐/}
+  };
+  let routeAnswers = {theme:'all',stops:3,walk:1200,company:'solo',newOnly:false,food:false};
+  let routeVariation = 0;
+  const themeMatches = place => (routeAnswers.theme==='geek' && (place.tags||[]).includes('덕후')) || !routeThemes[routeAnswers.theme]?.pattern || routeThemes[routeAnswers.theme].pattern.test(`${place.name} ${(place.tags||[]).join(' ')} ${place.insight||''} ${/^기타/.test(place.category||'')?'':place.category||''}`);
   function buildRoute(mode) {
-    if (mode === 'student' && !userTastes.length) return [];
     const visited = visitedIds();
-    const candidates = stores.filter((place) => place.status !== 'closed' && Number.isFinite(place.lat) && Number.isFinite(place.lng) && !isFranchise(place) && (mode !== 'student' || (!visited.has(place.id) && preferred(place).length > 0)));
-    const route = [], start = { lat: 37.5513, lng: 126.9256 };
-    for (let step = 0; step < 3; step++) {
-      const anchor = route.at(-1) || start;
-      const ranked = candidates.filter((place) => !route.some((picked) => picked.id === place.id)).map((place) => {
-        const distance = meters(anchor, place);
-        const diversity = route.some((picked) => picked.type === place.type) ? -5 : 4;
-        const score = baseScore(place, mode, visited) + diversity - distance / 450 - (distance > 1800 ? 8 : 0);
-        return { place, score };
-      }).sort((a, b) => b.score - a.score || a.place.id - b.place.id);
-      if (!ranked.length) break;
+    const candidates = stores.filter(place => place.status !== 'closed' && Number.isFinite(place.lat) && Number.isFinite(place.lng) && !isFranchise(place) && (!routeAnswers.newOnly || !visited.has(place.id)) && (mode !== 'student' || !visited.has(place.id)) && (themeMatches(place) || (routeAnswers.food && place.type === 'restaurant')));
+    const route = [], start = {lat:37.556670,lng:126.923610};
+    for (let step=0;step<routeAnswers.stops;step++) {
+      const anchor=route.at(-1)||start;
+      const wantsFood=routeAnswers.food && step===routeAnswers.stops-1;
+      const ranked=candidates.filter(place=>!route.some(p=>p.id===place.id) && meters(anchor,place)<=routeAnswers.walk && (wantsFood ? place.type==='restaurant' : themeMatches(place))).map(place=>{
+        const companyTag=routeAnswers.company==='solo'?'혼밥':routeAnswers.company==='date'?'데이트':'시끌벅적';
+        const variety=((place.id%997+routeVariation*137)%997)/997*6;
+        return {place,score:baseScore(place,mode,visited)+(place.tags||[]).includes(companyTag)*3+preferred(place).length*2-meters(anchor,place)/350+variety};
+      }).sort((a,b)=>b.score-a.score || a.place.id-b.place.id);
+      if(!ranked.length)break;
       route.push(ranked[0].place);
     }
     return route;
   }
   function reason(place, mode) {
     const tags = preferred(place);
+    if (routeAnswers.theme !== 'all' && themeMatches(place)) return `${routeThemes[routeAnswers.theme].title}${tags.length ? ' · #'+tags.join(' #') : ''}`;
     if (mode === 'student' && tags.length) return `#${tags.join(' #')}`;
     const source = (place.tags || []).find((tag) => mode === 'visitor' ? tag === '홍대병' : mode === 'explorer' ? ['로컬단골','노포'].includes(tag) : tag === '홍대병');
     return source ? `#${source}` : place.category || place.type;
@@ -131,7 +142,18 @@
     const t = language(), route = buildRoute(mode);
     const modeButtons = modes.map((item) => `<button type="button" class="hs-mode ${mode === item.id ? 'on' : ''}" data-mode="${item.id}" aria-pressed="${mode === item.id}">${escapeHtml(t[item.title])}<small>${escapeHtml(t[item.detail])}</small></button>`).join('');
     const steps = route.map((place, index) => `<button type="button" class="hs-route-step" data-place="${place.id}"><b>${index + 1}</b><span>${escapeHtml(place.name)}<small>${escapeHtml(place.dong || '홍대')} · ${escapeHtml(place.category || place.type)} · ${escapeHtml(t.reason)}: ${escapeHtml(reason(place, mode))}</small></span></button>`).join('');
-    show(`${head(t.route)}<p class="hs-intro">${escapeHtml(t.routeIntro)}</p><div class="hs-modes">${modeButtons}</div>${mode === 'student' && !userTastes.length ? `<p class="hs-intro">${escapeHtml(t.noTaste)}</p><button type="button" class="hs-cta" data-choose-taste>${escapeHtml(t.chooseTaste)}</button>` : `<div style="margin-top:18px">${steps || `<p class="hs-intro">${escapeHtml(t.empty)}</p>`}</div>`}<p class="hs-intro">${escapeHtml(t.routeNote)}</p>${route.length ? `<button type="button" class="hs-cta" data-start>${escapeHtml(t.start)}</button>` : ''}`);
+    const questions = `<form data-route-questions style="display:grid;gap:12px;margin-top:16px;font:13px Pretendard,sans-serif">
+      <label>무엇을 찾아볼까요? <select name="theme">${Object.entries(routeThemes).map(([id,v])=>`<option value="${id}" ${routeAnswers.theme===id?'selected':''}>${v.title}</option>`).join('')}</select></label>
+      <label>몇 곳을 방문할까요? <select name="stops">${[2,3,4].map(n=>`<option value="${n}" ${routeAnswers.stops===n?'selected':''}>${n}곳</option>`).join('')}</select></label>
+      <label>누구와 가나요? <select name="company">${[['solo','혼자'],['date','데이트'],['friends','친구들과']].map(([id,title])=>`<option value="${id}" ${routeAnswers.company===id?'selected':''}>${title}</option>`).join('')}</select></label>
+      <label>장소 사이 이동 범위 <select name="walk">${[[600,'가까운 골목 · 600m'],[1200,'동네 산책 · 1.2km'],[2200,'넓게 탐험 · 2.2km']].map(([n,title])=>`<option value="${n}" ${routeAnswers.walk===n?'selected':''}>${title}</option>`).join('')}</select></label>
+      <label><input type="checkbox" name="newOnly" ${routeAnswers.newOnly?'checked':''}> 가봤어요 표시한 곳 제외</label>
+      <label><input type="checkbox" name="food" ${routeAnswers.food?'checked':''}> 마지막에 식사 한 곳 추가</label>
+      <button type="submit" class="hs-cta">이 조건으로 코스 만들기</button>
+    </form>`;
+    show(`${head(t.route)}<p class="hs-intro">${escapeHtml(t.routeIntro)}</p><div class="hs-modes">${modeButtons}</div>${questions}${mode === 'student' && !userTastes.length && routeAnswers.theme === 'all' ? `<p class="hs-intro">${escapeHtml(t.noTaste)}</p><button type="button" class="hs-cta" data-choose-taste>${escapeHtml(t.chooseTaste)}</button>` : `<div style="margin-top:18px">${steps || `<p class="hs-intro">${escapeHtml(t.empty)}</p>`}</div>`}<p class="hs-intro">${escapeHtml(t.routeNote)}</p>${route.length < routeAnswers.stops ? '<p class="hs-intro">등록 정보와 이동 범위에 맞는 장소가 부족해 가능한 곳만 표시해요.</p>' : ''}<button type="button" class="hs-cta" data-other>다른 코스 보기</button>${route.length ? `<button type="button" class="hs-cta" data-start>${escapeHtml(t.start)}</button>` : ''}`);
+    root.querySelector('[data-route-questions]').onsubmit = event => { event.preventDefault(); const f=event.currentTarget.elements; routeAnswers={theme:f.theme.value,stops:Number(f.stops.value),walk:Number(f.walk.value),company:f.company.value,newOnly:f.newOnly.checked,food:f.food.checked}; routeVariation=0; openRoute(mode); };
+    root.querySelector('[data-other]').onclick=()=>{routeVariation++;openRoute(mode);};
     root.querySelectorAll('[data-mode]').forEach((button) => button.onclick = () => openRoute(button.dataset.mode));
     root.querySelectorAll('[data-place]').forEach((button) => button.onclick = () => { close(); selectStore(Number(button.dataset.place)); });
     root.querySelector('[data-start]')?.addEventListener('click', () => { close(); selectStore(route[0].id); });

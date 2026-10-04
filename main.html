@@ -11,6 +11,11 @@
 <title>홍대맵 Hongdae Map</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjZmYxODNjIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiNlNjAwMjUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZjM2NTQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjI0IiBmaWxsPSJ1cmwoI2cpIi8+PHN2ZyB4PSIxNCIgeT0iMzAiIHdpZHRoPSI3MiIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDE4MCAxMDAiPjxjaXJjbGUgY3g9IjU1IiBjeT0iNjQiIHI9IjMwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMTUiLz48Y2lyY2xlIGN4PSIxMzciIGN5PSI2NCIgcj0iMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxNSIvPjxyZWN0IHg9IjE3IiB5PSIyMiIgd2lkdGg9Ijc2IiBoZWlnaHQ9IjE1IiByeD0iNy41IiBmaWxsPSIjZmZmIi8+PHJlY3QgeD0iNDgiIHk9IjAiIHdpZHRoPSIxNSIgaGVpZ2h0PSIzMCIgcng9IjcuNSIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjEzNyIgY3k9IjY0IiByPSI3IiBmaWxsPSIjZmZmIi8+PC9zdmc+PC9zdmc+">
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0837551521646a85388e11c7360953a9&libraries=services,clusterer"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl.css">
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
+<script src="clean-map.js"></script>
+<style>.hm-place-pin{padding:0!important;border:0!important;background:transparent!important;cursor:pointer;line-height:0}.hm-place-pin img{display:block}.hm-cluster{width:38px;height:38px;border-radius:50%;background:#e8362a!important;color:#fff;font:700 13px Pretendard,sans-serif;border:2px solid #fff!important;line-height:34px}.hm-overlay{font-family:Pretendard,sans-serif}.maplibregl-ctrl-bottom-right{bottom:88px!important}.maplibregl-ctrl-attrib{font:10px Pretendard,sans-serif!important}.maplibregl-canvas:focus-visible{outline:2px solid #e8362a}</style>
+
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
   :root {
@@ -1169,7 +1174,7 @@
         <div class="loading-dot"></div>
         <div class="loading-dot"></div>
       </div>
-      <p>카카오맵 불러오는 중...</p>
+      <p>홍대 지도 불러오는 중...</p>
     </div>
     <div class="import-mode-banner" id="import-banner">📌 지도를 클릭하면 주변 업체를 불러옵니다</div>
     <div id="map"></div>
@@ -1325,7 +1330,7 @@
       <button onclick="closeExhibitionBanner()" style="width:26px;height:26px;border-radius:50%;border:none;background:var(--surface2);color:var(--muted);cursor:pointer;font-size:13px;flex:none">✕</button>
     </div>
     <p style="margin:0 0 8px;font-size:11px;color:var(--muted);line-height:1.5">
-      과별 졸업전시·기획전시 소식이에요. 학교 공식 API가 없어 운영자가 직접 등록해요.
+      과별 졸업전시·기획전시 소식이에요. 학교·학과 공식 공지를 매주 월요일 확인해요.
     </p>
     <div id="exhibition-body" style="overflow-y:auto;flex:1"></div>
   </div>
@@ -2945,10 +2950,11 @@ let pickerEl = null;
 let pickerLatlng = null;
 
 // ── MAP INIT ──────────────────────────────────────────
-window.kakao && kakao.maps.load(() => {
+window.kakao && kakao.maps.load(async () => {
+  await HongdaeMap.ready();
   const container = document.getElementById('map');
   const centerPosition = new kakao.maps.LatLng(HONGDAE_ENTRANCE.lat, HONGDAE_ENTRANCE.lng);
-  map = new kakao.maps.Map(container, { center: centerPosition, level: 4 });
+  map = new HongdaeMap.Map(container, { center: centerPosition, level: 4 });
   // 홍대 생활권: 합정·상수·연남 포함. 화면 전체가 범위 안에 있도록 크기에 맞춰 축소 제한.
   const district = { south:37.543, north:37.572, west:126.905, east:126.939 };
   let constrainingDistrict = false;
@@ -2974,7 +2980,7 @@ window.kakao && kakao.maps.load(() => {
   }
   map.setMinLevel(1);
   map.setMaxLevel(6);
-  kakao.maps.event.addListener(map, 'idle', constrainDistrict);
+  HongdaeMap.event.addListener(map, 'idle', constrainDistrict);
   window.addEventListener('resize', () => requestAnimationFrame(constrainDistrict));
   constrainDistrict();
 
@@ -2993,15 +2999,15 @@ window.kakao && kakao.maps.load(() => {
     <circle cx="11.6" cy="18" r="1.5" fill="${BRAND_RED}"/>
     <circle cx="18.4" cy="18" r="1.5" fill="${BRAND_RED}"/>
   </svg>`;
-  const subwayMarker = new kakao.maps.Marker({
+  const subwayMarker = new HongdaeMap.Marker({
     map, position: centerPosition, title: HONGDAE_ENTRANCE.name, zIndex: 5,
-    image: new kakao.maps.MarkerImage(
+    image: new HongdaeMap.MarkerImage(
       'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(subwaySvg),
       new kakao.maps.Size(subwaySize, subwaySize),
       { offset: new kakao.maps.Point(subwaySize / 2, subwaySize / 2) } // 원형 배지라 중심 고정
     )
   });
-  kakao.maps.event.addListener(subwayMarker, 'click', () => openSubwayArrivalBanner());
+  HongdaeMap.event.addListener(subwayMarker, 'click', () => openSubwayArrivalBanner());
 
   // ② 홍익대학교 캠퍼스 — 핀 모양 + 학사모 아이콘, 동일한 빨강
   const campusPosition = new kakao.maps.LatLng(HONGIK.lat, HONGIK.lng);
@@ -3015,21 +3021,21 @@ window.kakao && kakao.maps.load(() => {
       <rect x="15.3" y="3.6" width="0.9" height="4.6"/>
     </g>
   </svg>`;
-  const schoolMarker = new kakao.maps.Marker({
+  const schoolMarker = new HongdaeMap.Marker({
     map, position: campusPosition, title: '홍익대학교', zIndex: 5,
-    image: new kakao.maps.MarkerImage(
+    image: new HongdaeMap.MarkerImage(
       'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(schoolPinSvg),
       new kakao.maps.Size(schoolPinSize, schoolPinSize * 1.3),
       { offset: new kakao.maps.Point(schoolPinSize / 2, schoolPinSize * 1.3) }
     )
   });
-  kakao.maps.event.addListener(schoolMarker, 'click', () => openExhibitionBanner());
+  HongdaeMap.event.addListener(schoolMarker, 'click', () => openExhibitionBanner());
 
   document.getElementById('loading').style.display = 'none';
   applyLang(); // 저장된 언어 설정(있다면) 적용
 
   // Click on map
-  kakao.maps.event.addListener(map, 'click', e => {
+  HongdaeMap.event.addListener(map, 'click', e => {
     if (document.getElementById('modal').style.display !== 'none') {
       document.getElementById('f-lat').value = e.latLng.getLat().toFixed(6);
       document.getElementById('f-lng').value = e.latLng.getLng().toFixed(6);
@@ -3043,7 +3049,7 @@ window.kakao && kakao.maps.load(() => {
 
   // 사용자가 지도를 직접 드래그했을 때만 '이 지역에서 검색' 버튼을 보여줌
   // (resetView 등 코드로 지도를 옮기는 경우엔 안 뜸 — dragend는 사람이 손으로 끌 때만 발생)
-  kakao.maps.event.addListener(map, 'dragend', () => {
+  HongdaeMap.event.addListener(map, 'dragend', () => {
     const bar = document.getElementById('btn-search-area');
     if (bar) bar.style.display = 'inline-flex';
   });
@@ -3156,10 +3162,10 @@ function getScoreColor(score) {
 
 // 매장 이름표 오버레이 하나를 만들어주는 헬퍼 (선택됨/호버 공용)
 function makeLabelOverlay(s, pos, opts) {
-  return new kakao.maps.CustomOverlay({
+  return new HongdaeMap.CustomOverlay({
     position: pos, yAnchor: 2.4, zIndex: opts.zIndex,
-    content: `<div style="white-space:nowrap;font-size:9px;font-weight:600;
-      background:#2a0a0a;color:#ffffff;padding:2px 5px;border-radius:3px;
+    content: `<div style="white-space:nowrap;font-size:12px;font-weight:700;
+      background:#e8362a;color:#ffffff;padding:8px 12px;border-radius:99px;box-shadow:0 3px 12px rgba(60,20,20,.18);
       font-family:'Pretendard',sans-serif;pointer-events:none;${opts.outline?'outline:1px solid var(--accent)':''}">
       ${s.name}
     </div>`
@@ -3169,11 +3175,11 @@ function makeLabelOverlay(s, pos, opts) {
 // 캐치테이블 참고: 우리가 선정한 곳은 흰 배경 이름표를 상시 노출해서 카카오 기본 라벨들 사이에서
 // 확실히 도드라지게 함. 마커 점 바로 옆(오른쪽)에 붙여서 마커와 한 세트로 보이게 배치.
 function makePersistentLabelOverlay(s, pos) {
-  return new kakao.maps.CustomOverlay({
+  return new HongdaeMap.CustomOverlay({
     position: pos, yAnchor: 0.5, xAnchor: -0.15, zIndex: 8,
     content: `<div style="white-space:nowrap;font-size:11px;font-weight:700;
-      background:#ffffff;color:#1a1210;padding:4px 9px;border-radius:7px;
-      box-shadow:0 2px 7px rgba(0,0,0,.35);font-family:'Pretendard',sans-serif;
+      background:#ffffff;color:#1a1210;padding:5px 10px;border-radius:99px;
+      box-shadow:0 2px 7px rgba(0,0,0,.12);font-family:'Pretendard',sans-serif;
       pointer-events:none;border:1px solid rgba(0,0,0,.06)">
       ${s.name}
     </div>`
@@ -3244,7 +3250,7 @@ function getFilteredStores() {
 function renderMarkers() {
   // 클러스터러는 최초 1회만 생성해서 재사용 (매번 새로 만들면 깜빡임 생김)
   if (!clusterer) {
-    clusterer = new kakao.maps.MarkerClusterer({
+    clusterer = new HongdaeMap.MarkerClusterer({
       map,
       averageCenter: true,
       minLevel: 3,       // 이 레벨보다 축소하면 클러스터로 뭉침 (기존 4 → 3, 더 적극적으로 뭉치게)
@@ -3260,10 +3266,10 @@ function renderMarkers() {
     // 클러스터로 뭉쳐서 개별 마커가 안 보이는 줌 레벨에서는 이름표도 같이 숨김
     // (캐치테이블 참고: 지도 전체를 어둡게 만드는 대신, 우리 마커+이름표만 또렷하게 키워서
     //  카카오 기본 아이콘 사이에서 확실히 도드라지게 하는 방식)
-    kakao.maps.event.addListener(map, 'zoom_changed', updateStoreLabelVisibility);
+    HongdaeMap.event.addListener(map, 'idle', updateStoreLabelVisibility);
   }
   clusterer.clear();
-  storeMarkers.forEach(m => kakao.maps.event.removeListener(m));
+  storeMarkers.forEach(m => HongdaeMap.event.removeListener(m));
   storeMarkers = [];
   storeLabelOverlays.forEach(o => o.setMap(null));
   storeLabelOverlays = [];
@@ -3292,23 +3298,25 @@ function renderMarkers() {
       <circle cx="${size/2}" cy="${size/2}" r="${size/2 - strokeW}" fill="${color}"
         fill-opacity="${fillOpacity}" stroke="${strokeColor}" stroke-width="${strokeW}"/>
     </svg>`;
-    const markerImage = new kakao.maps.MarkerImage(
+    const markerImage = new HongdaeMap.MarkerImage(
       'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
       new kakao.maps.Size(size, size)
     );
 
-    const marker = new kakao.maps.Marker({
+    const marker = new HongdaeMap.Marker({
       position: pos, image: markerImage, title: s.name, zIndex: isSelected ? 10 : 1
     });
 
-    kakao.maps.event.addListener(marker, 'click', () => selectStore(s.id));
-    kakao.maps.event.addListener(marker, 'mouseover', () => showHoverLabel(s, pos));
-    kakao.maps.event.addListener(marker, 'mouseout', () => hideHoverLabel(s.id));
+    HongdaeMap.event.addListener(marker, 'click', () => selectStore(s.id));
+    HongdaeMap.event.addListener(marker, 'mouseover', () => showHoverLabel(s, pos));
+    HongdaeMap.event.addListener(marker, 'mouseout', () => hideHoverLabel(s.id));
 
     storeMarkers.push(marker);
 
     // 상시 이름표(캐치테이블 스타일) — 클러스터 안 되는 줌 레벨일 때만 지도에 붙임
     const labelOverlay = makePersistentLabelOverlay(s, pos);
+    labelOverlay.placeId = s.id;
+    labelOverlay.placeName = s.name;
     storeLabelOverlays.push(labelOverlay);
 
     if (isSelected) {
@@ -3325,8 +3333,32 @@ function renderMarkers() {
 // 개별 마커가 보이는 레벨(가까이 확대)에서만 이름표를 붙임
 function updateStoreLabelVisibility() {
   if (!map) return;
-  const showLabels = showMarkers && map.getLevel() < 3; // clusterer의 minLevel과 동일 기준
-  storeLabelOverlays.forEach(o => o.setMap(showLabels ? map : null));
+  const showLabels = showMarkers && map.getLevel() < 3;
+  const projection = map.getProjection();
+  const occupied = [];
+  const mapElement = document.getElementById('map');
+  const width = mapElement.clientWidth, height = mapElement.clientHeight;
+  const candidates = [...storeLabelOverlays].sort((a,b) =>
+    Number(Boolean(bookmarks[b.placeId]))-Number(Boolean(bookmarks[a.placeId])) || a.placeId-b.placeId);
+  // 선택한 장소 이름 주변도 비워 둔다. 화면 밖/서로 겹치는 이름표는 숨기되 핀은 유지한다.
+  if (selectedId != null) {
+    const selected = stores.find(s => s.id === selectedId);
+    if (selected) {
+      const point = projection.containerPointFromCoords(new kakao.maps.LatLng(selected.lat,selected.lng));
+      occupied.push({left:point.x-100,right:point.x+100,top:point.y-70,bottom:point.y+20});
+    }
+  }
+  let count = 0;
+  candidates.forEach(o => {
+    if (!showLabels || o.placeId === selectedId || count >= 16) { o.setMap(null); return; }
+    const point = projection.containerPointFromCoords(o.getPosition());
+    const box = {left:point.x+8,right:point.x+Math.min(190,o.placeName.length*12+24),top:point.y-17,bottom:point.y+17};
+    const onScreen = box.left >= 12 && box.right <= width-12 && box.top >= 12 && box.bottom <= height-90;
+    const collides = occupied.some(r => box.left < r.right+12 && box.right > r.left-12 && box.top < r.bottom+8 && box.bottom > r.top-8);
+    const visible = onScreen && !collides;
+    o.setMap(visible ? map : null);
+    if (visible) { occupied.push(box); count++; }
+  });
 }
 
 function renderList(skipMarkers) {
@@ -4198,12 +4230,12 @@ function searchNearby() {
     if (status !== kakao.maps.services.Status.OK) return;
     data.slice(0,5).forEach(place => {
       const pos = new kakao.maps.LatLng(place.y, place.x);
-      const infowindow = new kakao.maps.InfoWindow({
+      const infowindow = new HongdaeMap.InfoWindow({
         content: `<div class="kakao-infobox"><div class="ib-name">${place.place_name}</div><div class="ib-addr">${place.road_address_name||place.address_name}</div></div>`,
         removable: true
       });
-      const marker2 = new kakao.maps.Marker({ position: pos, map });
-      kakao.maps.event.addListener(marker2, 'click', () => infowindow.open(map, marker2));
+      const marker2 = new HongdaeMap.Marker({ position: pos, map });
+      HongdaeMap.event.addListener(marker2, 'click', () => infowindow.open(map, marker2));
       markers.push(marker2);
     });
   }, { location: center, radius: 500 });
@@ -4231,7 +4263,7 @@ function ensureUserLocationOverlay(lat, lng) {
   const el = document.createElement('div');
   el.className = 'user-location-dot';
   el.innerHTML = '<span class="ring"></span><span class="dot"></span>';
-  userLocationOverlay = new kakao.maps.CustomOverlay({
+  userLocationOverlay = new HongdaeMap.CustomOverlay({
     position: new kakao.maps.LatLng(lat, lng),
     content: el,
     zIndex: 20,
@@ -4446,8 +4478,8 @@ function addStore() {
       const res = await fetch(`/api/subway-arrival?station=${encodeURIComponent(SEOUL_STATION_NAME)}`);
       const data = await res.json();
       if (!data.ok || !data.list || data.list.length === 0) {
-        body.innerHTML = `<div style="padding:24px 4px;text-align:center;color:var(--muted);font-size:13px">${data.error ? data.error : '지금은 도착 정보를 불러올 수 없어요.'}</div>`;
-        if (updated) updated.textContent = '';
+        body.innerHTML = `<div style="padding:24px 4px;text-align:center;color:var(--muted);font-size:13px">${data.error || data.emptyReason || '현재 서울시에서 제공하는 도착 정보가 없습니다.'}</div>`;
+        if (updated) updated.textContent = '20초마다 다시 확인합니다';
         return;
       }
       const sorted = [...data.list].sort((a, b) => (parseInt(a.barvlDt,10) || 9999) - (parseInt(b.barvlDt,10) || 9999));
@@ -4654,9 +4686,9 @@ function addStore() {
     const pos = new kakao.maps.LatLng(place.latitude, place.longitude);
     map.panTo(pos);
     map.setLevel(3);
-    const marker = new kakao.maps.Marker({ map, position: pos, zIndex: 12 });
+    const marker = new HongdaeMap.Marker({ map, position: pos, zIndex: 12 });
     curatedMapMarkers.push(marker);
-    const overlay = new kakao.maps.CustomOverlay({
+    const overlay = new HongdaeMap.CustomOverlay({
       position: pos, yAnchor: 2.5, zIndex: 25,
       content: `<div style="white-space:nowrap;font-size:11px;font-weight:700;background:${BRAND_RED};color:#fff;padding:5px 10px;border-radius:8px;font-family:'Pretendard',sans-serif;box-shadow:0 3px 10px rgba(0,0,0,.4)">📍 ${place.name}</div>`
     });
@@ -4675,13 +4707,13 @@ function addStore() {
     if (curatedCoursePolyline) { curatedCoursePolyline.setMap(null); curatedCoursePolyline = null; }
 
     const path = item.places.map(p => new kakao.maps.LatLng(p.latitude, p.longitude));
-    curatedCoursePolyline = new kakao.maps.Polyline({
+    curatedCoursePolyline = new HongdaeMap.Polyline({
       map, path, strokeWeight: 4, strokeColor: BRAND_RED, strokeOpacity: 0.85, strokeStyle: 'shortdash'
     });
 
     item.places.forEach((p, i) => {
       const pos = new kakao.maps.LatLng(p.latitude, p.longitude);
-      const overlay = new kakao.maps.CustomOverlay({
+      const overlay = new HongdaeMap.CustomOverlay({
         position: pos, yAnchor: 0.5, xAnchor: 0.5, zIndex: 20,
         content: `<div style="width:26px;height:26px;border-radius:50%;background:${BRAND_RED};color:#fff;
           display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;
@@ -4795,20 +4827,11 @@ function addStore() {
        공식 오픈API가 없어 큐레이션 피드와 같은 '직접 입력 + 세션저장 + 내보내기' 방식.
        ══════════════════════════════════════════════════════════ -->
   <script>
-  // ⚠️ 아래 항목은 실제 전시가 아닌 화면 구성 예시입니다. 관리자 폼(🎓 전시 등록)으로 실제 전시 정보로 교체해주세요.
-  const EXHIBITIONS = [
-    {
-      id: 'exh-sample-1',
-      title: '[예시] 2026 회화과 졸업전시',
-      dept: '회화과',
-      dateStart: '2026-01-01',
-      dateEnd: '2099-12-31', // 예시라 항상 '진행중'으로 보이게 넉넉히 잡아둠 — 실제 등록 시 정확한 종료일로 교체
-      location: '홍익대학교 현대미술관',
-      thumbnail: '',
-      description: '이 카드는 실제 데이터가 아닌 화면 구성 예시입니다.',
-      link: ''
-    }
-  ];
+  const EXHIBITIONS = [];
+  fetch('data/hongik-exhibitions.json').then(r=>r.json()).then(data=>{
+    EXHIBITIONS.push(...(data.events || []));
+    if (document.getElementById('exhibition-modal')?.style.display !== 'none') renderExhibitionBanner();
+  }).catch(()=>{});
   let exhibitionSessionEntries = [];
 
   function exhibitionStatus(exh) {
@@ -4854,7 +4877,7 @@ function addStore() {
     const visible = EXHIBITIONS.filter(e => exhibitionStatus(e) !== 'ended')
       .sort((a, b) => (exhibitionStatus(a) === 'ongoing' ? 0 : 1) - (exhibitionStatus(b) === 'ongoing' ? 0 : 1) || a.dateStart.localeCompare(b.dateStart));
     if (!visible.length) {
-      body.innerHTML = `<div class="curated-feed-empty">지금 진행 중이거나 예정된 전시가 없어요.</div>`;
+      body.innerHTML = `<div class="curated-feed-empty">공식 공지로 확인된 전시가 아직 없어요. <a href="https://homa.hongik.ac.kr/homa/index.do" target="_blank" rel="noopener">현대미술관 공식 공지 보기 ↗</a></div>`;
       return;
     }
     body.innerHTML = visible.map(exhibitionCardHTML).join('');
