@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl.css">
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
 <script src="clean-map.js"></script>
-<style>.hm-place-pin{padding:10px!important;touch-action:manipulation;border:0!important;background:transparent!important;cursor:pointer;line-height:0}.hm-place-pin img{display:block;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(74,30,30,.18))}.hm-place-pin:focus-visible{outline:3px solid #ffb85c;border-radius:50%}.hm-place-pin:hover img{filter:drop-shadow(0 2px 5px rgba(232,54,42,.5))}.hm-cluster{padding:0!important;width:38px;height:38px;border-radius:50%;background:#e8362a!important;color:#fff;font:700 13px Pretendard,sans-serif;border:2px solid #fff!important;line-height:34px}.hm-overlay{font-family:Pretendard,sans-serif}.district-landmark{display:flex;align-items:center;gap:4px;white-space:nowrap;padding:5px 8px;border-radius:9px;border:1px solid #ffffff;background:rgba(255,253,246,.94);color:var(--landmark-color);font:800 12px Pretendard,sans-serif;box-shadow:0 2px 6px rgba(50,40,20,.12);pointer-events:none}.district-landmark span{font-size:14px}.maplibregl-ctrl-bottom-right{bottom:4px!important}.maplibregl-ctrl-attrib{font:9px Pretendard,sans-serif!important;background:rgba(255,253,246,.8)!important;padding:2px 5px!important;border-radius:4px!important}.maplibregl-ctrl-attrib-button{display:none!important}.maplibregl-canvas:focus-visible{outline:2px solid #e8362a}</style>
+<style>.hm-place-pin{padding:10px!important;touch-action:manipulation;border:0!important;background:transparent!important;cursor:pointer;line-height:0}.hm-place-pin img{display:block;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(74,30,30,.18))}.hm-place-pin:focus-visible{outline:3px solid #ffb85c;border-radius:50%}.hm-place-pin:hover img{filter:drop-shadow(0 2px 5px rgba(232,54,42,.5))}.hm-cluster{padding:0!important;width:38px;height:38px;border-radius:50%;background:#e8362a!important;color:#fff;font:700 13px Pretendard,sans-serif;border:2px solid #fff!important;line-height:34px}.hm-overlay{font-family:Pretendard,sans-serif}.district-landmark{display:flex;align-items:center;gap:4px;white-space:nowrap;padding:5px 8px;border-radius:9px;border:1px solid #ffffff;background:rgba(255,253,246,.94);color:var(--landmark-color);font:800 12px Pretendard,sans-serif;box-shadow:0 2px 6px rgba(50,40,20,.12);pointer-events:none}.district-landmark span{font-size:14px}.district-area{pointer-events:auto;cursor:pointer;font:800 17px Pretendard,sans-serif;color:var(--area-color);background:var(--area-bg);border:1px solid rgba(255,255,255,.9);border-radius:14px;padding:7px 12px;box-shadow:0 2px 6px rgba(60,40,20,.12)}.district-area small{display:block;font-size:9px;font-weight:600;margin-top:2px}.district-area:focus-visible{outline:3px solid #e8362a}.maplibregl-ctrl-bottom-right{bottom:4px!important}.maplibregl-ctrl-attrib{font:9px Pretendard,sans-serif!important;background:rgba(255,253,246,.8)!important;padding:2px 5px!important;border-radius:4px!important}.maplibregl-ctrl-attrib-button{display:none!important}.maplibregl-canvas:focus-visible{outline:2px solid #e8362a}</style>
 
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
@@ -3162,6 +3162,25 @@ function addDistrictLandmarks() {
   add('홍익대학교',HONGIK.lat,HONGIK.lng,'🎓','#6650a8');
   const cultural = stores.find(s=>s.kakaoId==='8016441');
   if(cultural) add('상상마당',cultural.lat,cultural.lng,'🎭','#a45677');
+  // These are orientation labels at the median of known places, not administrative borders.
+  [
+    {name:'연남동',id:'yeonnam',color:'#49764d',bg:'#edf5df'},
+    {name:'서교동',id:'seogyo',color:'#a66a32',bg:'#fff0d6'},
+    {name:'합정동',id:'hapjeong',color:'#596caa',bg:'#edf0ff'},
+    {name:'상수동',id:'sangsu',color:'#a25877',bg:'#ffeaf0'}
+  ].forEach(area=>{
+    const points=stores.filter(s=>s.dong===area.name&&s.status!=='closed'&&Number.isFinite(s.lat)&&Number.isFinite(s.lng));
+    if(!points.length)return;
+    const median=values=>values.sort((a,b)=>a-b)[Math.floor(values.length/2)];
+    const button=document.createElement('button');
+    button.type='button';button.className='district-area';
+    button.style.setProperty('--area-color',area.color);button.style.setProperty('--area-bg',area.bg);
+    button.setAttribute('aria-label',`${area.name} 업체 보기`);
+    button.innerHTML=`${area.name}<small>동네별 둘러보기</small>`;
+    for(const event of ['pointerdown','mousedown','touchstart'])button.addEventListener(event,e=>e.stopPropagation());
+    button.addEventListener('click',e=>{e.stopPropagation();toggleDetailFilter('dong:'+area.name,document.getElementById('chip-'+area.id));showToast(area.name+' 업체를 모아 보여드려요');});
+    new HongdaeMap.CustomOverlay({map,position:new kakao.maps.LatLng(median(points.map(s=>s.lat)),median(points.map(s=>s.lng))),zIndex:7,content:button});
+  });
   const places = new kakao.maps.services.Places();
   const requests = [
     {query:'합정역',match:n=>/^합정역(?:\s|$)/.test(n),icon:'🚇',color:'#3179a4'},
