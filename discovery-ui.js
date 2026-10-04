@@ -38,6 +38,7 @@
 
   function close() { root.classList.remove('open'); }
   function open(nextTab = 'curation') {
+    if(nextTab==='taste' && window.HongdaeRecommendations){close();window.HongdaeRecommendations.open();return;}
     document.querySelector('.map-result-sheet')?.classList.remove('open');
     document.body.classList.remove('map-results-open');
     if (document.querySelector('#sidebar')?.classList.contains('open')) closeSidebar();

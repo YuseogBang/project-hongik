@@ -111,12 +111,14 @@
     books:{title:'독립출판 & 바이닐 투어',pattern:/독립출판|독립서점|책방|바이닐|LP|음반|레코드/},
     music:{title:'라이브 & 음악 루트',pattern:/라이브|재즈|공연|음악|LP|바이닐/}
   };
-  let routeAnswers = {theme:'all',stops:3,walk:1200,company:'solo',newOnly:false,food:false};
+  const initialPreferences=window.HongdaeRecommendations?.profile();
+  let routeAnswers = {theme:'all',stops:3,walk:initialPreferences?.walk||1200,company:initialPreferences?.company||'solo',newOnly:initialPreferences?.explore==='new',food:false};
+  window.addEventListener('hongdae:preferences-change',()=>{const p=window.HongdaeRecommendations.profile();routeAnswers={...routeAnswers,walk:p.walk,company:p.company,newOnly:p.explore==='new'};});
   let routeVariation = 0;
   const themeMatches = place => (routeAnswers.theme==='geek' && (place.tags||[]).includes('덕후')) || !routeThemes[routeAnswers.theme]?.pattern || routeThemes[routeAnswers.theme].pattern.test(`${place.name} ${(place.tags||[]).join(' ')} ${place.insight||''} ${/^기타/.test(place.category||'')?'':place.category||''}`);
   function buildRoute(mode) {
     const visited = visitedIds();
-    const candidates = stores.filter(place => place.status !== 'closed' && Number.isFinite(place.lat) && Number.isFinite(place.lng) && !isFranchise(place) && (!routeAnswers.newOnly || !visited.has(place.id)) && (mode !== 'student' || !visited.has(place.id)) && (themeMatches(place) || (routeAnswers.food && place.type === 'restaurant')));
+    const candidates = stores.filter(place => (!window.HongdaeRecommendations || window.HongdaeRecommendations.eligible(place)) && place.status !== 'closed' && Number.isFinite(place.lat) && Number.isFinite(place.lng) && !isFranchise(place) && (!routeAnswers.newOnly || !visited.has(place.id)) && (mode !== 'student' || !visited.has(place.id)) && (themeMatches(place) || (routeAnswers.food && place.type === 'restaurant')));
     const route = [], start = {lat:37.556670,lng:126.923610};
     for (let step=0;step<routeAnswers.stops;step++) {
       const anchor=route.at(-1)||start;
@@ -124,7 +126,7 @@
       const ranked=candidates.filter(place=>!route.some(p=>p.id===place.id) && meters(anchor,place)<=routeAnswers.walk && (wantsFood ? place.type==='restaurant' : themeMatches(place))).map(place=>{
         const companyTag=routeAnswers.company==='solo'?'혼밥':routeAnswers.company==='date'?'데이트':'시끌벅적';
         const variety=((place.id%997+routeVariation*137)%997)/997*6;
-        return {place,score:baseScore(place,mode,visited)+(place.tags||[]).includes(companyTag)*3+preferred(place).length*2-meters(anchor,place)/350+variety};
+        return {place,score:baseScore(place,mode,visited)+(window.HongdaeRecommendations?.score(place)||0)+(place.tags||[]).includes(companyTag)*3+preferred(place).length*2-meters(anchor,place)/350+variety};
       }).sort((a,b)=>b.score-a.score || a.place.id-b.place.id);
       if(!ranked.length)break;
       route.push(ranked[0].place);
@@ -133,6 +135,8 @@
   }
   function reason(place, mode) {
     const tags = preferred(place);
+    const personalReasons=window.HongdaeRecommendations?.explain(place)||[];
+    if(personalReasons.length)return personalReasons.join(' · ');
     if (routeAnswers.theme !== 'all' && themeMatches(place)) return `${routeThemes[routeAnswers.theme].title}${tags.length ? ' · #'+tags.join(' #') : ''}`;
     if (mode === 'student' && tags.length) return `#${tags.join(' #')}`;
     const source = (place.tags || []).find((tag) => mode === 'visitor' ? tag === '홍대병' : mode === 'explorer' ? ['로컬단골','노포'].includes(tag) : tag === '홍대병');
