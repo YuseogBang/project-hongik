@@ -3166,13 +3166,18 @@ function addDistrictLandmarks() {
   const requests = [
     {query:'합정역',match:n=>/^합정역(?:\s|$)/.test(n),icon:'🚇',color:'#3179a4'},
     {query:'상수역',match:n=>/^상수역(?:\s|$)/.test(n),icon:'🚇',color:'#3179a4'},
-    {query:'홍익문화공원',match:n=>n==='홍익문화공원',icon:'🌳',color:'#40815b'},
+    {query:'홍대놀이터',name:'홍대놀이터',match:n=>/홍익문화공원|홍대놀이터/.test(n),icon:'🌳',color:'#40815b'},
+    {query:'AK플라자 홍대',name:'AK플라자 홍대',match:n=>/AK|에이케이/i.test(n)&&n.includes('홍대'),icon:'🏬',color:'#b27a32'},
+    {query:'와우공원',match:n=>n==='와우공원',icon:'🌳',color:'#40815b'},
+    {query:'마포평생학습관',match:n=>n==='마포평생학습관',icon:'📚',color:'#6650a8'},
+    {query:'홍익대학교 홍문관',name:'홍문관',match:n=>n.includes('홍문관'),icon:'🏛️',color:'#6650a8'},
+    {query:'경의선책거리',match:n=>n==='경의선책거리',icon:'📚',color:'#6650a8'},
     {query:'경의선숲길 연남동',match:n=>n.includes('경의선숲길'),icon:'🌳',color:'#40815b'}
   ];
   requests.forEach(request=>places.keywordSearch(request.query,(results,status)=>{
     if(status!==kakao.maps.services.Status.OK)return;
     const found=results.find(p=>request.match(p.place_name)&&Number(p.y)>=37.543&&Number(p.y)<=37.572&&Number(p.x)>=126.905&&Number(p.x)<=126.939);
-    if(found)add(request.query==='경의선숲길 연남동'?'경의선숲길':request.query,Number(found.y),Number(found.x),request.icon,request.color);
+    if(found)add(request.name||(request.query==='경의선숲길 연남동'?'경의선숲길':request.query),Number(found.y),Number(found.x),request.icon,request.color);
   },{location:new kakao.maps.LatLng(HONGDAE_ENTRANCE.lat,HONGDAE_ENTRANCE.lng),radius:2500,size:10}));
 }
 
