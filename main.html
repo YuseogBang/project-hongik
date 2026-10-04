@@ -3828,7 +3828,7 @@ function selectSearchResult(id) {
 function goDirections(placeId = selectedId) {
   const s = stores.find(x => x.id === Number(placeId));
   if (!s) { showToast('먼저 지도에서 매장을 선택해주세요'); return; }
-  if (!Number.isFinite(Number(s.lat)) || !Number.isFinite(Number(s.lng)) || !navigator.geolocation) {
+  if (s.lat == null || s.lng == null || !Number.isFinite(Number(s.lat)) || !Number.isFinite(Number(s.lng)) || !navigator.geolocation) {
     showToast('이 장소의 좌표 또는 위치 기능을 사용할 수 없어요.'); return;
   }
   const destination = `${encodeURIComponent(s.name)},${s.lat},${s.lng}`;
