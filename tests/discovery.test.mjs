@@ -117,3 +117,10 @@ test('Failed device bookmark import retains the local list for another attempt',
  vm.createContext(ctx);vm.runInContext('let bookmarks={42:true},signedInUser={id:"user"};'+body+';this.sync=syncDeviceSaves;this.saved=()=>bookmarks;',ctx);
  await ctx.sync();assert.equal(ctx.saved()[42],true);assert.equal(values.get('bookmarks'),'{"42":true}');assert.equal(values.get('bookmarksOwner'),'guest');
 });
+
+test('Corrupt or incorrectly shaped device data cannot stop map startup',()=>{
+ const source=fs.readFileSync('main.html','utf8');const body=source.slice(source.indexOf('function readDeviceData('),source.indexOf('let bookmarks = readDeviceData'));
+ const values=new Map([['broken','{'],['array','{}'],['object','[]'],['valid','{"42":true}']]);const ctx={localStorage:{getItem:k=>values.get(k)||null}};
+ vm.createContext(ctx);vm.runInContext(body+';this.read=readDeviceData;',ctx);
+ assert.equal(Object.keys(ctx.read('broken',{})).length,0);assert.ok(Array.isArray(ctx.read('array',[])));assert.equal(Array.isArray(ctx.read('object',{})),false);assert.equal(ctx.read('valid',{})[42],true);
+});
