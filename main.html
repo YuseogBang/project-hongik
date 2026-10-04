@@ -1403,7 +1403,7 @@
           <button class="chip" data-filter-group="cuisine" data-filter-key="cuisine:글로벌" onclick="toggleCuisineFilter('글로벌',this)">🌏 글로벌</button>
         </div>
         <div class="filter-chips filter-group">
-          <button class="chip" id="chip-hof" onclick="toggleDetailFilter('cert:hallOfFame',this)">🏅 홍대생 명예학식</button>
+          <button class="chip" id="chip-hof" onclick="toggleDetailFilter('cert:hallOfFame',this);if(this.classList.contains('on'))window.HongdaeWorkbook?.openHonor()">🏅 홍대생 명예학식</button>
           <button class="chip" id="chip-michelin" onclick="toggleDetailFilter('cert:michelin',this)">🍽️ 미쉐린 가이드</button>
           <button class="chip" id="chip-affiliate" onclick="toggleDetailFilter('cert:affiliate',this)">🤝 총학생회 제휴</button>
         </div>
