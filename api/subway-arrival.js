@@ -15,15 +15,17 @@ export default async function handler(req, res) {
     // 0, 20 = 0번째부터 20개까지 (홍대입구역은 노선이 여러 개라 넉넉하게 20개 요청)
     const url = `http://swopenapi.seoul.go.kr/api/subway/${apiKey}/json/realtimeStationArrival/0/20/${encodeURIComponent(station)}`;
 
-    const upstream = await fetch(url);
+    const upstream = await fetch(url, { signal:AbortSignal.timeout(8000) });
+    if (!upstream.ok) throw new Error(`서울시 도착정보 서버 응답 (${upstream.status})`);
     const data = await upstream.json();
 
     // 서울시 API는 에러도 200 OK로 내려주고 errorMessage 필드로 구분함
-    const code = data?.errorMessage?.code;
-    if (code && code !== 'INFO-000') {
+    const result = data?.errorMessage || data?.RESULT || {};
+    const code = result.code || result.CODE;
+    if (code && !['INFO-000','INFO-200'].includes(code)) {
       res.status(200).json({
         ok: false,
-        error: data.errorMessage.message || `서울시 API 오류 (${code})`
+        error: result.message || result.MESSAGE || `서울시 API 오류 (${code})`
       });
       return;
     }
@@ -42,9 +44,9 @@ export default async function handler(req, res) {
 
     // 짧게 캐싱 — 같은 20초 창 안에 여러 사용자가 봐도 서울시 API를 매번 다시 부르지 않게 함
     res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate=20');
-    res.status(200).json({ ok: true, station, list, fetchedAt: Date.now() });
+    res.status(200).json({ ok: true, station, list, emptyReason:list.length ? null : (result.message || result.MESSAGE || '서울시에서 현재 도착 정보를 제공하지 않고 있어요. 운행 종료 또는 일시적인 데이터 지연일 수 있습니다.'), fetchedAt: Date.now() });
 
   } catch (e) {
-    res.status(200).json({ ok: false, error: String(e && e.message || e) });
+    res.status(200).json({ ok: false, error: e?.name === 'TimeoutError' ? '도착정보 서버 연결이 지연되고 있어요. 잠시 후 다시 시도해 주세요.' : '도착정보 서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.' });
   }
 }

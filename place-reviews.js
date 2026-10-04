@@ -40,6 +40,15 @@
       host.innerHTML = '<h3>방문자 리뷰</h3><p class="pr-error">리뷰 서버가 아직 연결되지 않았어요.</p>';
       return;
     }
+    // Count people, not collection entries: the same person can save to several lists.
+    sb.rpc('place_save_count', {requested_place_id:Number(placeId)}).then(({data,error})=>{
+      if (error || !host.isConnected || currentPlace !== Number(placeId)) return;
+      const total=Number(data); if(!Number.isSafeInteger(total) || total<0)return;
+      let label=host.parentElement.querySelector('[data-save-count]');
+      if(!label){label=document.createElement('p');label.dataset.saveCount='';label.style.cssText='margin:12px 0;font:700 12px Pretendard,sans-serif;color:var(--muted)';host.before(label);}
+      label.textContent=`♥ ${total.toLocaleString('ko-KR')}명이 저장했어요`;
+      label.title='로그인 사용자 기준 · 여러 컬렉션에 저장해도 한 명으로 집계';
+    }).catch(()=>{});
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 10000);
     let result;
