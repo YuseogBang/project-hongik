@@ -13,7 +13,7 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0837551521646a85388e11c7360953a9&libraries=services,clusterer"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl.css">
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<script src="clean-map.js"></script>
+<script src="clean-map.js?v=20261004-mangwon"></script>
 <style>.hm-place-pin{padding:10px!important;touch-action:manipulation;border:0!important;background:transparent!important;cursor:pointer;line-height:0}.hm-place-pin img{display:block;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(74,30,30,.18))}.hm-place-pin:focus-visible{outline:3px solid #ffb85c;border-radius:50%}.hm-place-pin:hover img{filter:drop-shadow(0 2px 5px rgba(232,54,42,.5))}.hm-cluster{padding:0!important;width:38px;height:38px;border-radius:50%;background:#e8362a!important;color:#fff;font:700 13px Pretendard,sans-serif;border:2px solid #fff!important;line-height:34px}.hm-overlay{font-family:Pretendard,sans-serif}.district-landmark{display:flex;align-items:center;gap:4px;white-space:nowrap;padding:5px 8px;border-radius:9px;border:1px solid #ffffff;background:rgba(255,253,246,.94);color:var(--landmark-color);font:800 12px Pretendard,sans-serif;box-shadow:0 2px 6px rgba(50,40,20,.12);pointer-events:none}.landmark-banner{background:#2b070c!important;padding:16px!important;color:#f5ece7!important;border:1px solid #7a2534!important;border-radius:24px!important;font-family:Pretendard,sans-serif}.landmark-banner>div:first-child{background:linear-gradient(120deg,#fff0db,#f6c5b5);padding:18px 14px;border-radius:20px;color:#34241e;margin-bottom:18px}.landmark-banner h3{font-size:22px;margin:0}.landmark-banner>p{padding:15px;background:#fffaf2;color:#513a32!important;border-radius:16px;font-size:13px}.landmark-banner>div:not(:first-child){padding:3px 12px;font-size:12px;color:#ffb5a4!important}.landmark-banner a,.landmark-banner>p button{display:block;text-align:center;padding:12px;border:1px solid #aa554f;border-radius:12px;color:#f7e6df;font:700 12px Pretendard,sans-serif;text-decoration:none;background:#3d0f16}.landmark-banner>p:has(a),.landmark-banner>p:has(button){background:transparent;padding:0}.landmark-banner>div:first-child button{border:0;border-radius:50%;width:30px;height:30px;color:#59342d;background:rgba(255,255,255,.7)}.district-landmark span{font-size:14px}.district-landmark{pointer-events:auto;cursor:pointer}.district-landmark:focus-visible{outline:3px solid #e8362a}.district-area{pointer-events:auto;cursor:pointer;font:800 17px Pretendard,sans-serif;color:var(--area-color);background:var(--area-bg);border:1px solid rgba(255,255,255,.9);border-radius:14px;padding:7px 12px;box-shadow:0 2px 6px rgba(60,40,20,.12)}.district-area small{display:block;font-size:9px;font-weight:600;margin-top:2px}.district-area:focus-visible{outline:3px solid #e8362a}.maplibregl-ctrl-bottom-right{bottom:4px!important}.maplibregl-ctrl-attrib{font:9px Pretendard,sans-serif!important;background:rgba(255,253,246,.8)!important;padding:2px 5px!important;border-radius:4px!important}.maplibregl-ctrl-attrib-button{display:none!important}.maplibregl-canvas:focus-visible{outline:2px solid #e8362a}</style>
 
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
@@ -1139,7 +1139,7 @@
 </div>
 
 <div class="category-bar" id="category-bar">
-  <button class="cat-toggle" id="chip-indie" onclick="toggleIndieOnly(this)" title="대형 프랜차이즈를 숨기고 홍대 로컬·인디 매장만 봅니다"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.2"></circle><circle cx="12" cy="12" r="2.1"></circle><circle cx="12" cy="12" r="0.4" fill="currentColor" stroke="none"></circle><path d="M12 6.4v0M17.6 12h0M12 17.6v0M6.4 12h0" stroke-width="1.1" opacity="0.55"></path></svg>로컬 인디</button>
+  <button class="cat-toggle" id="chip-indie" onclick="toggleIndieOnly(this)" title="대형 프랜차이즈를 숨기고 홍대 로컬·인디 매장만 봅니다"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.2"></circle><circle cx="12" cy="12" r="2.1"></circle><circle cx="12" cy="12" r="0.4" fill="currentColor" stroke="none"></circle><path d="M12 6.4v0M17.6 12h0M12 17.6v0M6.4 12h0" stroke-width="1.1" opacity="0.55"></path></svg>프랜차이즈 제외</button>
   <button class="chip" id="chip-studentzone" onclick="selectCategoryBar('studentzone', this)" title="홍대생 명예학식 + 총학생회 제휴 업체만 모아봅니다"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5-10-5Z"></path><path d="M6 10.5V16c0 1.5 2.5 3 6 3s6-1.5 6-3v-5.5"></path><path d="M22 8v6"></path></svg>홍대생 존</button>
   <button class="chip" id="chip-restaurant" onclick="selectCategoryBar('restaurant', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13h16c0 4-3.6 7-8 7s-8-3-8-7ZM12 13V6M8 8l1.5 2M16 8l-1.5 2"></path></svg>음식점</button>
   <button class="chip" id="chip-cafe" onclick="selectCategoryBar('cafe', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4ZM16 10h2a2 2 0 0 1 0 5h-2M8 6V4M12 6V4"></path></svg>카페</button>
@@ -1437,6 +1437,7 @@
           <button class="chip" id="chip-seogyo" onclick="toggleDetailFilter('dong:서교동',this)">📍 서교동</button>
           <button class="chip" id="chip-yeonnam" onclick="toggleDetailFilter('dong:연남동',this)">📍 연남동</button>
           <button class="chip" id="chip-hapjeong" onclick="toggleDetailFilter('dong:합정동',this)">📍 합정동</button>
+          <button class="chip" id="chip-mangwon" onclick="toggleDetailFilter('dong:망원동',this)">📍 망원동</button>
         </div>
         <div class="filter-group" style="padding:12px 4px 0">
           <button class="chip" onclick="clearDetailFilters(this)" style="width:100%;text-align:center;color:var(--muted)">선택 초기화</button>
@@ -2611,7 +2612,7 @@ const FRANCHISE_BRANDS = [
   // 피자
   '도미노','피자헛','미스터피자','파파존스','피자스쿨','반올림피자',
   // 치킨
-  '교촌','비비큐','굽네','네네치킨','처갓집','자담치킨','푸라닭','또래오래',
+  '교촌','비비큐','bbq','bhc','케이엪씨','kfc','subway','굽네','네네치킨','처갓집','자담치킨','푸라닭','또래오래',
 ];
 // 프랜차이즈여도 인디 모드에서 "계속 보이게" 하고 싶은 매장을 여기에 개별적으로 추가하세요.
 // 매장 이름의 일부만 적어도 됩니다. 예: '스타벅스 홍대점' 을 넣으면 그 지점만 예외로 표시됨.
@@ -2621,10 +2622,12 @@ const FRANCHISE_ALLOW = [
   // '써브웨이 홍익대점',
 ];
 function isFranchise(s) {
+  if(s.franchise === true)return true;
+  if(s.franchise === false)return false;
   // 예외 목록에 있으면 프랜차이즈여도 숨기지 않는다(개별 되살리기)
   if (FRANCHISE_ALLOW.some(keep => (s.name || '').includes(keep))) return false;
-  const hay = `${s.name || ''} ${s.category || ''}`;
-  return FRANCHISE_BRANDS.some(brand => hay.includes(brand));
+  const hay = `${s.name || ''} ${s.category || ''}`.replace(/\s/g,'').toLowerCase();
+  return FRANCHISE_BRANDS.some(brand => hay.includes(brand.toLowerCase()));
 }
 
 // 클럽/라이브클럽의 '대표 장르' — category와 signatureMenu에 실제로 나타난 장르 단어만 사용(지어내지 않음).
@@ -2956,7 +2959,7 @@ window.kakao && kakao.maps.load(async () => {
   const centerPosition = new kakao.maps.LatLng(HONGDAE_ENTRANCE.lat, HONGDAE_ENTRANCE.lng);
   map = new HongdaeMap.Map(container, { center: centerPosition, level: 4 });
   // 홍대 생활권: 합정·상수·연남 포함. 화면 전체가 범위 안에 있도록 크기에 맞춰 축소 제한.
-  const district = { south:37.543, north:37.572, west:126.905, east:126.939 };
+  const district = { south:37.543, north:37.572, west:126.890, east:126.939 };
   let constrainingDistrict = false;
   function constrainDistrict() {
     if (constrainingDistrict) return;
@@ -3187,7 +3190,8 @@ function addDistrictLandmarks() {
     {name:'연남동',id:'yeonnam',color:'#49764d',bg:'#edf5df'},
     {name:'서교동',id:'seogyo',color:'#a66a32',bg:'#fff0d6'},
     {name:'합정동',id:'hapjeong',color:'#596caa',bg:'#edf0ff'},
-    {name:'상수동',id:'sangsu',color:'#a25877',bg:'#ffeaf0'}
+    {name:'상수동',id:'sangsu',color:'#a25877',bg:'#ffeaf0'},
+    {name:'망원동',id:'mangwon',color:'#328c84',bg:'#e3f7ee'}
   ].forEach(area=>{
     const points=stores.filter(s=>s.dong===area.name&&s.status!=='closed'&&Number.isFinite(s.lat)&&Number.isFinite(s.lng));
     if(!points.length)return;
@@ -3215,7 +3219,7 @@ function addDistrictLandmarks() {
   ];
   requests.forEach(request=>places.keywordSearch(request.query,(results,status)=>{
     if(status!==kakao.maps.services.Status.OK)return;
-    const found=results.find(p=>request.match(p.place_name)&&Number(p.y)>=37.543&&Number(p.y)<=37.572&&Number(p.x)>=126.905&&Number(p.x)<=126.939);
+    const found=results.find(p=>request.match(p.place_name)&&Number(p.y)>=37.543&&Number(p.y)<=37.572&&Number(p.x)>=126.890&&Number(p.x)<=126.939);
     if(found)add(request.name||(request.query==='경의선숲길 연남동'?'경의선숲길':request.query),Number(found.y),Number(found.x),request.icon,request.color);
   },{location:new kakao.maps.LatLng(HONGDAE_ENTRANCE.lat,HONGDAE_ENTRANCE.lng),radius:2500,size:10}));
 }
@@ -3274,7 +3278,7 @@ function hideHoverLabel(id) {
 // 리스트(renderListImpl)와 지도 마커(renderMarkers) 둘 다 이 함수 하나만 씀 — 그래야 "지금 보이는 리스트"와
 // "지도 위 마커"가 항상 똑같은 걸 보여줌.
 function getFilteredStores() {
-  const dongFilters = ['서교동','연남동','합정동','상수동'];
+  const dongFilters = ['서교동','연남동','합정동','상수동','망원동'];
   const isDongFilter = dongFilters.includes(currentFilter);
   const isTasteMode = currentFilter === 'taste';
   const isBookmarkMode = currentFilter === 'bookmarks';
@@ -3296,6 +3300,7 @@ function getFilteredStores() {
 
     if (isTasteMode) return s.status !== 'closed' && s.tags && matchScore(s) > 0;
     if (isGoneMode) return s.status === 'closed'; // 폐업으로 확인된 곳만 (지어내지 않음)
+    if(s.status==='closed' && !isBookmarkMode && currentFilter!=='closed')return false;
     if (isHallOfFameMode) return (s.certifications || []).includes('홍대생 명예학식');
     if (isMichelinMode) return (s.certifications || []).some(c => c.includes('미쉐린'));
     if (isCenturyMode) return isCenturyStore(s);
@@ -3448,7 +3453,7 @@ function renderList(skipMarkers) {
 }
 function renderListImpl() {
   const list = document.getElementById('store-list');
-  const dongFilters = ['서교동','연남동','합정동','상수동'];
+  const dongFilters = ['서교동','연남동','합정동','상수동','망원동'];
   const isDongFilter = dongFilters.includes(currentFilter);
   const isTasteMode = currentFilter === 'taste';
   const isBookmarkMode = currentFilter === 'bookmarks';
@@ -4002,6 +4007,7 @@ function showBookmarks(btn) {
 // 상단바 🪦 버튼 / 카테고리 바 "사라진 가게" — 폐업/사라진 가게 큐레이션.
 // 홍대에서 없어진, 추억의 장소를 모아 보여줌 (마찬가지로 결과 N곳 보기 버튼으로 안내)
 function showGoneStores(btn) {
+  if(window.HongdaeArchive){window.HongdaeArchive.open();return;}
   currentFilter = 'gone';
   boundsFilter = null;
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
@@ -5025,13 +5031,14 @@ function addStore() {
   });
   </script>
   <script src="platform.js?v=20261004-pin-position"></script>
-  <script src="ui-redesign.js?v=20261004-navigation"></script>
-  <script src="experience-ui.js?v=20261004-navigation"></script>
-  <script src="discovery-ui.js?v=20261004-navigation"></script>
-  <script src="journey-features.js?v=20261004-navigation"></script>
+  <script src="ui-redesign.js?v=20261004-mangwon"></script>
+  <script src="experience-ui.js?v=20261004-mangwon"></script>
+  <script src="discovery-ui.js?v=20261004-mangwon"></script>
+  <script src="journey-features.js?v=20261004-mangwon"></script>
   <script src="place-reviews.js"></script>
-  <script src="passport-routes.js?v=20261004-navigation"></script>
-  <script src="research-curations.js"></script>
+  <script src="passport-routes.js?v=20261004-mangwon"></script>
+  <script src="research-curations.js?v=20261004-mangwon"></script>
+  <script src="archive-places.js?v=20261004-mangwon"></script>
   <script src="workbook-curations.js"></script>
   <script src="survey-menu-data.js"></script>
   <script src="survey-menu-ui.js"></script>

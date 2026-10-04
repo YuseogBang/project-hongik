@@ -1,6 +1,13 @@
 (() => {
   // 사용자가 제공한 2026-10-03 1차 수집 메모. 현재 영업 정보로 검증하지 않았다.
   const collections = {
+    mangwon: {title:"🌿 망원동 골목 탐색",date:"2026-10-04",source:"",places:[
+      ["알맹상점","서울 마포구 월드컵로25길 47","미기재","리필·제로웨이스트 생활용품","https://almangmarket.co.kr/shopinfo/company.html","retail",["제로웨이스트","친환경"]],
+      ["제로스페이스 망원","서울 마포구 희우정로16길 32","평일 11:30-19:30 / 토 11:00-20:00 / 일 11:30-19:00","디자인 소품·문구·미피 굿즈","https://www.zeroperzero.com/offline-store","retail",["소품","문구","덕후"]],
+      ["스튜디오블랭크 망원","서울 마포구 포은로 92","미기재","커스텀 티셔츠·키링·패브릭 소품","https://www.stblank.co.kr/sb/store/mangwon.html","retail",["소품","커스텀"]],
+      ["소금집델리 망원점","서울 마포구 월드컵로19길 14","11:00-21:00 / 라스트오더 20:30","미기재","https://salthousekorea.com/contact/store-02.html","restaurant",[]],
+      ["망원시장","서울 마포구 포은로6길 27","10:00-21:00 (업체별 상이)","전통시장 먹거리","https://english.visitseoul.net/shopping/Mangwon%20Market/ENP037950","retail",["전통시장","산책"]]
+    ]},
     ramen: {
       title: '🍜 라멘 한 그릇',
       date: '2025-09-02',
@@ -39,7 +46,7 @@
     const wantedName = normalize(name), wantedRoad = roadKey(address);
     return results.find((place) => {
       const foundName = normalize(place.place_name), foundRoad = roadKey(place.road_address_name || place.address_name);
-      return (foundName === wantedName || foundName.includes(wantedName) || wantedName.includes(foundName)) && (!wantedRoad || wantedRoad === foundRoad);
+      return Number(place.x)>=126.890 && Number(place.x)<=126.939 && Number(place.y)>=37.543 && Number(place.y)<=37.572 && (foundName === wantedName || foundName.includes(wantedName) || wantedName.includes(foundName)) && (!wantedRoad || wantedRoad === foundRoad);
     });
   }
   function searchKakao(name, address) {
@@ -57,9 +64,9 @@
     let store = stores.find((entry) => String(entry.kakaoId) === String(place.id));
     if (!store) {
       const address = place.road_address_name || place.address_name;
-      const dong = (place.address_name || '').match(/(서교동|연남동|합정동|상수동|동교동)/)?.[1] || '홍대';
+      const dong = (place.address_name || '').match(/(서교동|연남동|합정동|상수동|동교동|망원동)/)?.[1] || '홍대';
       store = { id: -Number(place.id), kakaoId: place.id, name: place.place_name,
-        type: kind === 'ramen' ? 'restaurant' : 'bar', status: 'unverified',
+        type: item[5] || (kind === 'ramen' ? 'restaurant' : 'bar'), status: 'unverified',
         lat: Number(place.y), lng: Number(place.x), address, dong, category: place.category_name,
         kakaoUrl: place.place_url, naverUrl: `https://map.naver.com/p/search/${encodeURIComponent(place.place_name + ' ' + address)}`,
         rating: null, reviews: null, months: null, rent: null, score: null, tags: [],
@@ -67,6 +74,7 @@
       stores.push(store);
       if (typeof renderAll === 'function') renderAll();
     }
+    if(kind === "mangwon"){store.tags=[...new Set([...(store.tags||[]),...(item[6]||[])])];store.researchSource=item[4];store.researchChecked=collection.date;}
     store.curationGroups = [...new Set([...(store.curationGroups || []), kind])];
     if (!store.signatureMenu && menu !== '미기재') {
       store.signatureMenu = menu;
@@ -110,14 +118,14 @@
       if (result.place) found.push(addToMap(result.place, item, kind, collection));
       else missing.push(item[0]);
     }
-    const unique = [...new Map(found.map((store) => [store.id, store])).values()];
-    root.innerHTML = `<section class="hr-panel"><div class="hr-head"><h2>${escapeHtml(collection.title)}</h2><button type="button" class="hr-close">닫기 ✕</button></div><p class="hr-note">카카오 장소 검색으로 상호·주소를 대조한 ${unique.length}곳입니다. 누르면 기존 식당과 같은 장소 카드가 열립니다. 운영시간·메뉴는 ${escapeHtml(collection.date)} 수집 자료이며 현재 미확인입니다.</p>${collection.source ? `<a class="hr-source" href="${collection.source}" target="_blank" rel="noopener noreferrer">수집 게시물 보기 ↗</a>` : ''}${unique.map((store) => `<button type="button" class="hr-place" data-store="${store.id}">${escapeHtml(store.name)}<small>${escapeHtml(store.address)} · 장소 카드 보기 →</small></button>`).join('')}${missing.length ? `<p class="hr-note">카카오 검색에서 대조되지 않아 보류: ${escapeHtml(missing.join(', '))}</p>` : ''}</section>`;
+    const unique = [...new Map(found.map((store) => [store.id, store])).values()].filter(store=>!indieOnly||!isFranchise(store));
+    root.innerHTML = `<section class="hr-panel"><div class="hr-head"><h2>${escapeHtml(collection.title)}</h2><button type="button" class="hr-close">닫기 ✕</button></div><p class="hr-note">카카오 장소 검색으로 상호·주소를 대조한 ${unique.length}곳입니다. 누르면 기존 식당과 같은 장소 카드가 열립니다. 영업시간·메뉴는 ${escapeHtml(collection.date)} 수집 자료이며 현재 미확인입니다.</p>${collection.source ? `<a class="hr-source" href="${collection.source}" target="_blank" rel="noopener noreferrer">수집 게시물 보기 ↗</a>` : ''}${unique.map((store) => `<button type="button" class="hr-place" data-store="${store.id}">${escapeHtml(store.name)}<small>${escapeHtml(store.address)} · 장소 카드 보기 →</small></button>${store.researchSource?`<a class="hr-source" href="${escapeHtml(store.researchSource)}" target="_blank" rel="noopener noreferrer">공식 안내 ↗</a>`:""}`).join('')}${missing.length ? `<p class="hr-note">카카오 검색에서 대조되지 않아 보류: ${escapeHtml(missing.join(', '))}</p>` : ''}</section>`;
     root.querySelector('.hr-close').onclick = close;
     root.querySelectorAll('[data-store]').forEach((button) => button.onclick = () => { close(); selectStore(Number(button.dataset.store)); });
   }
   function renderEntry(host) {
     if (!host) return;
-    host.innerHTML = '<p class="discovery-intro" style="margin-top:20px">카카오 지도에서 대조해 보는 큐레이션</p><button type="button" class="discovery-theme" data-research="ramen">🍜 라멘 한 그릇 <span>검색 →</span><small>주소가 있는 라멘집 8곳</small></button><button type="button" class="discovery-theme" data-research="bar">🍸 혼술 자리 찾기 <span>검색 →</span><small>수집 메모의 바 3곳</small></button>';
+    host.innerHTML = '<p class="discovery-intro" style="margin-top:20px">카카오 지도에서 대조해 보는 큐레이션</p><button type="button" class="discovery-theme" data-research="ramen">🍜 라멘 한 그릇 <span>검색 →</span><small>주소가 있는 라멘집 8곳</small></button><button type="button" class="discovery-theme" data-research="bar">🍸 혼술 자리 찾기 <span>검색 →</span><small>수집 메모의 바 3곳</small></button><button type="button" class="discovery-theme" data-research="mangwon">🌿 망원동 골목 탐색 <span>검색 →</span><small>공식 안내로 수집한 소품·친환경·먹거리 공간 5곳</small></button>';
     host.querySelectorAll('[data-research]').forEach((button) => button.onclick = () => open(button.dataset.research));
   }
   document.addEventListener('DOMContentLoaded', () => document.body.append(root));

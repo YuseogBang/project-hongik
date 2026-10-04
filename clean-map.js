@@ -12,7 +12,7 @@
   class MapView {
     constructor(container,options) {
       this.raw = new maplibregl.Map({container,center:ll(options.center),zoom:20-options.level,
-        maxBounds:[[126.905,37.543],[126.939,37.572]],minZoom:14,maxZoom:19,
+        maxBounds:[[126.890,37.543],[126.939,37.572]],minZoom:14,maxZoom:19,
         dragRotate:false,touchPitch:false,renderWorldCopies:false,
         attributionControl:{compact:false},
         style:{version:8,sources:{district:{type:'raster',tiles:[`https://a.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}@2x.png?key=${encodeURIComponent(basemapKey)}`],tileSize:256,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> © <a href="https://carto.com/attributions" target="_blank">CARTO</a>'}},layers:[{id:'background',type:'raster',source:'district',paint:{'raster-saturation':.15}}]}});
