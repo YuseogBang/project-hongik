@@ -3,6 +3,9 @@
   let profile = null;
   let signedInUser = null;
   let accountLabel = '';
+  let finishReady;
+  const ready = new Promise(resolve => { finishReady = resolve; });
+  const announceAuth = () => window.dispatchEvent(new Event('hongdae-auth-changed'));
   const $ = (selector) => document.querySelector(selector);
 
   function notice(message) {
@@ -32,6 +35,7 @@
     profile = data || null;
     accountLabel = user.user_metadata?.nickname || user.user_metadata?.name || user.user_metadata?.full_name || '';
     renderAccount();
+    announceAuth();
     const adminLink = $('#admin-menu-link');
     if (adminLink) adminLink.hidden = !profile || profile.role !== 'admin';
   }
@@ -63,12 +67,12 @@
     if (collectionsError || !profile) {
       dialog.innerHTML = '<section style="max-width:360px;width:100%;padding:24px;border-radius:16px;background:#3d0f16;color:#f5ece7;font-family:Pretendard,sans-serif"><h2>로그인은 완료됐어요</h2><p style="line-height:1.6;color:#c39298">개인 컬렉션을 불러오지 못했습니다. 관리자에게 데이터베이스의 profiles 및 collections 설정을 확인해 달라고 알려주세요.</p><button type="button" id="account-retry">다시 시도</button><button type="button" id="sign-out">로그아웃</button></section>';
       $('#account-retry').onclick = openDialog;
-      $('#sign-out').onclick = async () => { await client.auth.signOut(); signedInUser = null; profile = null; dialog.remove(); renderAccount(); };
+      $('#sign-out').onclick = async () => { await client.auth.signOut(); signedInUser = null; profile = null; dialog.remove(); renderAccount(); announceAuth(); };
       return;
     }
     dialog.innerHTML = `<section style="max-width:420px;width:100%;max-height:calc(100vh - 40px);overflow:auto;padding:24px;border-radius:16px;background:#3d0f16;border:1px solid #7a2534;color:#f5ece7"><div style="position:sticky;top:-24px;z-index:1;display:flex;align-items:center;gap:8px;margin:-24px -24px 16px;padding:18px 24px 12px;background:#3d0f16;border-bottom:1px solid #7a2534"><h2 style="margin:0;flex:1">내 컬렉션</h2><button type="button" id="account-close" aria-label="내 컬렉션 나가기" style="padding:8px 11px;border:1px solid #7a2534;border-radius:99px;background:#2b070c;color:#f5ece7;font-weight:700">나가기 ✕</button></div><p style="margin:0 0 12px;color:#c39298;font-size:12px">지도에서 ♥를 누르면 ‘저장한 가게’에 자동으로 추가돼요.</p><div style="margin:0 0 16px">${(collections || []).map(c => { const places = c.collection_places || []; return `<div style="padding:12px 0;border-bottom:1px solid #7a2534">${c.emoji} <b>${escapeHtml(c.title)}</b> <span style="color:#c39298;font-size:12px">${places.length}곳</span>${places.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px">${places.map(p => `<span style="padding:5px 8px;border-radius:99px;background:#2b070c;color:#f5ece7;font-size:11px">${escapeHtml(p.places?.name || '저장한 장소')}</span>`).join('')}</div>` : ''}</div>`; }).join('') || '<p style="color:#c39298">지도에서 ♥를 눌러 첫 장소를 저장해보세요.</p>'}</div><form id="collection-form" style="display:flex;gap:8px"><input name="title" required maxlength="60" placeholder="예: 데이트 후보" style="min-width:0;flex:1;padding:10px;border-radius:8px;border:1px solid #7a2534;background:#2b070c;color:#fff"><button style="padding:10px;border:0;border-radius:8px;background:#e8362a;color:#fff">만들기</button></form><button type="button" id="sign-out" style="width:100%;margin-top:12px;padding:10px;border:1px solid #7a2534;border-radius:10px;background:transparent;color:#c39298">로그아웃</button></section>`;
     $('#account-close').onclick = () => dialog.remove();
-    $('#sign-out').onclick = async () => { await client.auth.signOut(); signedInUser = null; profile = null; dialog.remove(); renderAccount(); };
+    $('#sign-out').onclick = async () => { await client.auth.signOut(); signedInUser = null; profile = null; dialog.remove(); renderAccount(); announceAuth(); };
     $('#collection-form').onsubmit = async (event) => {
       event.preventDefault();
       const title = new FormData(event.currentTarget).get('title').trim();
@@ -119,14 +123,17 @@
       // Supabase auth callbacks must not await queries on the same client.
       setTimeout(async () => {
         if (session?.user) { await loadProfile(session.user); await syncDeviceSaves(); }
-        else { signedInUser = null; profile = null; renderAccount(); }
+        else { signedInUser = null; profile = null; renderAccount(); announceAuth(); }
       }, 0);
     });
   }
 
   window.HongdaePlatform = {
     openDialog,
-    async signOut() { if (client) await client.auth.signOut(); signedInUser = null; profile = null; accountLabel = ''; renderAccount(); notice('로그아웃했어요.'); },
+    whenReady: () => ready,
+    getClient: () => client,
+    getUser: () => signedInUser,
+    async signOut() { if (client) await client.auth.signOut(); signedInUser = null; profile = null; accountLabel = ''; renderAccount(); announceAuth(); notice('로그아웃했어요.'); },
     async openCollectionPicker(placeId) {
       if (!client || !profile) return notice('로그인 후 컬렉션에 추가할 수 있어요.');
       const { data: collections } = await client.from('collections').select('id,title,emoji').order('created_at');
@@ -135,7 +142,7 @@
       if (!dialog) { dialog = document.createElement('div'); dialog.id = 'account-dialog'; dialog.style.cssText = 'position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:rgba(0,0,0,.6);padding:20px'; document.body.appendChild(dialog); }
       dialog.innerHTML = `<section style="max-width:360px;width:100%;padding:24px;border-radius:22px;background:#3d0f16;color:#f5ece7"><h2 style="margin-top:0">컬렉션에 추가</h2><div style="display:grid;gap:8px">${collections.map(c => `<button data-collection="${c.id}" style="padding:12px;border:1px solid #7a2534;border-radius:12px;background:#2b070c;color:#fff;text-align:left">${c.emoji} ${escapeHtml(c.title)}</button>`).join('')}</div><button id="picker-close" style="width:100%;margin-top:10px;padding:9px;border:0;background:transparent;color:#c39298">닫기</button></section>`;
       $('#picker-close').onclick = () => dialog.remove();
-      dialog.querySelectorAll('[data-collection]').forEach(button => button.onclick = async () => { const { error } = await client.from('collection_places').upsert({ collection_id: button.dataset.collection, place_id: placeId }); if (error) return notice(error.message); if (typeof bookmarks !== 'undefined') { bookmarks[placeId] = true; localStorage.setItem('bookmarks', JSON.stringify(bookmarks)); } dialog.remove(); if (typeof selectStore === 'function' && selectedId != null) selectStore(selectedId); notice('컬렉션에 저장했어요.'); });
+      dialog.querySelectorAll('[data-collection]').forEach(button => button.onclick = async () => { const { error } = await client.from('collection_places').upsert({ collection_id: button.dataset.collection, place_id: placeId }); if (error) return notice(error.message); if (typeof bookmarks !== 'undefined') { bookmarks[placeId] = true; localStorage.setItem('bookmarks', JSON.stringify(bookmarks)); } window.HongdaeReviews?.logInterest(placeId, 'save'); dialog.remove(); if (typeof selectStore === 'function' && selectedId != null) selectStore(selectedId); notice('컬렉션에 저장했어요.'); });
     },
     async syncDefaultSave(placeId, saved) {
       if (!client || !profile) return;
@@ -166,12 +173,9 @@
     const sheet = document.querySelector('.xp-sheet');
     if (!sheet || sheet.dataset.profileEnhanced || sheet.querySelector('.xp-title')?.textContent !== '내 취향 지도') return;
     sheet.dataset.profileEnhanced = '1';
-    const reviews = JSON.parse(localStorage.getItem('hongdaeTagReviews') || '[]');
-    const history = document.createElement('div'); history.className = 'xp-history';
-    history.innerHTML = `<h4>내 방문 기록 · 리뷰</h4>${reviews.length ? reviews.slice(0, 4).map(r => `<p class="xp-copy">${typeof stores !== 'undefined' ? (stores.find(s => s.id === r.id)?.name || '가게') : '가게'} · ${r.score === 'again' ? '또 간다' : r.score === 'okay' ? '보통' : '아니다'}${r.tags?.length ? ` · ${r.tags.join(', ')}` : ''}</p>`).join('') : '<p class="xp-copy">아직 작성한 기록이 없어요.</p>'}`;
     const logout = document.createElement('button'); logout.className = 'xp-secondary'; logout.textContent = '로그아웃'; logout.onclick = () => { sheet.closest('.xp-overlay')?.classList.remove('open'); window.HongdaePlatform.signOut(); };
-    sheet.append(history, logout);
+    sheet.append(logout);
   });
   window.addEventListener('DOMContentLoaded', () => profileObserver.observe(document.body, { childList: true, subtree: true }));
-  window.addEventListener('DOMContentLoaded', init);
+  window.addEventListener('DOMContentLoaded', () => { init().catch(error => console.error('Account initialization failed:', error)).finally(() => { finishReady(); announceAuth(); }); });
 })();
