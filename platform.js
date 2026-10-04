@@ -126,6 +126,7 @@
     if (user) { await loadProfile(user); await syncDeviceSaves(); }
     client.auth.onAuthStateChange((_event, session) => {
       // Supabase auth callbacks must not await queries on the same client.
+      if(_event==='INITIAL_SESSION')return;
       setTimeout(async () => {
         if (session?.user) { await loadProfile(session.user); await syncDeviceSaves(); }
         else { signedInUser = null; profile = null; renderAccount(); announceAuth(); }
@@ -138,7 +139,7 @@
     whenReady: () => ready,
     getClient: () => client,
     getUser: () => signedInUser,
-    async signOut() { if (client) await client.auth.signOut(); signedInUser = null; profile = null; accountLabel = ''; renderAccount(); announceAuth(); notice('로그아웃했어요.'); },
+    async signOut() { if(typeof bookmarks!=='undefined'){bookmarks={};localStorage.setItem('bookmarks','{}');localStorage.setItem('bookmarksOwner','guest');if(typeof renderAll==='function')renderAll();} if (client) await client.auth.signOut(); signedInUser = null; profile = null; accountLabel = ''; renderAccount(); announceAuth(); notice('로그아웃했어요.'); },
     async openCollectionPicker(placeId) {
       if (!client || !profile) return notice('로그인 후 컬렉션에 추가할 수 있어요.');
       const { data: collections } = await client.from('collections').select('id,title,emoji').order('created_at');
@@ -150,34 +151,46 @@
       dialog.querySelectorAll('[data-collection]').forEach(button => button.onclick = async () => { const { error } = await client.from('collection_places').upsert({ collection_id: button.dataset.collection, place_id: placeId }); if (error) return notice(error.message); if (typeof bookmarks !== 'undefined') { bookmarks[placeId] = true; localStorage.setItem('bookmarks', JSON.stringify(bookmarks)); } window.HongdaeReviews?.logInterest(placeId, 'save'); dialog.remove(); if (typeof selectStore === 'function' && selectedId != null) selectStore(selectedId); notice('컬렉션에 저장했어요.'); });
     },
     async syncDefaultSave(placeId, saved) {
-      if (!client || !profile) return;
-      const { data: collection, error: collectionError } = await client.from('collections').select('id').eq('owner_id', profile.id).eq('title', '저장한 가게').maybeSingle();
-      if (collectionError) return;
+      if (!client || !profile){notice('계정 정보를 확인하지 못했어요. 다시 로그인해 주세요.');return false;}
+      const { data: collection, error: collectionError } = await client.from('collections').select('id').eq('owner_id', profile.id).eq('title', '저장한 가게').limit(1).maybeSingle();
+      if (collectionError){notice('계정 저장 목록을 확인하지 못했어요.');return false;}
       let collectionId = collection?.id;
       if (!collectionId) {
         const { data, error } = await client.from('collections').insert({ title:'저장한 가게', emoji:'♥' }).select('id').single();
-        if (error) return;
+        if (error){notice('저장 목록을 만들지 못했어요.');return false;}
         collectionId = data.id;
       }
-      if (saved) await client.from('collection_places').upsert({ collection_id:collectionId, place_id:placeId });
-      else await client.from('collection_places').delete().eq('collection_id', collectionId).eq('place_id', placeId);
+      const result=saved?await client.from('collection_places').upsert({collection_id:collectionId,place_id:placeId}):await client.from('collection_places').delete().eq('place_id',placeId);
+      if(result.error){notice('계정 저장에 실패했어요. 장소 등록과 서버 연결을 확인해 주세요.');return false;}return true;
     },
     async importPlaces(places) {
       if (!client || profile?.role !== 'admin') return notice('관리자 로그인 후 사용할 수 있어요.');
-      const rows = places.map(p => ({ id:p.id, name:p.name, type:p.type, status:p.status || 'unverified', lat:p.lat, lng:p.lng, address:p.address, category:p.category, tags:p.tags || [], source:{ kakaoId:p.kakaoId || null, kakaoUrl:p.kakaoUrl || null } }));
-      const { error } = await client.from('places').upsert(rows);
+      const rows = places.map(p => ({ id:p.id, name:p.name, type:p.type, status:p.status || 'unverified', lat:p.lat, lng:p.lng, address:p.address, category:p.category, tags:p.tags || [], source:{kakaoId:p.kakaoId||null,kakaoUrl:p.kakaoUrl||null,dong:p.dong||'',hours:p.hours||'',signatureMenu:p.signatureMenu||'',insight:p.insight||''} }));
+      const { error } = await client.from('places').upsert(rows,{onConflict:'id',ignoreDuplicates:true});
       notice(error ? error.message : `${rows.length}개 매장을 데이터베이스에 반영했어요.`);
     }
   };
   window.addEventListener('DOMContentLoaded', () => { applyButtonFeedback(); });
   async function syncDeviceSaves() {
-    if (typeof bookmarks === 'undefined') return;
-    await Promise.all(Object.keys(bookmarks).map(placeId => window.HongdaePlatform.syncDefaultSave(Number(placeId), true)));
+    if(typeof bookmarks==='undefined'||!signedInUser||!client)return;
+    const owner=localStorage.getItem('bookmarksOwner');
+    const device=(!owner||owner==='guest'||owner===signedInUser.id)?{...bookmarks}:{};
+    // Cloud reads never import another account's cached saves.
+    const {data,error}=await client.from('collections').select('id,collection_places(place_id)').eq('owner_id',signedInUser.id);
+    if(error){notice('저장 목록을 불러오지 못했어요.');return;}
+    const merged={};for(const c of data||[])for(const p of c.collection_places||[])merged[p.place_id]=true;
+    for(const id of Object.keys(device))if(device[id]&&!merged[id]){if(await window.HongdaePlatform.syncDefaultSave(Number(id),true))merged[id]=true;}
+    bookmarks=merged;localStorage.setItem('bookmarks',JSON.stringify(merged));localStorage.setItem('bookmarksOwner',signedInUser.id);
+    const pending=Number(localStorage.getItem('pendingSaveId'));if(pending){localStorage.removeItem('pendingSaveId');if(await window.HongdaePlatform.syncDefaultSave(pending,true)){bookmarks[pending]=true;localStorage.setItem('bookmarks',JSON.stringify(bookmarks));}}
+    if(typeof renderAll==='function')renderAll();
   }
   const profileObserver = new MutationObserver(() => {
     const sheet = document.querySelector('.xp-sheet');
-    if (!sheet || sheet.dataset.profileEnhanced || sheet.querySelector('.xp-title')?.textContent !== '내 취향 지도') return;
+    if (!sheet || sheet.dataset.profileEnhanced || sheet.querySelector('.xp-title')?.textContent !== '내 프로필') return;
     sheet.dataset.profileEnhanced = '1';
+    const account=document.createElement('button');account.className='xp-secondary';account.textContent=signedInUser?'계정·컬렉션 관리':'로그인하고 저장 동기화';account.onclick=()=>{sheet.closest('.xp-overlay')?.classList.remove('open');openDialog()};sheet.append(account);
+    if(profile?.role==='admin'){const manage=document.createElement('a');manage.className='xp-secondary';manage.textContent='업체·리뷰·관심도 관리';manage.href='/admin.html';manage.style.cssText='display:block;text-align:center;text-decoration:none';sheet.append(manage);const importButton=document.createElement('button');importButton.className='xp-secondary';importButton.textContent='지도 신규 업체를 서버에 등록';importButton.onclick=()=>window.HongdaePlatform.importPlaces(stores);sheet.append(importButton);}
+    if(!signedInUser)return;
     const logout = document.createElement('button'); logout.className = 'xp-secondary'; logout.textContent = '로그아웃'; logout.onclick = () => { sheet.closest('.xp-overlay')?.classList.remove('open'); window.HongdaePlatform.signOut(); };
     sheet.append(logout);
   });

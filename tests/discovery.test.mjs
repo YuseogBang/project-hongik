@@ -51,3 +51,21 @@ test('Franchise exclusion supports explicit data and case-insensitive names with
  assert.equal(ctx.isFranchise({name:'제제집 본점'}),false);
  assert.equal(ctx.isFranchise({name:'확인 브랜드',franchise:true}),true);
 });
+
+test('Managed database places preserve curated records and apply editor changes only within map bounds',()=>{
+ const ctx={window:{},document:{addEventListener(){}}};vm.createContext(ctx);vm.runInContext(fs.readFileSync('managed-places.js','utf8'),ctx);
+ const target=[{id:1,name:'기존',tags:['혼밥'],lat:37.55,lng:126.92}];
+ const merge=ctx.window.HongdaeManagedPlaces.merge;
+ merge([{id:1,name:'오래된 서버명',tags:[],source:{}}],target);assert.equal(target[0].name,'기존');
+ merge([{id:1,name:'관리자 수정',tags:['빈티지'],lat:37.55,lng:126.92,source:{editorial:true,hours:'12:00-20:00',franchise:true}},{id:2,name:'망원 공간',lat:37.555,lng:126.9,source:{}},{id:3,name:'타지역',lat:37.4,lng:127.1,source:{}}],target);
+ assert.equal(target[0].name,'관리자 수정');assert.equal(target[0].hours,'12:00-20:00');assert.equal(target[0].franchise,true);assert.equal(target.length,2);
+});
+test('Guest save and unsave work without a login server',async()=>{
+ const html=fs.readFileSync('main.html','utf8');const a=html.indexOf('async function toggleBookmark('),b=html.indexOf('// ── 사라진 가게',a);
+ const memory=new Map([['localSaveConsent','1']]);const ctx={bookmarks:{},window:{HongdaePlatform:{whenReady:async()=>{},getUser:()=>null}},localStorage:{getItem:k=>memory.get(k),setItem:(k,v)=>memory.set(k,v)},selectedId:null,showToast(){},renderAll(){}};vm.createContext(ctx);vm.runInContext(html.slice(a,b),ctx);
+ await ctx.toggleBookmark(5);assert.equal(ctx.bookmarks[5],true);assert.equal(memory.get('bookmarksOwner'),'guest');await ctx.toggleBookmark(5);assert.equal(ctx.bookmarks[5],undefined);
+});
+test('Failed account save does not pretend to update bookmarks',async()=>{
+ const html=fs.readFileSync('main.html','utf8');const a=html.indexOf('async function toggleBookmark('),b=html.indexOf('// ── 사라진 가게',a);
+ const ctx={bookmarks:{},window:{HongdaePlatform:{whenReady:async()=>{},getUser:()=>({id:'test'}),syncDefaultSave:async()=>false}},localStorage:{getItem:()=>null,setItem:()=>assert.fail('must not persist failed save')},selectedId:null};vm.createContext(ctx);vm.runInContext(html.slice(a,b),ctx);await ctx.toggleBookmark(5);assert.equal(ctx.bookmarks[5],undefined);
+});

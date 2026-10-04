@@ -1087,6 +1087,17 @@
     .profile-actions button.primary { border-color:var(--accent); background:var(--accent); color:#fff; }
   }
 </style>
+<style>
+.landmark-detail-card{width:min(420px,92vw)!important;max-height:86dvh;overflow:auto;background:#2b070c!important;border:1px solid #7a2534!important;border-radius:24px!important;padding:14px!important;font-family:Pretendard,sans-serif;color:#f5ece7}
+.place-identity-card{background:#fff;border-radius:20px;box-shadow:0 10px 32px rgba(20,60,50,.14);overflow:hidden}
+.place-identity-hero{position:relative;height:110px;background:linear-gradient(135deg,#ffe8d9,#ffd4b8);display:flex;align-items:center;justify-content:center}
+.place-identity-icon{font-size:28px}.place-kind{position:absolute;top:10px;left:10px;background:#fff;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700;color:#8a5a3a}.place-kicker{position:absolute;bottom:10px;left:12px;font-size:10px;font-weight:900;letter-spacing:.08em;color:#8a5a3a}
+.place-dismiss{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;border:0;background:#fff;color:#8a3c35;font-size:14px;box-shadow:0 3px 10px rgba(20,60,50,.15)}
+.place-identity-content{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px}.place-identity-content h3{margin:0;font-size:17px;font-weight:900;color:#1c352e}.place-feature-tags{display:flex;gap:6px;flex-wrap:wrap}.place-feature-tags span{background:#fdf0e4;color:#8a5a3a;font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px}.place-description{margin:0;font-size:12px;line-height:1.65;color:#5c756d}
+.place-story-card{margin-top:10px;padding:13px 14px;background:linear-gradient(135deg,#5b1722,#3b0d14);border:1px solid #8f3142;border-radius:14px;color:#fff4ed}.place-section-label{font-size:10px;font-weight:900;letter-spacing:.08em;color:#f0b5bd;margin-bottom:7px}.place-story-card p{margin:0;color:#e8c8c5;font-size:12px;line-height:1.55}.place-footer-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.place-footer-actions .map-btn{flex:1;text-align:center;font-size:11px;text-decoration:none;padding:11px 8px;border-radius:12px}
+.station-detail-card #subway-arrival-body{min-height:100px;padding:12px 0}.station-detail-card #subway-arrival-updated{color:#c39298!important}
+@media(max-width:700px){#landmark-guide-modal,#subway-modal{align-items:flex-end;padding-bottom:calc(12px + env(safe-area-inset-bottom));}.landmark-detail-card{width:min(520px,96vw)!important;border-radius:24px 24px 16px 16px!important}}
+</style>
 </head>
 <body>
 
@@ -1237,12 +1248,8 @@
 
 <!-- 지하철 실시간 도착정보 배너 — #sort-modal과 같은 이유로 .layout 밖(body 레벨)에 둠 -->
 <div class="modal-overlay" id="subway-modal" style="display:none" onclick="if(event.target===this)closeSubwayArrivalBanner()">
-  <div class="modal" style="display:flex; flex-direction:column; width:min(420px, 92vw); max-height:70vh;">
-    <div class="feed-handle"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex:none">
-      <h4 id="subway-arrival-title" style="margin:0;display:flex;align-items:center;gap:7px">🚇 홍대입구역 실시간 도착</h4>
-      <button onclick="closeSubwayArrivalBanner()" style="width:26px;height:26px;border-radius:50%;border:none;background:var(--surface2);color:var(--muted);cursor:pointer;font-size:13px;flex:none">✕</button>
-    </div>
+  <div class="modal landmark-detail-card station-detail-card" role="dialog" aria-modal="true" aria-labelledby="subway-arrival-title">
+    <div class="place-identity-card"><div class="place-identity-hero"><span class="place-identity-icon">🚇</span><span class="place-kind">🚇 지하철역</span><span class="place-kicker">실시간 도착 안내</span><button class="place-dismiss" aria-label="지하철 안내 닫기" onclick="closeSubwayArrivalBanner()">✕</button></div><div class="place-identity-content"><h3 id="subway-arrival-title">홍대입구역</h3><div class="place-feature-tags" id="station-feature-tags"><span>#2호선</span><span>#공항철도</span><span>#경의중앙선</span></div></div></div>
     <div id="subway-arrival-body" style="overflow-y:auto;flex:1;margin-top:8px">
       <div style="padding:24px 4px;text-align:center;color:var(--muted);font-size:13px">불러오는 중…</div>
     </div>
@@ -2884,13 +2891,18 @@ function setCardStyle(style) {
   if (selectedId != null) selectStore(selectedId);
 }
 
-function toggleBookmark(id) {
-  if (!localStorage.getItem('localSaveConsent') && window.HongdaeExperience?.requestSave) {
-    window.HongdaeExperience.requestSave(id);
-    return;
-  }
-  if (bookmarks[id]) return window.HongdaePlatform?.openDialog();
-  if (window.HongdaePlatform?.openCollectionPicker) return window.HongdaePlatform.openCollectionPicker(id);
+async function toggleBookmark(id) {
+  await window.HongdaePlatform?.whenReady();
+  const account=window.HongdaePlatform?.getUser();
+  if(!account && !localStorage.getItem('localSaveConsent') && window.HongdaeExperience?.requestSave){window.HongdaeExperience.requestSave(id);return;}
+  const saved=!bookmarks[id];
+  if(account){const ok=await window.HongdaePlatform.syncDefaultSave(id,saved);if(!ok)return;}
+  if(saved)bookmarks[id]=true;else delete bookmarks[id];
+  localStorage.setItem('bookmarks',JSON.stringify(bookmarks));
+  localStorage.setItem('bookmarksOwner',account?.id||'guest');
+  if(account&&saved)window.HongdaeReviews?.logInterest(id,'save');
+  showToast(saved?(account?'계정에 저장했어요':'이 기기에 저장했어요'):'저장을 해제했어요');
+  if(selectedId===id)selectStore(id);else renderAll();
 }
 
 // ── 사라진 가게 코멘트 (브라우저에 저장 — 북마크와 같은 방식) ──
@@ -2910,7 +2922,7 @@ function submitComment(storeId) {
 }
 
 // ── 취향 매칭 (카테고리·특징을 리서치해 태그를 붙인 가게들 중에서 매칭) ──────
-const TASTE_TAGS = ['매운맛','혼밥','데이트','인스타감성','조용한','시끌벅적','가성비','술안주','디저트','로컬단골','홍대병','노포'];
+const TASTE_TAGS = ['매운맛','혼밥','데이트','인스타감성','조용한','시끌벅적','가성비','술안주','디저트','로컬단골','홍대병','노포','빈티지','구제','독립출판','바이닐','덕후','문구','소품','라이브음악','재즈','전통시장','친환경','제로웨이스트'];
 let userTastes = JSON.parse(localStorage.getItem('userTastes') || '[]');
 applyLang(); // 페이지 로드 즉시 적용 (카카오맵 로드를 기다리지 않아도 되게)
 
@@ -3168,7 +3180,11 @@ function openLandmarkBanner(name,lat,lng,icon) {
   const guide=LANDMARK_GUIDES[name]||{description:'홍대 일대에서 위치를 확인할 수 있는 장소입니다.',tags:['랜드마크'],tip:'방문 전 장소 안내를 확인하세요.'};
   let overlay=document.getElementById('landmark-guide-modal');
   if(!overlay){overlay=document.createElement('div');overlay.id='landmark-guide-modal';overlay.className='modal-overlay';overlay.onclick=e=>{if(e.target===overlay)overlay.style.display='none';};document.body.append(overlay);}
-  overlay.innerHTML=`<section class="modal landmark-banner" role="dialog" aria-modal="true" aria-labelledby="landmark-guide-title" style="width:min(420px,92vw)"><div style="display:flex;justify-content:space-between;align-items:center"><h3 id="landmark-guide-title">${icon} ${name}</h3><button type="button" aria-label="랜드마크 안내 닫기" onclick="document.getElementById('landmark-guide-modal').style.display='none'">✕</button></div><p style="line-height:1.7">${guide.description}</p><div style="color:var(--accent);font-weight:700">${guide.tags.map(t=>'#'+t).join(' ')}</div><p style="line-height:1.7;color:var(--muted)">${guide.tip}</p><a href="https://map.kakao.com/link/map/${encodeURIComponent(name)},${lat},${lng}" target="_blank" rel="noopener noreferrer">카카오맵에서 장소 확인 ↗</a>${guide.url?`<p><a href="${guide.url}" target="_blank" rel="noopener noreferrer">공식 안내 ↗</a></p>`:''}${name==='홍익대학교'||name==='홍문관'?`<p><button onclick="document.getElementById('landmark-guide-modal').style.display='none';openExhibitionBanner()">홍익대 전시·행사 보기</button></p>`:''}</section>`;
+  overlay.innerHTML=`<section class="modal landmark-detail-card" role="dialog" aria-modal="true" aria-labelledby="landmark-guide-title">
+    <div class="place-identity-card"><div class="place-identity-hero"><span class="place-identity-icon">${icon}</span><span class="place-kind">${icon} 랜드마크</span><span class="place-kicker">동네의 기준점</span><button class="place-dismiss" type="button" aria-label="랜드마크 안내 닫기" onclick="document.getElementById('landmark-guide-modal').style.display='none'">✕</button></div>
+    <div class="place-identity-content"><h3 id="landmark-guide-title">${name}</h3><div class="place-feature-tags">${guide.tags.map(t=>`<span>#${t}</span>`).join('')}</div><p class="place-description">${guide.description}</p></div></div>
+    <section class="place-story-card"><div class="place-section-label">HONGDAE STORY</div><p>${guide.tip}</p></section>
+    <div class="place-footer-actions"><a class="map-btn" href="https://map.kakao.com/link/map/${encodeURIComponent(name)},${lat},${lng}" target="_blank" rel="noopener noreferrer">카카오맵에서 보기 ↗</a>${guide.url?`<a class="map-btn" href="${guide.url}" target="_blank" rel="noopener noreferrer">공식 안내 ↗</a>`:''}${name==='홍익대학교'||name==='홍문관'?`<button class="map-btn" onclick="document.getElementById('landmark-guide-modal').style.display='none';openExhibitionBanner()">전시·행사 보기 →</button>`:''}</div></section>`;
   overlay.style.display='flex';overlay.querySelector('button').focus();
 }
 
@@ -3709,7 +3725,7 @@ function selectStore(id) {
     const bm = !!bookmarks[s.id];
 
     const cardA = `
-      <div style="background:#ffffff;border-radius:20px;box-shadow:0 10px 32px rgba(20,60,50,.14);overflow:hidden">
+      <div class="place-identity-card" style="background:#ffffff;border-radius:20px;box-shadow:0 10px 32px rgba(20,60,50,.14);overflow:hidden">
         <div style="position:relative;height:110px;background:linear-gradient(135deg,#ffe8d9,#ffd4b8);display:flex;align-items:center;justify-content:center">
           <div style="font-size:28px">${menuEmoji(s)}</div>
           <div style="position:absolute;bottom:10px;left:12px;font-size:10px;font-weight:900;letter-spacing:.08em;color:#8a5a3a">MY TASTE PICK</div>
@@ -4525,7 +4541,8 @@ function addStore() {
 
   function openSubwayArrivalBanner(station='홍대입구') {
     SEOUL_STATION_NAME=['홍대입구','합정','상수'].includes(station)?station:'홍대입구';
-    document.getElementById('subway-arrival-title').textContent=`🚇 ${SEOUL_STATION_NAME}역 실시간 도착`;
+    document.getElementById('subway-arrival-title').textContent=`${SEOUL_STATION_NAME}역 실시간 도착`;
+    document.getElementById('station-feature-tags').innerHTML=(SEOUL_STATION_NAME==='홍대입구'?['2호선','공항철도','경의중앙선']:SEOUL_STATION_NAME==='합정'?['2호선','6호선']:['6호선']).map(line=>`<span>#${line}</span>`).join('');
     document.getElementById('subway-arrival-body').textContent='불러오는 중…';
     const overlay = document.getElementById('subway-modal');
     if (!overlay) return;
@@ -5030,7 +5047,7 @@ function addStore() {
     }
   });
   </script>
-  <script src="platform.js?v=20261004-pin-position"></script>
+  <script src="platform.js?v=20261004-managed"></script>
   <script src="ui-redesign.js?v=20261004-mangwon"></script>
   <script src="experience-ui.js?v=20261004-mangwon"></script>
   <script src="discovery-ui.js?v=20261004-mangwon"></script>
@@ -5041,10 +5058,11 @@ function addStore() {
   <script src="archive-places.js?v=20261004-mangwon"></script>
   <script src="workbook-curations.js?v=20261004-local"></script>
   <script src="survey-menu-data.js"></script>
+  <script src="managed-places.js?v=20261004-managed"></script>
   <script src="survey-menu-ui.js"></script>
   <script src="feedback-ui.js"></script>
   <script src="mobile-polish.js"></script>
-  <script src="feed-ui.js"></script>
+  <script src="feed-ui.js?v=20261004-managed"></script>
   <script src="hongdae-icons.js"></script>
   <link rel="stylesheet" href="button-system.css">
 </body>
