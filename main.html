@@ -1330,19 +1330,20 @@
      서울시 지하철 API 같은 공식 오픈API가 학교 쪽엔 없어서, 큐레이션 피드와 같은 방식
      (직접 입력 + 세션 저장 + 내보내기)으로 관리한다. body 레벨에 둬서 헤더에 안 가림. ── -->
 <div class="modal-overlay" id="exhibition-modal" style="display:none" onclick="if(event.target===this)closeExhibitionBanner()">
-  <div class="modal" style="display:flex; flex-direction:column; width:min(440px, 92vw); max-height:78vh;">
-    <div class="feed-handle"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex:none">
-      <h4 style="margin:0;display:flex;align-items:center;gap:7px">🎓 홍익대 전시·행사</h4>
-      <button onclick="closeExhibitionBanner()" style="width:26px;height:26px;border-radius:50%;border:none;background:var(--surface2);color:var(--muted);cursor:pointer;font-size:13px;flex:none">✕</button>
-    </div>
-    <p style="margin:0 0 8px;font-size:11px;color:var(--muted);line-height:1.5">
-      과별 졸업전시·기획전시 소식이에요. 학교·학과 공식 공지를 매주 월요일 확인해요.
-    </p>
-    <div id="exhibition-body" style="overflow-y:auto;flex:1"></div>
+  <div class="modal landmark-detail-card" style="display:flex;flex-direction:column">
+    <section class="place-identity-card">
+      <div class="place-identity-hero"><span class="place-kind">전시 · 행사</span><span class="place-identity-icon">🎨</span><span class="place-kicker">캠퍼스에서 만나는 예술</span><button class="place-dismiss" aria-label="닫기" onclick="closeExhibitionBanner()">×</button></div>
+      <div class="place-identity-content"><h3>홍익대 전시·행사</h3><div class="place-feature-tags"><span>#캠퍼스</span><span>#전시</span><span>#예술</span></div><p>학교·학과 공식 공지에서 확인한 졸업전시와 기획전시 소식이에요.</p></div>
+    </section>
+    <div id="exhibition-body" style="overflow-y:auto;margin-top:12px"></div>
+    <div class="place-footer-actions"><a class="map-btn" href="https://homa.hongik.ac.kr/homa/index.do" target="_blank" rel="noopener noreferrer">현대미술관 공식 안내 ↗</a></div>
   </div>
 </div>
 
+<div class="modal-overlay" id="language-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal landmark-detail-card" role="dialog" aria-modal="true" aria-labelledby="language-title"><h3 id="language-title">언어 선택 · Language</h3>
+    <p>지도 동네명과 주요 장소 안내도 선택한 언어로 표시됩니다.</p>
+    <div style="display:grid;gap:10px"><button class="map-btn" data-language="ko" onclick="selectLanguage('ko')">한국어</button><button class="map-btn" data-language="en" onclick="selectLanguage('en')">English</button><button class="map-btn" data-language="zh" onclick="selectLanguage('zh')">中文</button><button class="map-btn" data-language="ja" onclick="selectLanguage('ja')">日本語</button></div><button class="map-btn" style="margin-top:12px" onclick="document.getElementById('language-modal').style.display='none'">닫기 · Close</button></div></div>
 <!-- 전시 등록(관리자) — 배포용으로 기본 숨김. -->
 <div class="modal-overlay" id="exhibition-admin-modal" style="display:none" onclick="if(event.target===this)closeExhibitionAdmin()">
   <div class="modal" style="display:flex; flex-direction:column; width:min(440px, 92vw); max-height:86vh;">
@@ -2418,12 +2419,14 @@ function renderTrivia() {
 function nextTrivia() {
   triviaIdx = (triviaIdx + 1) % TRIVIA.length;
   renderTrivia();
+  updateMapLanguage();
 }
 
 
 // ── 언어 전환 (정적 UI 텍스트만 — 매장명/태그/코멘트 같은 실제 데이터는 번역하지 않음) ──
-const LANG_ORDER = ['ko', 'en', 'zh'];
+const LANG_ORDER = ['ko', 'en', 'zh', 'ja'];
 let currentLang = localStorage.getItem('lang') || 'ko';
+if (!LANG_ORDER.includes(currentLang)) currentLang='ko';
 // 색상 테마 — 'default'(기존 레드) | 'hongik'(홍익대 블루). 새로고침해도 유지되도록 저장해두고 바로 적용.
 let colorTheme = localStorage.getItem('colorTheme') || 'default';
 document.documentElement.setAttribute('data-theme', colorTheme === 'hongik' ? 'hongik' : 'default');
@@ -2471,16 +2474,44 @@ const I18N = {
   },
 };
 
-function cycleLang() {
-  const idx = LANG_ORDER.indexOf(currentLang);
-  currentLang = LANG_ORDER[(idx + 1) % LANG_ORDER.length];
-  localStorage.setItem('lang', currentLang);
-  applyLang();
+I18N.ja = { ...I18N.en, langBtn:'🌐 日本語', search:'お店を検索...', taste:'🎯 好みを選ぶ', hof:'🏅 学生に人気のお店', michelin:'🍽️ ミシュランガイド', affiliate:'🤝 学生会提携店', all:'すべて', restaurant:'飲食店', cafe:'カフェ', bar:'バー', liveclub:'🎤 ライブハウス', artsupply:'🎨 画材店', seogyo:'📍 西橋洞', yeonnam:'📍 延南洞', hapjeong:'📍 合井洞', sangsu:'📍 上水洞', triviaLabel:'弘大の豆知識' };
+const MAP_LABELS = {
+  '홍대입구역':{en:'Hongik Univ. Station',zh:'弘大入口站',ja:'弘大入口駅'},
+  '홍익대학교':{en:'Hongik University',zh:'弘益大学',ja:'弘益大学'},
+  '상상마당':{en:'KT&G Sangsangmadang',zh:'KT&G 想象空间',ja:'KT&G サンサンマダン'},
+  '연남동':{en:'Yeonnam-dong',zh:'延南洞',ja:'延南洞'}, '서교동':{en:'Seogyo-dong',zh:'西桥洞',ja:'西橋洞'},
+  '합정동':{en:'Hapjeong-dong',zh:'合井洞',ja:'合井洞'}, '상수동':{en:'Sangsu-dong',zh:'上水洞',ja:'上水洞'},
+  '망원동':{en:'Mangwon-dong',zh:'望远洞',ja:'望遠洞'}, '합정역':{en:'Hapjeong Station',zh:'合井站',ja:'合井駅'},
+  '상수역':{en:'Sangsu Station',zh:'上水站',ja:'上水駅'}, '홍대놀이터':{en:'Hongdae Playground',zh:'弘大游乐场',ja:'弘大遊び場'},
+  'AK플라자 홍대':{en:'AK Plaza Hongdae',zh:'AK Plaza 弘大',ja:'AK Plaza 弘大'}, '와우공원':{en:'Wau Park',zh:'卧牛公园',ja:'臥牛公園'},
+  '마포평생학습관':{en:'Mapo Lifelong Learning Center',zh:'麻浦终身学习馆',ja:'麻浦生涯学習館'},
+  '홍문관':{en:'Hongmungwan',zh:'弘文馆',ja:'弘文館'}, '경의선숲길':{en:'Gyeongui Line Forest Park',zh:'京义线林荫道',ja:'京義線の森公園'}
+};
+function mapLabel(name) { return currentLang==='ko' ? name : MAP_LABELS[name]?.[currentLang] || name; }
+function updateMapLanguage() {
+  document.querySelectorAll('[data-map-name]').forEach(el=>{
+    const name=el.dataset.mapName;
+    const label=el.querySelector('[data-map-label]'); if(label)label.textContent=mapLabel(name);
+    el.setAttribute('aria-label',mapLabel(name));
+    const hint=el.querySelector('small');if(hint)hint.textContent=({ko:'동네별 둘러보기',en:'Explore this area',zh:'探索此街区',ja:'このエリアを見る'})[currentLang];
+  });
+  document.querySelectorAll('.hm-cluster').forEach(el=>el.setAttribute('aria-label',({ko:'업체',en:'Places',zh:'店铺',ja:'お店'})[currentLang]+' '+el.textContent));
+}
+function selectLanguage(lang) {
+  if(!LANG_ORDER.includes(lang))return;
+  currentLang=lang;localStorage.setItem('lang',lang);
+  document.getElementById('language-modal').style.display='none';
+  document.documentElement.lang=lang;applyLang();updateMapLanguage();
+  if(map)renderAll();
   window.dispatchEvent(new Event('hongdae:language-change'));
+}
+function cycleLang() {
+  const modal=document.getElementById('language-modal');modal.style.display='flex';
+  modal.querySelectorAll('[data-language]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.language===currentLang)));
 }
 
 function applyLang() {
-  const t = I18N[currentLang];
+  const t = I18N[currentLang] || I18N.ko;
   const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
   const setChipText = (id, val) => { const el = document.getElementById(id); if (!el) return; const svg = el.querySelector('svg'); el.textContent = val; if (svg) el.insertBefore(svg, el.firstChild); };
   const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
@@ -2769,7 +2800,7 @@ function localizeTag(tag) {
   if (currentLang === 'ko') return tag;
   const key = tag.replace('#', '');
   const hit = TAG_I18N[key];
-  return hit ? `#${hit[currentLang]}` : tag; // 사전에 없는 태그는 지어내지 않고 한국어 그대로 둠
+  return hit?.[currentLang] ? `#${hit[currentLang]}` : tag; // 사전에 없는 태그는 지어내지 않고 한국어 그대로 둠
 }
 
 // 알려진 메뉴명만 번역, 매칭 안 되면 원문(한국어) 유지 — 없는 번역을 지어내지 않음
@@ -2839,7 +2870,7 @@ function localizeMenuText(text) {
   return text.split(',').map(part => {
     const trimmed = part.trim();
     for (const [re, tr] of MENU_I18N) {
-      if (re.test(trimmed)) return tr[currentLang];
+      if (re.test(trimmed) && tr[currentLang]) return tr[currentLang];
     }
     return trimmed; // 사전에 없으면 지어내지 않고 원문 유지
   }).join(', ');
@@ -3191,7 +3222,7 @@ function openLandmarkBanner(name,lat,lng,icon) {
 // Orientation labels use existing verified coordinates or Kakao place search results.
 function addDistrictLandmarks() {
   const add = (name, lat, lng, icon, color) => {
-    const button=document.createElement('button');button.type='button';button.className='district-landmark';button.style.setProperty('--landmark-color',color);button.setAttribute('aria-label',name+' 안내');button.innerHTML=`<span>${icon}</span>${name}`;
+    const button=document.createElement('button');button.type='button';button.className='district-landmark';button.style.setProperty('--landmark-color',color);button.setAttribute('aria-label',name+' 안내');button.dataset.mapName=name;button.innerHTML=`<span>${icon}</span><span data-map-label>${mapLabel(name)}</span>`;
     for(const event of ['pointerdown','mousedown','touchstart'])button.addEventListener(event,e=>e.stopPropagation());
     button.addEventListener('click',e=>{e.stopPropagation();openLandmarkBanner(name,lat,lng,icon);});
     const label = new HongdaeMap.CustomOverlay({map,position:new kakao.maps.LatLng(lat,lng),yAnchor:1.8,zIndex:6,content:button});
@@ -3216,7 +3247,7 @@ function addDistrictLandmarks() {
     button.type='button';button.className='district-area';
     button.style.setProperty('--area-color',area.color);button.style.setProperty('--area-bg',area.bg);
     button.setAttribute('aria-label',`${area.name} 업체 보기`);
-    button.innerHTML=`${area.name}<small>동네별 둘러보기</small>`;
+    button.dataset.mapName=area.name;button.innerHTML=`<span data-map-label>${mapLabel(area.name)}</span><small>동네별 둘러보기</small>`;
     for(const event of ['pointerdown','mousedown','touchstart'])button.addEventListener(event,e=>e.stopPropagation());
     button.addEventListener('click',e=>{e.stopPropagation();toggleDetailFilter('dong:'+area.name,document.getElementById('chip-'+area.id));showToast(area.name+' 업체를 모아 보여드려요');});
     new HongdaeMap.CustomOverlay({map,position:new kakao.maps.LatLng(median(points.map(s=>s.lat)),median(points.map(s=>s.lng))),zIndex:7,content:button});
@@ -3341,6 +3372,7 @@ function getFilteredStores() {
 }
 
 function renderMarkers() {
+  if (!map) return; // Data can arrive before the selected map renderer is ready.
   // 클러스터러는 최초 1회만 생성해서 재사용 (매번 새로 만들면 깜빡임 생김)
   if (!clusterer) {
     clusterer = new HongdaeMap.MarkerClusterer({
@@ -4951,16 +4983,12 @@ function addStore() {
     const status = exhibitionStatus(exh);
     const statusLabel = status === 'ongoing' ? '진행중' : status === 'upcoming' ? '예정' : '종료';
     const thumb = exh.thumbnail ? `<img src="${exh.thumbnail}" alt="">` : '🎨';
-    const link = exh.link ? `<a class="exhibition-link" href="${exh.link}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();trackCurationEvent('exhibition_link_click',{id:'${exh.id}'})">자세히 보기 →</a>` : '';
-    return `<div class="exhibition-card">
-      <div class="exhibition-thumb">${thumb}</div>
-      <div class="exhibition-info">
-        <span class="exhibition-status ${status}">${statusLabel}</span>
-        <div class="exhibition-title">${exh.title}</div>
-        <div class="exhibition-meta">${exh.dept ? exh.dept + ' · ' : ''}${exhibitionDateLabel(exh)}<br>${exh.location || ''}</div>
-        ${link}
-      </div>
-    </div>`;
+    const link = exh.link ? `<a class="map-btn" href="${exh.link}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();trackCurationEvent('exhibition_link_click',{id:'${exh.id}'})">자세히 보기 →</a>` : '';
+    return `<section class="place-identity-card" style="margin-bottom:12px"><div class="place-identity-content">
+      <div class="place-feature-tags"><span>${statusLabel}</span>${exh.dept?`<span>${exh.dept}</span>`:''}</div>
+      <h3>${exh.title}</h3><p>${exhibitionDateLabel(exh)}<br>${exh.location || ''}</p>
+      <div class="place-footer-actions">${link}</div>
+    </div></section>`;
   }
   function openExhibitionBanner() {
     const overlay = document.getElementById('exhibition-modal');

@@ -69,3 +69,5 @@ test('Failed account save does not pretend to update bookmarks',async()=>{
  const html=fs.readFileSync('main.html','utf8');const a=html.indexOf('async function toggleBookmark('),b=html.indexOf('// ── 사라진 가게',a);
  const ctx={bookmarks:{},window:{HongdaePlatform:{whenReady:async()=>{},getUser:()=>({id:'test'}),syncDefaultSave:async()=>false}},localStorage:{getItem:()=>null,setItem:()=>assert.fail('must not persist failed save')},selectedId:null};vm.createContext(ctx);vm.runInContext(html.slice(a,b),ctx);await ctx.toggleBookmark(5);assert.equal(ctx.bookmarks[5],undefined);
 });
+
+test('Data arriving before map readiness cannot create a clusterer for the wrong renderer',()=>{const html=fs.readFileSync('main.html','utf8');const source=html.slice(html.indexOf('function renderMarkers() {'),html.indexOf('// 클러스터 되는 줌 레벨'));const ctx={map:undefined,clusterer:undefined,HongdaeMap:{MarkerClusterer(){throw new Error('Premature cluster creation')}}};vm.createContext(ctx);vm.runInContext(source,ctx);ctx.renderMarkers();assert.equal(ctx.clusterer,undefined);});
