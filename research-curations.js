@@ -46,6 +46,7 @@
     const wantedName = normalize(name), wantedRoad = roadKey(address);
     return results.find((place) => {
       const foundName = normalize(place.place_name), foundRoad = roadKey(place.road_address_name || place.address_name);
+      if(name==='망원시장' && /상인회|협회|사무실/.test(place.place_name))return false;
       return Number(place.x)>=126.890 && Number(place.x)<=126.939 && Number(place.y)>=37.543 && Number(place.y)<=37.572 && (foundName === wantedName || foundName.includes(wantedName) || wantedName.includes(foundName)) && (!wantedRoad || wantedRoad === foundRoad);
     });
   }
