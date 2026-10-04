@@ -1,13 +1,10 @@
 (() => {
   // 사용자가 제공한 2026-10-03 1차 수집 메모. 현재 영업 정보로 검증하지 않았다.
   const collections = {
-    mangwon: {title:"🌿 망원동 골목 탐색",date:"2026-10-04",source:"",places:[
-      ["알맹상점","서울 마포구 월드컵로25길 47","미기재","리필·제로웨이스트 생활용품","https://almangmarket.co.kr/shopinfo/company.html","retail",["제로웨이스트","친환경"]],
-      ["제로스페이스 망원","서울 마포구 희우정로16길 32","평일 11:30-19:30 / 토 11:00-20:00 / 일 11:30-19:00","디자인 소품·문구·미피 굿즈","https://www.zeroperzero.com/offline-store","retail",["소품","문구","덕후"]],
-      ["스튜디오블랭크 망원","서울 마포구 포은로 92","미기재","커스텀 티셔츠·키링·패브릭 소품","https://www.stblank.co.kr/sb/store/mangwon.html","retail",["소품","커스텀"]],
-      ["소금집델리 망원점","서울 마포구 월드컵로19길 14","11:00-21:00 / 라스트오더 20:30","미기재","https://salthousekorea.com/contact/store-02.html","restaurant",[]],
-      ["망원시장","서울 마포구 포은로6길 27","10:00-21:00 (업체별 상이)","전통시장 먹거리","https://english.visitseoul.net/shopping/Mangwon%20Market/ENP037950","retail",["전통시장","산책"]]
-    ]},
+    mangwon: {title:'🌿 망원·이웃 골목 탐색', date:'2026-10-04', source:'',
+      note:'카카오맵에서 확인한 장소의 영업시간·메뉴·특징입니다. 일부 장소는 합정·서교·상수·성산동에 있어 주소를 확인해 주세요.',
+      places:(window.HONGDAE_MANGWON_RESEARCH?.places || []).map(record => [record.name, record.address, record.hours || '미기재', record.menu.map(row=>row[0]).join(', ') || record.features, record.source, record.type, record.tags, record])
+    },
     ramen: {
       title: '🍜 라멘 한 그릇',
       date: '2025-09-02',
@@ -42,21 +39,25 @@
     const match = String(address).match(/([가-힣0-9]+(?:로|길))\s*([0-9]+(?:-[0-9]+)?)(?:\s|$)/);
     return match ? normalize(match[1] + match[2]) : '';
   };
-  function matchingPlace(results, name, address) {
+  function matchingPlace(results, name, address, expectedId) {
     const wantedName = normalize(name), wantedRoad = roadKey(address);
     return results.find((place) => {
+      if (expectedId && String(place.id) !== String(expectedId)) return false;
       const foundName = normalize(place.place_name), foundRoad = roadKey(place.road_address_name || place.address_name);
       if(name==='망원시장' && /상인회|협회|사무실/.test(place.place_name))return false;
       return Number(place.x)>=126.890 && Number(place.x)<=126.939 && Number(place.y)>=37.543 && Number(place.y)<=37.572 && (foundName === wantedName || foundName.includes(wantedName) || wantedName.includes(foundName)) && (!wantedRoad || wantedRoad === foundRoad);
     });
   }
-  function searchKakao(name, address) {
+  function searchKakao(name, address, expectedId) {
     return new Promise((resolve) => {
       if (!window.kakao?.maps?.services?.Places) return resolve({ error: '카카오 지도를 불러오지 못했어요.' });
       const query = `${name} 마포구`;
+      let settled = false;
+      const finish = result => { if (settled) return; settled = true; clearTimeout(timer); resolve(result); };
+      const timer = setTimeout(() => finish({error:'장소 검색이 지연되고 있어요. 잠시 후 다시 열어 주세요.'}), 8000);
       new kakao.maps.services.Places().keywordSearch(query, (data, status) => {
-        if (status === kakao.maps.services.Status.ERROR) return resolve({ error: '카카오 검색을 잠시 이용할 수 없어요.' });
-        resolve({ place: matchingPlace(status === kakao.maps.services.Status.OK ? data : [], name, address) });
+        if (status === kakao.maps.services.Status.ERROR) return finish({ error: '카카오 검색을 잠시 이용할 수 없어요.' });
+        finish({ place: matchingPlace(status === kakao.maps.services.Status.OK ? data : [], name, address, expectedId) });
       }, { size: 15 });
     });
   }
@@ -73,7 +74,7 @@
         rating: null, reviews: null, months: null, rent: null, score: null, tags: [],
         insight: '카카오 장소 검색에서 위치를 확인했습니다. 현재 영업 여부는 방문 전에 확인해 주세요.' };
       stores.push(store);
-      if (typeof renderAll === 'function') renderAll();
+      if (!item[7] && typeof renderAll === 'function') renderAll();
     }
     if(kind === "mangwon"){store.tags=[...new Set([...(store.tags||[]),...(item[6]||[])])];store.researchSource=item[4];store.researchChecked=collection.date;}
     store.curationGroups = [...new Set([...(store.curationGroups || []), kind])];
@@ -84,6 +85,15 @@
     if (!store.hours && hours !== '미기재') {
       store.hours = hours;
       store.hoursNote = `${collection.date} 게시 당시 정보 · 현재 미확인`;
+    }
+    const record = item[7];
+    if (record) {
+      store.hours = record.hours || '';
+      store.hoursNote = `${record.checked} 카카오맵 표시 기준`;
+      store.signatureMenu = record.menu.map(row => row[0]);
+      store.insight = record.features;
+      store.researchNote = record.note;
+      store.surveyMenu = {...record, note: `10/4~10/10 표시 기준 · ${record.note}`};
     }
     return store;
   }
@@ -113,23 +123,48 @@
     root.querySelector('.hr-close').onclick = close;
     const found = [], missing = [];
     for (const item of collection.places) {
-      const result = await searchKakao(item[0], item[1]);
+      const existing = item[7] && stores.find(store => String(store.kakaoId) === String(item[7].kakaoId));
+      if (existing) { found.push(existing); continue; }
+      const result = await searchKakao(item[0], item[1], item[7]?.kakaoId);
       if (token !== requestId) return;
       if (result.error) { root.querySelector('.hr-note').textContent = result.error; return; }
       if (result.place) found.push(addToMap(result.place, item, kind, collection));
       else missing.push(item[0]);
     }
+    if (typeof renderAll === 'function') renderAll();
     const unique = [...new Map(found.map((store) => [store.id, store])).values()].filter(store=>!indieOnly||!isFranchise(store));
-    root.innerHTML = `<section class="hr-panel"><div class="hr-head"><h2>${escapeHtml(collection.title)}</h2><button type="button" class="hr-close">닫기 ✕</button></div><p class="hr-note">카카오 장소 검색으로 상호·주소를 대조한 ${unique.length}곳입니다. 누르면 기존 식당과 같은 장소 카드가 열립니다. 영업시간·메뉴는 ${escapeHtml(collection.date)} 수집 자료이며 현재 미확인입니다.</p>${collection.source ? `<a class="hr-source" href="${collection.source}" target="_blank" rel="noopener noreferrer">수집 게시물 보기 ↗</a>` : ''}${unique.map((store) => `<button type="button" class="hr-place" data-store="${store.id}">${escapeHtml(store.name)}<small>${escapeHtml(store.address)} · 장소 카드 보기 →</small></button>${store.researchSource?`<a class="hr-source" href="${escapeHtml(store.researchSource)}" target="_blank" rel="noopener noreferrer">공식 안내 ↗</a>`:""}`).join('')}${missing.length ? `<p class="hr-note">카카오 검색에서 대조되지 않아 보류: ${escapeHtml(missing.join(', '))}</p>` : ''}</section>`;
+    root.innerHTML = `<section class="hr-panel"><div class="hr-head"><h2>${escapeHtml(collection.title)}</h2><button type="button" class="hr-close">닫기 ✕</button></div><p class="hr-note">카카오 장소 검색으로 상호·주소를 대조한 ${unique.length}곳입니다. 누르면 기존 식당과 같은 장소 카드가 열립니다. 영업시간·메뉴는 ${escapeHtml(collection.date)} 표시 기준이며 방문 전에 확인해 주세요.</p>${collection.source ? `<a class="hr-source" href="${collection.source}" target="_blank" rel="noopener noreferrer">수집 게시물 보기 ↗</a>` : ''}${unique.map((store) => `<button type="button" class="hr-place" data-store="${store.id}">${escapeHtml(store.name)}<small>${escapeHtml(store.address)} · 장소 카드 보기 →</small></button>${store.researchSource?`<a class="hr-source" href="${escapeHtml(store.researchSource)}" target="_blank" rel="noopener noreferrer">카카오맵 상세 ↗</a>`:""}`).join('')}${missing.length ? `<p class="hr-note">카카오 검색에서 대조되지 않아 보류: ${escapeHtml(missing.join(', '))}</p>` : ''}</section>`;
     root.querySelector('.hr-close').onclick = close;
     root.querySelectorAll('[data-store]').forEach((button) => button.onclick = () => { close(); selectStore(Number(button.dataset.store)); });
   }
   function renderEntry(host) {
     if (!host) return;
-    host.innerHTML = '<p class="discovery-intro" style="margin-top:20px">카카오 지도에서 대조해 보는 큐레이션</p><button type="button" class="discovery-theme" data-research="ramen">🍜 라멘 한 그릇 <span>검색 →</span><small>주소가 있는 라멘집 8곳</small></button><button type="button" class="discovery-theme" data-research="bar">🍸 혼술 자리 찾기 <span>검색 →</span><small>수집 메모의 바 3곳</small></button><button type="button" class="discovery-theme" data-research="mangwon">🌿 망원동 골목 탐색 <span>검색 →</span><small>공식 안내로 수집한 소품·친환경·먹거리 공간 5곳</small></button>';
+    host.innerHTML = `<p class="discovery-intro" style="margin-top:20px">카카오 지도에서 대조해 보는 큐레이션</p><button type="button" class="discovery-theme" data-research="ramen">🍜 라멘 한 그릇 <span>검색 →</span><small>주소가 있는 라멘집 8곳</small></button><button type="button" class="discovery-theme" data-research="bar">🍸 혼술 자리 찾기 <span>검색 →</span><small>수집 메모의 바 3곳</small></button><button type="button" class="discovery-theme" data-research="mangwon">🌿 망원·이웃 골목 탐색 <span>검색 →</span><small>카카오맵으로 확인한 주점·식당·서점·소품 공간 ${collections.mangwon.places.length}곳</small></button>`;
     host.querySelectorAll('[data-research]').forEach((button) => button.onclick = () => open(button.dataset.research));
   }
-  document.addEventListener('DOMContentLoaded', () => document.body.append(root));
+  let loading;
+  function loadMangwon() {
+    if (loading) return loading;
+    loading = (async () => {
+      for (const item of collections.mangwon.places) {
+        const existing = stores.find(store => String(store.kakaoId) === item[7].kakaoId);
+        if (existing) {
+          addToMap({id:existing.kakaoId, place_name:existing.name, x:existing.lng, y:existing.lat,
+            road_address_name:existing.address, address_name:existing.address, place_url:item[7].source}, item, 'mangwon', collections.mangwon);
+          continue;
+        }
+        const result = await searchKakao(item[0], item[1], item[7].kakaoId);
+        if (result.error) break;
+        if (result.place) addToMap(result.place, item, 'mangwon', collections.mangwon);
+      }
+      if (typeof renderAll === 'function') renderAll();
+    })();
+    return loading;
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    document.body.append(root);
+    if (window.kakao?.maps?.load) kakao.maps.load(() => loadMangwon());
+  });
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
-  window.HongdaeResearch = { renderEntry, open, close };
+  window.HongdaeResearch = { renderEntry, open, close, loadMangwon, matchingPlace };
 })();

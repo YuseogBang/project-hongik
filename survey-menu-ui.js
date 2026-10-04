@@ -3,7 +3,7 @@
   const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[char]));
-  const won = (price) => Number.isInteger(price) ? `${price.toLocaleString('ko-KR')}원` : '가격 미기재';
+  const won = (price, label) => Number.isInteger(price) ? `${price.toLocaleString('ko-KR')}원` : label || '가격 미기재';
   let attached = 0;
   stores.forEach((store) => {
     const record = source[String(store.id)];
@@ -30,10 +30,10 @@
   function hours(store) {
     const record = store.surveyMenu;
     if (!record?.hours) return '';
-    return `<section class="survey-hours"><div class="survey-eyebrow">영업시간</div><div style="margin-top:6px;font-size:12px;line-height:1.55">${escapeHtml(record.hours)}</div><p class="survey-meta">${escapeHtml(record.checked)} 카카오맵 표시 기준 · 공휴일 시간이 섞였을 수 있어요. <a href="${escapeHtml(record.source)}" target="_blank" rel="noopener noreferrer">현재 정보 확인 ↗</a></p></section>`;
+    return `<section class="survey-hours"><div class="survey-eyebrow">영업시간</div><div style="margin-top:6px;font-size:12px;line-height:1.55">${escapeHtml(record.hours)}</div><p class="survey-meta">${escapeHtml(record.checked)} 카카오맵 표시 기준 · 공휴일·임시휴무는 방문 전에 확인해 주세요. <a href="${escapeHtml(record.source)}" target="_blank" rel="noopener noreferrer">현재 정보 확인 ↗</a></p>${record.note ? `<p class="survey-meta">${escapeHtml(record.note)}</p>` : ''}</section>`;
   }
   function rows(menu) {
-    return menu.map(([name, price, recommended]) => `<div class="survey-row"><span>${escapeHtml(name)}${recommended ? '<small class="survey-rec">★</small>' : ''}</span><b>${won(price)}</b></div>`).join('');
+    return menu.map(([name, price, recommended, priceLabel]) => `<div class="survey-row"><span>${escapeHtml(name)}${recommended ? '<small class="survey-rec">★</small>' : ''}</span><b>${won(price, priceLabel)}</b></div>`).join('');
   }
   function board(store) {
     const record = store.surveyMenu;
