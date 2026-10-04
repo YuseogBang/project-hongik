@@ -24,7 +24,8 @@
     if (document.querySelector('#hongdae-button-feedback')) return;
     const style = document.createElement('style');
     style.id = 'hongdae-button-feedback';
-    style.textContent = 'button, [role="button"] { transition:transform .14s ease, filter .14s ease, box-shadow .14s ease !important; } button:hover, [role="button"]:hover { filter:brightness(1.06); } button:active, [role="button"]:active { transform:scale(.96) !important; filter:brightness(.9); } button:focus-visible, [role="button"]:focus-visible { outline:2px solid #ff7165; outline-offset:2px; }';
+    // MapLibre positions marker buttons with transform; button feedback must never override it.
+    style.textContent = 'button:not(.maplibregl-marker), [role="button"]:not(.maplibregl-marker) { transition:transform .14s ease, filter .14s ease, box-shadow .14s ease !important; } button:not(.maplibregl-marker):hover, [role="button"]:not(.maplibregl-marker):hover { filter:brightness(1.06); } button:not(.maplibregl-marker):active, [role="button"]:not(.maplibregl-marker):active { transform:scale(.96) !important; filter:brightness(.9); } button:not(.maplibregl-marker):focus-visible, [role="button"]:not(.maplibregl-marker):focus-visible { outline:2px solid #ff7165; outline-offset:2px; }';
     document.head.appendChild(style);
   }
 
