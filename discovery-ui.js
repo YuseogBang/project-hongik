@@ -7,7 +7,7 @@
     { title: '🌙 딱 한 잔만, 진짜?', detail: '술안주 태그가 붙은 주점', type: 'bar', tag: '술안주' },
     { title: '📸 사진 먼저, 주문은 나중', detail: '인스타감성 태그가 붙은 카페', type: 'cafe', tag: '인스타감성' }
   ];
-  const budgetMeals = store => (store.surveyMenu?.menu || []).filter(([name,price])=>Number.isFinite(price)&&price>0&&price<=10000&&/라멘|우동|국수|냉면|덮밥|볶음밥|비빔밥|국밥|곰탕|설렁탕|찌개|백반|정식|돈까스|돈카츠|버거|샌드위치|오니기리|주먹밥|김밥|카레|소바|짜장|짬뽕|토스트/.test(name)&&!/추가|공기밥|사이드|감자튀김|음료|2인|3인|4인|인 이상|미니/.test(name));
+  const budgetMeals = store => (store.surveyMenu?.menu || []).filter(([name,price])=>Number.isFinite(price)&&price>0&&price<=10000&&/라멘|우동|국수|냉면|덮밥|볶음밥|비빔밥|국밥|곰탕|설렁탕|찌개|백반|정식|돈까스|돈카츠|버거|샌드위치|오니기리|주먹밥|김밥|카레|소바|짜장|짬뽕|토스트/.test(name)&&!/추가|공기밥|사이드|감자튀김|음료|2인|3인|4인|인 이상|미니|고기\s*마요|곁들임/.test(name));
   const themePlaces = (theme) => stores.filter((store) => store.status !== 'closed' && (!theme.type || store.type === theme.type) && (theme.budget ? budgetMeals(store).length>0 : (store.tags || []).includes(theme.tag)));
   const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   const style = document.createElement('style');

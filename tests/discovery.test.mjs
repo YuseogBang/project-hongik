@@ -41,6 +41,6 @@ test('Historical workbook keeps unique venues, separate evidence, and frequent-p
 
 test('Budget meal recommendations exclude sides, drinks, shared dishes and missing prices',()=>{
  const source=fs.readFileSync('discovery-ui.js','utf8');const start=source.indexOf('  const budgetMeals =');const end=source.indexOf('  const themePlaces =',start);const meal=vm.runInNewContext(source.slice(start,end)+';budgetMeals');
- const result=meal({surveyMenu:{menu:[['돈카츠 정식',10000],['라멘',10500],['미니우동',3000],['공기밥 추가',1000],['김치찌개 2인 이상',9000],['국밥',null],['김밥',4500],['감자튀김',4000],['콜라',2000]]}});
+ const result=meal({surveyMenu:{menu:[['돈카츠 정식',10000],['라멘',10500],['미니우동',3000],['공기밥 추가',1000],['고기 마요 덮밥',3000],['김치찌개 2인 이상',9000],['국밥',null],['김밥',4500],['감자튀김',4000],['콜라',2000]]}});
  assert.deepEqual(Array.from(result,r=>r[0]),['돈카츠 정식','김밥']);
 });
