@@ -22,3 +22,11 @@ test('Root-level Seoul errors are detected',async()=>{const b=await subway({stat
 
 test('Unknown Seoul payload is not treated as successful empty arrivals',async()=>{const b=await subway({status:500,error:'upstream problem'});assert.equal(b.ok,false);assert.deepEqual(Array.from(b.responseFields),['status','error']);});
 test('Entering station and arriving at previous station have different labels',()=>{const html=fs.readFileSync('main.html','utf8');const source=html.slice(html.indexOf('function subwayArrivalTimeLabel('),html.indexOf('async function fetchSubwayArrival('));const ctx={};vm.createContext(ctx);vm.runInContext(source,ctx);assert.equal(ctx.subwayArrivalTimeLabel({arvlCd:'0',barvlDt:'0'}),'진입 중');assert.equal(ctx.subwayArrivalTimeLabel({arvlCd:'5',barvlDt:'0'}),'전역 도착');});
+
+test('Each district station requests its own Seoul arrival endpoint',async()=>{
+  for(const station of ['홍대입구','합정','상수']){
+    let requested;const ctx={process:{env:{SEOUL_API_KEY:'test-only'}},AbortSignal,Date,fetch:async url=>{requested=url;return {ok:true,json:async()=>({RESULT:{CODE:'INFO-200'}})}}};
+    vm.createContext(ctx);vm.runInContext(subwaySource,ctx);const res={status(){return this},json(){},setHeader(){}};
+    await ctx.handler({query:{station}},res);assert.ok(requested.endsWith('/'+encodeURIComponent(station)));
+  }
+});

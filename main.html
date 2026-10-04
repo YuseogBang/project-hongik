@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl.css">
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
 <script src="clean-map.js"></script>
-<style>.hm-place-pin{padding:10px!important;touch-action:manipulation;border:0!important;background:transparent!important;cursor:pointer;line-height:0}.hm-place-pin img{display:block;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(74,30,30,.18))}.hm-place-pin:focus-visible{outline:3px solid #ffb85c;border-radius:50%}.hm-place-pin:hover img{filter:drop-shadow(0 2px 5px rgba(232,54,42,.5))}.hm-cluster{padding:0!important;width:38px;height:38px;border-radius:50%;background:#e8362a!important;color:#fff;font:700 13px Pretendard,sans-serif;border:2px solid #fff!important;line-height:34px}.hm-overlay{font-family:Pretendard,sans-serif}.district-landmark{display:flex;align-items:center;gap:4px;white-space:nowrap;padding:5px 8px;border-radius:9px;border:1px solid #ffffff;background:rgba(255,253,246,.94);color:var(--landmark-color);font:800 12px Pretendard,sans-serif;box-shadow:0 2px 6px rgba(50,40,20,.12);pointer-events:none}.district-landmark span{font-size:14px}.district-area{pointer-events:auto;cursor:pointer;font:800 17px Pretendard,sans-serif;color:var(--area-color);background:var(--area-bg);border:1px solid rgba(255,255,255,.9);border-radius:14px;padding:7px 12px;box-shadow:0 2px 6px rgba(60,40,20,.12)}.district-area small{display:block;font-size:9px;font-weight:600;margin-top:2px}.district-area:focus-visible{outline:3px solid #e8362a}.maplibregl-ctrl-bottom-right{bottom:4px!important}.maplibregl-ctrl-attrib{font:9px Pretendard,sans-serif!important;background:rgba(255,253,246,.8)!important;padding:2px 5px!important;border-radius:4px!important}.maplibregl-ctrl-attrib-button{display:none!important}.maplibregl-canvas:focus-visible{outline:2px solid #e8362a}</style>
+<style>.hm-place-pin{padding:10px!important;touch-action:manipulation;border:0!important;background:transparent!important;cursor:pointer;line-height:0}.hm-place-pin img{display:block;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(74,30,30,.18))}.hm-place-pin:focus-visible{outline:3px solid #ffb85c;border-radius:50%}.hm-place-pin:hover img{filter:drop-shadow(0 2px 5px rgba(232,54,42,.5))}.hm-cluster{padding:0!important;width:38px;height:38px;border-radius:50%;background:#e8362a!important;color:#fff;font:700 13px Pretendard,sans-serif;border:2px solid #fff!important;line-height:34px}.hm-overlay{font-family:Pretendard,sans-serif}.district-landmark{display:flex;align-items:center;gap:4px;white-space:nowrap;padding:5px 8px;border-radius:9px;border:1px solid #ffffff;background:rgba(255,253,246,.94);color:var(--landmark-color);font:800 12px Pretendard,sans-serif;box-shadow:0 2px 6px rgba(50,40,20,.12);pointer-events:none}.district-landmark span{font-size:14px}.district-landmark{pointer-events:auto;cursor:pointer}.district-landmark:focus-visible{outline:3px solid #e8362a}.district-area{pointer-events:auto;cursor:pointer;font:800 17px Pretendard,sans-serif;color:var(--area-color);background:var(--area-bg);border:1px solid rgba(255,255,255,.9);border-radius:14px;padding:7px 12px;box-shadow:0 2px 6px rgba(60,40,20,.12)}.district-area small{display:block;font-size:9px;font-weight:600;margin-top:2px}.district-area:focus-visible{outline:3px solid #e8362a}.maplibregl-ctrl-bottom-right{bottom:4px!important}.maplibregl-ctrl-attrib{font:9px Pretendard,sans-serif!important;background:rgba(255,253,246,.8)!important;padding:2px 5px!important;border-radius:4px!important}.maplibregl-ctrl-attrib-button{display:none!important}.maplibregl-canvas:focus-visible{outline:2px solid #e8362a}</style>
 
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
@@ -1240,7 +1240,7 @@
   <div class="modal" style="display:flex; flex-direction:column; width:min(420px, 92vw); max-height:70vh;">
     <div class="feed-handle"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex:none">
-      <h4 style="margin:0;display:flex;align-items:center;gap:7px">🚇 홍대입구역 실시간 도착</h4>
+      <h4 id="subway-arrival-title" style="margin:0;display:flex;align-items:center;gap:7px">🚇 홍대입구역 실시간 도착</h4>
       <button onclick="closeSubwayArrivalBanner()" style="width:26px;height:26px;border-radius:50%;border:none;background:var(--surface2);color:var(--muted);cursor:pointer;font-size:13px;flex:none">✕</button>
     </div>
     <div id="subway-arrival-body" style="overflow-y:auto;flex:1;margin-top:8px">
@@ -3149,13 +3149,33 @@ function processVerifyQueue() {
   }, { location: latlng, radius: 200, size: 1 });
 }
 
+const LANDMARK_GUIDES = {
+  '홍익대학교':{description:'홍대 일대의 이름과 연결되는 대학 캠퍼스입니다.',tags:['캠퍼스','전시 탐색'],tip:'교내 전시는 전시별 장소와 관람 시간을 확인하세요.',url:'https://www.hongik.ac.kr/'},
+  '홍문관':{description:'홍익대학교 안에서 위치를 찾을 때 기준으로 삼을 수 있는 건물입니다.',tags:['교내 건물','약속 기준점'],tip:'방문할 학과나 시설의 출입 안내를 먼저 확인하세요.'},
+  '상상마당':{description:'라이브 공연, 갤러리와 디자인 공간을 갖춘 문화시설입니다.',tags:['라이브 공연','전시','디자인'],tip:'공연과 전시는 프로그램별 운영 시간이 다릅니다.',url:'https://www.sangsangmadang.com/main/HD'},
+  'AK플라자 홍대':{description:'홍대입구역 인근의 쇼핑시설입니다.',tags:['쇼핑','실내 둘러보기'],tip:'매장과 팝업의 운영 여부는 방문 전에 확인하세요.'},
+  '홍대놀이터':{description:'홍익문화공원으로도 알려진 홍대의 공원입니다.',tags:['공원','도보 경유지'],tip:'공원 주변에서 다음 골목으로 이동하는 기준점으로 활용하세요.'},
+  '와우공원':{description:'홍익대학교 주변의 공원입니다.',tags:['공원','산책'],tip:'야외 산책은 날씨와 이동 경로를 확인하고 계획하세요.'},
+  '경의선숲길':{description:'연남동에서 산책 동선을 잡을 때 활용할 수 있는 공원입니다.',tags:['산책','연남동'],tip:'산책 후 주변 골목의 카페나 식당으로 이어가 보세요.'},
+  '경의선책거리':{description:'책과 관련된 장소를 탐색할 때 찾을 수 있는 거리입니다.',tags:['책','산책'],tip:'방문할 공간의 운영 여부는 개별 안내를 확인하세요.'},
+  '마포평생학습관':{description:'마포 지역의 학습·독서 시설입니다.',tags:['독서','학습'],tip:'이용하려는 자료실과 프로그램의 운영 시간을 확인하세요.'}
+};
+function openLandmarkBanner(name,lat,lng,icon) {
+  if(['홍대입구역','합정역','상수역'].includes(name)){openSubwayArrivalBanner(name.replace(/역$/,''));return;}
+  const guide=LANDMARK_GUIDES[name]||{description:'홍대 일대에서 위치를 확인할 수 있는 장소입니다.',tags:['랜드마크'],tip:'방문 전 장소 안내를 확인하세요.'};
+  let overlay=document.getElementById('landmark-guide-modal');
+  if(!overlay){overlay=document.createElement('div');overlay.id='landmark-guide-modal';overlay.className='modal-overlay';overlay.onclick=e=>{if(e.target===overlay)overlay.style.display='none';};document.body.append(overlay);}
+  overlay.innerHTML=`<section class="modal" role="dialog" aria-modal="true" aria-labelledby="landmark-guide-title" style="width:min(420px,92vw)"><div style="display:flex;justify-content:space-between;align-items:center"><h3 id="landmark-guide-title">${icon} ${name}</h3><button type="button" aria-label="랜드마크 안내 닫기" onclick="document.getElementById('landmark-guide-modal').style.display='none'">✕</button></div><p style="line-height:1.7">${guide.description}</p><div style="color:var(--accent);font-weight:700">${guide.tags.map(t=>'#'+t).join(' ')}</div><p style="line-height:1.7;color:var(--muted)">${guide.tip}</p><a href="https://map.kakao.com/link/map/${encodeURIComponent(name)},${lat},${lng}" target="_blank" rel="noopener noreferrer">카카오맵에서 장소 확인 ↗</a>${guide.url?`<p><a href="${guide.url}" target="_blank" rel="noopener noreferrer">공식 안내 ↗</a></p>`:''}${name==='홍익대학교'||name==='홍문관'?`<p><button onclick="document.getElementById('landmark-guide-modal').style.display='none';openExhibitionBanner()">홍익대 전시·행사 보기</button></p>`:''}</section>`;
+  overlay.style.display='flex';overlay.querySelector('button').focus();
+}
+
 // Orientation labels use existing verified coordinates or Kakao place search results.
 function addDistrictLandmarks() {
   const add = (name, lat, lng, icon, color) => {
-    const label = new HongdaeMap.CustomOverlay({
-      map, position:new kakao.maps.LatLng(lat,lng), yAnchor:1.8, zIndex:6,
-      content:`<div class="district-landmark" style="--landmark-color:${color}"><span>${icon}</span>${name}</div>`
-    });
+    const button=document.createElement('button');button.type='button';button.className='district-landmark';button.style.setProperty('--landmark-color',color);button.setAttribute('aria-label',name+' 안내');button.innerHTML=`<span>${icon}</span>${name}`;
+    for(const event of ['pointerdown','mousedown','touchstart'])button.addEventListener(event,e=>e.stopPropagation());
+    button.addEventListener('click',e=>{e.stopPropagation();openLandmarkBanner(name,lat,lng,icon);});
+    const label = new HongdaeMap.CustomOverlay({map,position:new kakao.maps.LatLng(lat,lng),yAnchor:1.8,zIndex:6,content:button});
     return label;
   };
   add('홍대입구역',HONGDAE_ENTRANCE.lat,HONGDAE_ENTRANCE.lng,'🚇','#3179a4');
@@ -4488,15 +4508,19 @@ function addStore() {
   <!-- 지하철 실시간 도착정보 — 지하철 마커 클릭 시 서울시 공공API를 프록시(/api/subway-arrival)로 불러와 배너에 표시.
        프록시를 거치는 이유: 서울시 API는 브라우저에서 직접 호출 시 CORS로 막히고, API 키도 클라이언트에 노출되면 안 되기 때문. -->
   <script>
-  const SEOUL_STATION_NAME = '홍대입구'; // 서울시 API의 역명 파라미터 표기(끝에 '역' 안 붙임)
+  let SEOUL_STATION_NAME = '홍대입구'; // 서울시 API의 역명 파라미터 표기(끝에 '역' 안 붙임)
   const SUBWAY_LINE_META = {
-    '1002': { name: '2호선', color: '#00A5DE' },
+    '1002': { name: '2호선', color: '#00A84D' },
+    '1006': { name: '6호선', color: '#CD7C2F' },
     '1063': { name: '경의중앙선', color: '#77C4A3' },
     '1065': { name: '공항철도', color: '#0090D2' },
   };
   let subwayRefreshTimer = null;
 
-  function openSubwayArrivalBanner() {
+  function openSubwayArrivalBanner(station='홍대입구') {
+    SEOUL_STATION_NAME=['홍대입구','합정','상수'].includes(station)?station:'홍대입구';
+    document.getElementById('subway-arrival-title').textContent=`🚇 ${SEOUL_STATION_NAME}역 실시간 도착`;
+    document.getElementById('subway-arrival-body').textContent='불러오는 중…';
     const overlay = document.getElementById('subway-modal');
     if (!overlay) return;
     overlay.style.display = 'flex';
@@ -4528,8 +4552,11 @@ function addStore() {
     const updated = document.getElementById('subway-arrival-updated');
     if (!body) return;
     try {
-      const res = await fetch(`/api/subway-arrival?station=${encodeURIComponent(SEOUL_STATION_NAME)}`);
+      const station=SEOUL_STATION_NAME;
+      const res = await fetch(`/api/subway-arrival?station=${encodeURIComponent(station)}`);
+      if(station!==SEOUL_STATION_NAME)return;
       const data = await res.json();
+      if(station!==SEOUL_STATION_NAME)return;
       if (!data.ok || !data.list || data.list.length === 0) {
         body.innerHTML = `<div style="padding:24px 4px;text-align:center;color:var(--muted);font-size:13px">${data.error || data.emptyReason || '현재 서울시에서 제공하는 도착 정보가 없습니다.'}</div>`;
         if (updated) updated.textContent = '20초마다 다시 확인합니다';
