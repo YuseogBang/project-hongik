@@ -3,11 +3,12 @@
     { title: '🦋 홍대병 체크리스트', detail: '홍대병 태그가 붙은 공간을 한데 모았어요', tag: '홍대병' },
     { title: '🍚 혼밥도 풀코스', detail: '혼밥 태그가 붙은 음식점', type: 'restaurant', tag: '혼밥' },
     { title: '☕ 조용한 척 오래 있기', detail: '조용한 태그가 붙은 카페', type: 'cafe', tag: '조용한' },
-    { title: '💸 통장 눈치 안 보는 한 끼', detail: '가성비 태그가 붙은 음식점', type: 'restaurant', tag: '가성비' },
+    { title: '🍚 만원 이하 한 끼', detail: '등록 메뉴 기준 10,000원 이하 · 점심과 저녁 후보', type: 'restaurant', budget: true },
     { title: '🌙 딱 한 잔만, 진짜?', detail: '술안주 태그가 붙은 주점', type: 'bar', tag: '술안주' },
     { title: '📸 사진 먼저, 주문은 나중', detail: '인스타감성 태그가 붙은 카페', type: 'cafe', tag: '인스타감성' }
   ];
-  const themePlaces = (theme) => stores.filter((store) => store.status !== 'closed' && (!theme.type || store.type === theme.type) && (store.tags || []).includes(theme.tag));
+  const budgetMeals = store => (store.surveyMenu?.menu || []).filter(([name,price])=>Number.isFinite(price)&&price>0&&price<=10000&&/라멘|우동|국수|냉면|덮밥|볶음밥|비빔밥|국밥|곰탕|설렁탕|찌개|백반|정식|돈까스|돈카츠|버거|샌드위치|오니기리|주먹밥|김밥|카레|소바|짜장|짬뽕|토스트/.test(name)&&!/추가|공기밥|사이드|감자튀김|음료|2인|3인|4인|인 이상|미니/.test(name));
+  const themePlaces = (theme) => stores.filter((store) => store.status !== 'closed' && (!theme.type || store.type === theme.type) && (theme.budget ? budgetMeals(store).length>0 : (store.tags || []).includes(theme.tag)));
   const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   const style = document.createElement('style');
   style.textContent = `
@@ -32,7 +33,7 @@
   root.className = 'discovery-dialog';
   root.setAttribute('role', 'dialog');
   root.setAttribute('aria-modal', 'true');
-  root.setAttribute('aria-label', '홍대 리스트와 내 취향');
+  root.setAttribute('aria-label', '테마 탐색');
   root.addEventListener('click', (event) => { if (event.target === root) close(); });
 
   function close() { root.classList.remove('open'); }
@@ -48,14 +49,14 @@
     root.querySelector('.discovery-close')?.focus();
   }
   function render() {
-    const header = `<div class="discovery-head"><h2>${selectedTheme ? escapeHtml(selectedTheme.title) : tab === 'taste' ? '내 취향 선택' : '홍대 리스트'}</h2><button class="discovery-close" type="button" aria-label="닫기">닫기 ✕</button></div>`;
+    const header = `<div class="discovery-head"><h2>${selectedTheme ? escapeHtml(selectedTheme.title) : tab === 'taste' ? '내 취향 선택' : '테마 탐색'}</h2><button class="discovery-close" type="button" aria-label="닫기">닫기 ✕</button></div>`;
     let body;
     if (selectedTheme) {
       const matches = themePlaces(selectedTheme);
-      body = `<p class="discovery-intro" style="margin-top:14px">#${escapeHtml(selectedTheme.tag)}${selectedTheme.type ? ' · ' + escapeHtml(selectedTheme.type === 'restaurant' ? '음식점' : selectedTheme.type === 'cafe' ? '카페' : '주점') : ''} 기준 · 등록된 장소 ${matches.length}곳. 방문 전 영업 여부를 확인해 주세요.</p><div class="discovery-list">${matches.length ? matches.map((store) => `<button type="button" class="discovery-place" data-place="${store.id}">${escapeHtml(store.name)}<small>${escapeHtml(store.dong || '홍대')} · ${escapeHtml(store.category || store.type)}</small></button>`).join('') : '<p class="discovery-intro">조건에 맞는 장소가 아직 없어요.</p>'}</div><button type="button" class="discovery-apply" data-back>다른 리스트 보기</button>`;
+      body = `<p class="discovery-intro" style="margin-top:14px">${selectedTheme.budget?'1인 식사 메뉴 10,000원 이하 · 현재 가격은 방문 전 확인':'#'+escapeHtml(selectedTheme.tag)}${selectedTheme.type ? ' · ' + escapeHtml(selectedTheme.type === 'restaurant' ? '음식점' : selectedTheme.type === 'cafe' ? '카페' : '주점') : ''} 기준 · 등록된 장소 ${matches.length}곳. 방문 전 영업 여부를 확인해 주세요.</p><div class="discovery-list">${matches.length ? matches.map((store) => `<button type="button" class="discovery-place" data-place="${store.id}">${escapeHtml(store.name)}<small>${escapeHtml(store.dong || '홍대')} · ${escapeHtml(store.category || store.type)}</small>${selectedTheme.budget?`<small style="color:var(--accent2)">${budgetMeals(store).slice(0,2).map(([name,price])=>`${escapeHtml(name)} ${price.toLocaleString('ko-KR')}원`).join(' · ')} · ${escapeHtml(store.surveyMenu.checked)} 확인</small>`:''}</button>`).join('') : '<p class="discovery-intro">조건에 맞는 장소가 아직 없어요.</p>'}</div><button type="button" class="discovery-apply" data-back>다른 테마 보기</button>`;
     } else {
       body = '';
-      if (tab === 'curation') body += `<p class="discovery-intro">이름은 유쾌하게, 목록은 실제 등록 장소와 태그로 만들었어요. 영업 여부는 방문 전에 확인해 주세요.</p><button type="button" class="discovery-theme" data-passport>🦋 홍대병 도감 <span>기록하기 →</span><small>공연·화방·밤의 홍대를 하나씩 발견해 보세요</small></button>${themes.map((theme, index) => `<button type="button" class="discovery-theme" data-theme="${index}">${escapeHtml(theme.title)} <span>${themePlaces(theme).length}곳 →</span><small>${escapeHtml(theme.detail)}</small></button>`).join('')}<div id="workbook-curation-entry"></div><div id="research-curation-entry"></div>`;
+      if (tab === 'curation') body += `<p class="discovery-intro">무엇을 좋아하는지에 따라 장소를 모아 봐요. 방문 순서를 짜고 싶다면 하단의 코스를 이용하세요.</p>${themes.map((theme, index) => `<button type="button" class="discovery-theme" data-theme="${index}">${escapeHtml(theme.title)} <span>${themePlaces(theme).length}곳 →</span><small>${escapeHtml(theme.detail)}</small></button>`).join('')}<div id="workbook-curation-entry"></div><div id="research-curation-entry"></div>`;
       else body += `<p class="discovery-intro">여기서 고른 취향만 이 기기에 저장됩니다. 지도 추천에 반영되며 언제든 수정할 수 있어요.</p><div class="discovery-tags">${TASTE_TAGS.map((tag) => `<button type="button" data-taste="${escapeHtml(tag)}" class="${draftTastes.includes(tag) ? 'on' : ''}" aria-pressed="${draftTastes.includes(tag)}">${tag === '홍대병' ? '🦋 ' : ''}${escapeHtml(tag)}</button>`).join('')}</div><button type="button" class="discovery-apply" data-apply>취향 저장하고 장소 보기</button>`;
     }
     root.innerHTML = `<section class="discovery-panel">${header}${body}</section>`;

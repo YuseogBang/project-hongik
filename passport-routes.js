@@ -162,16 +162,7 @@
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
   document.addEventListener('DOMContentLoaded', () => {
     document.body.append(root);
-    const bar = document.querySelector('#category-bar');
-    const entry = document.createElement('div');
-    entry.className = 'discovery-entry';
-    entry.innerHTML = '<button type="button" data-passport></button><button type="button" data-route></button>';
-    bar?.append(entry);
-    const updateLabels = () => { entry.querySelector('[data-passport]').textContent = language().passportNav; entry.querySelector('[data-route]').textContent = language().routeNav; };
-    updateLabels();
-    window.addEventListener('hongdae:language-change', updateLabels);
-    entry.querySelector('[data-passport]').onclick = openPassport;
-    entry.querySelector('[data-route]').onclick = () => openRoute();
+
   });
   window.HongdaeSpecial = { openPassport, openRoute, progress, buildRoute, close };
 })();
