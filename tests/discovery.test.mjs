@@ -83,3 +83,6 @@ test('Hours presentation separates weekday opening, break, last order and closed
  const split=ctx.window.HongdaeMenus.splitHours('매일 11:00~14:00, 17:00~21:00')[0];assert.equal(split.open,'11:00–14:00 / 17:00–21:00');
  const bad=ctx.window.HongdaeMenus.splitHours('매일 12:00~23:00 · 휴게 EEF')[0];assert.equal(bad.break,null);assert.equal(bad.uncertain,true);
 });
+test('Everyday meal candidates honor price, district, solo and closure without side dishes',()=>{
+ const ctx={window:{},document:{addEventListener(){}},stores:[{id:1,type:'restaurant',dong:'망원동',tags:['혼밥'],surveyMenu:{menu:[['김밥',4000],['공기밥',1000],['2인 정식',8000]]}},{id:2,type:'restaurant',dong:'서교동',surveyMenu:{menu:[['돈까스',12000]]}},{id:3,type:'restaurant',status:'closed',surveyMenu:{menu:[['국밥',6000]]}},{id:4,type:'cafe',surveyMenu:{menu:[['샌드위치',5000]]}}],indieOnly:false,isFranchise:()=>false};vm.createContext(ctx);vm.runInContext(fs.readFileSync('meal-picker.js','utf8'),ctx);const c=ctx.window.HongdaeMeals.candidates(7000,'망원동',true);assert.equal(c.length,1);assert.equal(c[0].menu.length,1);assert.equal(c[0].menu[0][0],'김밥');assert.equal(ctx.window.HongdaeMeals.candidates(3000).length,0);
+});
