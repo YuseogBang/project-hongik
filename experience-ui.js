@@ -27,7 +27,7 @@
   }
 
   // 모든 취향 진입점은 discovery-ui.js의 선택 화면을 사용한다.
-  function openTasteJourney() { openTasteModal(); }
+  function openTasteJourney() { if(window.HongdaeRecommendations)window.HongdaeRecommendations.open({destination:'profile'});else openTasteModal(); }
 
   function openFilters() {
     const sidebar = $('#sidebar');
@@ -52,7 +52,7 @@
     const recommendationSummary=recommendation?`<p class="xp-copy">추천 설정 · ${recommendation.budget==='10000'?'만원 이하 식사':'예산 제한 없음'} · ${{balanced:'취향을 골고루',local:'로컬 우선',new:'새로운 곳 우선'}[recommendation.explore]||'취향을 골고루'} · 장소 간 ${recommendation.walk}m</p>`:'';
     const overlay = ensureOverlay(); const history = readHistory(); const saved = Object.keys(bookmarks || {}).length;
     overlay.innerHTML = `<div class="xp-sheet"><div class="xp-handle"></div><div class="xp-top"><span class="xp-kicker">MY HONGDAE</span><button class="xp-close">✕</button></div><h2 class="xp-title">내 프로필</h2><p class="xp-copy">취향을 설정하고, 저장한 장소와 방문 도감을 관리해요.</p><div class="xp-profile-stats"><div><b>${userTastes.length}</b><span>취향</span></div><div><b>${saved}</b><span>저장</span></div><div><b>${history.length}</b><span>최근 탐색</span></div></div><div class="xp-tags">${userTastes.length ? userTastes.map((tag) => `<span>#${escapeHtml(tag)}</span>`).join('') : '<p class="xp-copy">아직 선택한 취향이 없어요.</p>'}</div>${recommendationSummary}<button class="xp-primary" data-edit>${userTastes.length ? '취향·추천 설정 바꾸기' : '내 취향·추천 설정하기'}</button><button class="xp-secondary" data-saved>저장한 가게 보기</button><button class="xp-secondary" data-passport>🦋 홍대병 도감 · 방문과 배지</button><div class="xp-history"><h4>최근 본 가게</h4>${history.length ? history.slice(0, 4).map((item) => `<button data-store="${item.id}"><span>${escapeHtml(item.name)}</span><small>다시 보기 ›</small></button>`).join('') : '<p class="xp-copy">아직 둘러본 가게가 없어요.</p>'}</div></div>`;
-    $('.xp-close', overlay).onclick = close; $('[data-passport]',overlay).onclick=()=>{close();window.HongdaeSpecial?.openPassport();}; $('[data-edit]', overlay).onclick = () => { close(); openTasteJourney(); }; $('[data-saved]', overlay).onclick = () => { close(); showBookmarks(); HongdaeUI.openResults(); }; overlay.querySelectorAll('[data-store]').forEach((button) => button.onclick = () => { close(); selectStore(Number(button.dataset.store)); }); overlay.classList.add('open');
+    $('.xp-close', overlay).onclick = close; $('[data-passport]',overlay).onclick=()=>{close();window.HongdaeSpecial?.openPassport();}; $('[data-edit]', overlay).onclick = () => { close(); window.HongdaeRecommendations?.open({destination:'profile'}); }; $('[data-saved]', overlay).onclick = () => { close(); showBookmarks(); HongdaeUI.openResults(); }; overlay.querySelectorAll('[data-store]').forEach((button) => button.onclick = () => { close(); selectStore(Number(button.dataset.store)); }); overlay.classList.add('open');
   }
 
   window.HongdaeExperience = { openTasteJourney, openFilters, openProfile, recordView };

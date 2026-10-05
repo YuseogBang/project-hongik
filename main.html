@@ -1102,7 +1102,11 @@
 .station-detail-card #subway-arrival-body{min-height:100px;padding:12px 0}.station-detail-card #subway-arrival-updated{color:#c39298!important}
 @media(max-width:700px){#landmark-guide-modal,#subway-modal,#exhibition-modal{align-items:flex-end;padding-bottom:calc(12px + env(safe-area-inset-bottom));}.landmark-detail-card{width:min(520px,96vw)!important;border-radius:24px 24px 16px 16px!important}}
 </style>
-</head>
+<style>
+#btn-curation{width:auto!important;min-width:72px!important;height:38px!important;padding:0 12px!important;border-radius:12px!important;background:#42131b!important;color:#efd2cc!important;border:1px solid #91505a!important;box-shadow:none!important;font:700 12px Pretendard,sans-serif!important;white-space:nowrap}
+.category-bar #chip-filter{display:inline-flex!important;order:-1;position:sticky;left:0;z-index:3;background:#ff563e!important;color:#fff!important;border:2px solid #ffb49e!important;box-shadow:0 3px 12px rgba(232,54,42,.35);font-weight:800!important;opacity:1!important;flex-shrink:0}
+.category-bar #chip-filter:hover{background:#e8362a!important}.category-bar #chip-filter:focus-visible,#btn-curation:focus-visible{outline:3px solid #ffd38c;outline-offset:3px}
+</style></head>
 <body>
 
 <!-- TOP BAR -->
@@ -1148,7 +1152,7 @@
       </div>
     </div>
     <a class="btn-notice" id="btn-notice" href="https://forms.gle/gJBKqm8sU5CS5KEK7" target="_blank" rel="noopener noreferrer" title="📣 홍대맵 설문·제보" aria-label="홍대맵 설문·제보 Google 폼 열기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10v4h4l10 5V5L7 10H3Z"/><path d="M7 14v5h3l2-3M20 9l2-2M20 15l2 2"/></svg></a>
-    <button class="btn-directions" id="btn-curation" onclick="HongdaeDiscovery.open('curation')" title="테마 탐색" aria-label="테마 탐색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg></button>
+    <button class="btn-directions" id="btn-curation" onclick="HongdaeDiscovery.open('curation')" title="테마별 장소 모음" aria-label="테마 모음">테마 모음</button>
     <button class="btn-bookmarks" id="account-button" onclick="HongdaePlatform.openDialog()">로그인</button>
   </div>
 </div>
@@ -5081,23 +5085,24 @@ function addStore() {
     }
   });
   </script>
-  <script src="recommendation-profile.js?v=20261004-onboarding"></script>
+  <script src="recommendation-profile.js?v=20261006-optional"></script>
   <script src="platform.js?v=20261004-managed"></script>
   <script src="ui-redesign.js?v=20261004-mangwon"></script>
-  <script src="experience-ui.js?v=20261004-onboarding"></script>
+  <script src="experience-ui.js?v=20261006-optional"></script>
   <script src="discovery-ui.js?v=20261004-onboarding"></script>
-  <script src="journey-features.js?v=20261004-mangwon"></script>
+  <script src="journey-features.js?v=20261006-optional"></script>
   <script src="place-reviews.js"></script>
-  <script src="passport-routes.js?v=20261004-onboarding"></script>
+  <script src="passport-routes.js?v=20261006-optional"></script>
   <script src="research-curations.js?v=20261004-mangwon-match"></script>
   <script src="archive-places.js?v=20261004-mangwon"></script>
   <script src="workbook-curations.js?v=20261004-local"></script>
   <script src="survey-menu-data.js"></script>
   <script src="managed-places.js?v=20261004-managed"></script>
   <script src="survey-menu-ui.js"></script>
-  <script src="feedback-ui.js"></script>
+  <script src="historical-details.js?v=20261006"></script>
+<script src="feedback-ui.js"></script>
   <script src="mobile-polish.js"></script>
-  <script src="feed-ui.js?v=20261004-onboarding"></script>
+  <script src="feed-ui.js?v=20261006-optional"></script>
   <script src="hongdae-icons.js"></script>
   <link rel="stylesheet" href="button-system.css">
 </body>
