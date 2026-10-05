@@ -18,14 +18,14 @@
   };
   const badgeText = () => badgeCopy[typeof currentLang === 'undefined' ? 'ko' : currentLang] || badgeCopy.ko;
   const badgeArtwork = {
-    art: '<path d="m20 40 17-20 7 6-17 20-10 3Z" fill="#ed8061" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="m34 24 7 6M20 40l7 6M17 49l3-9" stroke="currentColor" stroke-width="2.2"/><path d="m23 19 4-3 17 24-6 4Z" fill="#8eafa2" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="m38 44 6-4 3 7-7 1Z" fill="#f6ead9" stroke="currentColor" stroke-width="2.2"/>',
-    live: '<circle cx="32" cy="32" r="17" fill="#8f2440" stroke="currentColor" stroke-width="2.2"/><circle cx="32" cy="32" r="12" stroke="#c95c73" stroke-width="1.5"/><circle cx="32" cy="32" r="7" fill="#f6ead9" stroke="currentColor" stroke-width="1.8"/><circle cx="32" cy="32" r="2" fill="currentColor"/><path d="M21 23a13 13 0 0 1 5-3M38 43a13 13 0 0 0 5-5" stroke="#f6ead9" stroke-width="1.8" stroke-linecap="round"/>',
-    night: '<path d="M38 17a17 17 0 1 0 10 25 15 15 0 0 1-10-25Z" fill="#edc57c" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="m42 19 1.5 4.5L48 25l-4.5 1.5L42 31l-1.5-4.5L36 25l4.5-1.5Z" fill="#8eafa2" stroke="currentColor" stroke-width="1.8"/><circle cx="49" cy="35" r="1.6" fill="currentColor"/>'
+    art: {paper:'#eed8dd',ink:'#bd244e',label:'ART',number:'01',drawing:'<path d="M12 48C9 28 28 17 35 24s-10 16-5 24 23 3 23-6" fill="none" stroke="#ba244e" stroke-width="11" stroke-linecap="round"/><path d="m14 18 31 39" stroke="#2846ad" stroke-width="7"/><circle cx="49" cy="18" r="6" fill="#da872e"/>'},
+    live: {paper:'#2948ae',ink:'#f2e7cf',label:'LIVE',number:'02',drawing:'<circle cx="32" cy="34" r="22" fill="#ed705e"/><path d="M32 12a22 22 0 0 1 0 44Z" fill="#f2e7cf"/><circle cx="32" cy="34" r="13" fill="#2948ae"/><circle cx="32" cy="34" r="5" fill="#ed705e"/><path d="M11 61h8m4 0h14m4 0h12" stroke="#f2e7cf" stroke-width="2"/>'},
+    night: {paper:'#ead45a',ink:'#443b78',label:'AFTER',number:'03',drawing:'<path d="M10 55V31h14v24m4 0V21h16v34m4 0V36h9v19" fill="#443b78"/><path d="M28 21v-8h16v8" fill="#dd6857"/><path d="M15 38h4m-4 8h4m14-17h6m-6 8h6m-6 8h6" stroke="#ead45a" stroke-width="3"/><path d="M9 62h48" stroke="#dd6857" stroke-width="5"/>'}
   };
   function badgeIcon(id) {
-    return `<svg viewBox="0 0 64 64" width="76" height="76" aria-hidden="true"><path class="badge-rim" d="M22 4h20l18 18v20L42 60H22L4 42V22Z" fill="#cda876" stroke="#382027" stroke-width="1.5" stroke-linejoin="round"/><path class="badge-enamel" d="M23 8h18l15 15v18L41 56H23L8 41V23Z" fill="#f6ead9" stroke="#8e6948" stroke-width="1.4" stroke-linejoin="round"/><g color="#382027">${badgeArtwork[id]}</g></svg>`;
+    const art=badgeArtwork[id];
+    return `<svg viewBox="0 0 68 88" width="76" height="98" aria-hidden="true"><rect x="1" y="1" width="66" height="86" rx="3" fill="${art.paper}"/><g transform="translate(2 4)">${art.drawing}</g><text x="9" y="78" fill="${art.ink}" font-family="Pretendard,sans-serif" font-size="9" font-weight="900" letter-spacing="1">${art.label}</text><text x="57" y="78" text-anchor="end" fill="${art.ink}" font-family="Pretendard,sans-serif" font-size="8" font-weight="600">${art.number}</text></svg>`;
   }
-
   const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
   const visitedIds = () => { try { return new Set(JSON.parse(localStorage.getItem(VISITED_KEY) || '[]').map(Number)); } catch { return new Set(); } };
   const passportPlaces = () => stores.filter((place) => place.status !== 'closed' && (place.tags || []).includes('홍대병'));
@@ -78,6 +78,7 @@
   }
   const head = (title) => `<div class="hs-head"><h2>${escapeHtml(title)}</h2><button type="button" class="hs-close">${escapeHtml(language().close)} ✕</button></div>`;
   function openPassport() {
+    root.setAttribute('data-view','passport');
     const t = language(), b = badgeText(), visited = visitedIds(), p = progress();
     const earned = chapters.filter((chapter) => { const places = chapterPlaces(chapter); return places.length > 0 && places.every((place) => visited.has(place.id)); }).length;
     const sections = chapters.map((chapter, index) => {
@@ -162,6 +163,7 @@
   }
   function routeChoice(name,title,options){return `<fieldset class="route-choice"><legend>${escapeHtml(title)}</legend><input type="hidden" name="${name}" value="${escapeHtml(routeAnswers[name])}"><div>${options.map(([value,label,detail])=>`<button type="button" data-answer="${name}" data-value="${escapeHtml(value)}" aria-pressed="${String(routeAnswers[name])===String(value)}">${escapeHtml(label)}${detail?`<small>${escapeHtml(detail)}</small>`:''}</button>`).join('')}</div></fieldset>`;}
   function openRoute(mode = 'visitor', stage = 'start') {
+    root.setAttribute('data-view','route');
     const t=language(), route=stage==='result'?buildRoute(mode):[];
     const modeButtons=stories.map(item=>`<button type="button" class="hs-mode" data-story="${item.id}">${escapeHtml(item.title)}<small>${escapeHtml(item.detail)}</small></button>`).join('');
     const steps=route.map((place,index)=>`<button type="button" class="hs-route-step" data-place="${place.id}"><b>${index+1}</b><span>${escapeHtml(place.name)}<small>${escapeHtml(place.dong||'홍대')} · ${escapeHtml(place.category||place.type)} · ${escapeHtml(t.reason)}: ${escapeHtml(reason(place,mode))}</small></span></button>`).join('');
