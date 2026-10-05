@@ -96,6 +96,15 @@
     { id:'explorer', title:'explorer', detail:'explorerDesc' },
     { id:'student', title:'student', detail:'studentDesc' }
   ];
+  const stories=[
+    {id:'first',title:'홍대는 처음이라',detail:'공연장과 골목 문화부터 만나보기',mode:'visitor',theme:'all',company:'solo',newOnly:false},
+    {id:'unusual',title:'평범한 곳은 거부하는 당신을 위해',detail:'독립서점·바이닐·작은 문화 공간으로',mode:'explorer',theme:'culture',company:'solo',newOnly:false},
+    {id:'date',title:'뻔한 데이트는 싫은 당신을 위해',detail:'책과 음악 사이, 같이 구경할 거리 찾기',mode:'explorer',theme:'culture',company:'date',newOnly:false},
+    {id:'solo',title:'오늘은 혼자, 내 속도로',detail:'독립서점과 바이닐을 천천히 둘러보기',mode:'explorer',theme:'books',company:'solo',newOnly:false},
+    {id:'music',title:'오늘 밤은 음악이 필요한 당신',detail:'라이브·재즈·록이 있는 공간 찾기',mode:'visitor',theme:'music',company:'friends',newOnly:false},
+    {id:'local',title:'늘 가던 곳 말고, 오늘은 다른 골목',detail:'가봤어요 기록 밖의 새로운 장소 탐험',mode:'student',theme:'all',company:'solo',newOnly:true}
+  ];
+  let selectedStory='first';
   const preferred = (place) => (place.tags || []).filter((tag) => userTastes.includes(tag));
   function baseScore(place, mode, visited) {
     const tags = place.tags || [];
@@ -106,6 +115,7 @@
   }
   const routeThemes = {
     all:{title:'취향대로 둘러보기',pattern:null},
+    culture:{title:'책 · 음악 · 문화 공간',pattern:/독립출판|독립서점|책방|바이닐|LP|레코드|라이브|재즈|공연|전시|화방/},
     geek:{title:'덕후 루트',pattern:/애니메|피규어|굿즈|만화|보드게임/},
     vintage:{title:'빈티지 & 구제 루트',pattern:/빈티지|구제|중고의류/},
     books:{title:'독립출판 & 바이닐 투어',pattern:/독립출판|독립서점|책방|바이닐|LP|음반|레코드/},
@@ -145,31 +155,26 @@
   function routeChoice(name,title,options){return `<fieldset class="route-choice"><legend>${escapeHtml(title)}</legend><input type="hidden" name="${name}" value="${escapeHtml(routeAnswers[name])}"><div>${options.map(([value,label])=>`<button type="button" data-answer="${name}" data-value="${escapeHtml(value)}" aria-pressed="${String(routeAnswers[name])===String(value)}">${escapeHtml(label)}</button>`).join('')}</div></fieldset>`;}
   function openRoute(mode = 'visitor', stage = 'start') {
     const t=language(), route=stage==='result'?buildRoute(mode):[];
-    const modeButtons=modes.map(item=>`<button type="button" class="hs-mode" data-mode="${item.id}">${escapeHtml(t[item.title])}<small>${escapeHtml(t[item.detail])}</small></button>`).join('');
+    const modeButtons=stories.map(item=>`<button type="button" class="hs-mode" data-story="${item.id}">${escapeHtml(item.title)}<small>${escapeHtml(item.detail)}</small></button>`).join('');
     const steps=route.map((place,index)=>`<button type="button" class="hs-route-step" data-place="${place.id}"><b>${index+1}</b><span>${escapeHtml(place.name)}<small>${escapeHtml(place.dong||'홍대')} · ${escapeHtml(place.category||place.type)} · ${escapeHtml(t.reason)}: ${escapeHtml(reason(place,mode))}</small></span></button>`).join('');
-    const questions = `<button type="button" class="hs-action" data-choose-taste>내 취향 선택·수정 (선택)</button><form data-route-questions style="display:grid;gap:12px;margin-top:16px;font:13px Pretendard,sans-serif">
-      ${routeChoice('theme','무엇을 찾아볼까요?',Object.entries(routeThemes).map(([id,v])=>[id,v.title]))}
-      ${routeChoice('stops','몇 곳이 좋을까요?',[[2,'2곳'],[3,'3곳'],[4,'4곳']])}
-      ${routeChoice('company','누구와 함께하나요?',[['solo','🙋 혼자'],['date','💕 데이트'],['friends','👯 친구들과']])}
-      ${routeChoice('walk','얼마나 걸어볼까요?',[[600,'가까운 골목 · 600m'],[1200,'동네 산책 · 1.2km'],[2200,'넓게 탐험 · 2.2km']])}
-      <label><input type="checkbox" name="newOnly" ${routeAnswers.newOnly?'checked':''}> 가봤어요 표시한 곳 제외</label>
-      <label><input type="checkbox" name="food" ${routeAnswers.food?'checked':''}> 마지막에 식사 한 곳 추가</label>
-      <button type="submit" class="hs-cta">이 조건으로 코스 만들기</button>
-    </form>`;
-    const stepIndex={start:1,conditions:2,result:3}[stage];
-    const progress=`<p class="hs-intro route-stage" aria-live="polite">${stepIndex} / 3 · ${stage==='start'?'오늘은 어떤 탐험인가요?':stage==='conditions'?'나에게 맞는 조건 고르기':'추천 코스'}</p>`;
+    if(stage==='conditions')stage='interest';
+    const stages=['start','interest','company','range','result'];
+    const titles={start:'오늘은 어떤 하루인가요?',interest:'어떤 곳에 끌리나요?',company:'누구와 몇 곳을 둘러볼까요?',range:'얼마나 걸어볼까요?',result:'추천 코스'};
+    const progress=`<p class="hs-intro route-stage" aria-live="polite">${stages.indexOf(stage)+1} / 5 · ${titles[stage]}</p>`;
+    const questions=stage==='interest'?routeChoice('theme','오늘의 관심사',Object.entries(routeThemes).map(([id,v])=>[id,v.title])):stage==='company'?`${routeChoice('company','누구와 함께하나요?',[['solo','🙋 혼자'],['date','💕 데이트'],['friends','👯 친구들과']])}${routeChoice('stops','몇 곳이 좋을까요?',[[2,'2곳'],[3,'3곳'],[4,'4곳']])}`:stage==='range'?`${routeChoice('walk','장소 사이 이동 범위',[[600,'가까운 골목 · 600m'],[1200,'동네 산책 · 1.2km'],[2200,'넓게 탐험 · 2.2km']])}<label><input type="checkbox" name="newOnly" ${routeAnswers.newOnly?'checked':''}> 가봤어요 표시한 곳 제외</label><label><input type="checkbox" name="food" ${routeAnswers.food?'checked':''}> 마지막에 식사 한 곳 추가</label>`:'';
     let body;
-    if(stage==='start')body=`<p class="hs-intro">오늘의 탐험 스타일을 골라 주세요.</p><div class="hs-modes route-start-modes">${modeButtons}</div>`;
-    else if(stage==='conditions')body=`<button class="hs-action" data-back-start>← 탐험 스타일 다시 고르기</button><p class="hs-intro">${escapeHtml(t[modes.find(m=>m.id===mode)?.title||'visitor'])} · 출발은 홍대입구역이에요.</p>${questions}`;
+    if(stage==='start')body=`<p class="hs-intro">지금 끌리는 이야기를 하나 골라 주세요.</p><div class="hs-modes route-start-modes">${modeButtons}</div>`;
+    else if(stage!=='result')body=`<button class="hs-action" data-previous>← 이전</button><p class="hs-intro">${escapeHtml(stories.find(x=>x.id===selectedStory)?.title||'내 홍대 코스')}</p><form data-route-questions class="route-step-form">${questions}<button type="submit" class="hs-cta">${stage==='range'?'추천 코스 보기':'다음 →'}</button></form>${stage==='interest'?'<button type="button" class="hs-action" data-choose-taste>내 취향 선택·수정 (선택)</button>':''}`;
     else body=`<button class="hs-action" data-back-conditions>← 조건 수정하기</button><div class="route-result-summary">${escapeHtml(routeThemes[routeAnswers.theme].title)} · ${routeAnswers.stops}곳 · ${routeAnswers.walk/1000}km 이내</div><div style="margin-top:18px">${steps||`<p class="hs-intro">${escapeHtml(t.empty)}</p>`}</div><p class="hs-intro">${escapeHtml(t.routeNote)}</p>${route.length<routeAnswers.stops?`<section class="route-shortage"><h3>취향을 조금 더 알려주세요</h3><p>지금 조건으로는 ${route.length}곳을 찾았어요. 취향을 더 고르거나 다른 테마와 이동 범위도 살펴보세요.</p><button class="hs-action" data-choose-taste>＋ 취향 더 고르기</button>${routeAnswers.walk<2200?'<button class="hs-action" data-widen>이동 범위 넓혀 보기</button>':''}</section>`:''}<button class="hs-action" data-other>다른 조합 보기</button>${route.length?`<button class="hs-cta" data-start>${escapeHtml(t.start)}</button>`:''}`;
     show(`${head(t.route)}${progress}${body}`);
-    root.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{routeVariation=0;openRoute(button.dataset.mode,'conditions');});
+    root.querySelectorAll('[data-story]').forEach(button=>button.onclick=()=>{const story=stories.find(x=>x.id===button.dataset.story);selectedStory=story.id;routeAnswers={...routeAnswers,theme:story.theme,company:story.company,newOnly:story.newOnly};routeVariation=0;openRoute(story.mode,'interest');});
+    root.querySelector('[data-previous]')?.addEventListener('click',()=>openRoute(mode,stages[stages.indexOf(stage)-1]));
     root.querySelector('[data-back-start]')?.addEventListener('click',()=>openRoute(mode,'start'));
     root.querySelector('[data-back-conditions]')?.addEventListener('click',()=>openRoute(mode,'conditions'));
-    root.querySelectorAll('[data-answer]').forEach(button=>button.onclick=()=>{const name=button.dataset.answer;routeAnswers[name]=['stops','walk'].includes(name)?Number(button.dataset.value):button.dataset.value;routeVariation=0;openRoute(mode,'conditions');root.querySelector(`[data-answer="${name}"][aria-pressed="true"]`)?.focus();});
+    root.querySelectorAll('[data-answer]').forEach(button=>button.onclick=()=>{const name=button.dataset.answer;routeAnswers[name]=['stops','walk'].includes(name)?Number(button.dataset.value):button.dataset.value;routeVariation=0;openRoute(mode,stage);root.querySelector(`[data-answer="${name}"][aria-pressed="true"]`)?.focus();});
     root.querySelectorAll('[data-route-questions] input[type="checkbox"]').forEach(input=>input.onchange=()=>{routeAnswers[input.name]=input.checked;});
     const form=root.querySelector('[data-route-questions]');
-    if(stage==='conditions'&&form)form.onsubmit=event=>{event.preventDefault();const f=event.currentTarget.elements;routeAnswers={theme:f.theme.value,stops:Number(f.stops.value),walk:Number(f.walk.value),company:f.company.value,newOnly:f.newOnly.checked,food:f.food.checked};routeVariation=0;openRoute(mode,'result');};
+    if(['interest','company','range'].includes(stage)&&form)form.onsubmit=event=>{event.preventDefault();const f=event.currentTarget.elements;for(const name of ['theme','stops','walk','company','newOnly','food']){if(!f[name])continue;routeAnswers[name]=['newOnly','food'].includes(name)?f[name].checked:['stops','walk'].includes(name)?Number(f[name].value):f[name].value;}routeVariation=0;openRoute(mode,stages[stages.indexOf(stage)+1]);};
     root.querySelector('[data-widen]')?.addEventListener('click',()=>{routeAnswers.walk=2200;routeVariation=0;openRoute(mode,'result');});
     root.querySelector('[data-other]')?.addEventListener('click',()=>{routeVariation++;openRoute(mode,'result');});
     root.querySelectorAll('[data-place]').forEach(button=>button.onclick=()=>{close();selectStore(Number(button.dataset.place));});
