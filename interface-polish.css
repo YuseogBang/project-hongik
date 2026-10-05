@@ -90,24 +90,9 @@
 .hs-overlay[data-view=route] [data-story=music]{--label-bg:#e6d193;--label-ink:#594525}
 .hs-overlay[data-view=route] [data-story=local]{--label-bg:#cbd6bb;--label-ink:#415237}
 
-/* One flat course system across all five steps. */
-.hs-overlay[data-view=route] .hs-panel{background:#2b0c13}
-.hs-overlay[data-view=route] [data-story]{background:#40131e;color:#fff1eb;border:1px solid #793044;box-shadow:none}
-.hs-overlay[data-view=route] [data-story] small{color:#d0a8af}
-.hs-overlay[data-view=route] .route-choice{margin:0}
-.hs-overlay[data-view=route] .route-choice legend{font-size:14px;color:#fff1eb;margin-bottom:12px}
-.hs-overlay[data-view=route] .route-choice>div{gap:9px}
-.hs-overlay[data-view=route] .route-choice button{background:#40131e;color:#eac0c7;border:1px solid #793044;border-radius:16px;padding:12px 16px;font-size:13px;line-height:1.5;box-shadow:none}
-.hs-overlay[data-view=route] .route-choice button[aria-pressed=true]{background:#b52e48;color:#fff;border-color:#df6b81;box-shadow:none}
-.hs-overlay[data-view=route] .route-choice button small{color:inherit;font-size:11px;line-height:1.5;margin-top:3px;opacity:.8}
-.hs-overlay[data-view=route] .route-choice:has(input[name=theme])>div{gap:9px}
-.hs-overlay[data-view=route] .route-step-form{gap:24px;margin:20px 0}
-.hs-overlay[data-view=route] .hs-action{background:#40131e;border:1px solid #793044;color:#eac0c7;border-radius:16px;padding:11px 16px;box-shadow:none}
-.hs-overlay[data-view=route] .hs-cta{background:#ed382b;box-shadow:none;border-radius:16px!important;padding:14px;font-size:14px}
-.hs-overlay[data-view=route] .hs-route-step,.hs-overlay[data-view=route] .route-result-summary,.hs-overlay[data-view=route] .route-shortage{background:#40131e;border:1px solid #793044;border-radius:16px;padding:14px 16px;box-shadow:none}
-.hs-overlay[data-view=route] .hs-route-step{gap:12px;margin:10px 0;line-height:1.5}
-.hs-overlay[data-view=route] .hs-route-step small{font-size:11px;line-height:1.6;color:#d0a8af}
-.hs-overlay[data-view=route] .route-stage{font-size:12px;color:#eac0c7!important}
-.hs-overlay[data-view=route] .hs-intro{font-size:12px;color:#cba4ac;line-height:1.6}
-
+/* Use the original steps 3–5 palette for every course choice. */
+.hs-overlay[data-view=route] [data-story]{background:var(--surface);color:var(--text);border:1px solid var(--border);box-shadow:none}
+.hs-overlay[data-view=route] [data-story] small{color:var(--muted)}
+.hs-overlay[data-view=route] .route-choice:has(input[name=theme]) button{background:#45121e;color:#eac0c7;border:1px solid #8d3548;border-radius:20px;padding:12px 18px;font-size:13px;line-height:1.5}
+.hs-overlay[data-view=route] .route-choice:has(input[name=theme]) button[aria-pressed=true]{background:#f13b2b;color:white;border-color:#f13b2b;box-shadow:0 3px 12px #ff513c25}
 .hs-overlay[data-view=route] .route-choice:has(input[name=theme]) button small{display:none}
