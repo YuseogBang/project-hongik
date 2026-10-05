@@ -27,11 +27,33 @@
   `;
   document.head.append(style);
 
+  function splitHours(raw) {
+    const time='(\\d{1,2}:\\d{2})';
+    const range=new RegExp(time+'\\s*[~–—-]\\s*'+time);
+    const rows=[];
+    for(const segment of String(raw||'').split(/\s*\/\s*/)){
+      const opening=segment.match(range);
+      const day=(opening?segment.slice(0,opening.index):segment.replace(/휴무.*$/,'')).replace(/[()·]/g,'').trim()||'영업일';
+      const br=segment.match(new RegExp('(?:휴게|브레이크\\s*타임|휴식)\\s*[:：]?\\s*'+time+'\\s*[~–—-]\\s*'+time));
+      const lo=segment.match(/(?:라스트\s*오더|L\.?O\.?|LO)\s*[:：]?\s*(\d{1,2}:\d{2}(?:\s*,\s*\d{1,2}:\d{2})*)/i);
+      if(!opening && /휴무/.test(segment)){rows.push({day,closed:true});continue;}
+      if(!opening){rows.push({day:'안내',note:segment.trim()});continue;}
+      const operating=segment.split(/휴게|브레이크\s*타임|휴식|라스트\s*오더|L\.?O\.?/i)[0];
+      const sessions=[...operating.matchAll(new RegExp(range.source,'g'))].map(m=>m[1]+'–'+m[2]);
+      rows.push({day,open:sessions.join(' / ')||opening[1]+'–'+opening[2],break:br?br[1]+'–'+br[2]:null,last:lo?.[1]||null,uncertain:/(?:휴게|브레이크)/.test(segment)&&!br});
+    }
+    return rows;
+  }
   function hours(store) {
     const record = store.surveyMenu;
-    if (!record?.hours) return '';
-    return `<section class="survey-hours"><div class="survey-eyebrow">영업시간</div><div style="margin-top:6px;font-size:12px;line-height:1.55">${escapeHtml(record.hours)}</div><p class="survey-meta">${escapeHtml(record.checked)} 카카오맵 표시 기준 · 공휴일 시간이 섞였을 수 있어요. <a href="${escapeHtml(record.source)}" target="_blank" rel="noopener noreferrer">현재 정보 확인 ↗</a></p></section>`;
+    const raw=record?.hours||store.hours;
+    const rows=raw?splitHours(raw):[];
+    const table=rows.map(r=>r.closed?`<div class="hours-closed"><b>${escapeHtml(r.day)}</b><span>휴무</span></div>`:r.note?`<p class="survey-meta">${escapeHtml(r.note)}</p>`:`<div class="hours-group"><h5>${escapeHtml(r.day)}</h5><dl><div><dt>영업시간</dt><dd>${escapeHtml(r.open)}</dd></div><div><dt>브레이크타임</dt><dd>${escapeHtml(r.break|| (r.uncertain?'확인 필요':'미기재'))}</dd></div><div><dt>라스트오더</dt><dd>${escapeHtml(r.last||'미기재')}</dd></div></dl></div>`).join('');
+    const source=record?.source||store.kakaoUrl;
+    const checked=record?.checked?escapeHtml(record.checked)+' 카카오맵 표시 기준 · 공휴일에는 달라질 수 있어요.':escapeHtml(store.hoursNote||'등록 자료 기준 · 방문 전에 확인해 주세요.');
+    return `<section class="survey-hours"><div class="survey-eyebrow">영업 안내</div>${raw?table:'<p class="survey-meta">영업시간 미기재 · 방문 전 매장에 확인해 주세요.</p>'}${raw?`<details class="hours-original"><summary>원본 표기 보기</summary><p>${escapeHtml(raw)}</p></details>`:''}<p class="survey-meta">${checked} ${source?`<a href="${escapeHtml(source)}" target="_blank" rel="noopener noreferrer">현재 정보 확인 ↗</a>`:''}</p></section>`;
   }
+
   function rows(menu) {
     return menu.map(([name, price, recommended]) => `<div class="survey-row"><span>${escapeHtml(name)}${recommended ? '<small class="survey-rec">★</small>' : ''}</span><b>${won(price)}</b></div>`).join('');
   }
@@ -62,5 +84,5 @@
     modal.querySelector('[data-close]').focus();
     return true;
   }
-  window.HongdaeMenus = { attached, hours, board, open };
+  window.HongdaeMenus = { attached, hours, board, open, splitHours };
 })();
