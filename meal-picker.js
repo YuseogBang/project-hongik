@@ -24,6 +24,6 @@
   }
   function open(){close();root=document.createElement('div');root.className='meal-dialog';root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','오늘 뭐 먹지?');document.body.append(root);render();root.querySelector('[data-close]').focus();}
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&root)close()});
-  document.addEventListener('DOMContentLoaded',()=>{const parent=document.getElementById('btn-curated-feed')?.parentElement;if(!parent)return;const b=document.createElement('button');b.className='meal-map-button';b.textContent='🍚 오늘 뭐 먹지?';b.onclick=e=>{e.stopPropagation();open()};parent.append(b)});
+  document.addEventListener('DOMContentLoaded',()=>{const parent=document.getElementById('btn-curated-feed')?.parentElement;if(!parent)return;const b=document.createElement('button');b.className='meal-map-button';b.textContent='🎲';b.setAttribute('aria-label','오늘 뭐 먹지? 식사 추천');b.title='오늘 뭐 먹지?';b.onclick=e=>{e.stopPropagation();open()};parent.append(b)});
   window.HongdaeMeals={open,candidates};
 })();
