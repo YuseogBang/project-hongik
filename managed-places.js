@@ -17,6 +17,7 @@
       if(source.editorial && source.franchise==null)delete store.franchise;
       if(source.editorial){store.hoursNote='관리자가 확인한 영업시간';store.menuSourceNote='관리자가 확인한 메뉴';
         if(store.surveyMenu)store.surveyMenu={...store.surveyMenu,hours:store.hours||store.surveyMenu.hours};}
+      window.HongdaeMusic?.enrich(store);
       changed++;
     }
     return changed;

@@ -86,3 +86,16 @@ test('Hours presentation separates weekday opening, break, last order and closed
 test('Everyday meal candidates honor price, district, solo and closure without side dishes',()=>{
  const ctx={window:{},document:{addEventListener(){}},stores:[{id:1,type:'restaurant',category:'분식',dong:'망원동',tags:['혼밥'],surveyMenu:{menu:[['김밥',4000],['공기밥',1000],['2인 정식',8000]]}},{id:2,type:'restaurant',dong:'서교동',surveyMenu:{menu:[['돈까스',12000]]}},{id:3,type:'restaurant',status:'closed',surveyMenu:{menu:[['국밥',6000]]}},{id:4,type:'cafe',surveyMenu:{menu:[['샌드위치',5000]]}}],indieOnly:false,isFranchise:()=>false};vm.createContext(ctx);vm.runInContext(fs.readFileSync('meal-picker.js','utf8'),ctx);const c=ctx.window.HongdaeMeals.candidates(7000,'망원동',true);assert.equal(c.length,1);assert.equal(c[0].menu.length,1);assert.equal(c[0].menu[0][0],'김밥');assert.equal(ctx.window.HongdaeMeals.candidates(3000).length,0);assert.equal(ctx.window.HongdaeMeals.candidates(7000,'',false,'한식').length,1);assert.equal(ctx.window.HongdaeMeals.candidates(7000,'',false,'일식').length,0);assert.equal(ctx.window.HongdaeMeals.mealCuisine({category:'음식점'}),'');
 });
+
+
+test('Music enrichment corrects venue classification without inventing DJ sessions or free admission',()=>{
+ const ctx={window:{},stores:[]};vm.createContext(ctx);vm.runInContext(fs.readFileSync('music-venues.js','utf8'),ctx);
+ const music=ctx.window.HongdaeMusic;
+ const evans={id:1784182411172,type:'restaurant',category:'한식',tags:['로컬단골']};music.enrich(evans);
+ assert.equal(evans.type,'liveclub');assert.ok(evans.tags.includes('재즈'));assert.ok(evans.tags.includes('라이브음악'));
+ assert.match(music.card(evans),/음료 한 잔 별도/);
+ const side={id:1786000000018,type:'bar',tags:[]};music.enrich(side);assert.ok(!side.tags.includes('DJ'));assert.ok(!side.tags.includes('라이브음악'));
+ assert.match(music.card({id:1784182364776}),/자율 모금/);assert.doesNotMatch(music.card({id:1784182364776}),/무료|0원/);
+ assert.equal(music.card({id:1784182411172,status:'closed'}),'');
+ music.enrich(evans);assert.equal(evans.tags.filter(t=>t==='재즈').length,1);
+});

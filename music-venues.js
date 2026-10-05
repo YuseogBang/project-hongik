@@ -8,5 +8,19 @@ function card(store) {
  const data = info || {genres:['미확인'],live:'라이브·DJ 여부 미확인',admission:'입장료 미확인',note:'요일·이벤트별 조건은 업체에 확인해 주세요.'};
  return `<section class="music-conditions"><h3>음악 · 공연</h3><dl><div><dt>음악 장르</dt><dd>${data.genres.map(esc).join(' · ')}</dd></div><div><dt>공연 방식</dt><dd>${esc(data.live)}</dd></div><div><dt>입장료</dt><dd>${esc(data.admission)}</dd></div></dl><p>${esc(data.note)}</p>${data.source ? `<a href="${esc(data.source)}" target="_blank" rel="noopener noreferrer">공연·입장 안내 ↗</a>` : ''}</section>`;
 }
-window.HongdaeMusic = {card, venues};
+function enrich(store) {
+ const info=venues.find(v=>v.id===Number(store.id));
+ if(!info || store.status==='closed')return store;
+ store.music={genres:info.genres,live:info.live,admission:info.admission};
+ const additions=info.genres.filter(g=>['재즈','록','인디','모던록','포크','싱어송라이터'].includes(g));
+ if(info.live.startsWith('라이브')&&!/미확인/.test(info.live))additions.push('라이브음악');
+ if(additions.includes('모던록'))additions.push('록');
+ // DJ 부스 보유만으로 실제 DJ 공연을 추정하지 않는다.
+ store.tags=[...new Set([...(store.tags||[]),...additions])];
+ const liveIds=[1784182411172,1784182364776,1784182373485,1784422345325];
+ if(liveIds.includes(Number(store.id))){store.type='liveclub';store.category=info.genres.includes('재즈')?'재즈클럽':'라이브클럽';}
+ return store;
+}
+window.HongdaeMusic = {card, venues, enrich};
+if(typeof stores!=='undefined')stores.forEach(enrich);
 })();
