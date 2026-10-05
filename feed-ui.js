@@ -19,12 +19,12 @@
     root.innerHTML=`<header class="hf-head"><div class="hf-head-top"><div><h2 class="hf-title">홍대에서 오늘</h2><p class="hf-sub">새 소식 · 계절 메뉴 · 내 취향</p></div><button class="hf-close" aria-label="피드를 닫고 지도로 돌아가기">← 지도</button></div><div class="hf-filter">${[['today','오늘 소식'],['season','계절 메뉴'],['taste','내 취향'],['saved','저장한 곳']].map(([id,title])=>`<button data-section="${id}" class="${section===id?'on':''}">${title}</button>`).join('')}</div></header><main class="hf-list"></main>`;
     const list=root.querySelector('.hf-list');
     if(section==='season')list.innerHTML=`<div class="hf-section"><b>지금 계절에 어울리는 메뉴</b><span></span></div><p class="hf-sub" style="margin-bottom:16px">등록된 메뉴를 기준으로 골랐어요. 판매 여부는 업체에서 확인해 주세요.</p>${season.slice(0,18).map(s=>card(s,seasonalMenu(s))).join('')||'<p>조건에 맞는 메뉴가 아직 없어요.</p>'}`;
-    else if(section==='taste')list.innerHTML=`<div class="hf-section"><b>내 취향에 맞는 곳</b><span></span></div>${personal.slice(0,18).map(s=>card(s,'추천 이유: '+(window.HongdaeRecommendations?.explain(s)||userTastes.filter(t=>(s.tags||[]).includes(t))).join(' · '))).join('')||'<p>내 프로필에서 취향을 선택해 주세요.</p><button class="hf-close" data-profile>취향 선택하기</button>'}`;
+    else if(section==='taste')list.innerHTML=`<div class="hf-section"><b>내 취향에 맞는 곳</b><button class="hf-close" data-profile>취향 선택·수정</button></div>${personal.slice(0,18).map(s=>card(s,'추천 이유: '+(window.HongdaeRecommendations?.explain(s)||userTastes.filter(t=>(s.tags||[]).includes(t))).join(' · '))).join('')||'<p>내 프로필에서 취향을 선택해 주세요.</p><button class="hf-close" data-profile>취향 선택하기</button>'}`;
     else if(section==='saved')list.innerHTML=`<div class="hf-section"><b>저장한 곳 다시 보기</b><span></span></div>${saved.map(s=>card(s,'내가 저장한 장소')).join('')||'<p>아직 저장한 장소가 없어요.</p>'}`;
     else list.innerHTML='<p class="hf-sub">공식 행사 소식을 확인하고 있어요.</p>';
     root.querySelector('.hf-close').onclick=()=>{generation++;root.classList.remove('open')};
     root.querySelectorAll('[data-section]').forEach(b=>b.onclick=()=>{section=b.dataset.section;open()});
-    const bind=()=>{root.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>{generation++;root.classList.remove('open');selectStore(Number(b.dataset.id))});root.querySelector('[data-profile]')?.addEventListener('click',()=>{root.classList.remove('open');window.HongdaeExperience?.openProfile()})};
+    const bind=()=>{root.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>{generation++;root.classList.remove('open');selectStore(Number(b.dataset.id))});root.querySelectorAll('[data-profile]').forEach(button=>button.addEventListener('click',()=>{root.classList.remove('open');window.HongdaeRecommendations?.open({destination:'feed'})}))};
     bind();root.classList.add('open');
     if(section==='today'){
       try{

@@ -146,7 +146,7 @@
     const t = language(), route = buildRoute(mode);
     const modeButtons = modes.map((item) => `<button type="button" class="hs-mode ${mode === item.id ? 'on' : ''}" data-mode="${item.id}" aria-pressed="${mode === item.id}">${escapeHtml(t[item.title])}<small>${escapeHtml(t[item.detail])}</small></button>`).join('');
     const steps = route.map((place, index) => `<button type="button" class="hs-route-step" data-place="${place.id}"><b>${index + 1}</b><span>${escapeHtml(place.name)}<small>${escapeHtml(place.dong || '홍대')} · ${escapeHtml(place.category || place.type)} · ${escapeHtml(t.reason)}: ${escapeHtml(reason(place, mode))}</small></span></button>`).join('');
-    const questions = `<form data-route-questions style="display:grid;gap:12px;margin-top:16px;font:13px Pretendard,sans-serif">
+    const questions = `<button type="button" class="hs-action" data-choose-taste>내 취향 선택·수정 (선택)</button><form data-route-questions style="display:grid;gap:12px;margin-top:16px;font:13px Pretendard,sans-serif">
       <label>무엇을 찾아볼까요? <select name="theme">${Object.entries(routeThemes).map(([id,v])=>`<option value="${id}" ${routeAnswers.theme===id?'selected':''}>${v.title}</option>`).join('')}</select></label>
       <label>몇 곳을 방문할까요? <select name="stops">${[2,3,4].map(n=>`<option value="${n}" ${routeAnswers.stops===n?'selected':''}>${n}곳</option>`).join('')}</select></label>
       <label>누구와 가나요? <select name="company">${[['solo','혼자'],['date','데이트'],['friends','친구들과']].map(([id,title])=>`<option value="${id}" ${routeAnswers.company===id?'selected':''}>${title}</option>`).join('')}</select></label>
@@ -161,7 +161,7 @@
     root.querySelectorAll('[data-mode]').forEach((button) => button.onclick = () => openRoute(button.dataset.mode));
     root.querySelectorAll('[data-place]').forEach((button) => button.onclick = () => { close(); selectStore(Number(button.dataset.place)); });
     root.querySelector('[data-start]')?.addEventListener('click', () => { close(); selectStore(route[0].id); });
-    root.querySelector('[data-choose-taste]')?.addEventListener('click', () => { close(); window.HongdaeExperience?.openProfile(); });
+    root.querySelectorAll('[data-choose-taste]').forEach(button=>button.addEventListener('click', () => { close(); window.HongdaeRecommendations?.open({destination:'course'}); }));
   }
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
   document.addEventListener('DOMContentLoaded', () => {

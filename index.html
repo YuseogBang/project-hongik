@@ -70,14 +70,21 @@
   .hover-darken:hover{background:#c92b20 !important}
   .example-badge{font-size:9px;font-weight:700;letter-spacing:.05em;color:#6f5f5a;border:1px solid #7a2534;border-radius:99px;padding:2px 8px;white-space:nowrap}
 </style>
-</head>
+<style>.brand-logo{filter:drop-shadow(0 0 5px rgba(255,31,61,.45))}.preview-brand{display:inline-flex;align-items:center}.landing-feature-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.landing-feature-links a{padding:12px 18px;border-radius:12px;border:1px solid #a45156;background:#501823;color:#fff1e8;font-weight:700}.preview-map{background-color:#fff4df!important}.preview-place{border-color:#e8362a!important}</style></head>
 <body>
 <a class="skip-link" href="#top">본문으로 바로가기</a>
 <div style="min-height:100vh;background:#2b070c;overflow-x:hidden">
 
 <header style="position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(20,16,16,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(58,42,42,.6)">
   <a href="#top" style="display:flex;align-items:center;gap:9px;letter-spacing:-.3px">
-    <svg width="28" height="17" viewBox="0 0 180 100" role="img" aria-label="Hongdae Map logo"><defs><linearGradient id="hlogo" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs><circle cx="55" cy="62" r="31" fill="none" stroke="url(#hlogo)" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="url(#hlogo)" stroke-width="16"/><path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="url(#hlogo)"/></svg>
+    <svg class="brand-logo" width="30" height="18" viewBox="0 0 180 100" aria-label="Hongdae Map logo" role="img">
+      <defs><linearGradient id="header-logo-red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs>
+      <circle cx="55" cy="64" r="30" fill="none" stroke="url(#header-logo-red)" stroke-width="15"/>
+      <circle cx="137" cy="64" r="30" fill="none" stroke="url(#header-logo-red)" stroke-width="15"/>
+      <rect x="17" y="22" width="76" height="15" rx="7.5" fill="url(#header-logo-red)"/>
+      <rect x="48" y="0" width="15" height="30" rx="7.5" fill="url(#header-logo-red)"/>
+      <circle cx="137" cy="64" r="7" fill="url(#header-logo-red)"/>
+    </svg>
     <span style="width:1px;height:19px;background:#7a2534"></span>
     <span style="display:flex;flex-direction:column;line-height:1.05">
       <span style="font-size:15px;font-weight:800;letter-spacing:-.02em">홍대맵</span>
@@ -100,17 +107,24 @@
     <div class="hero-copy" data-reveal>
       <div class="hero-kicker">홍대를 고르는 새로운 방법</div>
       <h1>오늘 갈 곳,<br><em>지도에서 찾자.</em></h1>
-      <p class="hero-lede">음식, 음악, 골목의 분위기까지. 내 취향과 감각을 고르면 나에게 맞는 피드와 코스로 이어져요.</p>
+      <p class="hero-lede">음식, 음악, 골목의 분위기까지. 먼저 지도를 둘러보고, 원할 때 내 취향을 골라 업체와 코스를 추천받으세요.</p>
       <div class="hero-actions">
         <a class="hero-primary" href="main.html">지도로 가게 찾기 ↗</a>
         <a class="hero-secondary" href="#feat-map">기능 살펴보기</a>
       </div>
-      <p class="hero-note">설치 없이 바로 이용 · 매장 정보는 계속 업데이트 중</p>
+      <p class="hero-note">설치 없이 바로 이용 · 취향 선택은 지도 안에서 자유롭게</p>
     </div>
     <div class="hero-preview" data-reveal role="img" aria-label="홍대맵의 지도 탐색 기능을 설명하는 미리보기">
       <div class="preview-window">
-        <div class="preview-bar"><span class="preview-brand">ㅎㅇ</span> 홍대맵 <span class="preview-search">⌕ 가게 검색</span></div>
-        <div class="preview-filters"><span>전체</span><span>음식점</span><span>카페</span><span>공연·문화</span><span>저장한 곳</span></div>
+        <div class="preview-bar"><span class="preview-brand"><svg class="brand-logo" width="30" height="18" viewBox="0 0 180 100" aria-label="Hongdae Map logo" role="img">
+      <defs><linearGradient id="header-logo-red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs>
+      <circle cx="55" cy="64" r="30" fill="none" stroke="url(#header-logo-red)" stroke-width="15"/>
+      <circle cx="137" cy="64" r="30" fill="none" stroke="url(#header-logo-red)" stroke-width="15"/>
+      <rect x="17" y="22" width="76" height="15" rx="7.5" fill="url(#header-logo-red)"/>
+      <rect x="48" y="0" width="15" height="30" rx="7.5" fill="url(#header-logo-red)"/>
+      <circle cx="137" cy="64" r="7" fill="url(#header-logo-red)"/>
+    </svg></span> 홍대맵 <span class="preview-search">⌕ 가게 검색</span></div>
+        <div class="preview-filters"><span>로컬만</span><span>음식점</span><span>카페</span><span>주점</span><span>필터</span></div>
         <div class="preview-map">
           <span class="preview-street" style="left:16%;top:30%">연남동</span>
           <span class="preview-street" style="left:62%;top:55%">서교동</span>
@@ -128,7 +142,7 @@
   <div data-reveal>
     <div style="font-size:15px;font-weight:700;color:#ff5c46;margin-bottom:14px">실시간 지도</div>
     <h2 style="margin:0;font-size:clamp(28px,3.6vw,44px);font-weight:800;line-height:1.3;letter-spacing:-.02em">직접 검증한 가게만,<br>필터 하나로</h2>
-    <p style="margin:20px 0 0;font-size:17px;line-height:1.7;color:#c39298;text-wrap:pretty">카카오맵 실존 확인을 거친 매장만 지도에 올려요. 업종, 동네, 취향 태그로 원하는 곳만 걸러서 볼 수 있어요.</p>
+    <p style="margin:20px 0 0;font-size:17px;line-height:1.7;color:#c39298;text-wrap:pretty">지도에 등록된 장소를 둘러보고, 영업 상태는 방문 전에 확인해 주세요. 업종, 동네, 취향 태그로 원하는 곳만 걸러서 볼 수 있어요.</p>
   </div>
   <div data-reveal style="background:#3d0f16;border:1px solid #7a2534;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px">
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
@@ -206,9 +220,9 @@
       <div style="margin-top:12px;background:rgba(232,54,42,.08);border:1px solid rgba(232,54,42,.3);border-radius:12px;padding:11px 14px;font-size:12px;line-height:1.6;color:#c9b8b2">🎨 <b style="color:#f5ece7">벽화 도슨트</b> — 홍대 벽화거리 그래피티 위치와 작가 비하인드 스토리, 포토존 가이드 (준비 중인 기능이에요)</div>
     </div>
     <div data-reveal>
-      <div style="font-size:15px;font-weight:700;color:#ff5c46;margin-bottom:14px">버스킹 &amp; 이벤트</div>
+      <div style="font-size:15px;font-weight:700;color:#ff5c46;margin-bottom:14px">공연 &amp; 이벤트</div>
       <h2 style="margin:0;font-size:clamp(28px,3.6vw,44px);font-weight:800;line-height:1.3;letter-spacing:-.02em">지금 레드로드에선<br>무슨 일이 일어날까</h2>
-      <p style="margin:20px 0 0;font-size:17px;line-height:1.7;color:#c39298;text-wrap:pretty">길 이름만 알려주는 지도는 그만. 버스킹 존 라인업과 거리 이벤트를 실시간으로 보여주는 기능을 준비하고 있어요. 화면은 완성 예시이고, 실제 공연 데이터는 곧 채워질 예정이에요.</p>
+      <p style="margin:20px 0 0;font-size:17px;line-height:1.7;color:#c39298;text-wrap:pretty">공식 공지로 확인한 공연·전시·이벤트를 지도 안의 피드에서 찾아보세요. 거리 버스킹 실시간 라인업과 벽화 도슨트는 자료를 확보한 뒤 제공할 예정이에요.</p>
     </div>
   </div>
 </section>
@@ -217,13 +231,13 @@
   <div data-reveal style="text-align:center;max-width:640px;margin:0 auto 64px">
     <div style="font-size:15px;font-weight:700;color:#ff5c46;margin-bottom:14px">서브컬처 &amp; 스페셜티</div>
     <h2 style="margin:0;font-size:clamp(28px,3.6vw,44px);font-weight:800;line-height:1.3;letter-spacing:-.02em">'의류점', '서점'으로<br>뭉뚱그리지 않아요</h2>
-    <p style="margin:20px 0 0;font-size:17px;line-height:1.7;color:#c39298;text-wrap:pretty">전국에서 취향 소비가 가장 밀집된 동네답게, 홍대의 숨은 가게들을 취향별 루트로 엮어드릴 예정이에요.</p>
+    <p style="margin:20px 0 0;font-size:17px;line-height:1.7;color:#c39298;text-wrap:pretty">덕후·빈티지·독립출판·바이닐 테마와 동행, 이동 범위를 골라 등록된 장소로 코스를 만들어요. 조건에 맞는 장소가 부족하면 알려드려요.</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px" class="route-grid">
     <div data-reveal style="background:#3d0f16;border:1px solid #7a2534;border-radius:20px;padding:26px;display:flex;flex-direction:column;gap:14px" class="hover-red">
       <div style="font-size:30px">🧸</div>
       <div style="font-size:18px;font-weight:700;letter-spacing:-.3px">덕후 루트</div>
-      <div style="font-size:14px;line-height:1.65;color:#c39298;text-wrap:pretty">피규어숍, 애니메이트, 콜라보 카페를 한 동선으로 엮은 루트를 준비하고 있어요.</div>
+      <div style="font-size:14px;line-height:1.65;color:#c39298;text-wrap:pretty">덕후 태그가 붙은 등록 장소를 방문 순서로 추천해요.</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:auto">
         <span class="example-badge">준비중</span>
       </div>
@@ -231,7 +245,7 @@
     <div data-reveal style="background:#3d0f16;border:1px solid #7a2534;border-radius:20px;padding:26px;display:flex;flex-direction:column;gap:14px" class="hover-red">
       <div style="font-size:30px">👕</div>
       <div style="font-size:18px;font-weight:700;letter-spacing:-.3px">빈티지 &amp; 구제 맵</div>
-      <div style="font-size:14px;line-height:1.65;color:#c39298;text-wrap:pretty">연남·서교동 골목에 숨은 빈티지 숍을 스타일별로 분류해 보여드릴 예정이에요.</div>
+      <div style="font-size:14px;line-height:1.65;color:#c39298;text-wrap:pretty">빈티지·구제 태그를 기준으로 골목 탐방 코스를 선택해요.</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:auto">
         <span class="example-badge">준비중</span>
       </div>
@@ -239,13 +253,13 @@
     <div data-reveal style="background:#3d0f16;border:1px solid #7a2534;border-radius:20px;padding:26px;display:flex;flex-direction:column;gap:14px" class="hover-red">
       <div style="font-size:30px">🎧</div>
       <div style="font-size:18px;font-weight:700;letter-spacing:-.3px">독립출판 &amp; 바이닐 투어</div>
-      <div style="font-size:14px;line-height:1.65;color:#c39298;text-wrap:pretty">대형 서점 말고, 동네 독립서점과 LP 바만 모은 취향 지도를 준비하고 있어요.</div>
+      <div style="font-size:14px;line-height:1.65;color:#c39298;text-wrap:pretty">독립출판·바이닐 태그가 있는 장소를 코스로 연결해요.</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:auto">
         <span class="example-badge">준비중</span>
       </div>
     </div>
   </div>
-</section>
+<div class="landing-feature-links"><a href="main.html">지도에서 코스 만들기 →</a><a href="main.html">지도에서 피드 보기 →</a><a href="main.html">지도에서 내 프로필 열기 →</a></div></section>
 
 <section style="padding:170px 24px;text-align:center;background:radial-gradient(50% 60% at 50% 110%, rgba(232,54,42,.25) 0%, rgba(232,54,42,0) 70%)">
   <h2 data-reveal style="margin:0;font-size:clamp(34px,5vw,60px);font-weight:800;line-height:1.25;letter-spacing:-.03em">홍대에서 뭐 먹을지,<br>이제 고민하지 마세요</h2>
@@ -256,7 +270,14 @@
 
 <footer style="border-top:1px solid #241b1b;padding:44px 28px;display:flex;align-items:center;justify-content:space-between;max-width:1080px;margin:0 auto;flex-wrap:wrap;gap:16px">
   <div style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:#c39298">
-    <svg width="24" height="15" viewBox="0 0 180 100" role="img" aria-label="Hongdae Map logo"><circle cx="55" cy="62" r="31" fill="none" stroke="#c39298" stroke-width="16"/><circle cx="135" cy="62" r="31" fill="none" stroke="#c39298" stroke-width="16"/><path d="M87 54h16v16H87zM15 20h80v17H15zM47 0h16v37H47z" fill="#c39298"/></svg>
+    <svg class="brand-logo" width="30" height="18" viewBox="0 0 180 100" aria-label="Hongdae Map logo" role="img">
+      <defs><linearGradient id="header-logo-red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff183c"/><stop offset=".55" stop-color="#e60025"/><stop offset="1" stop-color="#ff3654"/></linearGradient></defs>
+      <circle cx="55" cy="64" r="30" fill="none" stroke="url(#header-logo-red)" stroke-width="15"/>
+      <circle cx="137" cy="64" r="30" fill="none" stroke="url(#header-logo-red)" stroke-width="15"/>
+      <rect x="17" y="22" width="76" height="15" rx="7.5" fill="url(#header-logo-red)"/>
+      <rect x="48" y="0" width="15" height="30" rx="7.5" fill="url(#header-logo-red)"/>
+      <circle cx="137" cy="64" r="7" fill="url(#header-logo-red)"/>
+    </svg>
     홍대맵
   </div>
   <div style="display:flex;gap:24px;font-size:13px">
@@ -312,6 +333,6 @@
 
 
 </script>
-<script src="recommendation-profile.js?v=20261004-onboarding"></script>
+<script src="recommendation-profile.js?v=20261006-optional"></script>
 </body>
 </html>
