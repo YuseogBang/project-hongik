@@ -2892,6 +2892,7 @@ function is2ndRound(s) {
 
 function objectiveTasteTags(s) {
   const tags = [`#${s.dong || '홍대'}`];
+  if(s.music) s.music.genres.filter(g=>!['미확인','공연별 상이','선곡별 상이','다양한 장르'].includes(g)).forEach(g=>tags.push('#'+g));
   if (s.type === 'restaurant') tags.push(`#${cuisineLabel(s)}`);
   if (is2ndRound(s)) tags.push('#2차·3차');
 
@@ -2962,7 +2963,7 @@ function submitComment(storeId) {
 }
 
 // ── 취향 매칭 (카테고리·특징을 리서치해 태그를 붙인 가게들 중에서 매칭) ──────
-const TASTE_TAGS = ['매운맛','혼밥','데이트','인스타감성','조용한','시끌벅적','가성비','술안주','디저트','로컬단골','홍대병','노포','빈티지','구제','독립출판','바이닐','덕후','문구','소품','라이브음악','재즈','전통시장','친환경','제로웨이스트'];
+const TASTE_TAGS = ['매운맛','혼밥','데이트','인스타감성','조용한','시끌벅적','가성비','술안주','디저트','로컬단골','홍대병','노포','빈티지','구제','독립출판','바이닐','덕후','문구','소품','라이브음악','재즈','록','포크','DJ','전통시장','친환경','제로웨이스트'];
 let userTastes = JSON.parse(localStorage.getItem('userTastes') || '[]');
 applyLang(); // 페이지 로드 즉시 적용 (카카오맵 로드를 기다리지 않아도 되게)
 
@@ -5166,22 +5167,22 @@ function addStore() {
     }
   });
   </script>
-  <script src="recommendation-profile.js?v=20261006-optional"></script>
+  <script src="recommendation-profile.js?v=20261006-music2"></script>
   <script src="platform.js?v=20261004-managed"></script>
   <script src="ui-redesign.js?v=20261004-mangwon"></script>
   <script src="experience-ui.js?v=20261006-optional"></script>
   <script src="discovery-ui.js?v=20261004-onboarding"></script>
   <script src="journey-features.js?v=20261006-optional"></script>
   <script src="place-reviews.js"></script>
-  <script src="passport-routes.js?v=20261006-optional"></script>
+  <script src="passport-routes.js?v=20261006-music2"></script>
   <script src="research-curations.js?v=20261004-mangwon-match"></script>
   <script src="archive-places.js?v=20261004-mangwon"></script>
   <script src="workbook-curations.js?v=20261004-local"></script>
   <script src="survey-menu-data.js"></script>
-  <script src="managed-places.js?v=20261004-managed"></script>
+  <script src="managed-places.js?v=20261006-music2"></script>
   <script src="survey-menu-ui.js"></script>
   <script src="meal-picker.js?v=20261006"></script>
-  <script src="music-venues.js?v=20261006"></script>
+  <script src="music-venues.js?v=20261006-music2"></script>
 <script src="feedback-ui.js"></script>
   <script src="mobile-polish.js"></script>
   <script src="feed-ui.js?v=20261006-posts"></script>

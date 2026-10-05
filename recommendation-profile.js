@@ -2,7 +2,7 @@
 (() => {
   const KEY='hongdaeRecommendationProfile';
   const groups=[
-    {title:'무엇에 끌리나요?',subtitle:'음식부터 음악까지, 여러 개 골라도 좋아요.',tags:['매운맛','혼밥','디저트','술안주','빈티지','구제','독립출판','바이닐','덕후','문구','소품','라이브음악','재즈','전통시장','친환경','제로웨이스트']},
+    {title:'무엇에 끌리나요?',subtitle:'음식부터 음악까지, 여러 개 골라도 좋아요.',tags:['매운맛','혼밥','디저트','술안주','빈티지','구제','독립출판','바이닐','덕후','문구','소품','라이브음악','재즈','록','포크','DJ','전통시장','친환경','제로웨이스트']},
     {title:'어떤 감각의 공간이 좋나요?',subtitle:'사진에 담고 싶은 곳, 조용히 머무는 곳, 나만 아는 골목.',tags:['조용한','시끌벅적','인스타감성','데이트','가성비','로컬단골','노포','홍대병']}
   ];
   const read=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'null')||{version:1,tags:[],budget:'any',explore:'balanced',company:'solo',walk:1200}}catch{return {version:1,tags:[],budget:'any',explore:'balanced',company:'solo',walk:1200}}};

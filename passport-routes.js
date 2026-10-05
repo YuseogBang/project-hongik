@@ -109,7 +109,7 @@
     geek:{title:'덕후 루트',pattern:/애니메|피규어|굿즈|만화|보드게임/},
     vintage:{title:'빈티지 & 구제 루트',pattern:/빈티지|구제|중고의류/},
     books:{title:'독립출판 & 바이닐 투어',pattern:/독립출판|독립서점|책방|바이닐|LP|음반|레코드/},
-    music:{title:'라이브 & 음악 루트',pattern:/라이브|재즈|공연|음악|LP|바이닐/}
+    music:{title:'라이브 & 음악 루트',pattern:/라이브|재즈|공연|음악|록|포크|DJ|LP|바이닐/}
   };
   const initialPreferences=window.HongdaeRecommendations?.profile();
   let routeAnswers = {theme:'all',stops:3,walk:initialPreferences?.walk||1200,company:initialPreferences?.company||'solo',newOnly:initialPreferences?.explore==='new',food:false};
