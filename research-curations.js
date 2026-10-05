@@ -36,7 +36,7 @@
       ]
     }
   };
-  const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
+  const escapeHtml = (value) => String(value ?? '').replace(/미기재/g,'정보 확인 필요').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
   const normalize = (value) => String(value || '').replace(/[^0-9a-zA-Z가-힣]/g, '').toLowerCase();
   const roadKey = (address) => {
     const match = String(address).match(/([가-힣0-9]+(?:로|길))\s*([0-9]+(?:-[0-9]+)?)(?:\s|$)/);
