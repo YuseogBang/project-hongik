@@ -64,5 +64,30 @@
     "evidence": "https://indistreet.com/venues/clubbbang",
     "sourceStatus": "공연 공지 재게시 확인 · 공식 계정 직접 조회 제한",
     "checkedAt": "2026-10-06"
+  },
+  {
+    "id": 1786000000018,
+    "name": "사이드노트 클럽 (라이즈호텔)",
+    "genres": [
+      "선곡별 상이"
+    ],
+    "live": "DJ 부스 운영 · 세션 일정 확인 필요",
+    "admission": "입장료 미확인",
+    "note": "칵테일 바 · 미성년자 입장 불가. 특별 이벤트 조건은 별도 확인해 주세요.",
+    "source": "https://rysehotel.com/side-note-club/",
+    "evidence": "https://d3n14jmbdg5y6n.cloudfront.net/wp-content/uploads/2019/02/RYSE_WEDDING.pdf",
+    "checkedAt": "2026-10-06"
+  },
+  {
+    "id": 1786000000017,
+    "name": "클럽 FF",
+    "genres": [
+      "미확인"
+    ],
+    "live": "라이브·DJ 일정 미확인",
+    "admission": "입장료 미확인",
+    "note": "공식 공연 공지에서 장르와 예매·현매 조건 확인이 필요합니다.",
+    "checkedAt": "2026-10-06",
+    "sourceStatus": "공식 최신 공연·요금 안내 미확인"
   }
 ]
