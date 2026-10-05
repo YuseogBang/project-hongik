@@ -3178,7 +3178,8 @@ function processVerifyQueue() {
       s.lat = parseFloat(best.y);
       s.lng = parseFloat(best.x);
       s.address = best.road_address_name || best.address_name;
-      if (CAT_TYPE[best.category_group_code]) s.type = CAT_TYPE[best.category_group_code];
+      if (CAT_TYPE[best.category_group_code] && !['liveclub','club','artsupply','animeshop','practice','play','entertainment'].includes(s.type)) s.type = CAT_TYPE[best.category_group_code];
+      window.HongdaeMusic?.enrich(s);
 
       // 평점·리뷰는 카카오 API에서 직접 제공 안 되므로 운영 기간만 추정, 나머지 기본값
       s.rating = s.rating || 3.8;
