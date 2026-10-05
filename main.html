@@ -3901,6 +3901,7 @@ function selectStore(id) {
           <a href="${naverUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" style="flex:1;text-align:center;text-decoration:none;display:block">네이버지도 확인 ↗</a>
         </div>
         <button type="button" class="map-btn" onclick="goDirections(${s.id})">📍 내 위치에서 길찾기 ↗</button>
+        ${window.HongdaeMusic?.card(s) || ''}
         ${window.HongdaeMenus?.hours(s) || ''}
         ${window.HongdaeMenus?.board(s) || signatureMenuSection}
         ${storySection}
@@ -5180,6 +5181,7 @@ function addStore() {
   <script src="managed-places.js?v=20261004-managed"></script>
   <script src="survey-menu-ui.js"></script>
   <script src="meal-picker.js?v=20261006"></script>
+  <script src="music-venues.js?v=20261006"></script>
 <script src="feedback-ui.js"></script>
   <script src="mobile-polish.js"></script>
   <script src="feed-ui.js?v=20261006-posts"></script>

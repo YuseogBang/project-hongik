@@ -8,7 +8,7 @@
     filter: icon('<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/>'),
     map: icon('<path d="m9 4.5 6 2.4 5.8-2.4v12.6L15 19.5 9 17.1l-5.8 2.4V6.9Z"/><path d="M9 4.5v12.6M15 6.9v12.6"/>'),
     feed: icon('<rect x="3.4" y="4.4" width="17.2" height="6.6" rx="1.7"/><rect x="3.4" y="13" width="17.2" height="6.6" rx="1.7"/><path d="M6.6 7.7H11M6.6 16.3H11"/>'),
-    save: icon('<path d="M6 3.6h12a1.5 1.5 0 0 1 1.5 1.5v15.3L12 15.6l-7.5 4.8V5.1A1.5 1.5 0 0 1 6 3.6Z"/><path d="M9 8.6h6"/>'),
+    save: icon('<path d="M12 20.5 4.7 13a4.9 4.9 0 0 1 7-7l.3.4.3-.4a4.9 4.9 0 0 1 7 7Z"/>'),
     profile: icon('<circle cx="12" cy="8.6" r="3.7"/><path d="M4.8 20.4c0-3.7 3.2-5.7 7.2-5.7s7.2 2 7.2 5.7"/>')
   };
   window.addEventListener('DOMContentLoaded', () => {
