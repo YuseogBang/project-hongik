@@ -1,9 +1,9 @@
 (() => {
   const source = window.HONGDAE_SURVEY_MENUS || {};
-  const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+  const escapeHtml = (value) => String(value ?? '').replace(/미기재/g,'정보 확인 필요').replace(/[&<>"']/g, (char) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[char]));
-  const won = (price) => Number.isInteger(price) ? `${price.toLocaleString('ko-KR')}원` : '가격 미기재';
+  const won = (price) => Number.isInteger(price) ? `${price.toLocaleString('ko-KR')}원` : '가격 정보 확인 필요';
   let attached = 0;
   stores.forEach((store) => {
     const record = source[String(store.id)];
@@ -48,9 +48,9 @@
     const record = store.surveyMenu;
     const raw=record?.hours||store.hours;
     const rows=raw?splitHours(raw):[];
-    const table=rows.map(r=>r.closed?`<div class="hours-closed"><b>${escapeHtml(r.day)}</b><span>휴무</span></div>`:r.note?`<p class="survey-meta">${escapeHtml(r.note)}</p>`:`<div class="hours-group"><h5>${escapeHtml(r.day)}</h5><dl><div><dt>영업시간</dt><dd>${escapeHtml(r.open)}</dd></div><div><dt>브레이크타임</dt><dd>${escapeHtml(r.break|| (r.uncertain?'확인 필요':'미기재'))}</dd></div><div><dt>라스트오더</dt><dd>${escapeHtml(r.last||'미기재')}</dd></div></dl></div>`).join('');
+    const table=rows.map(r=>r.closed?`<div class="hours-closed"><b>${escapeHtml(r.day)}</b><span>휴무</span></div>`:r.note?`<p class="survey-meta">${escapeHtml(r.note)}</p>`:`<div class="hours-group"><h5>${escapeHtml(r.day)}</h5><dl><div><dt>영업시간</dt><dd>${escapeHtml(r.open)}</dd></div><div><dt>브레이크타임</dt><dd>${escapeHtml(r.break||'정보 확인 필요')}</dd></div><div><dt>라스트오더</dt><dd>${escapeHtml(r.last||'정보 확인 필요')}</dd></div></dl></div>`).join('');
     const source=record?.source||store.kakaoUrl;
-    return `<section class="survey-hours"><div class="survey-eyebrow">영업 안내</div>${raw?table:'<p class="survey-meta">영업시간 미기재 · 방문 전 매장에 확인해 주세요.</p>'}<p class="survey-meta">${source?`<a href="${escapeHtml(source)}" target="_blank" rel="noopener noreferrer">현재 정보 확인 ↗</a>`:''}</p></section>`;
+    return `<section class="survey-hours"><div class="survey-eyebrow">영업 안내</div>${raw?table:'<p class="survey-meta">영업시간 정보 확인 필요 · 방문 전 매장에 확인해 주세요.</p>'}<p class="survey-meta">${source?`<a href="${escapeHtml(source)}" target="_blank" rel="noopener noreferrer">현재 정보 확인 ↗</a>`:''}</p></section>`;
   }
 
   function rows(menu) {
