@@ -1106,7 +1106,7 @@
 #btn-curation{width:auto!important;min-width:72px!important;height:38px!important;padding:0 12px!important;border-radius:12px!important;background:#42131b!important;color:#efd2cc!important;border:1px solid #91505a!important;box-shadow:none!important;font:700 12px Pretendard,sans-serif!important;white-space:nowrap}
 .category-bar #chip-filter{display:inline-flex!important;order:-1;position:sticky;left:0;z-index:3;background:#ff563e!important;color:#fff!important;border:2px solid #ffb49e!important;box-shadow:0 3px 12px rgba(232,54,42,.35);font-weight:800!important;opacity:1!important;flex-shrink:0}
 .category-bar #chip-filter:hover{background:#e8362a!important}.category-bar #chip-filter:focus-visible,#btn-curation:focus-visible{outline:3px solid #ffd38c;outline-offset:3px}
-</style><link rel="stylesheet" href="interface-polish.css?v=20261006"></head>
+</style><link rel="stylesheet" href="interface-polish.css?v=20261006"><link rel="stylesheet" href="feed-posts.css?v=20261006"></head>
 <body>
 
 <!-- TOP BAR -->
@@ -3772,10 +3772,10 @@ function selectStore(id) {
           <div style="font-size:28px">${menuEmoji(s)}</div>
           <div style="position:absolute;bottom:10px;left:12px;font-size:10px;font-weight:900;letter-spacing:.08em;color:#8a5a3a">MY TASTE PICK</div>
           <div style="position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:5px;background:#fff;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700;color:${info.color}">${menuEmoji(s)} ${info.label} <span style="color:#93a8a2;font-weight:500">${info.labelEn}</span></div>
-          <button onclick="toggleBookmark(${s.id})" style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;background:${bm?'var(--accent)':'#fff'};color:${bm?'#fff':'var(--accent)'};font-size:14px;box-shadow:0 3px 10px rgba(20,60,50,.15)">${bm?'♥':'♡'}</button>
+
         </div>
         <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px">
-          <div style="font-size:17px;font-weight:900;color:#1c352e">${s.name}</div>
+          <div class="place-title-actions" style="display:flex;align-items:center;gap:12px"><div style="flex:1;min-width:0;font-size:17px;font-weight:900;color:#1c352e">${s.name}</div><button onclick="toggleBookmark(${s.id})" class="place-save-action" aria-label="${bm?'저장 해제':'업체 저장'}" aria-pressed="${bm}" style="flex:none;width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;background:${bm?'var(--accent)':'#fff'};color:${bm?'#fff':'var(--accent)'};font-size:14px;box-shadow:0 3px 10px rgba(20,60,50,.15)">${bm?'♥':'♡'}</button></div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             ${tags.map(t=>`<span style="background:#fdf0e4;color:#8a5a3a;font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px">${t}</span>`).join('')}
           </div>
@@ -3788,7 +3788,7 @@ function selectStore(id) {
               📍 위치를 켠 후 거리를 알 수 있어요 <span style="color:var(--accent);font-weight:700;text-decoration:underline">위치 켜기</span>
             </div>
           </div>
-          ${s.hours && !s.surveyMenu?.hours ? `<div style="font-size:12px;color:#5c756d;margin-top:2px">🕐 ${s.hours}${(s.services||[]).includes('lateNight') ? ' <span style="color:var(--accent);font-weight:700">· 심야영업</span>' : ''}${s.hoursNote ? `<small style="display:block">${s.hoursNote}</small>` : ''}</div>` : ''}
+
         </div>
       </div>`;
 
@@ -5102,7 +5102,7 @@ function addStore() {
   <script src="historical-details.js?v=20261006"></script>
 <script src="feedback-ui.js"></script>
   <script src="mobile-polish.js"></script>
-  <script src="feed-ui.js?v=20261006-optional"></script>
+  <script src="feed-ui.js?v=20261006-posts"></script>
   <script src="hongdae-icons.js"></script>
   <link rel="stylesheet" href="button-system.css">
 </body>

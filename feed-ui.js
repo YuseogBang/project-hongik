@@ -9,7 +9,14 @@
     return [...new Set(menus)].slice(0,2).join(' · ');
   };
   const seasonal=s=>Boolean(seasonalMenu(s));
-  function card(s,reason){return `<button class="hf-card" data-id="${s.id}"><div class="hf-card-main"><div class="hf-name">${escape(s.name)}</div><div class="hf-meta">${escape(s.category||TYPES[s.type]||'홍대 장소')} · ${escape(s.dong||'홍대')}</div><div class="hf-meta">${escape(reason)}</div><div class="hf-tags">${(s.tags||[]).slice(0,4).map(t=>'#'+escape(t)).join(' ')}</div></div></button>`}
+  const visuals={restaurant:['🍜','한 끼의 발견','food'],food:['🍜','한 끼의 발견','food'],cafe:['☕','잠깐의 여유','cafe'],bar:['🍸','오늘 밤의 취향','bar'],retail:['🛍️','골목의 발견','shop'],entertainment:['🎸','취향을 만나는 곳','culture']};
+  function card(s,reason){
+    const [icon,kicker,tone]=visuals[s.type]||['📍','홍대의 발견','culture'];
+    const saved=!!bookmarks[s.id];
+    return `<article class="hf-card hf-post"><header class="hf-post-head"><span class="hf-avatar" aria-hidden="true">${icon}</span><div><h3>${escape(s.name)}</h3><p>${escape(s.dong||'홍대')} · ${escape(s.category||TYPES[s.type]||'장소')}</p></div><span class="hf-editorial">홍대맵 큐레이션</span></header><button class="hf-cover hf-tone-${tone}" data-id="${s.id}" aria-label="${escape(s.name)} 상세 보기"><span class="hf-cover-kicker">${kicker}</span><span class="hf-cover-icon" aria-hidden="true">${icon}</span><strong>${escape(s.name)}</strong><small>PLACE IN HONGDAE</small></button><div class="hf-post-actions"><button data-id="${s.id}" aria-label="${escape(s.name)} 업체 상세">↗ 업체 상세</button><button data-save-place="${s.id}" aria-pressed="${saved}" aria-label="${escape(s.name)} ${saved?'저장 해제':'저장'}">${saved?'♥ 저장됨':'♡ 저장'}</button></div><div class="hf-card-main"><p class="hf-caption"><b>${escape(s.name)}</b> ${escape(reason||'등록된 장소의 메뉴와 특징을 살펴보세요.')}</p><div class="hf-tags">${(s.tags||[]).slice(0,6).map(t=>'<span class="hf-tag">#'+escape(t)+'</span>').join('')}</div></div></article>`;
+  }
+  function eventCard(e){return `<article class="hf-card hf-post hf-event-post"><header class="hf-post-head"><span class="hf-avatar" aria-hidden="true">🎟️</span><div><h3>공연·전시 소식</h3><p>${escape(e.location)}</p></div><span class="hf-editorial">공식 공지</span></header><div class="hf-cover hf-tone-culture"><span class="hf-cover-kicker">WHAT'S ON</span><strong>${escape(e.title)}</strong><small>${escape(e.dateStart)} — ${escape(e.dateEnd)}</small></div><div class="hf-card-main"><p class="hf-caption">${escape(e.description||'')}</p><a class="hf-source-link" href="${escape(e.link)}" target="_blank" rel="noopener noreferrer">공식 공지 보기 ↗</a></div></article>`;}
+
   async function open(){
     const token=++generation;
     let root=document.querySelector('.hf-feed');if(!root){root=document.createElement('section');root.className='hf-feed';document.body.append(root)}
@@ -25,6 +32,7 @@
     root.querySelector('.hf-close').onclick=()=>{generation++;root.classList.remove('open')};
     root.querySelectorAll('[data-section]').forEach(b=>b.onclick=()=>{section=b.dataset.section;open()});
     const bind=()=>{root.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>{generation++;root.classList.remove('open');selectStore(Number(b.dataset.id))});root.querySelectorAll('[data-profile]').forEach(button=>button.addEventListener('click',()=>{root.classList.remove('open');window.HongdaeRecommendations?.open({destination:'feed'})}))};
+    root.onclick=async event=>{const button=event.target.closest('[data-save-place]');if(!button)return;button.disabled=true;try{const id=Number(button.dataset.savePlace);await toggleBookmark(id);const saved=!!bookmarks[id];button.setAttribute('aria-pressed',String(saved));button.textContent=saved?'♥ 저장됨':'♡ 저장';const place=stores.find(s=>s.id===id);button.setAttribute('aria-label',`${place?.name||'업체'} ${saved?'저장 해제':'저장'}`);}finally{button.disabled=false;}};
     bind();root.classList.add('open');
     if(section==='today'){
       try{
@@ -32,7 +40,7 @@
         if(token!==generation)return;
         const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul'}).format(new Date());
         const events=data.flatMap(d=>d.events||[]).filter(e=>e.dateEnd>=today && e.link && /^https:\/\//.test(e.link)).sort((a,b)=>a.dateStart.localeCompare(b.dateStart));
-        list.innerHTML=`${personal.length?`<div class="hf-section"><b>내 취향으로 고른 오늘</b><span></span></div>${personal.slice(0,4).map(s=>card(s,(window.HongdaeRecommendations?.explain(s)||[]).join(' · '))).join('')}`:''}<div class="hf-section"><b>업체 이벤트 & 홍익대 전시</b><span></span></div>${events.map(e=>`<article class="hf-card"><div class="hf-card-main"><div class="hf-name">${escape(e.title)}</div><div class="hf-meta">${escape(e.dateStart)} ~ ${escape(e.dateEnd)} · ${escape(e.location)}</div><p class="hf-sub">${escape(e.description||'')}</p><a href="${escape(e.link)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:12px;color:#ff8a7a">공식 공지 보기 ↗</a></div></article>`).join('')||'<p class="hf-sub" style="margin-bottom:18px">공식 공지로 확인된 진행·예정 행사가 아직 없어요. 매주 월요일 확인해요.</p>'}<div class="hf-section"><b>계절 메뉴로 둘러보기</b><span></span></div>${season.slice(0,5).map(s=>card(s,seasonalMenu(s))).join('')}`;bind();
+        list.innerHTML=`${personal.length?`<div class="hf-section"><b>내 취향으로 고른 오늘</b><span></span></div>${personal.slice(0,4).map(s=>card(s,(window.HongdaeRecommendations?.explain(s)||[]).join(' · '))).join('')}`:''}<div class="hf-section"><b>업체 이벤트 & 홍익대 전시</b><span></span></div>${events.map(eventCard).join('')||'<p class="hf-sub" style="margin-bottom:18px">공식 공지로 확인된 진행·예정 행사가 아직 없어요. 매주 월요일 확인해요.</p>'}<div class="hf-section"><b>계절 메뉴로 둘러보기</b><span></span></div>${season.slice(0,5).map(s=>card(s,seasonalMenu(s))).join('')}`;bind();
       }catch{if(token===generation)list.innerHTML='<p>행사 소식을 불러오지 못했어요. 잠시 후 다시 열어 주세요.</p>'}
     }
   }
