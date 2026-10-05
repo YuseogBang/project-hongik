@@ -1,6 +1,6 @@
 (() => {
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const menus=(s,limit)=>(s.surveyMenu?.menu||[]).filter(([n,p])=>Number.isFinite(p)&&p>0&&p<=limit&&/라멘|우동|국수|냉면|덮밥|볶음밥|비빔밥|국밥|곰탕|설렁탕|찌개|백반|정식|돈까스|돈카츠|버거|샌드위치|오니기리|주먹밥|김밥|카레|소바|짜장|짬뽕|토스트/.test(n)&&!/추가|공기밥|사이드|감자튀김|음료|2인|3인|4인|인 이상|미니|곁들임|회원가|세트 추가/.test(n));
+  const menus=(s,limit)=>(s.surveyMenu?.menu||[]).filter(([n,p])=>Number.isFinite(p)&&p>0&&p<=limit&&/라멘|우동|국수|냉면|덮밥|볶음밥|비빔밥|국밥|곰탕|설렁탕|찌개|백반|정식|돈까스|돈카츠|버거|샌드위치|오니기리|주먹밥|김밥|카레|소바|짜장|짬뽕|토스트/.test(n)&&!/추가|공기밥|사이드|감자튀김|음료|2인|3인|4인|인 이상|미니|고기\s*마요|곁들임|회원가|세트 추가/.test(n)&&!(/떡볶이/.test(s.name+' '+(s.category||''))&&/볶음밥/.test(n)));
   function candidates(limit=10000,dong='',solo=false){return stores.filter(s=>s.type==='restaurant'&&s.status!=='closed'&&(!dong||s.dong===dong)&&(!solo||(s.tags||[]).includes('혼밥'))&&(!(typeof indieOnly!=='undefined'&&indieOnly)||!isFranchise(s))).map(s=>({store:s,menu:menus(s,limit)})).filter(x=>x.menu.length).sort((a,b)=>Math.min(...a.menu.map(m=>m[1]))-Math.min(...b.menu.map(m=>m[1])));}
   let root,limit=10000,dong='',solo=false,lastId=null,timer;
   function close(){clearInterval(timer);root?.remove();root=null;document.querySelector('.meal-map-button')?.focus();}
