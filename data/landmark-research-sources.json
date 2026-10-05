@@ -1,0 +1,42 @@
+{
+  "checkedAt": "2026-10-06",
+  "note": "확인일은 내부 기록용이며 카드에는 표시하지 않음",
+  "places": {
+    "홍익대학교": {
+      "url": "https://www.hongik.ac.kr/kr/introduction/museum-of-art.do",
+      "updated": true
+    },
+    "홍문관": {
+      "url": "https://homa.hongik.ac.kr/homa/index.do",
+      "updated": true
+    },
+    "상상마당": {
+      "url": "https://www.sangsangmadang.com/main/HD",
+      "updated": true
+    },
+    "AK플라자 홍대": {
+      "url": "https://www.akplaza.com/",
+      "updated": true
+    },
+    "홍대놀이터": {
+      "url": "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260406150632588660",
+      "updated": true
+    },
+    "와우공원": {
+      "url": null,
+      "updated": false
+    },
+    "경의선숲길": {
+      "url": "https://korean.visitseoul.net/hallyu/도심-속-쉼터-경의선-숲길/KON017350",
+      "updated": true
+    },
+    "경의선책거리": {
+      "url": "https://love.seoul.go.kr/articles/9074?tr_code=m_snews",
+      "updated": true
+    },
+    "마포평생학습관": {
+      "url": "https://mpllc.sen.go.kr/mpllc/html.do?menu_idx=44",
+      "updated": true
+    }
+  }
+}
