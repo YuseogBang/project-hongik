@@ -40,3 +40,8 @@ button.hf-cover{cursor:pointer}.hf-cover:before{content:'';position:absolute;z-i
 .hf-feed .hf-post{background:#fff;color:#203b32;border-color:#ead9cc}
 .hf-feed .hf-post .hf-card-main{background:#fff}
 .hf-feed .hf-post .hf-post-actions{background:#fff}
+/* All place covers use the same palette as the existing place identity card. */
+.hf-feed .hf-cover{background:linear-gradient(135deg,#ffe8d9,#ffd4b8)!important}
+.hf-feed .hf-cover:before,.hf-feed .hf-cover:after{display:none}
+
+.hf-feed .hf-post h3,.hf-feed .hf-caption,.hf-feed .hf-post-head p,.hf-feed .hf-cover strong,.hf-feed .hf-cover small{word-break:keep-all;overflow-wrap:break-word}.hf-feed .hf-event-post .hf-cover{gap:14px;align-items:flex-start;min-height:230px}.hf-feed .hf-event-post .hf-cover strong{display:block;max-width:100%;font-size:clamp(23px,4vw,32px);line-height:1.45;letter-spacing:-.035em;text-wrap:pretty}.hf-feed .hf-event-post .hf-cover small{display:block;font-size:12px;line-height:1.6;letter-spacing:.03em}.hf-event-hook{margin:0;color:#8e5941;font-size:13px;font-weight:700;line-height:1.6;word-break:keep-all}.hf-caption:has(b:only-child){margin-bottom:8px}

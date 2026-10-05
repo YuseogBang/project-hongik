@@ -142,20 +142,22 @@
     const source = (place.tags || []).find((tag) => mode === 'visitor' ? tag === '홍대병' : mode === 'explorer' ? ['로컬단골','노포'].includes(tag) : tag === '홍대병');
     return source ? `#${source}` : place.category || place.type;
   }
+  function routeChoice(name,title,options){return `<fieldset class="route-choice"><legend>${escapeHtml(title)}</legend><input type="hidden" name="${name}" value="${escapeHtml(routeAnswers[name])}"><div>${options.map(([value,label])=>`<button type="button" data-answer="${name}" data-value="${escapeHtml(value)}" aria-pressed="${String(routeAnswers[name])===String(value)}">${escapeHtml(label)}</button>`).join('')}</div></fieldset>`;}
   function openRoute(mode = 'visitor') {
     const t = language(), route = buildRoute(mode);
     const modeButtons = modes.map((item) => `<button type="button" class="hs-mode ${mode === item.id ? 'on' : ''}" data-mode="${item.id}" aria-pressed="${mode === item.id}">${escapeHtml(t[item.title])}<small>${escapeHtml(t[item.detail])}</small></button>`).join('');
     const steps = route.map((place, index) => `<button type="button" class="hs-route-step" data-place="${place.id}"><b>${index + 1}</b><span>${escapeHtml(place.name)}<small>${escapeHtml(place.dong || '홍대')} · ${escapeHtml(place.category || place.type)} · ${escapeHtml(t.reason)}: ${escapeHtml(reason(place, mode))}</small></span></button>`).join('');
     const questions = `<button type="button" class="hs-action" data-choose-taste>내 취향 선택·수정 (선택)</button><form data-route-questions style="display:grid;gap:12px;margin-top:16px;font:13px Pretendard,sans-serif">
-      <label>무엇을 찾아볼까요? <select name="theme">${Object.entries(routeThemes).map(([id,v])=>`<option value="${id}" ${routeAnswers.theme===id?'selected':''}>${v.title}</option>`).join('')}</select></label>
-      <label>몇 곳을 방문할까요? <select name="stops">${[2,3,4].map(n=>`<option value="${n}" ${routeAnswers.stops===n?'selected':''}>${n}곳</option>`).join('')}</select></label>
-      <label>누구와 가나요? <select name="company">${[['solo','혼자'],['date','데이트'],['friends','친구들과']].map(([id,title])=>`<option value="${id}" ${routeAnswers.company===id?'selected':''}>${title}</option>`).join('')}</select></label>
-      <label>장소 사이 이동 범위 <select name="walk">${[[600,'가까운 골목 · 600m'],[1200,'동네 산책 · 1.2km'],[2200,'넓게 탐험 · 2.2km']].map(([n,title])=>`<option value="${n}" ${routeAnswers.walk===n?'selected':''}>${title}</option>`).join('')}</select></label>
+      ${routeChoice('theme','무엇을 찾아볼까요?',Object.entries(routeThemes).map(([id,v])=>[id,v.title]))}
+      ${routeChoice('stops','몇 곳이 좋을까요?',[[2,'2곳'],[3,'3곳'],[4,'4곳']])}
+      ${routeChoice('company','누구와 함께하나요?',[['solo','🙋 혼자'],['date','💕 데이트'],['friends','👯 친구들과']])}
+      ${routeChoice('walk','얼마나 걸어볼까요?',[[600,'가까운 골목 · 600m'],[1200,'동네 산책 · 1.2km'],[2200,'넓게 탐험 · 2.2km']])}
       <label><input type="checkbox" name="newOnly" ${routeAnswers.newOnly?'checked':''}> 가봤어요 표시한 곳 제외</label>
       <label><input type="checkbox" name="food" ${routeAnswers.food?'checked':''}> 마지막에 식사 한 곳 추가</label>
       <button type="submit" class="hs-cta">이 조건으로 코스 만들기</button>
     </form>`;
     show(`${head(t.route)}<p class="hs-intro">${escapeHtml(t.routeIntro)}</p><div class="hs-modes">${modeButtons}</div>${questions}${mode === 'student' && !userTastes.length && routeAnswers.theme === 'all' ? `<p class="hs-intro">${escapeHtml(t.noTaste)}</p><button type="button" class="hs-cta" data-choose-taste>${escapeHtml(t.chooseTaste)}</button>` : `<div style="margin-top:18px">${steps || `<p class="hs-intro">${escapeHtml(t.empty)}</p>`}</div>`}<p class="hs-intro">${escapeHtml(t.routeNote)}</p>${route.length < routeAnswers.stops ? '<p class="hs-intro">등록 정보와 이동 범위에 맞는 장소가 부족해 가능한 곳만 표시해요.</p>' : ''}<button type="button" class="hs-cta" data-other>다른 코스 보기</button>${route.length ? `<button type="button" class="hs-cta" data-start>${escapeHtml(t.start)}</button>` : ''}`);
+    root.querySelectorAll('[data-answer]').forEach(button=>button.onclick=()=>{const field=button.closest('fieldset');field.querySelector('input').value=button.dataset.value;field.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));});
     root.querySelector('[data-route-questions]').onsubmit = event => { event.preventDefault(); const f=event.currentTarget.elements; routeAnswers={theme:f.theme.value,stops:Number(f.stops.value),walk:Number(f.walk.value),company:f.company.value,newOnly:f.newOnly.checked,food:f.food.checked}; routeVariation=0; openRoute(mode); };
     root.querySelector('[data-other]').onclick=()=>{routeVariation++;openRoute(mode);};
     root.querySelectorAll('[data-mode]').forEach((button) => button.onclick = () => openRoute(button.dataset.mode));

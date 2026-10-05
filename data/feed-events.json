@@ -6,14 +6,17 @@
       "dateStart": "2026-10-18",
       "dateEnd": "2026-10-18",
       "location": "KT&G 상상마당 홍대 라이브홀 B2F",
-      "description": "18:00 공연 · 예매: 멜론티켓. 공식 10월 프로그램 안내에서 확인했습니다.",
+      "description": "OYSTERS 단독공연.",
       "link": "https://sangsangmadang.com/customer/notice/detail/5768",
       "placeId": 1785289557659,
       "tags": [
         "라이브공연",
         "인디음악"
       ],
-      "checkedAt": "2026-10-04"
+      "checkedAt": "2026-10-04",
+      "hook": "일요일 저녁, OYSTERS 단독공연.",
+      "time": "18:00",
+      "booking": "멜론티켓"
     },
     {
       "id": "ssmadang-prelude-20261021",
@@ -21,14 +24,17 @@
       "dateStart": "2026-10-21",
       "dateEnd": "2026-10-21",
       "location": "KT&G 상상마당 홍대 라이브홀 B2F",
-      "description": "20:00 공연 · 예매: 멜론티켓. 공식 10월 프로그램 안내에서 확인했습니다.",
+      "description": "아카이브 SSMD 공연.",
       "link": "https://sangsangmadang.com/customer/notice/detail/5768",
       "placeId": 1785289557659,
       "tags": [
         "라이브공연",
         "인디음악"
       ],
-      "checkedAt": "2026-10-04"
+      "checkedAt": "2026-10-04",
+      "hook": "스킵잭과 포저군단, 한 무대에서.",
+      "time": "20:00",
+      "booking": "멜론티켓"
     }
   ],
   "note": "업체 공식 공지에서 행사명·기간·혜택·링크가 확인된 경우만 추가",
