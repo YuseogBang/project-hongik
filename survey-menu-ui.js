@@ -51,7 +51,7 @@
     const table=rows.map(r=>r.closed?`<div class="hours-closed"><b>${escapeHtml(r.day)}</b><span>휴무</span></div>`:r.note?`<p class="survey-meta">${escapeHtml(r.note)}</p>`:`<div class="hours-group"><h5>${escapeHtml(r.day)}</h5><dl><div><dt>영업시간</dt><dd>${escapeHtml(r.open)}</dd></div><div><dt>브레이크타임</dt><dd>${escapeHtml(r.break|| (r.uncertain?'확인 필요':'미기재'))}</dd></div><div><dt>라스트오더</dt><dd>${escapeHtml(r.last||'미기재')}</dd></div></dl></div>`).join('');
     const source=record?.source||store.kakaoUrl;
     const checked=record?.checked?escapeHtml(record.checked)+' 카카오맵 표시 기준 · 공휴일에는 달라질 수 있어요.':escapeHtml(store.hoursNote||'등록 자료 기준 · 방문 전에 확인해 주세요.');
-    return `<section class="survey-hours"><div class="survey-eyebrow">영업 안내</div>${raw?table:'<p class="survey-meta">영업시간 미기재 · 방문 전 매장에 확인해 주세요.</p>'}<p class="survey-meta">${checked} ${source?`<a href="${escapeHtml(source)}" target="_blank" rel="noopener noreferrer">현재 정보 확인 ↗</a>`:''}</p></section>`;
+    return `<section class="survey-hours"><div class="survey-eyebrow">영업 안내</div>${raw?table:'<p class="survey-meta">영업시간 미기재 · 방문 전 매장에 확인해 주세요.</p>'}<p class="survey-meta">${source?`<a href="${escapeHtml(source)}" target="_blank" rel="noopener noreferrer">현재 정보 확인 ↗</a>`:''}</p></section>`;
   }
 
   function rows(menu) {
@@ -62,7 +62,7 @@
     if (!record?.menu?.length) {
       const research = store.boardResearch;
       if (!research?.menu && !research?.price) return '';
-      return `<section class="survey-board" data-place-menu><div class="survey-eyebrow">BOARD RESEARCH · 2026-10-04</div><div class="survey-board-head"><strong>메뉴판</strong></div>${research.menu ? `<div class="survey-row"><span>${escapeHtml(research.menu)}</span></div>` : ''}${research.price ? `<div class="survey-row"><span>${escapeHtml(research.price)}</span></div>` : ''}<p class="survey-meta">제공된 게시판 업체 정리 기준입니다. 현재 가격·영업 여부는 카카오맵과 매장에서 확인해 주세요.</p></section>`;
+      return `<section class="survey-board" data-place-menu><div class="survey-eyebrow">MENU BOARD</div><div class="survey-board-head"><strong>메뉴판</strong></div>${research.menu ? `<div class="survey-row"><span>${escapeHtml(research.menu)}</span></div>` : ''}${research.price ? `<div class="survey-row"><span>${escapeHtml(research.price)}</span></div>` : ''}<p class="survey-meta">가격·영업 여부는 방문 전에 확인해 주세요.</p></section>`;
     }
     const count = record.menu.length;
     return `<section class="survey-board" data-place-menu><div class="survey-eyebrow">MENU BOARD</div><div class="survey-board-head"><strong>메뉴판</strong></div>${rows(record.menu.slice(0, 6))}${count > 6 ? `<button type="button" class="survey-more" onclick="openFullMenu(${store.id})">전체 메뉴 보기 →</button>` : ''}<p class="survey-meta">가격·품절 여부는 방문 전에 확인해 주세요. <a href="${escapeHtml(record.source)}" target="_blank" rel="noopener noreferrer">현재 메뉴 확인 ↗</a></p></section>`;
