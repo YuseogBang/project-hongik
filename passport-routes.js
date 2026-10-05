@@ -106,12 +106,12 @@
     { id:'student', title:'student', detail:'studentDesc' }
   ];
   const stories=[
-    {id:'first',title:'홍대는 처음이라',detail:'공연장과 골목 문화부터 만나보기',mode:'visitor',theme:'all',company:'solo',newOnly:false},
-    {id:'unusual',title:'평범한 곳은 거부하는 당신을 위해',detail:'독립서점·바이닐·작은 문화 공간으로',mode:'explorer',theme:'culture',company:'solo',newOnly:false},
-    {id:'date',title:'뻔한 데이트는 싫은 당신을 위해',detail:'책과 음악 사이, 같이 구경할 거리 찾기',mode:'explorer',theme:'culture',company:'date',newOnly:false},
-    {id:'solo',title:'오늘은 혼자, 내 속도로',detail:'독립서점과 바이닐을 천천히 둘러보기',mode:'explorer',theme:'books',company:'solo',newOnly:false},
-    {id:'music',title:'오늘 밤은 음악이 필요한 당신',detail:'라이브·재즈·록이 있는 공간 찾기',mode:'visitor',theme:'music',company:'friends',newOnly:false},
-    {id:'local',title:'늘 가던 곳 말고, 오늘은 다른 골목',detail:'가봤어요 기록 밖의 새로운 장소 탐험',mode:'student',theme:'all',company:'solo',newOnly:true}
+    {id:'first',label:'첫 방문',title:'홍대는 처음이라',detail:'공연장과 골목 문화부터 만나보기',mode:'visitor',theme:'all',company:'solo',newOnly:false},
+    {id:'unusual',label:'취향 탐험',title:'평범한 곳은 거부하는 당신을 위해',detail:'독립서점·바이닐·작은 문화 공간으로',mode:'explorer',theme:'culture',company:'solo',newOnly:false},
+    {id:'date',label:'데이트',title:'뻔한 데이트는 싫은 당신을 위해',detail:'책과 음악 사이, 같이 구경할 거리 찾기',mode:'explorer',theme:'culture',company:'date',newOnly:false},
+    {id:'solo',label:'혼자',title:'오늘은 혼자, 내 속도로',detail:'독립서점과 바이닐을 천천히 둘러보기',mode:'explorer',theme:'books',company:'solo',newOnly:false},
+    {id:'music',label:'음악',title:'오늘 밤은 음악이 필요한 당신',detail:'라이브·재즈·록이 있는 공간 찾기',mode:'visitor',theme:'music',company:'friends',newOnly:false},
+    {id:'local',label:'새 골목',title:'늘 가던 곳 말고, 오늘은 다른 골목',detail:'가봤어요 기록 밖의 새로운 장소 탐험',mode:'student',theme:'all',company:'solo',newOnly:true}
   ];
   let selectedStory='first';
   const preferred = (place) => (place.tags || []).filter((tag) => userTastes.includes(tag));
@@ -165,7 +165,7 @@
   function openRoute(mode = 'visitor', stage = 'start') {
     root.setAttribute('data-view','route');
     const t=language(), route=stage==='result'?buildRoute(mode):[];
-    const modeButtons=stories.map(item=>`<button type="button" class="hs-mode" data-story="${item.id}">${escapeHtml(item.title)}<small>${escapeHtml(item.detail)}</small></button>`).join('');
+    const modeButtons=stories.map(item=>`<button type="button" class="hs-mode" data-story="${item.id}"><span class="route-story-label">${escapeHtml(item.label)}</span><span class="route-story-title">${escapeHtml(item.title)}</span><small>${escapeHtml(item.detail)}</small></button>`).join('');
     const steps=route.map((place,index)=>`<button type="button" class="hs-route-step" data-place="${place.id}"><b>${index+1}</b><span>${escapeHtml(place.name)}<small>${escapeHtml(place.dong||'홍대')} · ${escapeHtml(place.category||place.type)} · ${escapeHtml(t.reason)}: ${escapeHtml(reason(place,mode))}</small></span></button>`).join('');
     if(stage==='conditions')stage='interest';
     const stages=['start','interest','company','range','result'];
