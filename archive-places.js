@@ -19,10 +19,10 @@
   }
   root.addEventListener('click',e=>{if(e.target===root)close()});document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});document.addEventListener('DOMContentLoaded',()=>document.body.append(root));
   function showLocation(id){
-    close();currentFilter='gone';activeDetailFilters.clear();searchQuery='';showMarkers=true;renderList();
+    close();currentFilter='gone';activeDetailFilters.clear();searchText='' ;showMarkers=true;renderList();
     const places=stores.filter(s=>s.status==='closed'&&Number.isFinite(s.lat)&&Number.isFinite(s.lng));
     const place=id?places.find(s=>s.id===id):places[0];
-    if(place&&map){map.panTo(new kakao.maps.LatLng(place.lat,place.lng));map.setLevel(id?3:5);}
+    if(place&&map){map.setCenter(new kakao.maps.LatLng(place.lat,place.lng));map.setLevel(id?3:5);}
     if(id && typeof closeDetail==='function')closeDetail();
     showToast('사라진 가게의 추정 옛 위치 · 현재 영업 장소가 아닙니다');
   }
