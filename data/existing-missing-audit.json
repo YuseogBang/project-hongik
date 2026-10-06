@@ -1,0 +1,8642 @@
+[
+  {
+    "name": "국시와 가래떡",
+    "id": 1784136804944,
+    "kakaoId": "14734012",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/14734012",
+    "kakaoAddress": "text: 서울 마포구 와우산로21길 8 지하1층 (우)04040",
+    "kakaoSchedule": {},
+    "naverSchedule": {},
+    "decision": "needs-check",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "뚝닭",
+        8000,
+        false
+      ],
+      [
+        "찜닭",
+        8500,
+        false
+      ],
+      [
+        "알밥",
+        7500,
+        false
+      ],
+      [
+        "철판제육덮밥",
+        8000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "인클",
+    "id": 1784270682830,
+    "kakaoId": "560830975",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/560830975",
+    "kakaoAddress": "text: 서울 마포구 잔다리로 11 (우)04049",
+    "kakaoSchedule": {},
+    "naverSchedule": {},
+    "decision": "needs-check",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "어썸",
+    "id": 1784270693186,
+    "kakaoId": "2069407891",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/2069407891",
+    "kakaoAddress": "text: 서울 마포구 잔다리로 8 지하1층 (우)04041",
+    "kakaoSchedule": {},
+    "naverSchedule": {},
+    "decision": "needs-check",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "엑스엑스",
+    "id": 1784270726412,
+    "kakaoId": "1251853398",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1251853398",
+    "kakaoAddress": "text: 서울 마포구 어울마당로 61 지하1층 (우)04048",
+    "naverAddress": "button \"서울 마포구 잔다리로 9 지하1층(서교동)\":",
+    "naverUrl": "https://pcmap.place.naver.com/place/1921886822/home",
+    "kakaoSchedule": {},
+    "naverSchedule": {
+      "월": [
+        "00:00 - 24:00"
+      ],
+      "화": [
+        "00:00 - 24:00"
+      ],
+      "수": [
+        "00:00 - 24:00"
+      ],
+      "목": [
+        "00:00 - 24:00"
+      ],
+      "금": [
+        "00:00 - 24:00"
+      ],
+      "토": [
+        "00:00 - 24:00"
+      ],
+      "일": [
+        "00:00 - 24:00"
+      ]
+    },
+    "decision": "needs-check",
+    "locationNeedsCheck": true,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": "현재 위치와 운영시간 확인 필요 · 지도마다 주소가 달라요."
+  },
+  {
+    "name": "일용할커피",
+    "id": 1784422040163,
+    "kakaoId": "1617561634",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1617561634",
+    "kakaoAddress": "text: 서울 마포구 양화로 106 1층 (우)04038",
+    "naverAddress": "button \"서울 마포구 동교로 156-10 1층 1호\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1549136173/home",
+    "kakaoSchedule": {},
+    "naverSchedule": {
+      "화": [
+        "11:30 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "수": [
+        "11:30 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "목": [
+        "11:30 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "금": [
+        "한글날12:00 - 20:00"
+      ],
+      "토": [
+        "12:00 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "정기휴무 (매주 일요일)"
+      ],
+      "월": [
+        "11:30 - 20:00",
+        "19:30 라스트오더"
+      ]
+    },
+    "decision": "needs-check",
+    "locationNeedsCheck": true,
+    "temporaryExceptions": {
+      "2026-10-09": "12:00~20:00"
+    },
+    "menu": [],
+    "operatingNote": "현재 위치와 운영시간 확인 필요 · 지도마다 주소가 달라요."
+  },
+  {
+    "name": "에꼴리",
+    "id": 1784424690119,
+    "kakaoId": "1806556274",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1806556274",
+    "kakaoAddress": "text: 서울 마포구 와우산로13길 23 지하1층 (우)04049",
+    "naverAddress": "button \"서울 마포구 와우산로13길 23 지하1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/59999648/home",
+    "verifiedMenu": [
+      [
+        "게 내장 크림, 새우, 스파게티니",
+        20000,
+        true
+      ],
+      [
+        "볼로네제, 그라나, 생면 딸리아텔레",
+        21000,
+        false
+      ],
+      [
+        "런치 쉐어 코스",
+        39000,
+        false
+      ]
+    ],
+    "menuSource": "https://pcmap.place.naver.com/restaurant/59999648/menu/list",
+    "kakaoSchedule": {
+      "화": [
+        "12:00 ~ 21:30",
+        "14:30 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "수": [
+        "12:00 ~ 21:30",
+        "14:30 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "12:00 ~ 21:30",
+        "14:30 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "12:00 ~ 21:30",
+        "14:30 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "토": [
+        "12:00 ~ 21:30",
+        "14:30 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "17:00 ~ 23:00",
+        "22:00 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "17:00 - 21:30",
+        "20:30 라스트오더"
+      ],
+      "수": [
+        "17:00 - 21:30",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "17:00 - 21:30",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "17:00 - 21:30",
+        "20:30 라스트오더"
+      ],
+      "토": [
+        "12:00 - 21:30",
+        "14:30 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "12:00 - 21:30",
+        "14:30 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "월": [
+        "17:00 - 21:30",
+        "20:30 라스트오더"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "게 내장 크림, 새우, 스파게티니",
+        20000,
+        true
+      ],
+      [
+        "볼로네제, 그라나, 생면 딸리아텔레",
+        21000,
+        false
+      ],
+      [
+        "런치 쉐어 코스",
+        39000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "밀키하우스",
+    "id": 1784424819397,
+    "kakaoId": "161399880",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/161399880",
+    "kakaoAddress": "text: 서울 마포구 홍익로 10 서교푸르지오 101동 1층 110호 (우)04055",
+    "kakaoSchedule": {},
+    "naverSchedule": {},
+    "decision": "needs-check",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": "임시 휴업 · 재개 여부는 매장에 확인해 주세요."
+  },
+  {
+    "name": "제시뮤직 홍대 합주실",
+    "id": 1785239962656,
+    "kakaoId": "575653430",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/575653430",
+    "kakaoAddress": "text: 서울 마포구 월드컵북로1길 18 승원빌딩 지하1층 (우)04031",
+    "naverAddress": "button \"서울 마포구 월드컵북로1길 18 지하\":",
+    "naverUrl": "https://pcmap.place.naver.com/place/1686623146/home",
+    "kakaoSchedule": {},
+    "naverSchedule": {
+      "화": [
+        "09:00 - 다음 날 02:00"
+      ],
+      "수": [
+        "09:00 - 다음 날 02:00"
+      ],
+      "목": [
+        "09:00 - 다음 날 02:00"
+      ],
+      "금": [
+        "09:00 - 다음 날 02:00"
+      ],
+      "토": [
+        "09:00 - 다음 날 02:00"
+      ],
+      "일": [
+        "09:00 - 다음 날 02:00"
+      ],
+      "월": [
+        "09:00 - 다음 날 02:00"
+      ]
+    },
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": "명절·성탄절 휴무 · 예약 전 확인해 주세요."
+  },
+  {
+    "name": "제시뮤직 합정점",
+    "id": 1785239968999,
+    "kakaoId": "247424416",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/247424416",
+    "kakaoAddress": "text: 서울 마포구 양화로 64 지하2층 202호 (우)04045",
+    "naverAddress": "button \"서울 마포구 양화로 64 지하 2층 202호\":",
+    "naverUrl": "https://pcmap.place.naver.com/place/2097003189/home",
+    "kakaoSchedule": {},
+    "naverSchedule": {
+      "화": [
+        "10:00 - 다음 날 01:00"
+      ],
+      "수": [
+        "10:00 - 다음 날 01:00"
+      ],
+      "목": [
+        "10:00 - 다음 날 01:00"
+      ],
+      "금": [
+        "10:00 - 다음 날 01:00"
+      ],
+      "토": [
+        "10:00 - 다음 날 01:00"
+      ],
+      "일": [
+        "10:00 - 다음 날 01:00"
+      ],
+      "월": [
+        "10:00 - 다음 날 01:00"
+      ]
+    },
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "그라운드합주실 본점",
+    "id": 1785240007187,
+    "kakaoId": "1747937001",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1747937001",
+    "kakaoAddress": "text: 서울 마포구 양화로 147 지하 2층 (우)03995",
+    "naverAddress": "button \"서울 마포구 양화로 147 지하2층\":",
+    "naverUrl": "https://pcmap.place.naver.com/place/1683336842/home",
+    "kakaoSchedule": {},
+    "naverSchedule": {
+      "월": [
+        "00:00 - 24:00"
+      ],
+      "화": [
+        "00:00 - 24:00"
+      ],
+      "수": [
+        "00:00 - 24:00"
+      ],
+      "목": [
+        "00:00 - 24:00"
+      ],
+      "금": [
+        "00:00 - 24:00"
+      ],
+      "토": [
+        "00:00 - 24:00"
+      ],
+      "일": [
+        "00:00 - 24:00"
+      ]
+    },
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "그라운드합주실 홍대1호점",
+    "id": 1785240017630,
+    "kakaoId": "1127214076",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1127214076",
+    "kakaoAddress": "text: 서울 마포구 월드컵북로 49 (우)03999",
+    "naverAddress": "button \"서울 마포구 월드컵북로 49 B1층 01호\":",
+    "naverUrl": "https://pcmap.place.naver.com/place/36305356/home",
+    "kakaoSchedule": {},
+    "naverSchedule": {
+      "화": [
+        "00:00 - 24:00"
+      ],
+      "수": [
+        "00:00 - 24:00"
+      ],
+      "목": [
+        "00:00 - 24:00"
+      ],
+      "금": [
+        "00:00 - 24:00"
+      ],
+      "토": [
+        "00:00 - 24:00"
+      ],
+      "일": [
+        "00:00 - 24:00"
+      ],
+      "월": [
+        "00:00 - 24:00"
+      ]
+    },
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "그라운드합주실 신촌1호점",
+    "id": 1785240025946,
+    "kakaoId": "1193391307",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1193391307",
+    "kakaoAddress": "text: 서울 마포구 백범로1길 83 지하1층 (우)04104",
+    "naverAddress": "button \"서울 마포구 백범로1길 83 지1층 비101호, 비102호\":",
+    "naverUrl": "https://pcmap.place.naver.com/place/1270834513/home",
+    "kakaoSchedule": {},
+    "naverSchedule": {
+      "화": [
+        "09:00 - 24:00"
+      ],
+      "수": [
+        "09:00 - 24:00"
+      ],
+      "목": [
+        "09:00 - 24:00"
+      ],
+      "금": [
+        "09:00 - 24:00"
+      ],
+      "토": [
+        "09:00 - 24:00"
+      ],
+      "일": [
+        "09:00 - 24:00"
+      ],
+      "월": [
+        "09:00 - 24:00"
+      ]
+    },
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "매거진랜드",
+    "id": 1785290178272,
+    "kakaoId": "7862674",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/7862674",
+    "kakaoAddress": "text: 서울 마포구 잔다리로6길 17 1층 (우)04039",
+    "naverAddress": "button \"서울 마포구 잔다리로6길 17\":",
+    "naverUrl": "https://pcmap.place.naver.com/place/18350178/home",
+    "kakaoSchedule": {
+      "화": [
+        "10:30 ~ 19:00"
+      ],
+      "수": [
+        "10:30 ~ 19:00"
+      ],
+      "목": [
+        "10:30 ~ 19:00"
+      ],
+      "금": [
+        "10:30 ~ 19:00"
+      ],
+      "토": [
+        "10:30 ~ 19:00"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "10:30 ~ 19:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "휴무"
+      ],
+      "수": [
+        "휴무"
+      ],
+      "목": [
+        "휴무"
+      ],
+      "금": [
+        "10:00 - 19:00"
+      ],
+      "토": [
+        "10:00 - 19:00"
+      ],
+      "일": [
+        "정기휴무 (매주 일요일)"
+      ],
+      "월": [
+        "10:00 - 19:00"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-08": "휴무"
+    },
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "금복식당",
+    "id": 1784136728682,
+    "kakaoId": "1722785841",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1722785841",
+    "expectedAddress": "서울 마포구 독막로14길 24",
+    "kakaoName": "금복식당",
+    "kakaoAddress": "text: 서울 마포구 독막로14길 24 지하1층 (우)04074",
+    "naverAddress": "button \"서울 마포구 독막로14길 24 b1f\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1224693248/home",
+    "naverName": "금복식당",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 20:00",
+        "14:30 ~ 17:30 브레이크타임"
+      ],
+      "수": [
+        "11:30 ~ 20:00",
+        "14:30 ~ 17:30 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 20:00",
+        "14:30 ~ 17:30 브레이크타임"
+      ],
+      "금": [
+        "12:00 ~ 20:00",
+        "14:30 ~ 17:30 브레이크타임"
+      ],
+      "토": [
+        "휴무일"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "11:30 ~ 20:00",
+        "14:30 ~ 17:30 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 20:00",
+        "14:30 - 17:30 브레이크타임",
+        "14:00, 19:30 라스트오더"
+      ],
+      "수": [
+        "11:30 - 20:00",
+        "14:30 - 17:30 브레이크타임",
+        "14:00, 19:30 라스트오더"
+      ],
+      "목": [
+        "11:30 - 20:00",
+        "14:30 - 17:30 브레이크타임",
+        "14:00, 19:30 라스트오더"
+      ],
+      "금": [
+        "한글날12:00 - 20:00",
+        "14:30 - 17:30 브레이크타임"
+      ],
+      "토": [
+        "정기휴무 (매주 토요일)"
+      ],
+      "일": [
+        "정기휴무 (매주 일요일)"
+      ],
+      "월": [
+        "11:30 - 20:00",
+        "14:30 - 17:30 브레이크타임",
+        "14:00, 19:30 라스트오더"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "12:00~20:00"
+    },
+    "menu": [
+      [
+        "고등어 숯불구이 정식 (1인)",
+        12000,
+        false
+      ],
+      [
+        "함박스테이크정식",
+        13500,
+        false
+      ],
+      [
+        "스프카레정식",
+        14500,
+        false
+      ],
+      [
+        "고등어추가",
+        8000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "식스티즈",
+    "id": 1784136773462,
+    "kakaoId": "488474938",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/488474938",
+    "expectedAddress": "서울 마포구 와우산로23길 9",
+    "kakaoName": "식스티즈",
+    "kakaoAddress": "text: 서울 마포구 와우산로23길 9 칼리오페 1층 105호 (우)04055",
+    "naverAddress": "button \"서울 마포구 와우산로23길 9 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1853322194/home",
+    "naverName": "식스티즈 홍대본점",
+    "kakaoSchedule": {
+      "화": [
+        "10:30 ~ 21:00"
+      ],
+      "수": [
+        "10:30 ~ 21:00"
+      ],
+      "목": [
+        "10:30 ~ 21:00"
+      ],
+      "금": [
+        "10:30 ~ 21:00"
+      ],
+      "토": [
+        "10:30 ~ 21:00"
+      ],
+      "일": [
+        "10:30 ~ 21:00"
+      ],
+      "월": [
+        "10:30 ~ 21:00"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "10:30 - 20:40",
+        "20:35 라스트오더"
+      ],
+      "화": [
+        "10:30 - 20:40",
+        "20:35 라스트오더"
+      ],
+      "수": [
+        "10:30 - 20:40",
+        "20:35 라스트오더"
+      ],
+      "목": [
+        "10:30 - 20:40",
+        "20:35 라스트오더"
+      ],
+      "금": [
+        "10:30 - 20:40",
+        "20:35 라스트오더"
+      ],
+      "토": [
+        "10:30 - 20:40",
+        "20:35 라스트오더"
+      ],
+      "일": [
+        "10:30 - 20:40",
+        "20:35 라스트오더"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "율촌",
+    "id": 1784136786163,
+    "kakaoId": "24580312",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/24580312",
+    "expectedAddress": "서울 마포구 와우산로 100",
+    "kakaoName": "율촌",
+    "kakaoAddress": "text: 서울 마포구 와우산로 100 지하1층 (우)04059",
+    "kakaoSchedule": {
+      "화": [
+        "10:00 ~ 20:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "10:00 ~ 20:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "10:00 ~ 20:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "10:00 ~ 20:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:00 ~ 19:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "10:00 ~ 20:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "닭칼국수",
+        10000,
+        false
+      ],
+      [
+        "물냉면",
+        9000,
+        false
+      ],
+      [
+        "비빔냉면",
+        9000,
+        false
+      ],
+      [
+        "회냉면",
+        10000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "연우김밥 상수점",
+    "id": 1784136796734,
+    "kakaoId": "26965495",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/26965495",
+    "expectedAddress": "서울 마포구 와우산로 29",
+    "kakaoName": "연우김밥 상수점",
+    "kakaoAddress": "text: 서울 마포구 와우산로 29 1층 (우)04074",
+    "kakaoSchedule": {
+      "화": [
+        "07:00 ~ 21:00"
+      ],
+      "수": [
+        "07:00 ~ 21:00"
+      ],
+      "목": [
+        "07:00 ~ 21:00"
+      ],
+      "금": [
+        "07:00 ~ 21:00"
+      ],
+      "토": [
+        "07:00 ~ 21:00"
+      ],
+      "일": [
+        "07:30 ~ 19:30"
+      ],
+      "월": [
+        "07:00 ~ 21:00"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "유부김밥",
+        5000,
+        false
+      ],
+      [
+        "참치김밥",
+        5000,
+        false
+      ],
+      [
+        "꽃나물김밥",
+        5000,
+        false
+      ],
+      [
+        "매운멸치김밥",
+        5000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "카이화",
+    "id": 1784136812466,
+    "kakaoId": "570518757",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/570518757",
+    "expectedAddress": "서울 마포구 독막로 73",
+    "kakaoName": "카이화",
+    "kakaoAddress": "text: 서울 마포구 독막로 73 2층 (우)04049",
+    "naverAddress": "button \"서울 마포구 독막로 73 2층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1732949952/home",
+    "naverName": "카이화 상수 중국집",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 21:00",
+        "14:00 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "11:30 ~ 21:00",
+        "14:00 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 21:00",
+        "14:00 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "11:30 ~ 21:00",
+        "14:00 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:30 ~ 21:00",
+        "14:30 ~ 17:00 브레이크타임"
+      ],
+      "일": [
+        "11:00 ~ 16:00"
+      ],
+      "월": [
+        "휴무일"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 21:00",
+        "14:00 - 17:00 브레이크타임",
+        "20:00 라스트오더"
+      ],
+      "수": [
+        "11:30 - 21:00",
+        "14:00 - 17:00 브레이크타임",
+        "20:00 라스트오더"
+      ],
+      "목": [
+        "11:30 - 21:00",
+        "14:00 - 17:00 브레이크타임",
+        "20:00 라스트오더"
+      ],
+      "금": [
+        "11:30 - 21:00",
+        "14:00 - 17:00 브레이크타임",
+        "20:00 라스트오더"
+      ],
+      "토": [
+        "11:30 - 21:00",
+        "14:30 - 17:00 브레이크타임",
+        "20:00 라스트오더"
+      ],
+      "일": [
+        "11:00 - 16:00",
+        "15:00 라스트오더"
+      ],
+      "월": [
+        "정기휴무 (매주 월요일)"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "삼선간짜장",
+        9800,
+        false
+      ],
+      [
+        "삼선짱뽕",
+        11000,
+        false
+      ],
+      [
+        "삼선짬뽕밥",
+        11000,
+        false
+      ],
+      [
+        "양장피",
+        28000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "발바리네",
+    "id": 1784136819600,
+    "kakaoId": "15625653",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/15625653",
+    "expectedAddress": "서울 마포구 와우산로 128",
+    "kakaoName": "발바리네",
+    "kakaoAddress": "text: 서울 마포구 와우산로 128 1층 (우)04059",
+    "kakaoSchedule": {
+      "화": [
+        "10:30 ~ 21:00"
+      ],
+      "수": [
+        "10:30 ~ 21:00"
+      ],
+      "목": [
+        "10:30 ~ 21:00"
+      ],
+      "금": [
+        "10:30 ~ 21:00"
+      ],
+      "토": [
+        "10:30 ~ 21:00"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "10:30 ~ 21:00"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "제육볶음",
+        9000,
+        false
+      ],
+      [
+        "어묵제육",
+        10000,
+        false
+      ],
+      [
+        "오징어볶음",
+        12000,
+        false
+      ],
+      [
+        "청국장",
+        9000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "제제집 홍대점",
+    "id": 1784136829801,
+    "kakaoId": "1557839449",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1557839449",
+    "expectedAddress": "서울 마포구 와우산로15길 30",
+    "kakaoName": "제제집 홍대점",
+    "kakaoAddress": "text: 서울 마포구 와우산로15길 30 1층 (우)04049",
+    "naverAddress": "button \"서울 마포구 와우산로15길 30 지1층 제제집\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/2051542117/home",
+    "naverName": "제제집 홍대점",
+    "kakaoSchedule": {
+      "화": [
+        "10:30 ~ 21:00",
+        "20:40 라스트오더"
+      ],
+      "수": [
+        "10:30 ~ 21:00",
+        "20:40 라스트오더"
+      ],
+      "목": [
+        "10:30 ~ 21:00",
+        "20:40 라스트오더"
+      ],
+      "금": [
+        "10:30 ~ 21:00",
+        "20:40 라스트오더"
+      ],
+      "토": [
+        "10:30 ~ 21:00",
+        "20:40 라스트오더"
+      ],
+      "일": [
+        "10:30 ~ 21:00",
+        "20:40 라스트오더"
+      ],
+      "월": [
+        "10:30 ~ 21:00",
+        "20:40 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "10:30 - 21:00",
+        "20:40 라스트오더"
+      ],
+      "화": [
+        "10:30 - 21:00",
+        "20:40 라스트오더"
+      ],
+      "수": [
+        "10:30 - 21:00",
+        "20:40 라스트오더"
+      ],
+      "목": [
+        "10:30 - 21:00",
+        "20:40 라스트오더"
+      ],
+      "금": [
+        "10:30 - 21:00",
+        "20:40 라스트오더"
+      ],
+      "토": [
+        "10:30 - 21:00",
+        "20:40 라스트오더"
+      ],
+      "일": [
+        "10:30 - 21:00",
+        "20:40 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "제육볶음(1인분 가능)",
+        9000,
+        false
+      ],
+      [
+        "오제볶음(2인분 이상)",
+        10000,
+        false
+      ],
+      [
+        "쭈꾸미볶음(2인분 이상)",
+        11000,
+        false
+      ],
+      [
+        "간장불고기(2인분 이상)",
+        9000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "더피자보이즈 서교",
+    "id": 1784137377763,
+    "kakaoId": "805500797",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/805500797",
+    "expectedAddress": "서울 마포구 와우산로29마길 24-1",
+    "kakaoName": "더피자보이즈 서교",
+    "kakaoAddress": "text: 서울 마포구 와우산로29마길 24-1 지하1층 (우)04053",
+    "kakaoSchedule": {
+      "화": [
+        "15:00 ~ 22:00",
+        "21:00 라스트오더"
+      ],
+      "수": [
+        "15:00 ~ 22:00",
+        "21:00 라스트오더"
+      ],
+      "목": [
+        "15:00 ~ 22:00",
+        "21:00 라스트오더"
+      ],
+      "금": [
+        "15:00 ~ 22:00",
+        "21:00 라스트오더"
+      ],
+      "토": [
+        "13:00 ~ 22:00",
+        "21:00 라스트오더"
+      ],
+      "일": [
+        "13:00 ~ 22:00",
+        "21:00 라스트오더"
+      ],
+      "월": [
+        "15:00 ~ 22:00",
+        "21:00 라스트오더"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "페퍼로니피자(R)",
+        20000,
+        false
+      ],
+      [
+        "포테이토피자(R)",
+        23000,
+        false
+      ],
+      [
+        "콘치즈피자(R)",
+        23000,
+        false
+      ],
+      [
+        "베이컨&치즈 피자(R)",
+        24000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "고집",
+    "id": 1784137385924,
+    "kakaoId": "12781019",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/12781019",
+    "expectedAddress": "서울 마포구 홍익로 3-11",
+    "kakaoName": "고집",
+    "kakaoAddress": "text: 서울 마포구 홍익로 3-11 (우)04040",
+    "naverAddress": "button \"서울 마포구 홍익로 3-11\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/19451363/home",
+    "naverName": "고집",
+    "kakaoSchedule": {
+      "화": [
+        "10:30 ~ 21:00"
+      ],
+      "수": [
+        "10:30 ~ 21:00"
+      ],
+      "목": [
+        "10:30 ~ 21:00"
+      ],
+      "금": [
+        "10:30 ~ 21:00"
+      ],
+      "토": [
+        "10:30 ~ 21:00"
+      ],
+      "일": [
+        "10:30 ~ 21:00"
+      ],
+      "월": [
+        "10:30 ~ 21:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "10:30 - 21:00"
+      ],
+      "수": [
+        "10:30 - 21:00"
+      ],
+      "목": [
+        "10:30 - 21:00"
+      ],
+      "금": [
+        "10:30 - 21:00"
+      ],
+      "토": [
+        "10:30 - 21:00"
+      ],
+      "일": [
+        "정기휴무 (매주 일요일)"
+      ],
+      "월": [
+        "10:30 - 21:00"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "돼지 연탄구이백반",
+        9500,
+        false
+      ],
+      [
+        "고추장 연탄구이백반",
+        9500,
+        false
+      ],
+      [
+        "고등어 연탄구이백반",
+        9500,
+        false
+      ],
+      [
+        "해물 순두부찌개",
+        9000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "라멘반라이",
+    "id": 1784137392121,
+    "kakaoId": "2095032804",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/2095032804",
+    "expectedAddress": "서울 마포구 독막로15길 3-12",
+    "kakaoName": "라멘반라이",
+    "kakaoAddress": "text: 서울 마포구 독막로15길 3-12 NJ빌딩 1층 102호 (우)04049",
+    "kakaoSchedule": {
+      "화": [
+        "휴무일"
+      ],
+      "수": [
+        "11:00 ~ 20:00"
+      ],
+      "목": [
+        "11:00 ~ 20:00"
+      ],
+      "금": [
+        "11:00 ~ 20:00"
+      ],
+      "토": [
+        "11:00 ~ 20:00"
+      ],
+      "일": [
+        "11:00 ~ 20:00"
+      ],
+      "월": [
+        "11:00 ~ 20:00"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "톤코츠라멘 (농후)",
+        10000,
+        false
+      ],
+      [
+        "돈청탕 시오라멘",
+        9000,
+        false
+      ],
+      [
+        "시루나시탄탄멘",
+        9000,
+        false
+      ],
+      [
+        "아부라소바",
+        10000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "카미야",
+    "id": 1784137398925,
+    "kakaoId": "12771116",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/12771116",
+    "expectedAddress": "서울 마포구 와우산로21길 28-6",
+    "kakaoName": "카미야",
+    "kakaoAddress": "text: 서울 마포구 와우산로21길 28-6 지하1층 (우)04040",
+    "naverAddress": "button \"서울 마포구 와우산로21길 28-6 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/19535343/home",
+    "naverName": "카미야",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 21:30",
+        "21:00 라스트오더"
+      ],
+      "수": [
+        "11:00 ~ 21:30",
+        "21:00 라스트오더"
+      ],
+      "목": [
+        "11:00 ~ 21:30",
+        "21:00 라스트오더"
+      ],
+      "금": [
+        "11:00 ~ 21:30",
+        "21:00 라스트오더"
+      ],
+      "토": [
+        "11:00 ~ 21:30",
+        "21:00 라스트오더"
+      ],
+      "일": [
+        "11:00 ~ 21:30",
+        "21:00 라스트오더"
+      ],
+      "월": [
+        "11:00 ~ 21:30",
+        "21:00 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "11:00 - 21:30",
+        "21:00 라스트오더"
+      ],
+      "화": [
+        "11:00 - 21:30",
+        "21:00 라스트오더"
+      ],
+      "수": [
+        "11:00 - 21:30",
+        "21:00 라스트오더"
+      ],
+      "목": [
+        "11:00 - 21:30",
+        "21:00 라스트오더"
+      ],
+      "금": [
+        "11:00 - 21:30",
+        "21:00 라스트오더"
+      ],
+      "토": [
+        "11:00 - 21:30",
+        "21:00 라스트오더"
+      ],
+      "일": [
+        "11:00 - 21:30",
+        "21:00 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "가치동(등심)",
+        8500,
+        false
+      ],
+      [
+        "히레동(안심)",
+        9500,
+        false
+      ],
+      [
+        "치킨동(닭안심)",
+        9000,
+        false
+      ],
+      [
+        "믹스동(안심, 닭안심, 새우)",
+        10000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "괜찮은생고기",
+    "id": 1784137405896,
+    "kakaoId": "17894166",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/17894166",
+    "expectedAddress": "서울 마포구 와우산로15길 23",
+    "kakaoName": "괜찮은생고기",
+    "kakaoAddress": "text: 서울 마포구 와우산로15길 23 1층 (우)04049",
+    "naverAddress": "button \"서울 마포구 와우산로15길 23 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/38274941/home",
+    "naverName": "괜찮은생고기",
+    "kakaoSchedule": {
+      "화": [
+        "13:00 ~ 23:00"
+      ],
+      "수": [
+        "13:00 ~ 23:00"
+      ],
+      "목": [
+        "13:00 ~ 23:00"
+      ],
+      "금": [
+        "13:00 ~ 23:00"
+      ],
+      "토": [
+        "13:00 ~ 23:00"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "13:00 ~ 23:00"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "제육쌈밥",
+        12000,
+        false
+      ],
+      [
+        "돼지한판 (510g)",
+        48000,
+        false
+      ],
+      [
+        "생삼겹 (180g)",
+        18000,
+        false
+      ],
+      [
+        "제주오겹 (180g)",
+        19000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "옥동식 서교점",
+    "id": 1784138528524,
+    "kakaoId": "1797997961",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1797997961",
+    "expectedAddress": "서울 마포구 양화로7길 44-10",
+    "kakaoName": "옥동식 서교점",
+    "kakaoAddress": "text: 서울 마포구 양화로7길 44-10 1층 (우)04035",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 22:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "11:00 ~ 22:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:00 ~ 22:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "11:00 ~ 22:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:00 ~ 20:30"
+      ],
+      "일": [
+        "11:00 ~ 20:30"
+      ],
+      "월": [
+        "11:00 ~ 22:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "돼지곰탕 (보통)",
+        14000,
+        false
+      ],
+      [
+        "돼지곰탕 (특)",
+        19000,
+        false
+      ],
+      [
+        "김치만두",
+        7000,
+        false
+      ],
+      [
+        "돼지곰탕 (포장. 2인분)",
+        20000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "바다회사랑 서교점",
+    "id": 1784138540633,
+    "kakaoId": "953592773",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/953592773",
+    "expectedAddress": "서울 마포구 동교로 143",
+    "kakaoName": "바다회사랑 서교점",
+    "kakaoAddress": "text: 서울 마포구 동교로 143 1층 (우)04002",
+    "naverAddress": "button \"서울 마포구 동교로 143\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/35523842/home",
+    "naverName": "바다회사랑 서교점",
+    "kakaoSchedule": {
+      "화": [
+        "16:00 ~ 23:30"
+      ],
+      "수": [
+        "16:00 ~ 23:30"
+      ],
+      "목": [
+        "16:00 ~ 23:30"
+      ],
+      "금": [
+        "16:00 ~ 23:30"
+      ],
+      "토": [
+        "16:00 ~ 23:30"
+      ],
+      "일": [
+        "16:00 ~ 23:30"
+      ],
+      "월": [
+        "휴무일"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "휴무"
+      ],
+      "수": [
+        "16:00 - 22:30",
+        "22:00 라스트오더"
+      ],
+      "목": [
+        "16:00 - 22:30",
+        "22:00 라스트오더"
+      ],
+      "금": [
+        "16:00 - 23:30",
+        "23:00 라스트오더"
+      ],
+      "토": [
+        "16:00 - 23:30",
+        "23:00 라스트오더"
+      ],
+      "일": [
+        "16:00 - 22:30",
+        "22:00 라스트오더"
+      ],
+      "월": [
+        "휴무"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-12": "휴무"
+    },
+    "menu": [
+      [
+        "산낙지",
+        30000,
+        false
+      ],
+      [
+        "해삼",
+        30000,
+        false
+      ],
+      [
+        "개불",
+        25000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "육지",
+    "id": 1784138548616,
+    "kakaoId": "931881312",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/931881312",
+    "expectedAddress": "서울 마포구 독막로3길 34",
+    "kakaoName": "육지",
+    "kakaoAddress": "text: 서울 마포구 독막로3길 34 1층 (우)04047",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 22:00"
+      ],
+      "수": [
+        "11:30 ~ 22:00"
+      ],
+      "목": [
+        "11:30 ~ 22:00"
+      ],
+      "금": [
+        "11:30 ~ 23:00"
+      ],
+      "토": [
+        "11:30 ~ 23:00"
+      ],
+      "일": [
+        "11:30 ~ 22:00"
+      ],
+      "월": [
+        "11:30 ~ 22:00"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "돈대갈비",
+        20000,
+        false
+      ],
+      [
+        "벌집덧살",
+        21000,
+        false
+      ],
+      [
+        "삼겹살",
+        18000,
+        false
+      ],
+      [
+        "꽃목살",
+        18000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "산울림1992",
+    "id": 1784138558637,
+    "kakaoId": "2036183426",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/2036183426",
+    "expectedAddress": "서울 마포구 서강로9길 60",
+    "kakaoName": "산울림1992",
+    "kakaoAddress": "text: 서울 마포구 서강로9길 60 (우)04061",
+    "kakaoSchedule": {
+      "화": [
+        "17:00 ~ 01:00"
+      ],
+      "수": [
+        "17:00 ~ 01:00"
+      ],
+      "목": [
+        "17:00 ~ 01:00"
+      ],
+      "금": [
+        "17:00 ~ 01:00"
+      ],
+      "토": [
+        "17:00 ~ 01:00"
+      ],
+      "일": [
+        "17:00 ~ 01:00"
+      ],
+      "월": [
+        "휴무일"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "치즈 감자전",
+        26000,
+        false
+      ],
+      [
+        "육전",
+        32000,
+        false
+      ],
+      [
+        "곱파전+미나리무침",
+        31000,
+        false
+      ],
+      [
+        "오징어가듬뿍해물파전",
+        26000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "고기꾼김춘배 홍대본점",
+    "id": 1784138591988,
+    "kakaoId": "27197478",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/27197478",
+    "expectedAddress": "서울 마포구 홍익로3길 36",
+    "kakaoName": "고기꾼김춘배 홍대본점",
+    "kakaoAddress": "text: 서울 마포구 홍익로3길 36 3-4층 (우)04039",
+    "naverAddress": "button \"서울 마포구 홍익로3길 36 3층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/36873920/home",
+    "naverName": "고기꾼김춘배 홍대본점",
+    "kakaoSchedule": {
+      "화": [
+        "12:00 ~ 23:00"
+      ],
+      "수": [
+        "12:00 ~ 23:00"
+      ],
+      "목": [
+        "12:00 ~ 23:00"
+      ],
+      "금": [
+        "12:00 ~ 23:00"
+      ],
+      "토": [
+        "12:00 ~ 23:00"
+      ],
+      "일": [
+        "12:00 ~ 23:00"
+      ],
+      "월": [
+        "12:00 ~ 23:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "12:00 - 23:00",
+        "22:00 라스트오더",
+        "12:30 - 22:30",
+        "21:30 라스트오더"
+      ],
+      "수": [
+        "12:00 - 23:00",
+        "22:00 라스트오더",
+        "12:30 - 22:30",
+        "21:30 라스트오더"
+      ],
+      "목": [
+        "12:00 - 23:00",
+        "22:00 라스트오더",
+        "12:30 - 22:30",
+        "21:30 라스트오더"
+      ],
+      "금": [
+        "한글날12:00 - 23:00",
+        "12:30 - 22:30",
+        "21:30 라스트오더"
+      ],
+      "토": [
+        "12:00 - 23:00",
+        "22:00 라스트오더",
+        "12:30 - 22:30",
+        "21:30 라스트오더"
+      ],
+      "일": [
+        "12:00 - 23:00",
+        "22:00 라스트오더",
+        "12:30 - 22:30",
+        "21:30 라스트오더"
+      ],
+      "월": [
+        "12:00 - 23:00",
+        "22:00 라스트오더",
+        "12:30 - 22:30",
+        "21:30 라스트오더"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "12:00~23:00"
+    },
+    "menu": [
+      [
+        "한우/한돈 2인세트(600g)",
+        118000,
+        false
+      ],
+      [
+        "오겹살 (150g)",
+        17000,
+        false
+      ],
+      [
+        "한돈 2인 set (600g)",
+        62000,
+        false
+      ],
+      [
+        "한돈 3인 set (900g)",
+        93000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "옹달샘 본점",
+    "id": 1784138626622,
+    "kakaoId": "26871332",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/26871332",
+    "expectedAddress": "서울 마포구 양화로6길 99",
+    "kakaoName": "옹달샘 본점",
+    "kakaoAddress": "text: 서울 마포구 양화로6길 99 1층 (우)04048",
+    "naverAddress": "button \"서울 마포구 양화로6길 99 1층옹달샘\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/13538858/home",
+    "naverName": "옹달샘 본점",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 22:00"
+      ],
+      "수": [
+        "11:00 ~ 22:00"
+      ],
+      "목": [
+        "11:00 ~ 22:00"
+      ],
+      "금": [
+        "11:00 ~ 22:00"
+      ],
+      "토": [
+        "11:00 ~ 22:00"
+      ],
+      "일": [
+        "11:00 ~ 22:00"
+      ],
+      "월": [
+        "11:00 ~ 22:00"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "10:30 - 21:30"
+      ],
+      "화": [
+        "10:30 - 21:30"
+      ],
+      "수": [
+        "10:30 - 21:30"
+      ],
+      "목": [
+        "10:30 - 21:30"
+      ],
+      "금": [
+        "10:30 - 21:30"
+      ],
+      "토": [
+        "10:30 - 21:30"
+      ],
+      "일": [
+        "10:30 - 21:30"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "곤드레 나물밥",
+        9000,
+        false
+      ],
+      [
+        "닭볶음탕",
+        38000,
+        false
+      ],
+      [
+        "오징어 볶음 (2인 이상)",
+        9000,
+        false
+      ],
+      [
+        "제육 볶음 (2인 이상)",
+        9000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "오레노라멘 합정본점",
+    "id": 1784138675041,
+    "kakaoId": "1916682638",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1916682638",
+    "expectedAddress": "서울 마포구 독막로8길 16",
+    "kakaoName": "오레노라멘 합정본점",
+    "kakaoAddress": "text: 서울 마포구 독막로8길 16 1층 (우)04072",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "수": [
+        "11:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "목": [
+        "11:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "금": [
+        "11:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "토": [
+        "11:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "일": [
+        "11:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "월": [
+        "11:00 ~ 22:00",
+        "21:30 라스트오더"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "토리빠이탄",
+        13000,
+        false
+      ],
+      [
+        "카라빠이탄",
+        13000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "크레이지카츠",
+    "id": 1784138683082,
+    "kakaoId": "83301316",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/83301316",
+    "expectedAddress": "서울 마포구 포은로2나길 44",
+    "kakaoName": "크레이지카츠",
+    "kakaoAddress": "text: 서울 마포구 포은로2나길 44 2층 (우)04026",
+    "naverAddress": "button \"서울 마포구 포은로2나길 44 , 2층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/38555759/home",
+    "naverName": "크레이지카츠",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:30 ~ 21:00"
+      ],
+      "일": [
+        "11:30 ~ 21:00"
+      ],
+      "월": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 21:00",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "수": [
+        "11:30 - 21:00",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "11:30 - 21:00",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "한글날11:30 - 21:00"
+      ],
+      "토": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "월": [
+        "11:30 - 21:00",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "11:30~21:00"
+    },
+    "menu": [
+      [
+        "상히레카츠 (중)",
+        14000,
+        false
+      ],
+      [
+        "스페셜특로스카츠",
+        20000,
+        false
+      ],
+      [
+        "특상로스카츠 (250g)",
+        23000,
+        false
+      ],
+      [
+        "크레이지 특선코스(1인)",
+        26000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "카와카츠 본점",
+    "id": 1784138699524,
+    "kakaoId": "1351221007",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1351221007",
+    "expectedAddress": "서울 마포구 동교로 126",
+    "kakaoName": "카와카츠 본점",
+    "kakaoAddress": "text: 서울 마포구 동교로 126 광남벨라스아파트 1층 102호 (우)04030",
+    "naverAddress": "button \"서울 마포구 동교로 126 1층 102호\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1924306900/home",
+    "naverName": "카와카츠 본점",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 20:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "11:30 ~ 20:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 20:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "11:30 ~ 20:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:30 ~ 20:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "11:30 ~ 20:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 20:00",
+        "15:00 - 17:00 브레이크타임",
+        "14:30, 19:30 라스트오더"
+      ],
+      "수": [
+        "11:30 - 20:00",
+        "15:00 - 17:00 브레이크타임",
+        "14:30, 19:30 라스트오더"
+      ],
+      "목": [
+        "11:30 - 20:00",
+        "15:00 - 17:00 브레이크타임",
+        "14:30, 19:30 라스트오더"
+      ],
+      "금": [
+        "11:30 - 20:00",
+        "15:00 - 17:00 브레이크타임",
+        "14:30, 19:30 라스트오더"
+      ],
+      "토": [
+        "11:30 - 20:00",
+        "15:00 - 17:00 브레이크타임",
+        "14:30, 19:30 라스트오더"
+      ],
+      "일": [
+        "정기휴무 (매주 일요일)"
+      ],
+      "월": [
+        "11:30 - 20:00",
+        "15:00 - 17:00 브레이크타임",
+        "14:30, 19:30 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "로스(등심)카츠",
+        16000,
+        false
+      ],
+      [
+        "히레(안심)카츠",
+        17000,
+        false
+      ],
+      [
+        "모둠카츠",
+        19000,
+        false
+      ],
+      [
+        "특로스(상등심)카츠",
+        19000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "칸다소바 홍대점",
+    "id": 1784138707096,
+    "kakaoId": "2057792795",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/2057792795",
+    "expectedAddress": "서울 마포구 와우산로 51-6",
+    "kakaoName": "칸다소바 홍대점",
+    "kakaoAddress": "text: 서울 마포구 와우산로 51-6 1층 (우)04049",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 21:30",
+        "15:30 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "11:30 ~ 21:30",
+        "15:30 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 21:30",
+        "15:30 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "11:30 ~ 21:30",
+        "15:30 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:30 ~ 21:30",
+        "15:30 ~ 17:00 브레이크타임"
+      ],
+      "일": [
+        "11:30 ~ 21:30",
+        "15:30 ~ 17:00 브레이크타임"
+      ],
+      "월": [
+        "11:30 ~ 21:30",
+        "15:30 ~ 17:00 브레이크타임"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "마제소바",
+        12000,
+        false
+      ],
+      [
+        "돼지껍데기 아부라소바",
+        14500,
+        false
+      ],
+      [
+        "이에케 돈코츠 라멘",
+        12000,
+        false
+      ],
+      [
+        "아부라소바",
+        12000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "부탄츄 홍대점",
+    "id": 1784138715211,
+    "kakaoId": "18742750",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/18742750",
+    "expectedAddress": "서울 마포구 와우산로35길 75",
+    "kakaoName": "부탄츄 홍대점",
+    "kakaoAddress": "text: 서울 마포구 와우산로35길 75 1층 (우)04052",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "수": [
+        "11:30 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "목": [
+        "11:30 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "금": [
+        "11:30 ~ 03:00",
+        "21:30 ~ 22:00 브레이크타임",
+        "02:30 라스트오더"
+      ],
+      "토": [
+        "11:30 ~ 03:00",
+        "21:30 ~ 22:00 브레이크타임",
+        "02:30 라스트오더"
+      ],
+      "일": [
+        "11:30 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "월": [
+        "11:30 ~ 22:00",
+        "21:30 라스트오더"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "우와 홍대본점",
+    "id": 1784138726883,
+    "kakaoId": "400281849",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/400281849",
+    "expectedAddress": "서울 마포구 와우산로21길 21-16",
+    "kakaoName": "우와 홍대본점",
+    "kakaoAddress": "text: 서울 마포구 와우산로21길 21-16 2층 202호 (우)04041",
+    "naverAddress": "button \"서울 마포구 와우산로21길 21-16 2층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/56228015/home",
+    "naverName": "우와 홍대본점",
+    "kakaoSchedule": {
+      "화": [
+        "12:00 ~ 22:00",
+        "14:30 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "12:00 ~ 22:00",
+        "14:30 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "12:00 ~ 22:00",
+        "14:30 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "12:00 ~ 22:00",
+        "14:30 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "12:00 ~ 22:00"
+      ],
+      "일": [
+        "12:00 ~ 22:00"
+      ],
+      "월": [
+        "12:00 ~ 22:00",
+        "14:30 ~ 17:00 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "12:00 - 22:00",
+        "14:30 - 17:00 브레이크타임",
+        "21:00 라스트오더"
+      ],
+      "수": [
+        "12:00 - 22:00",
+        "14:30 - 17:00 브레이크타임",
+        "21:00 라스트오더"
+      ],
+      "목": [
+        "12:00 - 22:00",
+        "14:30 - 17:00 브레이크타임",
+        "21:00 라스트오더"
+      ],
+      "금": [
+        "한글날12:00 - 22:00"
+      ],
+      "토": [
+        "12:00 - 22:00",
+        "21:00 라스트오더"
+      ],
+      "일": [
+        "12:00 - 22:00",
+        "21:00 라스트오더"
+      ],
+      "월": [
+        "12:00 - 22:00",
+        "14:30 - 17:00 브레이크타임",
+        "21:00 라스트오더"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "12:00~22:00"
+    },
+    "menu": [
+      [
+        "토마토 새우 오코노미야끼",
+        17000,
+        false
+      ],
+      [
+        "클래식 돼지고기 야끼소바",
+        16000,
+        false
+      ],
+      [
+        "아보카도멘타마요&바게트 (3ea)",
+        9500,
+        false
+      ],
+      [
+        "철판 꽃갈비살 (100g)",
+        19000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "하카타분코",
+    "id": 1784138737286,
+    "kakaoId": "21410206",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/21410206",
+    "expectedAddress": "서울 마포구 독막로19길 43",
+    "kakaoName": "하카타분코",
+    "kakaoAddress": "text: 서울 마포구 독막로19길 43 1층 (우)04068",
+    "naverAddress": "button \"서울 마포구 독막로19길 43\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/11678649/home",
+    "naverName": "하카타분코",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 02:30",
+        "16:00 ~ 17:30 브레이크타임",
+        "01:30 라스트오더"
+      ],
+      "수": [
+        "11:00 ~ 02:30",
+        "16:00 ~ 17:30 브레이크타임",
+        "01:30 라스트오더"
+      ],
+      "목": [
+        "11:00 ~ 02:30",
+        "16:00 ~ 17:30 브레이크타임",
+        "01:30 라스트오더"
+      ],
+      "금": [
+        "11:00 ~ 02:30",
+        "16:00 ~ 17:30 브레이크타임",
+        "01:30 라스트오더"
+      ],
+      "토": [
+        "11:00 ~ 02:30",
+        "16:00 ~ 17:30 브레이크타임",
+        "01:30 라스트오더"
+      ],
+      "일": [
+        "11:00 ~ 02:30",
+        "16:00 ~ 17:30 브레이크타임",
+        "01:30 라스트오더"
+      ],
+      "월": [
+        "11:00 ~ 02:30",
+        "16:00 ~ 17:30 브레이크타임",
+        "01:30 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:00 - 다음 날 01:00",
+        "00:00 라스트오더"
+      ],
+      "수": [
+        "11:00 - 다음 날 02:30",
+        "01:30 라스트오더"
+      ],
+      "목": [
+        "11:00 - 다음 날 02:30",
+        "01:30 라스트오더"
+      ],
+      "금": [
+        "11:00 - 다음 날 02:30",
+        "01:30 라스트오더"
+      ],
+      "토": [
+        "11:00 - 다음 날 02:30",
+        "01:30 라스트오더"
+      ],
+      "일": [
+        "11:00 - 다음 날 02:30",
+        "01:30 라스트오더"
+      ],
+      "월": [
+        "11:00 - 다음 날 02:30",
+        "01:30 라스트오더",
+        "\"- 재료준비로 15:30 이후 1시간~2시간 브레이크 타임\""
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "인라멘",
+        11000,
+        false
+      ],
+      [
+        "청라멘",
+        11000,
+        false
+      ],
+      [
+        "차돌단면",
+        16000,
+        false
+      ],
+      [
+        "차슈덮밥",
+        7000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "진진",
+    "id": 1784138760149,
+    "kakaoId": "1767349854",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1767349854",
+    "expectedAddress": "서울 마포구 월드컵북로1길 60",
+    "kakaoName": "진진",
+    "kakaoAddress": "text: 서울 마포구 월드컵북로1길 60 1층 (우)04031",
+    "naverAddress": "button \"서울 마포구 월드컵북로1길 60 1층 진진\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/36202928/home",
+    "naverName": "진진",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "일": [
+        "12:00 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "월": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 21:30",
+        "15:00 - 17:00 브레이크타임",
+        "14:30 라스트오더"
+      ],
+      "수": [
+        "11:30 - 21:30",
+        "15:00 - 17:00 브레이크타임",
+        "14:30 라스트오더"
+      ],
+      "목": [
+        "11:30 - 21:30",
+        "15:00 - 17:00 브레이크타임",
+        "14:30 라스트오더"
+      ],
+      "금": [
+        "11:30 - 21:30",
+        "15:00 - 17:00 브레이크타임",
+        "14:30 라스트오더"
+      ],
+      "토": [
+        "11:30 - 21:30",
+        "15:00 - 17:00 브레이크타임",
+        "14:30 라스트오더"
+      ],
+      "일": [
+        "12:00 - 21:30",
+        "15:00 - 17:00 브레이크타임",
+        "14:30 라스트오더"
+      ],
+      "월": [
+        "11:30 - 21:30",
+        "15:00 - 17:00 브레이크타임",
+        "14:30 라스트오더",
+        "\"- 저녁라스트오더 월~토 20:30, 일요일 21:00\""
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "대게살볶음(회원가)",
+        32000,
+        false
+      ],
+      [
+        "멘보샤(회원가)",
+        26400,
+        false
+      ],
+      [
+        "깐풍기(회원가)",
+        24800,
+        false
+      ],
+      [
+        "어향가지(회원가)",
+        21600,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "연교",
+    "id": 1784138775682,
+    "kakaoId": "934767425",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/934767425",
+    "expectedAddress": "서울 마포구 연희로1길 65",
+    "kakaoName": "연교",
+    "kakaoAddress": "text: 서울 마포구 연희로1길 65 1층 (우)03982",
+    "naverAddress": "button \"서울 마포구 연희로1길 65 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1051220427/home",
+    "naverName": "연교",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "수": [
+        "휴무일"
+      ],
+      "목": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "토": [
+        "11:30 ~ 21:30",
+        "16:00 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "11:30 ~ 21:30",
+        "16:00 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "월": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 21:20",
+        "15:00 - 17:00 브레이크타임",
+        "20:20 라스트오더"
+      ],
+      "수": [
+        "11:30 - 21:20",
+        "15:00 - 17:00 브레이크타임",
+        "20:20 라스트오더"
+      ],
+      "목": [
+        "11:30 - 21:20",
+        "15:00 - 17:00 브레이크타임",
+        "20:20 라스트오더"
+      ],
+      "금": [
+        "11:30 - 21:20",
+        "15:00 - 17:00 브레이크타임",
+        "20:20 라스트오더"
+      ],
+      "토": [
+        "11:30 - 21:20",
+        "16:00 - 17:00 브레이크타임",
+        "20:20 라스트오더"
+      ],
+      "일": [
+        "11:30 - 21:20",
+        "16:00 - 17:00 브레이크타임",
+        "20:20 라스트오더"
+      ],
+      "월": [
+        "11:30 - 21:20",
+        "15:00 - 17:00 브레이크타임",
+        "20:20 라스트오더"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "우육탕",
+        15000,
+        false
+      ],
+      [
+        "성젠바오, 4p",
+        8000,
+        false
+      ],
+      [
+        "샤오롱바오, 6p",
+        7000,
+        false
+      ],
+      [
+        "깐풍새우 (소)",
+        18000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "소이연남",
+    "id": 1784138796067,
+    "kakaoId": "25479306",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/25479306",
+    "expectedAddress": "서울 마포구 동교로 267",
+    "kakaoName": "소이연남",
+    "kakaoAddress": "text: 서울 마포구 동교로 267 1층 (우)03983",
+    "naverAddress": "button \"서울 마포구 동교로 267 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/35402809/home",
+    "naverName": "소이연남",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 21:20",
+        "15:00 ~ 17:00 브레이크타임",
+        "14:30 라스트오더",
+        "20:50 라스트오더"
+      ],
+      "수": [
+        "11:00 ~ 21:20",
+        "15:00 ~ 17:00 브레이크타임",
+        "14:30 라스트오더",
+        "20:50 라스트오더"
+      ],
+      "목": [
+        "11:00 ~ 21:20",
+        "15:00 ~ 17:00 브레이크타임",
+        "14:30 라스트오더",
+        "20:50 라스트오더"
+      ],
+      "금": [
+        "11:00 ~ 21:20",
+        "15:00 ~ 17:00 브레이크타임",
+        "14:30 라스트오더",
+        "20:50 라스트오더"
+      ],
+      "토": [
+        "11:00 ~ 21:20",
+        "20:50 라스트오더"
+      ],
+      "일": [
+        "11:00 ~ 21:20",
+        "20:50 라스트오더"
+      ],
+      "월": [
+        "11:00 ~ 21:20",
+        "15:00 ~ 17:00 브레이크타임",
+        "14:30 라스트오더",
+        "20:50 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:00 - 21:20",
+        "15:00 - 17:00 브레이크타임",
+        "14:30, 20:50 라스트오더"
+      ],
+      "수": [
+        "11:00 - 21:20",
+        "15:00 - 17:00 브레이크타임",
+        "14:30, 20:50 라스트오더"
+      ],
+      "목": [
+        "11:00 - 21:20",
+        "15:00 - 17:00 브레이크타임",
+        "14:30, 20:50 라스트오더"
+      ],
+      "금": [
+        "한글날11:00 - 21:20"
+      ],
+      "토": [
+        "11:00 - 21:20",
+        "20:50 라스트오더"
+      ],
+      "일": [
+        "11:00 - 21:20",
+        "20:50 라스트오더"
+      ],
+      "월": [
+        "11:00 - 21:20",
+        "15:00 - 17:00 브레이크타임",
+        "14:30, 20:50 라스트오더"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "11:00~21:20"
+    },
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "미분당 홍대점",
+    "id": 1784138803767,
+    "kakaoId": "1551661200",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1551661200",
+    "expectedAddress": "서울 마포구 서강로9길 59",
+    "kakaoName": "미분당 홍대점",
+    "kakaoAddress": "text: 서울 마포구 서강로9길 59 1층 (우)04059",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "11:00 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:00 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "11:00 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:00 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "일": [
+        "11:00 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "월": [
+        "11:00 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "향미",
+    "id": 1784138811618,
+    "kakaoId": "9593688",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/9593688",
+    "expectedAddress": "서울 마포구 홍익로 3-24",
+    "kakaoName": "향미",
+    "kakaoAddress": "text: 서울 마포구 홍익로 3-24 지하1층 (우)04040",
+    "naverAddress": "button \"서울 마포구 홍익로 3-24\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/32051064/home",
+    "naverName": "향미",
+    "kakaoSchedule": {
+      "화": [
+        "05:30 ~ 22:00"
+      ],
+      "수": [
+        "05:30 ~ 22:00"
+      ],
+      "목": [
+        "05:30 ~ 22:00"
+      ],
+      "금": [
+        "05:30 ~ 22:00"
+      ],
+      "토": [
+        "05:30 ~ 22:00"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "05:30 ~ 22:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "08:00 - 22:00"
+      ],
+      "수": [
+        "08:00 - 22:00"
+      ],
+      "목": [
+        "08:00 - 22:00"
+      ],
+      "금": [
+        "08:00 - 22:00"
+      ],
+      "토": [
+        "08:00 - 22:00"
+      ],
+      "일": [
+        "정기휴무 (매주 일요일)"
+      ],
+      "월": [
+        "08:00 - 22:00"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "제육볶음",
+        8000,
+        false
+      ],
+      [
+        "고갈비백반",
+        8500,
+        false
+      ],
+      [
+        "소불뚝배기",
+        8500,
+        false
+      ],
+      [
+        "낙지비빔밥",
+        8000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "뉴오더클럽",
+    "id": 1784138820313,
+    "kakaoId": "1629395786",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1629395786",
+    "expectedAddress": "서울 마포구 동교로34길 3",
+    "kakaoName": "뉴오더클럽",
+    "kakaoAddress": "text: 서울 마포구 동교로34길 3 지하1층 (우)03982",
+    "naverAddress": "button \"서울 마포구 동교로34길 3 1F 뉴오더클럽\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1173480601/home",
+    "naverName": "뉴오더클럽 연남",
+    "kakaoSchedule": {
+      "화": [
+        "14:00 ~ 23:00",
+        "22:00 라스트오더"
+      ],
+      "수": [
+        "14:00 ~ 23:00",
+        "22:00 라스트오더"
+      ],
+      "목": [
+        "14:00 ~ 23:00",
+        "22:00 라스트오더"
+      ],
+      "금": [
+        "14:00 ~ 23:00",
+        "22:00 라스트오더"
+      ],
+      "토": [
+        "14:00 ~ 23:00",
+        "22:00 라스트오더"
+      ],
+      "일": [
+        "14:00 ~ 23:00",
+        "22:00 라스트오더"
+      ],
+      "월": [
+        "14:00 ~ 23:00",
+        "22:00 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "14:00 - 23:00",
+        "22:00 라스트오더"
+      ],
+      "수": [
+        "14:00 - 23:00",
+        "22:00 라스트오더"
+      ],
+      "목": [
+        "14:00 - 23:00",
+        "22:00 라스트오더"
+      ],
+      "금": [
+        "14:00 - 23:00",
+        "22:00 라스트오더"
+      ],
+      "토": [
+        "14:00 - 23:00",
+        "22:00 라스트오더"
+      ],
+      "일": [
+        "14:00 - 23:00",
+        "22:00 라스트오더"
+      ],
+      "월": [
+        "14:00 - 23:00",
+        "22:00 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "페퍼로니 피자 (R)",
+        23000,
+        false
+      ],
+      [
+        "포테이토 피자 (R)",
+        24000,
+        false
+      ],
+      [
+        "트러플 루꼴라 피자 (R)",
+        28000,
+        false
+      ],
+      [
+        "콰트로치즈 피자 (R)",
+        22000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "또보겠지떡볶이집 호호피크닉점",
+    "id": 1784138861096,
+    "kakaoId": "2127178691",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/2127178691",
+    "expectedAddress": "서울 마포구 독막로3길 34",
+    "kakaoName": "또보겠지떡볶이집 호호피크닉점",
+    "kakaoAddress": "text: 서울 마포구 독막로3길 34 2층 201호 (우)04047",
+    "naverAddress": "button \"서울 마포구 독막로3길 34 2층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1732575894/home",
+    "naverName": "또보겠지떡볶이집 호호피크닉점",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 22:00"
+      ],
+      "수": [
+        "11:00 ~ 22:00"
+      ],
+      "목": [
+        "11:00 ~ 22:00"
+      ],
+      "금": [
+        "11:00 ~ 22:00"
+      ],
+      "토": [
+        "11:00 ~ 22:00"
+      ],
+      "일": [
+        "11:00 ~ 22:00"
+      ],
+      "월": [
+        "11:00 ~ 22:00"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "11:00 - 22:00",
+        "21:10 라스트오더"
+      ],
+      "화": [
+        "11:00 - 22:00",
+        "21:10 라스트오더"
+      ],
+      "수": [
+        "11:00 - 22:00",
+        "21:10 라스트오더"
+      ],
+      "목": [
+        "11:00 - 22:00",
+        "21:10 라스트오더"
+      ],
+      "금": [
+        "11:00 - 22:00",
+        "21:10 라스트오더"
+      ],
+      "토": [
+        "11:00 - 22:00",
+        "21:10 라스트오더"
+      ],
+      "일": [
+        "11:00 - 22:00",
+        "21:10 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "소세지볶음밥",
+        3500,
+        false
+      ],
+      [
+        "날치알볶음밥",
+        3500,
+        false
+      ],
+      [
+        "베이컨볶음밥",
+        3500,
+        false
+      ],
+      [
+        "그냥볶음밥",
+        3000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "홍대삭 상수본점",
+    "id": 1784138877250,
+    "kakaoId": "19909925",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/19909925",
+    "expectedAddress": "서울 마포구 독막로 71",
+    "kakaoName": "홍대삭 상수본점",
+    "kakaoAddress": "text: 서울 마포구 독막로 71 1층 (우)04049",
+    "naverAddress": "button \"서울 마포구 독막로 71\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/11856660/home",
+    "naverName": "홍대삭 상수본점",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 23:00"
+      ],
+      "수": [
+        "11:30 ~ 23:00"
+      ],
+      "목": [
+        "11:30 ~ 23:00"
+      ],
+      "금": [
+        "11:30 ~ 23:00"
+      ],
+      "토": [
+        "11:30 ~ 23:00"
+      ],
+      "일": [
+        "11:30 ~ 23:00"
+      ],
+      "월": [
+        "11:30 ~ 23:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:00 - 23:00"
+      ],
+      "수": [
+        "11:00 - 23:00"
+      ],
+      "목": [
+        "11:00 - 23:00"
+      ],
+      "금": [
+        "11:00 - 23:00"
+      ],
+      "토": [
+        "11:00 - 23:00"
+      ],
+      "일": [
+        "11:00 - 22:00"
+      ],
+      "월": [
+        "11:00 - 22:00"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "홍대조폭떡볶이",
+    "id": 1784138883698,
+    "kakaoId": "1260873032",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1260873032",
+    "expectedAddress": "서울 마포구 와우산로29길 26",
+    "kakaoName": "홍대조폭떡볶이",
+    "kakaoAddress": "text: 서울 마포구 와우산로29길 26 우림빌딩 1층 (우)04052",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 22:00",
+        "21:50 라스트오더"
+      ],
+      "수": [
+        "11:00 ~ 22:00",
+        "21:50 라스트오더"
+      ],
+      "목": [
+        "11:00 ~ 22:00",
+        "21:50 라스트오더"
+      ],
+      "금": [
+        "11:00 ~ 22:00",
+        "21:50 라스트오더"
+      ],
+      "토": [
+        "11:00 ~ 22:00",
+        "21:50 라스트오더"
+      ],
+      "일": [
+        "11:00 ~ 22:00",
+        "21:50 라스트오더"
+      ],
+      "월": [
+        "11:00 ~ 22:00",
+        "21:50 라스트오더"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "조폭떡볶이",
+        4500,
+        false
+      ],
+      [
+        "모듬튀김(5p)",
+        4500,
+        false
+      ],
+      [
+        "김밥",
+        4500,
+        false
+      ],
+      [
+        "옛날순대(내장섞어)",
+        5000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "테일러커피 연남1호점",
+    "id": 1784138896622,
+    "kakaoId": "27508963",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/27508963",
+    "expectedAddress": "서울 마포구 성미산로 189",
+    "kakaoName": "테일러커피 연남1호점",
+    "kakaoAddress": "text: 서울 마포구 성미산로 189 1층 (우)03981",
+    "kakaoSchedule": {
+      "화": [
+        "10:00 ~ 21:30"
+      ],
+      "수": [
+        "10:00 ~ 21:30"
+      ],
+      "목": [
+        "10:00 ~ 21:30"
+      ],
+      "금": [
+        "10:00 ~ 21:30"
+      ],
+      "토": [
+        "10:00 ~ 21:30"
+      ],
+      "일": [
+        "10:00 ~ 21:30"
+      ],
+      "월": [
+        "10:00 ~ 21:30"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "Americano",
+        5500,
+        false
+      ],
+      [
+        "Catte Latte",
+        6000,
+        false
+      ],
+      [
+        "Cream Mocha (HOT)",
+        6500,
+        false
+      ],
+      [
+        "Bluesy (ICE)",
+        6000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "앤티크커피 연남점",
+    "id": 1784138912103,
+    "kakaoId": "1868341857",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1868341857",
+    "expectedAddress": "서울 마포구 연희로 25-1",
+    "kakaoName": "앤티크커피 연남점",
+    "kakaoAddress": "text: 서울 마포구 연희로 25-1 서아빌딩 1층 (우)03985",
+    "naverAddress": "button \"서울 마포구 연희로 25-1 1층 앤티크커피\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1310686440/home",
+    "naverName": "앤티크커피 연남점",
+    "kakaoSchedule": {
+      "화": [
+        "10:00 ~ 22:00"
+      ],
+      "수": [
+        "10:00 ~ 22:00"
+      ],
+      "목": [
+        "10:00 ~ 22:00"
+      ],
+      "금": [
+        "10:00 ~ 22:00"
+      ],
+      "토": [
+        "10:00 ~ 22:00"
+      ],
+      "일": [
+        "10:00 ~ 22:00"
+      ],
+      "월": [
+        "10:00 ~ 22:00"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "10:00 - 22:00"
+      ],
+      "화": [
+        "10:00 - 22:00"
+      ],
+      "수": [
+        "10:00 - 22:00"
+      ],
+      "목": [
+        "10:00 - 22:00"
+      ],
+      "금": [
+        "10:00 - 22:00"
+      ],
+      "토": [
+        "10:00 - 22:00"
+      ],
+      "일": [
+        "10:00 - 22:00"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "더티앤크림",
+        6500,
+        false
+      ],
+      [
+        "에스프레소",
+        5500,
+        false
+      ],
+      [
+        "아메리카노",
+        5500,
+        false
+      ],
+      [
+        "롱블랙",
+        5500,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "니시무라멘 연남본점",
+    "id": 1784164639151,
+    "kakaoId": "1897298692",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1897298692",
+    "expectedAddress": "서울 마포구 동교로 265",
+    "kakaoName": "니시무라멘 연남본점",
+    "kakaoAddress": "text: 서울 마포구 동교로 265 옥순빌딩 4층 (우)03983",
+    "naverAddress": "button \"서울 마포구 동교로 265 4층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1851499166/home",
+    "naverName": "니시무라멘 연남본점",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 15:30"
+      ],
+      "수": [
+        "휴무일"
+      ],
+      "목": [
+        "11:00 ~ 15:30"
+      ],
+      "금": [
+        "11:00 ~ 20:00",
+        "15:30 ~ 17:30 브레이크타임"
+      ],
+      "토": [
+        "11:00 ~ 20:00",
+        "15:30 ~ 17:30 브레이크타임"
+      ],
+      "일": [
+        "11:00 ~ 20:00",
+        "15:30 ~ 17:30 브레이크타임"
+      ],
+      "월": [
+        "11:00 ~ 15:30"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "휴무"
+      ],
+      "수": [
+        "정기휴무 (매주 수요일)"
+      ],
+      "목": [
+        "11:00 - 15:30"
+      ],
+      "금": [
+        "11:00 - 20:00",
+        "15:30 - 17:30 브레이크타임"
+      ],
+      "토": [
+        "11:00 - 20:00",
+        "15:30 - 17:30 브레이크타임"
+      ],
+      "일": [
+        "11:00 - 20:00",
+        "15:30 - 17:30 브레이크타임"
+      ],
+      "월": [
+        "11:00 - 15:30"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-06": "휴무"
+    },
+    "menu": [
+      [
+        "교카이파이탄",
+        12000,
+        false
+      ],
+      [
+        "시오",
+        12000,
+        false
+      ],
+      [
+        "마라탄탄멘",
+        13000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "사루카메",
+    "id": 1784164645951,
+    "kakaoId": "560657944",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/560657944",
+    "expectedAddress": "서울 마포구 연남로 15",
+    "kakaoName": "사루카메",
+    "kakaoAddress": "text: 서울 마포구 연남로 15 1층 (우)03990",
+    "naverAddress": "button \"서울 마포구 연남로 15 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1763607050/home",
+    "naverName": "사루카메",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:30 브레이크타임"
+      ],
+      "수": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:30 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:30 브레이크타임"
+      ],
+      "금": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:30 브레이크타임"
+      ],
+      "토": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:30 브레이크타임"
+      ],
+      "일": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:30 브레이크타임"
+      ],
+      "월": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:30 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 20:30",
+        "15:00 - 17:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "수": [
+        "11:30 - 20:30",
+        "15:00 - 17:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "목": [
+        "11:30 - 20:30",
+        "15:00 - 17:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "금": [
+        "한글날11:30 - 20:30",
+        "15:00 - 17:30 브레이크타임"
+      ],
+      "토": [
+        "11:30 - 20:30",
+        "15:00 - 17:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "일": [
+        "11:30 - 20:30",
+        "15:00 - 17:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "월": [
+        "11:30 - 20:30",
+        "15:00 - 17:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "11:30~20:30"
+    },
+    "menu": [
+      [
+        "명물 바지락라멘",
+        13000,
+        false
+      ],
+      [
+        "바지락꽃게라멘",
+        15800,
+        false
+      ],
+      [
+        "클리어 니보시(멸치) 라멘",
+        13000,
+        false
+      ],
+      [
+        "바지락 동",
+        5000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "담택 본점",
+    "id": 1784164655928,
+    "kakaoId": "1534943798",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1534943798",
+    "expectedAddress": "서울 마포구 동교로12안길 51",
+    "kakaoName": "담택 본점",
+    "kakaoAddress": "text: 서울 마포구 동교로12안길 51 코람데오빌리지 1층 (우)04029",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:00 라스트오더"
+      ],
+      "수": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:00 라스트오더"
+      ],
+      "목": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:00 라스트오더"
+      ],
+      "금": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:00 라스트오더"
+      ],
+      "토": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:00 라스트오더"
+      ],
+      "일": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:00 라스트오더"
+      ],
+      "월": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:00 라스트오더"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "시오라멘",
+        9500,
+        false
+      ],
+      [
+        "유즈시오라멘",
+        10500,
+        false
+      ],
+      [
+        "와사비시오라멘",
+        11500,
+        false
+      ],
+      [
+        "에비시오라멘",
+        11500,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "서교난면방",
+    "id": 1784164662671,
+    "kakaoId": "1437270529",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1437270529",
+    "expectedAddress": "서울 마포구 동교로12길 16",
+    "kakaoName": "서교난면방",
+    "kakaoAddress": "text: 서울 마포구 동교로12길 16 1층 (우)04029",
+    "naverAddress": "button \"서울 마포구 동교로12길 16 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1906492218/home",
+    "naverName": "서교난면방",
+    "kakaoSchedule": {
+      "화": [
+        "휴무일"
+      ],
+      "수": [
+        "11:00 ~ 21:00",
+        "15:00 ~ 17:30 브레이크타임"
+      ],
+      "목": [
+        "11:00 ~ 21:00",
+        "15:00 ~ 17:30 브레이크타임"
+      ],
+      "금": [
+        "11:00 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:00 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "일": [
+        "11:00 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "월": [
+        "11:00 ~ 21:00",
+        "15:00 ~ 17:30 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "정기휴무 (매주 화요일)"
+      ],
+      "수": [
+        "11:00 - 21:00",
+        "15:00 - 17:30 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "11:00 - 21:00",
+        "15:00 - 17:30 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "한글날11:00 - 21:00",
+        "15:00 - 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:00 - 21:00",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "11:00 - 21:00",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "월": [
+        "11:00 - 21:00",
+        "15:00 - 17:30 브레이크타임",
+        "20:30 라스트오더"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "11:00~21:00"
+    },
+    "menu": [
+      [
+        "난면 콩국수 (비건 가능) 여름메뉴!!",
+        13000,
+        false
+      ],
+      [
+        "서교난면 (시그니쳐)",
+        13000,
+        false
+      ],
+      [
+        "들기름 난면과 모르따델라 햄",
+        14000,
+        false
+      ],
+      [
+        "구엄닭 난면(점심 only)",
+        11000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "미필담",
+    "id": 1784164670173,
+    "kakaoId": "810201050",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/810201050",
+    "expectedAddress": "서울 마포구 성지3길 22",
+    "kakaoName": "미필담",
+    "kakaoAddress": "text: 서울 마포구 성지3길 22 1층 (우)04083",
+    "naverAddress": "button \"서울 마포구 성지3길 22 1층 미필담\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1006791410/home",
+    "naverName": "미필담",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 14:30"
+      ],
+      "수": [
+        "11:30 ~ 20:30",
+        "14:30 ~ 17:30 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 20:30",
+        "14:30 ~ 17:30 브레이크타임"
+      ],
+      "금": [
+        "11:30 ~ 20:30",
+        "14:30 ~ 17:30 브레이크타임"
+      ],
+      "토": [
+        "11:30 ~ 20:30",
+        "14:30 ~ 17:30 브레이크타임"
+      ],
+      "일": [
+        "11:30 ~ 20:30",
+        "14:30 ~ 17:30 브레이크타임"
+      ],
+      "월": [
+        "11:30 ~ 14:30"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 14:00"
+      ],
+      "수": [
+        "11:30 - 20:30",
+        "14:30 - 17:30 브레이크타임"
+      ],
+      "목": [
+        "11:30 - 20:30",
+        "14:30 - 17:30 브레이크타임"
+      ],
+      "금": [
+        "11:30 - 20:30",
+        "14:30 - 17:30 브레이크타임"
+      ],
+      "토": [
+        "11:30 - 20:30",
+        "14:30 - 17:30 브레이크타임"
+      ],
+      "일": [
+        "11:30 - 20:30",
+        "14:30 - 17:30 브레이크타임"
+      ],
+      "월": [
+        "11:30 - 14:00"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "이북식 손만두국",
+        12000,
+        false
+      ],
+      [
+        "수육 무침(반 접시)",
+        15000,
+        false
+      ],
+      [
+        "양지 온반(계절메뉴)",
+        13000,
+        false
+      ],
+      [
+        "만두 전골(저녁한정)",
+        30000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "합정옥",
+    "id": 1784164685329,
+    "kakaoId": "27493864",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/27493864",
+    "expectedAddress": "서울 마포구 양화로1길 21",
+    "kakaoName": "합정옥",
+    "kakaoAddress": "text: 서울 마포구 양화로1길 21 2층 (우)04026",
+    "naverAddress": "button \"서울 마포구 양화로1길 21 2층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/37434385/home",
+    "naverName": "합정옥",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 22:00"
+      ],
+      "수": [
+        "11:00 ~ 22:00"
+      ],
+      "목": [
+        "11:00 ~ 22:00"
+      ],
+      "금": [
+        "11:00 ~ 22:00"
+      ],
+      "토": [
+        "11:00 ~ 22:00"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "11:00 ~ 22:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:00 - 22:00",
+        "20:30 라스트오더"
+      ],
+      "수": [
+        "11:00 - 22:00",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "11:00 - 22:00",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "11:00 - 22:00",
+        "20:30 라스트오더"
+      ],
+      "토": [
+        "11:00 - 22:00",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "정기휴무 (매주 일요일)"
+      ],
+      "월": [
+        "11:00 - 22:00",
+        "20:30 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "앤트러사이트 서교점",
+    "id": 1784182487753,
+    "kakaoId": "657926243",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/657926243",
+    "expectedAddress": "서울 마포구 월드컵로12길 11",
+    "kakaoName": "앤트러사이트 서교점",
+    "kakaoAddress": "text: 서울 마포구 월드컵로12길 11 (우)04004",
+    "naverAddress": "button \"서울 마포구 월드컵로12길 11\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1088501208/home",
+    "naverName": "앤트러사이트 서교점",
+    "kakaoSchedule": {
+      "화": [
+        "09:00 ~ 22:00"
+      ],
+      "수": [
+        "09:00 ~ 22:00"
+      ],
+      "목": [
+        "09:00 ~ 22:00"
+      ],
+      "금": [
+        "09:00 ~ 22:00"
+      ],
+      "토": [
+        "09:00 ~ 22:00"
+      ],
+      "일": [
+        "09:00 ~ 22:00"
+      ],
+      "월": [
+        "09:00 ~ 22:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "09:00 - 21:50"
+      ],
+      "수": [
+        "09:00 - 21:50"
+      ],
+      "목": [
+        "09:00 - 21:50"
+      ],
+      "금": [
+        "09:00 - 21:50"
+      ],
+      "토": [
+        "09:00 - 21:50"
+      ],
+      "일": [
+        "09:00 - 21:50"
+      ],
+      "월": [
+        "09:00 - 21:50"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "말차밀크",
+        9000,
+        false
+      ],
+      [
+        "차이밀크",
+        9000,
+        false
+      ],
+      [
+        "패션후르츠 에이드",
+        9000,
+        false
+      ],
+      [
+        "핸드드립 커피",
+        7000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "앤트러사이트 합정점",
+    "id": 1784182494623,
+    "kakaoId": "12518512",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/12518512",
+    "expectedAddress": "서울 마포구 토정로5길 10",
+    "kakaoName": "앤트러사이트 합정점",
+    "kakaoAddress": "text: 서울 마포구 토정로5길 10 (우)04073",
+    "naverAddress": "button \"서울 마포구 토정로5길 10\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/13316501/home",
+    "naverName": "앤트러사이트 합정점",
+    "kakaoSchedule": {
+      "화": [
+        "09:00 ~ 21:50",
+        "21:30 라스트오더"
+      ],
+      "수": [
+        "09:00 ~ 21:50",
+        "21:30 라스트오더"
+      ],
+      "목": [
+        "09:00 ~ 21:50",
+        "21:30 라스트오더"
+      ],
+      "금": [
+        "09:00 ~ 21:50",
+        "21:30 라스트오더"
+      ],
+      "토": [
+        "09:00 ~ 21:50",
+        "21:30 라스트오더"
+      ],
+      "일": [
+        "09:00 ~ 21:50",
+        "21:30 라스트오더"
+      ],
+      "월": [
+        "09:00 ~ 21:50",
+        "21:30 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "08:00 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "수": [
+        "08:00 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "목": [
+        "08:00 - 22:00"
+      ],
+      "금": [
+        "08:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "토": [
+        "08:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "일": [
+        "08:00 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "월": [
+        "08:00 - 20:00",
+        "19:30 라스트오더"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-08": "08:00~22:00"
+    },
+    "menu": [
+      [
+        "아메리카노",
+        5500,
+        false
+      ],
+      [
+        "카페라떼",
+        6000,
+        false
+      ],
+      [
+        "레몬 에이드",
+        7000,
+        false
+      ],
+      [
+        "에스프레소",
+        5500,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "커피 리브레 연남점",
+    "id": 1784182529573,
+    "kakaoId": "11553130",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/11553130",
+    "expectedAddress": "서울 마포구 성미산로32길 20-5",
+    "kakaoName": "커피 리브레 연남점",
+    "kakaoAddress": "text: 서울 마포구 성미산로32길 20-5 1,2층 (우)03983",
+    "naverAddress": "button \"서울 마포구 성미산로32길 20-5\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/21856573/home",
+    "naverName": "커피리브레 연남점",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 20:00"
+      ],
+      "수": [
+        "11:30 ~ 20:00"
+      ],
+      "목": [
+        "11:30 ~ 20:00"
+      ],
+      "금": [
+        "11:30 ~ 20:00"
+      ],
+      "토": [
+        "11:30 ~ 20:00"
+      ],
+      "일": [
+        "11:30 ~ 20:00"
+      ],
+      "월": [
+        "11:30 ~ 20:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 20:00",
+        "19:45 라스트오더"
+      ],
+      "수": [
+        "11:30 - 20:00",
+        "19:45 라스트오더"
+      ],
+      "목": [
+        "11:30 - 20:00",
+        "19:45 라스트오더"
+      ],
+      "금": [
+        "11:30 - 20:00",
+        "19:45 라스트오더"
+      ],
+      "토": [
+        "11:30 - 20:00",
+        "19:45 라스트오더"
+      ],
+      "일": [
+        "11:30 - 20:00",
+        "19:45 라스트오더"
+      ],
+      "월": [
+        "11:30 - 20:00",
+        "19:45 라스트오더",
+        "\"- 주문 마감 19:45 / 2층 마감 19:30\""
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "카페 라떼",
+        5500,
+        false
+      ],
+      [
+        "마로끼노 (ONLY HOT)",
+        6500,
+        false
+      ],
+      [
+        "아인슈페퍼",
+        7500,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "콘하스 연남점",
+    "id": 1784421914542,
+    "kakaoId": "1329719252",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1329719252",
+    "expectedAddress": "서울 마포구 연희로 1-1",
+    "kakaoName": "콘하스 연남점",
+    "kakaoAddress": "text: 서울 마포구 연희로 1-1 1-2층 (우)03985",
+    "naverAddress": "button \"서울 마포구 연희로 1-1 1,2층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/97642371/home",
+    "naverName": "콘하스 연남점",
+    "kakaoSchedule": {
+      "화": [
+        "10:00 ~ 23:00",
+        "22:00 라스트오더"
+      ],
+      "수": [
+        "10:00 ~ 23:00",
+        "22:00 라스트오더"
+      ],
+      "목": [
+        "10:00 ~ 23:00",
+        "22:00 라스트오더"
+      ],
+      "금": [
+        "10:00 ~ 23:00",
+        "22:00 라스트오더"
+      ],
+      "토": [
+        "10:00 ~ 23:00",
+        "22:00 라스트오더"
+      ],
+      "일": [
+        "10:00 ~ 23:00",
+        "22:00 라스트오더"
+      ],
+      "월": [
+        "10:00 ~ 23:00",
+        "22:00 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "10:00 - 23:00",
+        "22:00 라스트오더"
+      ],
+      "화": [
+        "10:00 - 23:00",
+        "22:00 라스트오더"
+      ],
+      "수": [
+        "10:00 - 23:00",
+        "22:00 라스트오더"
+      ],
+      "목": [
+        "10:00 - 23:00",
+        "22:00 라스트오더"
+      ],
+      "금": [
+        "10:00 - 23:00",
+        "22:00 라스트오더"
+      ],
+      "토": [
+        "10:00 - 23:00",
+        "22:00 라스트오더"
+      ],
+      "일": [
+        "10:00 - 23:00",
+        "22:00 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "라떼",
+        6000,
+        false
+      ],
+      [
+        "콘하스 커피 D",
+        5500,
+        false
+      ],
+      [
+        "올리브치아바타",
+        5300,
+        false
+      ],
+      [
+        "잠봉샌드위치",
+        7500,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "작업실01",
+    "id": 1784421969688,
+    "kakaoId": "1440598365",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1440598365",
+    "expectedAddress": "서울 마포구 홍익로2길 27-17",
+    "kakaoName": "작업실01",
+    "kakaoAddress": "text: 서울 마포구 홍익로2길 27-17 1층 (우)04055",
+    "naverAddress": "button \"서울 마포구 홍익로2길 27-17 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1261853056/home",
+    "naverName": "작업실01",
+    "kakaoSchedule": {
+      "화": [
+        "12:00 ~ 22:30"
+      ],
+      "수": [
+        "12:00 ~ 22:30"
+      ],
+      "목": [
+        "12:00 ~ 22:30"
+      ],
+      "금": [
+        "12:00 ~ 22:30"
+      ],
+      "토": [
+        "12:00 ~ 22:30"
+      ],
+      "일": [
+        "12:00 ~ 22:30"
+      ],
+      "월": [
+        "12:00 ~ 22:30"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "12:00 - 22:30"
+      ],
+      "수": [
+        "12:00 - 22:30"
+      ],
+      "목": [
+        "12:00 - 22:30"
+      ],
+      "금": [
+        "12:00 - 22:30"
+      ],
+      "토": [
+        "12:00 - 22:30"
+      ],
+      "일": [
+        "12:00 - 22:30"
+      ],
+      "월": [
+        "12:00 - 22:30"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "크림브륄래라떼",
+        7000,
+        false
+      ],
+      [
+        "씰라떼",
+        7000,
+        false
+      ],
+      [
+        "아메리카노",
+        5000,
+        false
+      ],
+      [
+        "카페라떼",
+        6000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "카페공명 연남점",
+    "id": 1784421978864,
+    "kakaoId": "1797970569",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1797970569",
+    "expectedAddress": "서울 마포구 연희로 11",
+    "kakaoName": "카페공명 연남점",
+    "kakaoAddress": "text: 서울 마포구 연희로 11 한국특허기술진흥원빌딩 1층 (우)03985",
+    "naverAddress": "button \"서울 마포구 연희로 11 1층 카페 공명 연남\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1176845784/home",
+    "naverName": "카페 공명 연남점",
+    "kakaoSchedule": {
+      "화": [
+        "10:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "수": [
+        "10:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "목": [
+        "10:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "금": [
+        "10:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "토": [
+        "10:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "일": [
+        "10:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "월": [
+        "10:00 ~ 22:00",
+        "21:30 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "화": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "수": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "목": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "금": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "토": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "일": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "카페공명 홍대점",
+    "id": 1784421986013,
+    "kakaoId": "193594597",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/193594597",
+    "expectedAddress": "서울 마포구 와우산로17길 11-8",
+    "kakaoName": "카페공명 홍대점",
+    "kakaoAddress": "text: 서울 마포구 와우산로17길 11-8 1-3층 (우)04049",
+    "naverAddress": "button \"서울 마포구 와우산로17길 11-8 1층, 2층, 3층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1403773455/home",
+    "naverName": "카페 공명 홍대점",
+    "kakaoSchedule": {
+      "화": [
+        "10:00 ~ 22:00",
+        "21:00 라스트오더"
+      ],
+      "수": [
+        "10:00 ~ 22:00",
+        "21:00 라스트오더"
+      ],
+      "목": [
+        "10:00 ~ 22:00",
+        "21:00 라스트오더"
+      ],
+      "금": [
+        "10:00 ~ 22:00",
+        "21:00 라스트오더"
+      ],
+      "토": [
+        "10:00 ~ 22:00",
+        "21:00 라스트오더"
+      ],
+      "일": [
+        "10:00 ~ 22:00",
+        "21:00 라스트오더"
+      ],
+      "월": [
+        "10:00 ~ 22:00",
+        "21:00 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "화": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "수": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "목": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "금": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "토": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "일": [
+        "10:00 - 22:00",
+        "21:30 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "\"[NEW] 피스타치오 마들렌\"",
+        4200,
+        false
+      ],
+      [
+        "공명 라떼",
+        6500,
+        false
+      ],
+      [
+        "비스킷슈",
+        4600,
+        false
+      ],
+      [
+        "아메리카노",
+        5000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "자연도소금빵in연남",
+    "id": 1784421997386,
+    "kakaoId": "940858855",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/940858855",
+    "expectedAddress": "서울 마포구 양화로21길 33",
+    "kakaoName": "자연도소금빵in연남",
+    "kakaoAddress": "text: 서울 마포구 양화로21길 33 1층 (우)03994",
+    "naverAddress": "button \"서울 마포구 양화로21길 33 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1908613139/home",
+    "naverName": "자연도소금빵in연남",
+    "kakaoSchedule": {
+      "화": [
+        "09:00 ~ 22:00"
+      ],
+      "수": [
+        "09:00 ~ 22:00"
+      ],
+      "목": [
+        "09:00 ~ 22:00"
+      ],
+      "금": [
+        "09:00 ~ 22:00"
+      ],
+      "토": [
+        "09:00 ~ 22:00"
+      ],
+      "일": [
+        "09:00 ~ 22:00"
+      ],
+      "월": [
+        "09:00 ~ 22:00"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "09:00 - 22:00"
+      ],
+      "화": [
+        "09:00 - 22:00"
+      ],
+      "수": [
+        "09:00 - 22:00"
+      ],
+      "목": [
+        "09:00 - 22:00"
+      ],
+      "금": [
+        "09:00 - 22:00"
+      ],
+      "토": [
+        "09:00 - 22:00"
+      ],
+      "일": [
+        "09:00 - 22:00"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "자연도소금빵",
+        12000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "만동제과",
+    "id": 1784422006665,
+    "kakaoId": "1165755646",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1165755646",
+    "expectedAddress": "서울 서대문구 연희로 32",
+    "kakaoName": "만동제과 연남점",
+    "kakaoAddress": "text: 서울 서대문구 연희로 32 1층 (우)03784",
+    "naverAddress": "button \"서울 서대문구 연희로 32\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1038526987/home",
+    "naverName": "만동제과 연남점",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 21:00"
+      ],
+      "수": [
+        "11:00 ~ 21:00"
+      ],
+      "목": [
+        "11:00 ~ 21:00"
+      ],
+      "금": [
+        "11:00 ~ 21:00"
+      ],
+      "토": [
+        "11:00 ~ 21:00"
+      ],
+      "일": [
+        "11:00 ~ 21:00"
+      ],
+      "월": [
+        "11:00 ~ 21:00"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "11:00 - 21:00"
+      ],
+      "화": [
+        "11:00 - 21:00"
+      ],
+      "수": [
+        "11:00 - 21:00"
+      ],
+      "목": [
+        "11:00 - 21:00"
+      ],
+      "금": [
+        "11:00 - 21:00"
+      ],
+      "토": [
+        "11:00 - 21:00"
+      ],
+      "일": [
+        "11:00 - 21:00"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "마늘바게트",
+        7000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "아오이토리",
+    "id": 1784422015152,
+    "kakaoId": "24504952",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/24504952",
+    "expectedAddress": "서울 마포구 와우산로29길 8",
+    "kakaoName": "아오이토리",
+    "kakaoAddress": "text: 서울 마포구 와우산로29길 8 KC빌딩 1층 (우)04052",
+    "naverAddress": "button \"서울 마포구 와우산로29길 8 K.C빌딩\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/34658234/home",
+    "naverName": "아오이토리",
+    "kakaoSchedule": {
+      "화": [
+        "09:00 ~ 21:00"
+      ],
+      "수": [
+        "09:00 ~ 21:00"
+      ],
+      "목": [
+        "09:00 ~ 21:00"
+      ],
+      "금": [
+        "09:00 ~ 21:00"
+      ],
+      "토": [
+        "09:00 ~ 21:00"
+      ],
+      "일": [
+        "09:00 ~ 21:00"
+      ],
+      "월": [
+        "09:00 ~ 21:00"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "09:00 - 21:00"
+      ],
+      "화": [
+        "09:00 - 21:00"
+      ],
+      "수": [
+        "09:00 - 21:00"
+      ],
+      "목": [
+        "09:00 - 21:00"
+      ],
+      "금": [
+        "09:00 - 21:00"
+      ],
+      "토": [
+        "09:00 - 21:00"
+      ],
+      "일": [
+        "09:00 - 21:00"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "아메리카노",
+        3500,
+        false
+      ],
+      [
+        "카페라떼",
+        4000,
+        false
+      ],
+      [
+        "카페모카",
+        4500,
+        false
+      ],
+      [
+        "바닐라라떼",
+        4500,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "틸로스터스",
+    "id": 1784422024990,
+    "kakaoId": "646616890",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/646616890",
+    "expectedAddress": "서울 마포구 신촌로2길 5-14",
+    "kakaoName": "틸로스터스",
+    "kakaoAddress": "text: 서울 마포구 신촌로2길 5-14 1층 (우)04056",
+    "naverAddress": "button \"서울 마포구 신촌로2길 5-14 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1914770644/home",
+    "naverName": "틸로스터스",
+    "kakaoSchedule": {
+      "화": [
+        "08:00 ~ 18:00"
+      ],
+      "수": [
+        "08:00 ~ 18:00"
+      ],
+      "목": [
+        "08:00 ~ 18:00"
+      ],
+      "금": [
+        "08:00 ~ 18:00"
+      ],
+      "토": [
+        "12:00 ~ 20:00"
+      ],
+      "일": [
+        "12:00 ~ 20:00"
+      ],
+      "월": [
+        "08:00 ~ 18:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "08:00 - 18:00"
+      ],
+      "수": [
+        "08:00 - 18:00"
+      ],
+      "목": [
+        "08:00 - 18:00"
+      ],
+      "금": [
+        "08:00 - 18:00"
+      ],
+      "토": [
+        "12:00 - 20:00"
+      ],
+      "일": [
+        "12:00 - 20:00"
+      ],
+      "월": [
+        "08:00 - 18:00"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "클래식 티라미수",
+        8000,
+        false
+      ],
+      [
+        "에스프레소",
+        3000,
+        false
+      ],
+      [
+        "스트라빠짜또",
+        3500,
+        false
+      ],
+      [
+        "아메리카노",
+        5000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "일용할커피 홍대본점",
+    "id": 1784422033892,
+    "kakaoId": "2085156455",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/2085156455",
+    "expectedAddress": "서울 마포구 동교로 156-10",
+    "kakaoName": "일용할커피 홍대본점",
+    "kakaoAddress": "text: 서울 마포구 동교로 156-10 사단법인한국기독학생중앙회관 1층 (우)04031",
+    "naverAddress": "button \"서울 마포구 동교로 156-10 1층 1호\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1549136173/home",
+    "naverName": "일용할커피 홍대본점",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 17:30"
+      ],
+      "수": [
+        "11:00 ~ 17:30"
+      ],
+      "목": [
+        "11:00 ~ 17:30"
+      ],
+      "금": [
+        "11:00 ~ 20:00"
+      ],
+      "토": [
+        "11:00 ~ 20:00"
+      ],
+      "월": [
+        "11:00 ~ 17:30"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "수": [
+        "11:30 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "목": [
+        "11:30 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "금": [
+        "한글날12:00 - 20:00"
+      ],
+      "토": [
+        "12:00 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "정기휴무 (매주 일요일)"
+      ],
+      "월": [
+        "11:30 - 20:00",
+        "19:30 라스트오더"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "12:00~20:00"
+    },
+    "menu": [
+      [
+        "아메리카노",
+        4500,
+        false
+      ],
+      [
+        "히비스커스",
+        5000,
+        false
+      ],
+      [
+        "페퍼민트",
+        5000,
+        false
+      ],
+      [
+        "레몬그라스",
+        5000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "말릭",
+    "id": 1784422105376,
+    "kakaoId": "854125937",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/854125937",
+    "expectedAddress": "서울 마포구 와우산로29바길 20",
+    "kakaoName": "말릭",
+    "kakaoAddress": "text: 서울 마포구 와우산로29바길 20 지하1층 (우)04053",
+    "kakaoSchedule": {
+      "화": [
+        "09:00 ~ 21:00"
+      ],
+      "수": [
+        "09:00 ~ 21:00"
+      ],
+      "목": [
+        "09:00 ~ 21:00"
+      ],
+      "금": [
+        "12:00 ~ 21:00"
+      ],
+      "토": [
+        "12:00 ~ 21:00"
+      ],
+      "일": [
+        "12:00 ~ 21:00"
+      ],
+      "월": [
+        "09:00 ~ 21:00"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "너티크림라떼",
+        6000,
+        false
+      ],
+      [
+        "체리파이",
+        8500,
+        false
+      ],
+      [
+        "말릭아이스티",
+        6500,
+        false
+      ],
+      [
+        "발로나쇼콜라",
+        5800,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "서교포차",
+    "id": 1784422144087,
+    "kakaoId": "1634331865",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1634331865",
+    "expectedAddress": "서울 마포구 잔다리로 5",
+    "kakaoName": "서교포차",
+    "kakaoAddress": "text: 서울 마포구 잔다리로 5 1-3층 (우)04049",
+    "naverAddress": "button \"서울 마포구 잔다리로 5 1층, 2층, 3층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1917290125/home",
+    "naverName": "서교포차",
+    "kakaoSchedule": {
+      "화": [
+        "17:00 ~ 05:00"
+      ],
+      "수": [
+        "17:00 ~ 05:00"
+      ],
+      "목": [
+        "17:00 ~ 05:00"
+      ],
+      "금": [
+        "17:00 ~ 08:00"
+      ],
+      "토": [
+        "17:00 ~ 08:00"
+      ],
+      "일": [
+        "17:00 ~ 05:00"
+      ],
+      "월": [
+        "17:00 ~ 05:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ],
+      "수": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ],
+      "목": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ],
+      "금": [
+        "17:00 - 다음 날 08:00",
+        "07:00 라스트오더"
+      ],
+      "토": [
+        "17:00 - 다음 날 08:00",
+        "07:00 라스트오더"
+      ],
+      "일": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ],
+      "월": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "삼겹두부김치",
+        23900,
+        false
+      ],
+      [
+        "해물순두부짬뽕탕",
+        23900,
+        false
+      ],
+      [
+        "치즈계란말이",
+        18900,
+        false
+      ],
+      [
+        "오징어 볶음",
+        19900,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "벽돌포차 홍대점",
+    "id": 1784422151560,
+    "kakaoId": "1382220123",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1382220123",
+    "expectedAddress": "서울 마포구 와우산로17길 5",
+    "kakaoName": "벽돌포차 홍대점",
+    "kakaoAddress": "text: 서울 마포구 와우산로17길 5 밤사빌딩 1-2층 (우)04049",
+    "naverAddress": "button \"서울 마포구 와우산로17길 5\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1869206869/home",
+    "naverName": "벽돌포차 홍대점",
+    "kakaoSchedule": {
+      "화": [
+        "17:00 ~ 05:00"
+      ],
+      "수": [
+        "17:00 ~ 05:00"
+      ],
+      "목": [
+        "17:00 ~ 05:00"
+      ],
+      "금": [
+        "17:00 ~ 05:00"
+      ],
+      "토": [
+        "17:00 ~ 06:00"
+      ],
+      "일": [
+        "17:00 ~ 05:00"
+      ],
+      "월": [
+        "17:00 ~ 05:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ],
+      "수": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ],
+      "목": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ],
+      "금": [
+        "17:00 - 다음 날 06:00",
+        "05:00 라스트오더"
+      ],
+      "토": [
+        "17:00 - 다음 날 06:00",
+        "05:00 라스트오더"
+      ],
+      "일": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ],
+      "월": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "육회 물회",
+        24900,
+        false
+      ],
+      [
+        "국물 닭발(무뼈)",
+        23900,
+        false
+      ],
+      [
+        "통삼겹김치찜",
+        21900,
+        false
+      ],
+      [
+        "마라전골",
+        22900,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "삼거리포차",
+    "id": 1784422157519,
+    "kakaoId": "7919830",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/7919830",
+    "expectedAddress": "서울 마포구 와우산로 70",
+    "kakaoName": "삼거리포차",
+    "kakaoAddress": "text: 서울 마포구 와우산로 70 1-2층 (우)04067",
+    "naverAddress": "button \"서울 은평구 응암로13길 23\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1909145409/home",
+    "naverName": "삼거리포차",
+    "kakaoSchedule": {
+      "화": [
+        "17:00 ~ 05:30",
+        "05:00 라스트오더"
+      ],
+      "수": [
+        "17:00 ~ 05:30",
+        "05:00 라스트오더"
+      ],
+      "목": [
+        "17:00 ~ 05:30",
+        "05:00 라스트오더"
+      ],
+      "금": [
+        "17:00 ~ 05:30",
+        "05:00 라스트오더"
+      ],
+      "토": [
+        "17:00 ~ 05:30",
+        "05:00 라스트오더"
+      ],
+      "일": [
+        "17:00 ~ 05:30",
+        "05:00 라스트오더"
+      ],
+      "월": [
+        "17:00 ~ 05:30",
+        "05:00 라스트오더"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "모듬튀김",
+        22000,
+        false
+      ],
+      [
+        "세트1",
+        38000,
+        false
+      ],
+      [
+        "세트2",
+        36000,
+        false
+      ],
+      [
+        "오뎅탕",
+        20000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "좋아해닭발1",
+    "id": 1784422164833,
+    "kakaoId": "1558238643",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1558238643",
+    "expectedAddress": "서울 마포구 와우산로 107",
+    "kakaoName": "좋아해닭발1",
+    "kakaoAddress": "text: 서울 마포구 와우산로 107 1층 (우)04054",
+    "kakaoSchedule": {
+      "화": [
+        "휴무일"
+      ],
+      "수": [
+        "15:00 ~ 01:30"
+      ],
+      "목": [
+        "15:00 ~ 01:30"
+      ],
+      "금": [
+        "15:00 ~ 01:30"
+      ],
+      "토": [
+        "15:00 ~ 01:30"
+      ],
+      "일": [
+        "15:00 ~ 01:30"
+      ],
+      "월": [
+        "15:00 ~ 01:30"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "짜글이닭발",
+        32800,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "연남주막1987",
+    "id": 1784422171753,
+    "kakaoId": "2058942922",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/2058942922",
+    "expectedAddress": "서울 마포구 동교로 212-5",
+    "kakaoName": "연남주막1987",
+    "kakaoAddress": "text: 서울 마포구 동교로 212-5 1층 (우)03994",
+    "naverAddress": "button \"서울 마포구 동교로 212-5 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1252808612/home",
+    "naverName": "연남주막1987",
+    "kakaoSchedule": {
+      "화": [
+        "15:00 ~ 03:00"
+      ],
+      "수": [
+        "15:00 ~ 03:00"
+      ],
+      "목": [
+        "15:00 ~ 03:00"
+      ],
+      "금": [
+        "15:00 ~ 03:00"
+      ],
+      "토": [
+        "12:00 ~ 03:00"
+      ],
+      "일": [
+        "12:00 ~ 03:00"
+      ],
+      "월": [
+        "15:00 ~ 03:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "15:00 - 다음 날 03:00",
+        "02:00 라스트오더"
+      ],
+      "수": [
+        "15:00 - 다음 날 03:00",
+        "02:00 라스트오더"
+      ],
+      "목": [
+        "15:00 - 다음 날 03:00",
+        "02:00 라스트오더"
+      ],
+      "금": [
+        "15:00 - 다음 날 03:00",
+        "02:00 라스트오더"
+      ],
+      "토": [
+        "12:00 - 다음 날 03:00",
+        "02:00 라스트오더"
+      ],
+      "일": [
+        "12:00 - 다음 날 03:00",
+        "02:00 라스트오더"
+      ],
+      "월": [
+        "15:00 - 다음 날 03:00",
+        "02:00 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "반반전",
+        23000,
+        false
+      ],
+      [
+        "곱도리탕",
+        33000,
+        false
+      ],
+      [
+        "꿀복숭아막걸리",
+        13900,
+        false
+      ],
+      [
+        "꽃도리탕",
+        35000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "비랩 홍대점",
+    "id": 1784422187517,
+    "kakaoId": "1420799753",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1420799753",
+    "expectedAddress": "서울 마포구 잔다리로 10",
+    "kakaoName": "비랩 홍대점",
+    "kakaoAddress": "text: 서울 마포구 잔다리로 10 3층 (우)04041",
+    "naverAddress": "button \"서울 마포구 잔다리로 10 3층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1309781106/home",
+    "naverName": "비랩 홍대점",
+    "kakaoSchedule": {
+      "화": [
+        "17:30 ~ 02:00"
+      ],
+      "수": [
+        "17:30 ~ 02:00"
+      ],
+      "목": [
+        "17:30 ~ 02:00"
+      ],
+      "금": [
+        "17:30 ~ 02:00"
+      ],
+      "토": [
+        "17:30 ~ 02:00"
+      ],
+      "일": [
+        "17:30 ~ 02:00"
+      ],
+      "월": [
+        "17:30 ~ 02:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "17:30 - 다음 날 02:00",
+        "01:30 라스트오더"
+      ],
+      "수": [
+        "17:30 - 다음 날 02:00",
+        "01:30 라스트오더"
+      ],
+      "목": [
+        "17:30 - 다음 날 02:00",
+        "01:30 라스트오더"
+      ],
+      "금": [
+        "한글날17:30 - 다음 날 02:00"
+      ],
+      "토": [
+        "17:30 - 다음 날 02:00",
+        "01:30 라스트오더"
+      ],
+      "일": [
+        "17:30 - 다음 날 02:00",
+        "01:30 라스트오더"
+      ],
+      "월": [
+        "17:30 - 다음 날 02:00",
+        "01:30 라스트오더"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "17:30~02:00"
+    },
+    "menu": [
+      [
+        "무제한 칵테일",
+        18000,
+        false
+      ],
+      [
+        "무제한 칵테일2",
+        18000,
+        false
+      ],
+      [
+        "버터팝콘",
+        5000,
+        false
+      ],
+      [
+        "디저트 스폴리아띠네",
+        6000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "비터스",
+    "id": 1784422243790,
+    "kakaoId": "521522824",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/521522824",
+    "expectedAddress": "서울 마포구 홍익로 3-30",
+    "kakaoName": "비터스",
+    "kakaoAddress": "text: 서울 마포구 홍익로 3-30 포도빌딩 지1층 (우)04040",
+    "naverAddress": "button \"서울 마포구 홍익로 3-30 B1\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1595745527/home",
+    "naverName": "비터스",
+    "kakaoSchedule": {
+      "화": [
+        "19:00 ~ 02:00"
+      ],
+      "수": [
+        "19:00 ~ 02:00"
+      ],
+      "목": [
+        "19:00 ~ 02:00"
+      ],
+      "금": [
+        "19:00 ~ 02:00"
+      ],
+      "토": [
+        "19:00 ~ 02:00"
+      ],
+      "일": [
+        "19:00 ~ 02:00"
+      ],
+      "월": [
+        "19:00 ~ 02:00"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "19:00 - 다음 날 02:00",
+        "01:30 라스트오더"
+      ],
+      "화": [
+        "19:00 - 다음 날 02:00",
+        "01:30 라스트오더"
+      ],
+      "수": [
+        "19:00 - 다음 날 02:00",
+        "01:30 라스트오더"
+      ],
+      "목": [
+        "19:00 - 다음 날 02:00",
+        "01:30 라스트오더"
+      ],
+      "금": [
+        "19:00 - 다음 날 02:00",
+        "01:30 라스트오더"
+      ],
+      "토": [
+        "19:00 - 다음 날 02:00",
+        "01:30 라스트오더"
+      ],
+      "일": [
+        "19:00 - 다음 날 02:00",
+        "01:30 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "Zezé",
+        22000,
+        false
+      ],
+      [
+        "Pereco no.2",
+        22000,
+        false
+      ],
+      [
+        "감바스",
+        25000,
+        false
+      ],
+      [
+        "멜론하몽플레이트",
+        23000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "연남마실",
+    "id": 1784422252237,
+    "kakaoId": "485216607",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/485216607",
+    "expectedAddress": "서울 마포구 동교로51길 129-2",
+    "kakaoName": "연남마실",
+    "kakaoAddress": "text: 서울 마포구 동교로51길 129-2 1층 (우)03979",
+    "naverAddress": "button \"서울 마포구 동교로51길 129-2 연남마실\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1486816049/home",
+    "naverName": "연남마실",
+    "kakaoSchedule": {
+      "화": [
+        "휴무일"
+      ],
+      "수": [
+        "18:00 ~ 01:30"
+      ],
+      "목": [
+        "18:00 ~ 01:30"
+      ],
+      "금": [
+        "18:00 ~ 01:30"
+      ],
+      "토": [
+        "18:00 ~ 01:30"
+      ],
+      "일": [
+        "18:00 ~ 01:30"
+      ],
+      "월": [
+        "18:00 ~ 01:30"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "정기휴무 (매주 화요일)"
+      ],
+      "수": [
+        "18:00 - 다음 날 01:30",
+        "01:00 라스트오더"
+      ],
+      "목": [
+        "18:00 - 다음 날 01:30",
+        "01:00 라스트오더"
+      ],
+      "금": [
+        "18:00 - 다음 날 01:30",
+        "01:00 라스트오더"
+      ],
+      "토": [
+        "18:00 - 다음 날 01:30",
+        "01:00 라스트오더"
+      ],
+      "일": [
+        "18:00 - 다음 날 01:30",
+        "01:00 라스트오더"
+      ],
+      "월": [
+        "18:00 - 다음 날 01:30",
+        "01:00 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "마실 모듬 플래터",
+        32000,
+        false
+      ],
+      [
+        "구운브리치즈",
+        18000,
+        false
+      ],
+      [
+        "가든 카프레제",
+        20000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "포차플러팅",
+    "id": 1784422296594,
+    "kakaoId": "817854079",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/817854079",
+    "expectedAddress": "서울 마포구 잔다리로 3",
+    "kakaoName": "포차플러팅",
+    "kakaoAddress": "text: 서울 마포구 잔다리로 3 3-4층 (우)04049",
+    "naverAddress": "button \"서울 마포구 잔다리로 3 4층, 5층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1315833471/home",
+    "naverName": "포차플러팅",
+    "kakaoSchedule": {
+      "화": [
+        "17:30 ~ 06:00",
+        "05:00 라스트오더"
+      ],
+      "수": [
+        "17:30 ~ 06:00",
+        "05:00 라스트오더"
+      ],
+      "목": [
+        "17:30 ~ 06:00",
+        "05:00 라스트오더"
+      ],
+      "금": [
+        "17:30 ~ 06:00",
+        "05:00 라스트오더"
+      ],
+      "토": [
+        "17:30 ~ 06:00",
+        "05:00 라스트오더"
+      ],
+      "일": [
+        "17:30 ~ 06:00",
+        "05:00 라스트오더"
+      ],
+      "월": [
+        "17:30 ~ 06:00",
+        "05:00 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "17:30 - 다음 날 06:00",
+        "05:00 라스트오더"
+      ],
+      "화": [
+        "17:30 - 다음 날 06:00",
+        "05:00 라스트오더"
+      ],
+      "수": [
+        "17:30 - 다음 날 06:00",
+        "05:00 라스트오더"
+      ],
+      "목": [
+        "17:30 - 다음 날 06:00",
+        "05:00 라스트오더"
+      ],
+      "금": [
+        "17:30 - 다음 날 06:00",
+        "05:00 라스트오더"
+      ],
+      "토": [
+        "17:30 - 다음 날 06:00",
+        "05:00 라스트오더"
+      ],
+      "일": [
+        "17:30 - 다음 날 06:00",
+        "05:00 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "왕새우튀김",
+        12900,
+        false
+      ],
+      [
+        "타코야끼",
+        9900,
+        false
+      ],
+      [
+        "케이준감자",
+        8900,
+        false
+      ],
+      [
+        "스노윙치즈닭껍질튀김",
+        9900,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "다락투",
+    "id": 1784423236883,
+    "kakaoId": "10278424",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/10278424",
+    "expectedAddress": "서울 마포구 와우산로21길 4-3",
+    "kakaoName": "다락투",
+    "kakaoAddress": "text: 서울 마포구 와우산로21길 4-3 1층 (우)04040",
+    "naverAddress": "button \"서울 마포구 와우산로21길 4-3\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/31202900/home",
+    "naverName": "다락투",
+    "kakaoSchedule": {
+      "화": [
+        "08:30 ~ 20:30"
+      ],
+      "수": [
+        "08:30 ~ 20:30"
+      ],
+      "목": [
+        "08:30 ~ 20:30"
+      ],
+      "금": [
+        "08:30 ~ 20:30"
+      ],
+      "토": [
+        "08:30 ~ 20:30"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "08:30 ~ 20:30"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "08:30 - 20:30"
+      ],
+      "수": [
+        "08:30 - 20:30"
+      ],
+      "목": [
+        "08:30 - 20:30"
+      ],
+      "금": [
+        "08:30 - 20:30"
+      ],
+      "토": [
+        "08:30 - 20:30"
+      ],
+      "일": [
+        "정기휴무 (매주 일요일)"
+      ],
+      "월": [
+        "08:30 - 20:30"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "닭곰탕 (보)",
+        10000,
+        false
+      ],
+      [
+        "닭 칼국수",
+        11000,
+        false
+      ],
+      [
+        "닭곰탕 (특)",
+        11000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "써브웨이 홍익대점",
+    "id": 1784423248720,
+    "kakaoId": "948550238",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/948550238",
+    "expectedAddress": "서울 마포구 홍익로 3",
+    "kakaoName": "써브웨이 홍익대점",
+    "kakaoAddress": "text: 서울 마포구 홍익로 3 1층 (우)04040",
+    "kakaoSchedule": {
+      "화": [
+        "08:00 ~ 22:00"
+      ],
+      "수": [
+        "08:00 ~ 22:00"
+      ],
+      "목": [
+        "08:00 ~ 22:00"
+      ],
+      "금": [
+        "08:00 ~ 22:00"
+      ],
+      "토": [
+        "08:00 ~ 22:00"
+      ],
+      "일": [
+        "08:00 ~ 22:00"
+      ],
+      "월": [
+        "08:00 ~ 22:00"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "환시앙",
+    "id": 1784423257770,
+    "kakaoId": "1056365433",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1056365433",
+    "expectedAddress": "서울 마포구 와우산로 51",
+    "kakaoName": "환시앙",
+    "kakaoAddress": "text: 서울 마포구 와우산로 51 2층 (우)04049",
+    "naverAddress": "button \"서울 마포구 와우산로 51 2층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1181997169/home",
+    "naverName": "환시앙",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 22:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "11:00 ~ 22:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:00 ~ 22:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "11:00 ~ 22:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:00 ~ 22:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "11:00 ~ 22:00",
+        "15:00 ~ 17:00 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:00 - 22:00",
+        "15:00 - 17:00 브레이크타임"
+      ],
+      "수": [
+        "11:00 - 22:00",
+        "15:00 - 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:00 - 22:00",
+        "15:00 - 17:00 브레이크타임"
+      ],
+      "금": [
+        "한글날11:00 - 22:00",
+        "15:00 - 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:00 - 22:00",
+        "15:00 - 17:00 브레이크타임"
+      ],
+      "일": [
+        "정기휴무 (매주 일요일)"
+      ],
+      "월": [
+        "11:00 - 22:00",
+        "15:00 - 17:00 브레이크타임"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "11:00~22:00"
+    },
+    "menu": [
+      [
+        "간짜장",
+        9000,
+        false
+      ],
+      [
+        "짜장",
+        7000,
+        false
+      ],
+      [
+        "짬뽕",
+        9000,
+        false
+      ],
+      [
+        "볶음밥",
+        9000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "샤브라오",
+    "id": 1784423266625,
+    "kakaoId": "855515350",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/855515350",
+    "expectedAddress": "서울 마포구 독막로19길 45",
+    "kakaoName": "샤브라오",
+    "kakaoAddress": "text: 서울 마포구 독막로19길 45 (우)04068",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 22:00"
+      ],
+      "수": [
+        "11:00 ~ 22:00"
+      ],
+      "목": [
+        "11:00 ~ 22:00"
+      ],
+      "금": [
+        "11:00 ~ 22:00"
+      ],
+      "토": [
+        "11:00 ~ 22:00"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "11:00 ~ 22:00"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "오리지널샤브 한돈(1인)",
+        9500,
+        false
+      ],
+      [
+        "오리지널샤브 소고기(1인)",
+        8500,
+        false
+      ],
+      [
+        "스파이시샤브 소고기(1인)",
+        8900,
+        false
+      ],
+      [
+        "스파이시샤브 한돈(1인)",
+        9900,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "리파인 망원",
+    "id": 1784424651874,
+    "kakaoId": "1189035228",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1189035228",
+    "expectedAddress": "서울 마포구 포은로 63",
+    "kakaoName": "리파인 망원",
+    "kakaoAddress": "text: 서울 마포구 포은로 63 형섭빌딩 2층 (우)04017",
+    "naverAddress": "button \"서울 마포구 포은로 63 PA63빌딩 2층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1933700256/home",
+    "naverName": "리파인 망원",
+    "kakaoSchedule": {
+      "화": [
+        "17:00 ~ 01:00"
+      ],
+      "수": [
+        "17:00 ~ 01:00"
+      ],
+      "목": [
+        "17:00 ~ 01:00"
+      ],
+      "금": [
+        "17:00 ~ 01:00"
+      ],
+      "토": [
+        "17:00 ~ 01:00"
+      ],
+      "일": [
+        "17:00 ~ 01:00"
+      ],
+      "월": [
+        "휴무일"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "17:00 - 다음 날 01:00",
+        "00:00 라스트오더"
+      ],
+      "수": [
+        "17:00 - 다음 날 01:00",
+        "00:00 라스트오더"
+      ],
+      "목": [
+        "17:00 - 다음 날 01:00",
+        "00:00 라스트오더"
+      ],
+      "금": [
+        "한글날17:00 - 다음 날 01:00"
+      ],
+      "토": [
+        "17:00 - 다음 날 01:00",
+        "00:00 라스트오더"
+      ],
+      "일": [
+        "17:00 - 다음 날 01:00",
+        "00:00 라스트오더"
+      ],
+      "월": [
+        "정기휴무 (매주 월요일)"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "17:00~01:00"
+    },
+    "menu": [
+      [
+        "감자전",
+        21000,
+        false
+      ],
+      [
+        "우대갈비",
+        47000,
+        false
+      ],
+      [
+        "크림수제비",
+        18900,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "넌덕",
+    "id": 1784424662397,
+    "kakaoId": "988663478",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/988663478",
+    "expectedAddress": "서울 마포구 월드컵로5길 74",
+    "kakaoName": "넌덕",
+    "kakaoAddress": "text: 서울 마포구 월드컵로5길 74 1층 (우)04021",
+    "naverAddress": "button \"서울 마포구 월드컵로5길 74 1층 넌덕\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1255383366/home",
+    "naverName": "넌덕",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "12:00 ~ 18:00"
+      ],
+      "토": [
+        "휴무일"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 20:30",
+        "15:30 - 17:00 브레이크타임",
+        "15:00, 20:00 라스트오더"
+      ],
+      "수": [
+        "11:30 - 20:30",
+        "15:30 - 17:00 브레이크타임",
+        "15:00, 20:00 라스트오더"
+      ],
+      "목": [
+        "11:30 - 20:30",
+        "15:30 - 17:00 브레이크타임",
+        "15:00, 20:00 라스트오더"
+      ],
+      "금": [
+        "12:00 - 18:00"
+      ],
+      "토": [
+        "휴무"
+      ],
+      "일": [
+        "정기휴무 (매주 일요일)"
+      ],
+      "월": [
+        "11:30 - 20:30",
+        "15:30 - 17:00 브레이크타임",
+        "15:00, 20:00 라스트오더"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "12:00~18:00",
+      "2026-10-10": "휴무"
+    },
+    "menu": [
+      [
+        "2달의버거(10-11월)",
+        12500,
+        false
+      ],
+      [
+        "넌덕버거",
+        9500,
+        false
+      ],
+      [
+        "치즈버거",
+        8500,
+        false
+      ],
+      [
+        "루꼴라버거",
+        10500,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "문학살롱 초고",
+    "id": 1784424699863,
+    "kakaoId": "262768520",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/262768520",
+    "expectedAddress": "서울 마포구 독막로2길 30",
+    "kakaoName": "문학살롱 초고",
+    "kakaoAddress": "text: 서울 마포구 독막로2길 30 지하1층 101호 (우)04071",
+    "naverAddress": "button \"서울 마포구 독막로2길 30 지하\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1647322114/home",
+    "naverName": "문학살롱 초고",
+    "kakaoSchedule": {
+      "화": [
+        "17:00 ~ 24:00"
+      ],
+      "수": [
+        "휴무일"
+      ],
+      "목": [
+        "17:00 ~ 24:00"
+      ],
+      "금": [
+        "한글날 휴무"
+      ],
+      "토": [
+        "16:00 ~ 24:00"
+      ],
+      "일": [
+        "16:00 ~ 24:00"
+      ],
+      "월": [
+        "17:00 ~ 24:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "17:00 - 24:00",
+        "23:30 라스트오더"
+      ],
+      "수": [
+        "정기휴무 (매주 수요일)"
+      ],
+      "목": [
+        "17:00 - 24:00",
+        "23:30 라스트오더"
+      ],
+      "금": [
+        "한글날17:00 - 24:00"
+      ],
+      "토": [
+        "16:00 - 24:00",
+        "23:30 라스트오더"
+      ],
+      "일": [
+        "16:00 - 24:00",
+        "23:30 라스트오더"
+      ],
+      "월": [
+        "17:00 - 24:00",
+        "23:30 라스트오더"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "17:00~24:00"
+    },
+    "menu": [
+      [
+        "우리는 분위기를 사랑해",
+        15000,
+        false
+      ],
+      [
+        "식물원",
+        15000,
+        false
+      ],
+      [
+        "제주에 혼자 살고 술은 약해요",
+        16000,
+        false
+      ],
+      [
+        "섬",
+        14000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "스파카나폴리",
+    "id": 1784424715050,
+    "kakaoId": "16050660",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/16050660",
+    "expectedAddress": "서울 마포구 양화로6길 28",
+    "kakaoName": "스파카나폴리",
+    "kakaoAddress": "text: 서울 마포구 양화로6길 28 2층 (우)04046",
+    "naverAddress": "button \"서울 마포구 양화로6길 28 2층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/20136283/home",
+    "naverName": "스파카나폴리 합정",
+    "kakaoSchedule": {
+      "화": [
+        "휴무일"
+      ],
+      "수": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "일": [
+        "11:30 ~ 21:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "월": [
+        "휴무일"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "정기휴무 (매주 화요일)"
+      ],
+      "수": [
+        "11:30 - 21:30",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "11:30 - 21:30",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "한글날11:30 - 21:30",
+        "15:00 - 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:30 - 21:30",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "11:30 - 21:30",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "월": [
+        "정기휴무 (매주 월요일)",
+        "\"- 주말 브레이크타임 있습니다. 런치라스트오더 14:00\""
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "11:30~21:30"
+    },
+    "menu": [],
+    "operatingNote": null
+  },
+  {
+    "name": "큐멘",
+    "id": 1784424729339,
+    "kakaoId": "681374114",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/681374114",
+    "expectedAddress": "서울 마포구 홍익로 3-11",
+    "kakaoName": "큐멘",
+    "kakaoAddress": "text: 서울 마포구 홍익로 3-11 새로빌딩 1층 101호 (우)04040",
+    "naverAddress": "button \"서울 마포구 홍익로 3-11 좌측호\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/2037807713/home",
+    "naverName": "큐멘",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 20:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "11:00 ~ 20:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:00 ~ 20:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "11:00 ~ 20:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:00 ~ 20:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "일": [
+        "11:00 ~ 16:00"
+      ],
+      "월": [
+        "11:00 ~ 20:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:00 - 20:00",
+        "16:00 - 17:00 브레이크타임",
+        "19:50 라스트오더"
+      ],
+      "수": [
+        "11:00 - 20:00",
+        "16:00 - 17:00 브레이크타임",
+        "19:50 라스트오더"
+      ],
+      "목": [
+        "11:00 - 20:00",
+        "16:00 - 17:00 브레이크타임",
+        "19:50 라스트오더"
+      ],
+      "금": [
+        "11:00 - 20:00",
+        "16:00 - 17:00 브레이크타임",
+        "19:50 라스트오더"
+      ],
+      "토": [
+        "11:00 - 20:00",
+        "16:00 - 17:00 브레이크타임",
+        "19:50 라스트오더"
+      ],
+      "일": [
+        "11:00 - 16:00",
+        "15:50 라스트오더"
+      ],
+      "월": [
+        "11:00 - 20:00",
+        "16:00 - 17:00 브레이크타임",
+        "19:50 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "동죽 쇼유라멘",
+        11500,
+        false
+      ],
+      [
+        "큐멘 쇼유라멘",
+        9900,
+        false
+      ],
+      [
+        "고기 마요 덮밥",
+        3000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "카와카츠 합정점",
+    "id": 1784424743006,
+    "kakaoId": "1363495640",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1363495640",
+    "expectedAddress": "서울 마포구 양화로 78-7",
+    "kakaoName": "카와카츠 합정점",
+    "kakaoAddress": "text: 서울 마포구 양화로 78-7 1층 (우)04043",
+    "naverAddress": "button \"서울 마포구 양화로 78-7 1층 카와카츠\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1152661518/home",
+    "naverName": "카와카츠 합정점",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:30 브레이크타임"
+      ],
+      "수": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:30 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:30 브레이크타임"
+      ],
+      "금": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:30 브레이크타임"
+      ],
+      "토": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:30 브레이크타임"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:30 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 20:30",
+        "15:00 - 17:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "수": [
+        "11:30 - 20:30",
+        "15:00 - 17:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "목": [
+        "11:30 - 20:30",
+        "15:00 - 17:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "금": [
+        "11:30 - 20:30",
+        "15:00 - 17:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "토": [
+        "11:30 - 20:30",
+        "15:00 - 17:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "일": [
+        "정기휴무 (매주 일요일)"
+      ],
+      "월": [
+        "11:30 - 20:30",
+        "15:00 - 17:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "히레안심카츠",
+        17000,
+        false
+      ],
+      [
+        "특로스상등심카츠",
+        19000,
+        false
+      ],
+      [
+        "로스등심카츠",
+        16000,
+        false
+      ],
+      [
+        "모듬카츠",
+        19000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "스미레",
+    "id": 1784424751527,
+    "kakaoId": "664218957",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/664218957",
+    "expectedAddress": "서울 서대문구 연세로4길 61",
+    "kakaoName": "스미레",
+    "kakaoAddress": "text: 서울 서대문구 연세로4길 61 1층 (우)03777",
+    "naverAddress": "button \"서울 서대문구 연세로4길 61\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1325384742/home",
+    "naverName": "스미레",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "일": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 17:00 브레이크타임"
+      ],
+      "월": [
+        "휴무일"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 20:30",
+        "15:00 - 17:00 브레이크타임"
+      ],
+      "수": [
+        "11:30 - 20:30",
+        "15:00 - 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:30 - 20:30",
+        "15:00 - 17:00 브레이크타임"
+      ],
+      "금": [
+        "11:30 - 20:30",
+        "15:00 - 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:30 - 20:30",
+        "15:00 - 17:00 브레이크타임"
+      ],
+      "일": [
+        "11:30 - 20:30",
+        "15:00 - 17:00 브레이크타임"
+      ],
+      "월": [
+        "정기휴무 (매주 월요일)"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "부타동 (삼겹살)",
+        16000,
+        false
+      ],
+      [
+        "부타동 (등심)",
+        12000,
+        false
+      ],
+      [
+        "부타동 (특상 등심)",
+        15000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "아키야라멘",
+    "id": 1784424767490,
+    "kakaoId": "604742224",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/604742224",
+    "expectedAddress": "서울 마포구 토정로 39-3",
+    "kakaoName": "아키야라멘",
+    "kakaoAddress": "text: 서울 마포구 토정로 39-3 1층 (우)04083",
+    "naverAddress": "button \"서울 마포구 토정로 39-3 1층 아키야라멘\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1464984328/home",
+    "naverName": "아키야라멘",
+    "kakaoSchedule": {
+      "화": [
+        "휴무일"
+      ],
+      "수": [
+        "11:30 ~ 21:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 21:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "11:30 ~ 21:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:30 ~ 21:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "일": [
+        "11:30 ~ 21:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ],
+      "월": [
+        "11:30 ~ 21:00",
+        "16:00 ~ 17:00 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "정기휴무 (매주 화요일)"
+      ],
+      "수": [
+        "11:30 - 21:00",
+        "16:00 - 17:00 브레이크타임",
+        "15:30, 20:30 라스트오더"
+      ],
+      "목": [
+        "11:30 - 21:00",
+        "16:00 - 17:00 브레이크타임",
+        "15:30, 20:30 라스트오더"
+      ],
+      "금": [
+        "한글날11:30 - 21:00",
+        "16:00 - 17:00 브레이크타임"
+      ],
+      "토": [
+        "11:30 - 21:00",
+        "16:00 - 17:00 브레이크타임",
+        "15:30, 20:30 라스트오더"
+      ],
+      "일": [
+        "11:30 - 21:00",
+        "16:00 - 17:00 브레이크타임",
+        "15:30, 20:30 라스트오더"
+      ],
+      "월": [
+        "11:30 - 21:00",
+        "16:00 - 17:00 브레이크타임",
+        "15:30, 20:30 라스트오더"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "11:30~21:00"
+    },
+    "menu": [
+      [
+        "미소라멘",
+        14000,
+        false
+      ],
+      [
+        "아키야라멘",
+        11000,
+        false
+      ],
+      [
+        "매운아키야라멘",
+        12000,
+        false
+      ],
+      [
+        "쿠로라멘",
+        12000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "멘야준",
+    "id": 1784424778015,
+    "kakaoId": "120900052",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/120900052",
+    "expectedAddress": "서울 마포구 동교로 128",
+    "kakaoName": "멘야준",
+    "kakaoAddress": "text: 서울 마포구 동교로 128 (우)04030",
+    "naverAddress": "button \"서울 마포구 동교로 128\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1070926739/home",
+    "naverName": "멘야준 홍대점",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 20:00"
+      ],
+      "수": [
+        "11:00 ~ 20:00"
+      ],
+      "목": [
+        "11:00 ~ 20:00"
+      ],
+      "금": [
+        "11:00 ~ 20:00"
+      ],
+      "토": [
+        "11:00 ~ 20:00"
+      ],
+      "일": [
+        "11:00 ~ 20:00"
+      ],
+      "월": [
+        "11:00 ~ 20:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:00 - 20:30"
+      ],
+      "수": [
+        "11:00 - 20:30"
+      ],
+      "목": [
+        "11:00 - 20:30"
+      ],
+      "금": [
+        "11:00 - 20:30"
+      ],
+      "토": [
+        "11:00 - 20:30"
+      ],
+      "일": [
+        "11:00 - 20:30"
+      ],
+      "월": [
+        "11:00 - 20:30"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "특선쇼유라멘",
+        15500,
+        false
+      ],
+      [
+        "특선시로쇼유라멘(白)",
+        15800,
+        false
+      ],
+      [
+        "완탕쇼유라멘",
+        12500,
+        false
+      ],
+      [
+        "차슈쇼유라멘",
+        12500,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "하쿠텐",
+    "id": 1784424791995,
+    "kakaoId": "2000734287",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/2000734287",
+    "expectedAddress": "서울 마포구 동교로 266-12",
+    "kakaoName": "하쿠텐",
+    "kakaoAddress": "text: 서울 마포구 동교로 266-12 (우)03982",
+    "naverAddress": "button \"서울 마포구 동교로 266-12 반지하\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1031219213/home",
+    "naverName": "하쿠텐라멘",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "수": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "토": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "월": [
+        "11:30 ~ 21:00",
+        "15:00 ~ 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 21:00",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "수": [
+        "11:30 - 21:00",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "11:30 - 21:00",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "11:30 - 21:00",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "토": [
+        "11:30 - 21:00",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "11:30 - 21:00",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ],
+      "월": [
+        "11:30 - 21:00",
+        "15:00 - 17:00 브레이크타임",
+        "20:30 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "이에케 라멘",
+        11000,
+        false
+      ],
+      [
+        "매운이에케 라멘",
+        11500,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "라멘바 시코우",
+    "id": 1784424800605,
+    "kakaoId": "2140098172",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/2140098172",
+    "expectedAddress": "서울 마포구 와우산로7길 33",
+    "kakaoName": "라멘바 시코우",
+    "kakaoAddress": "text: 서울 마포구 와우산로7길 33 1층 101호 (우)04074",
+    "naverAddress": "button \"서울 마포구 와우산로7길 33 1층 101호\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/2010614292/home",
+    "naverName": "라멘바 시코우",
+    "kakaoSchedule": {
+      "화": [
+        "12:00 ~ 18:40",
+        "14:30 ~ 17:00 브레이크타임",
+        "14:20 라스트오더",
+        "18:30 라스트오더"
+      ],
+      "수": [
+        "휴무일"
+      ],
+      "목": [
+        "12:00 ~ 18:40",
+        "14:30 ~ 17:00 브레이크타임",
+        "14:20 라스트오더",
+        "18:30 라스트오더"
+      ],
+      "금": [
+        "12:00 ~ 18:40",
+        "14:30 ~ 17:00 브레이크타임",
+        "14:20 라스트오더",
+        "18:30 라스트오더"
+      ],
+      "토": [
+        "12:00 ~ 18:40",
+        "14:30 ~ 17:00 브레이크타임",
+        "14:20 라스트오더",
+        "18:30 라스트오더"
+      ],
+      "일": [
+        "12:00 ~ 18:40",
+        "14:30 ~ 17:00 브레이크타임",
+        "14:20 라스트오더",
+        "18:30 라스트오더"
+      ],
+      "월": [
+        "12:00 ~ 18:40",
+        "14:30 ~ 17:00 브레이크타임",
+        "14:20 라스트오더",
+        "18:30 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "12:00 - 18:30",
+        "14:30 - 17:00 브레이크타임",
+        "14:20, 18:20 라스트오더"
+      ],
+      "화": [
+        "12:00 - 18:30",
+        "14:30 - 17:00 브레이크타임",
+        "14:20, 18:20 라스트오더"
+      ],
+      "수": [
+        "12:00 - 18:30",
+        "14:30 - 17:00 브레이크타임",
+        "14:20, 18:20 라스트오더"
+      ],
+      "목": [
+        "12:00 - 18:30",
+        "14:30 - 17:00 브레이크타임",
+        "14:20, 18:20 라스트오더"
+      ],
+      "금": [
+        "12:00 - 18:30",
+        "14:30 - 17:00 브레이크타임",
+        "14:20, 18:20 라스트오더"
+      ],
+      "토": [
+        "12:00 - 18:30",
+        "14:30 - 17:00 브레이크타임",
+        "14:20, 18:20 라스트오더"
+      ],
+      "일": [
+        "12:00 - 18:30",
+        "14:30 - 17:00 브레이크타임",
+        "14:20, 18:20 라스트오더"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "쇼유라멘",
+        12500,
+        false
+      ],
+      [
+        "시오라멘",
+        12500,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "우와 연남점",
+    "id": 1784424850971,
+    "kakaoId": "1135820976",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1135820976",
+    "expectedAddress": "서울 마포구 성미산로 161-11",
+    "kakaoName": "우와 연남점",
+    "kakaoAddress": "text: 서울 마포구 성미산로 161-11 화이트하우스 2층 (우)03980",
+    "naverAddress": "button \"서울 마포구 성미산로 161-11 2층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1225027833/home",
+    "naverName": "우와 연남점",
+    "kakaoSchedule": {
+      "화": [
+        "12:00 ~ 22:00",
+        "14:30 ~ 17:00 브레이크타임"
+      ],
+      "수": [
+        "12:00 ~ 22:00",
+        "14:30 ~ 17:00 브레이크타임"
+      ],
+      "목": [
+        "12:00 ~ 22:00",
+        "14:30 ~ 17:00 브레이크타임"
+      ],
+      "금": [
+        "12:00 ~ 22:00",
+        "14:30 ~ 17:00 브레이크타임"
+      ],
+      "토": [
+        "12:00 ~ 22:00",
+        "14:30 ~ 17:00 브레이크타임"
+      ],
+      "일": [
+        "12:00 ~ 22:00",
+        "14:30 ~ 17:00 브레이크타임"
+      ],
+      "월": [
+        "12:00 ~ 22:00",
+        "14:30 ~ 17:00 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "12:00 - 22:00",
+        "14:30 - 17:00 브레이크타임"
+      ],
+      "수": [
+        "12:00 - 22:00",
+        "14:30 - 17:00 브레이크타임"
+      ],
+      "목": [
+        "12:00 - 22:00",
+        "14:30 - 17:00 브레이크타임"
+      ],
+      "금": [
+        "한글날12:00 - 22:00",
+        "14:30 - 17:00 브레이크타임"
+      ],
+      "토": [
+        "12:00 - 22:00",
+        "14:30 - 17:00 브레이크타임"
+      ],
+      "일": [
+        "12:00 - 22:00",
+        "14:30 - 17:00 브레이크타임"
+      ],
+      "월": [
+        "정기휴무 (매주 월요일)"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "12:00~22:00"
+    },
+    "menu": [
+      [
+        "야마이모 오코노미야키 (클래식)",
+        16000,
+        false
+      ],
+      [
+        "야끼소바 (클래식)",
+        16000,
+        false
+      ],
+      [
+        "브로콜리 에비마요",
+        18000,
+        false
+      ],
+      [
+        "철판 꽃갈비살 (100g)",
+        18000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "장작집 연남본점",
+    "id": 1784424865098,
+    "kakaoId": "1191541006",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1191541006",
+    "expectedAddress": "서울 마포구 월드컵북로6길 19",
+    "kakaoName": "장작집 연남본점",
+    "kakaoAddress": "text: 서울 마포구 월드컵북로6길 19 1층 (우)03991",
+    "naverAddress": "button \"서울 마포구 월드컵북로6길 19 1층 장작집\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/750761196/home",
+    "naverName": "장작집 연남본점",
+    "kakaoSchedule": {
+      "화": [
+        "17:00 ~ 24:00"
+      ],
+      "수": [
+        "17:00 ~ 24:00"
+      ],
+      "목": [
+        "17:00 ~ 24:00"
+      ],
+      "금": [
+        "17:00 ~ 24:00"
+      ],
+      "토": [
+        "13:00 ~ 24:00"
+      ],
+      "일": [
+        "13:00 ~ 23:00"
+      ],
+      "월": [
+        "17:00 ~ 24:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "17:00 - 24:00"
+      ],
+      "수": [
+        "17:00 - 24:00"
+      ],
+      "목": [
+        "17:00 - 24:00"
+      ],
+      "금": [
+        "17:00 - 24:00"
+      ],
+      "토": [
+        "13:00 - 24:00"
+      ],
+      "일": [
+        "13:00 - 23:00"
+      ],
+      "월": [
+        "17:00 - 24:00"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "청양크림 - 누룽지 통닭",
+        28000,
+        false
+      ],
+      [
+        "장작 누룽지 통닭",
+        22000,
+        false
+      ],
+      [
+        "달콤양념 - 누룽지 통닭",
+        24000,
+        false
+      ],
+      [
+        "매운양념 - 누룽지 통닭",
+        24000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "본가껍데기 본점",
+    "id": 1784424877781,
+    "kakaoId": "1190084450",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1190084450",
+    "expectedAddress": "서울 마포구 희우정로 68",
+    "kakaoName": "본가껍데기 본점",
+    "kakaoAddress": "text: 서울 마포구 희우정로 68 1층 (우)04017",
+    "naverAddress": "button \"서울 마포구 희우정로 68\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/36624337/home",
+    "naverName": "본가껍데기 본점",
+    "kakaoSchedule": {
+      "화": [
+        "17:00 ~ 23:30"
+      ],
+      "수": [
+        "17:00 ~ 23:30"
+      ],
+      "목": [
+        "17:00 ~ 23:30"
+      ],
+      "금": [
+        "17:00 ~ 23:30"
+      ],
+      "토": [
+        "17:00 ~ 23:30"
+      ],
+      "일": [
+        "17:00 ~ 23:30"
+      ],
+      "월": [
+        "휴무일"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "17:00 - 23:30"
+      ],
+      "수": [
+        "17:00 - 23:30"
+      ],
+      "목": [
+        "17:00 - 23:30"
+      ],
+      "금": [
+        "17:00 - 23:30"
+      ],
+      "토": [
+        "17:00 - 23:30"
+      ],
+      "일": [
+        "17:00 - 23:30"
+      ],
+      "월": [
+        "17:00 - 23:30"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "갈매기살 (180g)",
+        17000,
+        false
+      ],
+      [
+        "삼겹살 (180g)",
+        17000,
+        false
+      ],
+      [
+        "목살 (180g)",
+        17000,
+        false
+      ],
+      [
+        "통항정 (180g)",
+        20000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "본가껍데기 합정점",
+    "id": 1784424884333,
+    "kakaoId": "233834389",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/233834389",
+    "expectedAddress": "서울 마포구 월드컵로1길 11",
+    "kakaoName": "본가껍데기 합정점",
+    "kakaoAddress": "text: 서울 마포구 월드컵로1길 11 1층 (우)04027",
+    "naverAddress": "button \"서울 마포구 월드컵로1길 11 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/2066881995/home",
+    "naverName": "본가껍데기 합정점",
+    "kakaoSchedule": {
+      "화": [
+        "17:00 ~ 05:00"
+      ],
+      "수": [
+        "17:00 ~ 05:00"
+      ],
+      "목": [
+        "17:00 ~ 05:00"
+      ],
+      "금": [
+        "17:00 ~ 05:00"
+      ],
+      "토": [
+        "17:00 ~ 05:00"
+      ],
+      "일": [
+        "17:00 ~ 05:00"
+      ],
+      "월": [
+        "17:00 ~ 05:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "17:00 - 다음 날 03:00",
+        "02:00 라스트오더"
+      ],
+      "수": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ],
+      "목": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ],
+      "금": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ],
+      "토": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ],
+      "일": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ],
+      "월": [
+        "17:00 - 다음 날 05:00",
+        "04:00 라스트오더"
+      ]
+    },
+    "decision": "conflict",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "껍데기(200g)",
+        8000,
+        false
+      ],
+      [
+        "꼬들살(200g)",
+        17000,
+        false
+      ],
+      [
+        "삼겹살(180g)",
+        17000,
+        false
+      ],
+      [
+        "목살(180g)",
+        17000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "연어롭다",
+    "id": 1784424894140,
+    "kakaoId": "1689615887",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1689615887",
+    "expectedAddress": "서울 마포구 동교로38길 42",
+    "kakaoName": "연어롭다",
+    "kakaoAddress": "text: 서울 마포구 동교로38길 42 지하1층 (우)03982",
+    "naverAddress": "button \"서울 마포구 동교로38길 42\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1537918661/home",
+    "naverName": "연어롭다",
+    "kakaoSchedule": {
+      "화": [
+        "12:00 ~ 24:00",
+        "15:00 ~ 16:30 브레이크타임"
+      ],
+      "수": [
+        "12:00 ~ 24:00",
+        "15:00 ~ 16:30 브레이크타임"
+      ],
+      "목": [
+        "12:00 ~ 24:00",
+        "15:00 ~ 16:30 브레이크타임"
+      ],
+      "금": [
+        "12:00 ~ 24:00",
+        "15:00 ~ 16:30 브레이크타임"
+      ],
+      "토": [
+        "12:00 ~ 24:00",
+        "15:00 ~ 16:30 브레이크타임"
+      ],
+      "일": [
+        "12:00 ~ 24:00",
+        "15:00 ~ 16:30 브레이크타임"
+      ],
+      "월": [
+        "휴무일"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "휴무"
+      ],
+      "수": [
+        "12:00 - 24:00",
+        "15:00 - 16:30 브레이크타임"
+      ],
+      "목": [
+        "12:00 - 24:00",
+        "15:00 - 16:30 브레이크타임"
+      ],
+      "금": [
+        "12:00 - 24:00",
+        "15:00 - 16:30 브레이크타임"
+      ],
+      "토": [
+        "12:00 - 24:00",
+        "15:00 - 16:30 브레이크타임"
+      ],
+      "일": [
+        "12:00 - 24:00",
+        "15:00 - 16:30 브레이크타임"
+      ],
+      "월": [
+        "정기휴무 (매주 월요일)"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-06": "휴무"
+    },
+    "menu": [
+      [
+        "생연어 모듬",
+        35000,
+        false
+      ],
+      [
+        "매콤 크림 파스타",
+        18000,
+        false
+      ],
+      [
+        "생연어사시미",
+        25000,
+        false
+      ],
+      [
+        "생연어타다끼",
+        20000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "아티장 깔조네버거 홍대본점",
+    "id": 1784424907385,
+    "kakaoId": "1694657356",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1694657356",
+    "expectedAddress": "서울 마포구 독막로19길 45-4",
+    "kakaoName": "아티장 깔조네버거 홍대본점",
+    "kakaoAddress": "text: 서울 마포구 독막로19길 45-4 1층 (우)04068",
+    "naverAddress": "button \"서울 마포구 독막로19길 45-4 1층 아티장 깔조네버거 홍대본점\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1210273017/home",
+    "naverName": "아티장 깔조네버거 홍대본점",
+    "kakaoSchedule": {
+      "화": [
+        "휴무일"
+      ],
+      "수": [
+        "휴무일"
+      ],
+      "목": [
+        "휴무일"
+      ],
+      "금": [
+        "휴무일"
+      ],
+      "토": [
+        "휴무일"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "휴무일"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "휴무"
+      ],
+      "수": [
+        "휴무"
+      ],
+      "목": [
+        "휴무"
+      ],
+      "금": [
+        "휴무"
+      ],
+      "토": [
+        "휴무"
+      ],
+      "일": [
+        "휴무"
+      ],
+      "월": [
+        "휴무"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-12": "휴무"
+    },
+    "menu": [
+      [
+        "아티장 깔조네 버거",
+        17900,
+        false
+      ],
+      [
+        "아보카도 깔조네 버거",
+        15500,
+        false
+      ],
+      [
+        "모짜렐라 깔조네 버거",
+        14900,
+        false
+      ],
+      [
+        "베지 깔조네 샌드위치",
+        14900,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "필리커피 합정",
+    "id": 1784424931229,
+    "kakaoId": "1119038967",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1119038967",
+    "expectedAddress": "서울 마포구 양화로6길 9",
+    "kakaoName": "필리커피 합정",
+    "kakaoAddress": "text: 서울 마포구 양화로6길 9 3층 (우)04044",
+    "naverAddress": "button \"서울 마포구 양화로6길 9 3층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1191223824/home",
+    "naverName": "필리커피 합정",
+    "kakaoSchedule": {
+      "화": [
+        "12:00 ~ 22:00"
+      ],
+      "수": [
+        "12:00 ~ 22:00"
+      ],
+      "목": [
+        "12:00 ~ 22:00"
+      ],
+      "금": [
+        "12:00 ~ 22:00"
+      ],
+      "토": [
+        "12:00 ~ 22:00"
+      ],
+      "일": [
+        "12:00 ~ 22:00"
+      ],
+      "월": [
+        "12:00 ~ 22:00"
+      ]
+    },
+    "naverSchedule": {
+      "월": [
+        "12:00 - 22:00"
+      ],
+      "화": [
+        "12:00 - 22:00"
+      ],
+      "수": [
+        "12:00 - 22:00"
+      ],
+      "목": [
+        "12:00 - 22:00"
+      ],
+      "금": [
+        "12:00 - 22:00"
+      ],
+      "토": [
+        "12:00 - 22:00"
+      ],
+      "일": [
+        "12:00 - 22:00"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "무화과케이크",
+        8500,
+        false
+      ],
+      [
+        "무화과 홀케이크",
+        49000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "무소식",
+    "id": 1784424936844,
+    "kakaoId": "239536058",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/239536058",
+    "expectedAddress": "서울 마포구 잔다리로 19",
+    "kakaoName": "무소식",
+    "kakaoAddress": "text: 서울 마포구 잔다리로 19 3층 (우)04048",
+    "naverAddress": "button \"서울 마포구 잔다리로 19 3층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1757296214/home",
+    "naverName": "무소식",
+    "kakaoSchedule": {
+      "화": [
+        "12:00 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "수": [
+        "12:00 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "12:00 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "12:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "토": [
+        "12:00 ~ 22:00",
+        "21:30 라스트오더"
+      ],
+      "일": [
+        "12:00 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "월": [
+        "12:00 ~ 21:00",
+        "20:30 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "12:00 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "수": [
+        "12:00 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "12:00 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "12:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "토": [
+        "12:00 - 22:00",
+        "21:30 라스트오더"
+      ],
+      "일": [
+        "12:00 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "월": [
+        "12:00 - 21:00",
+        "20:30 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "아메리카노",
+        5000,
+        false
+      ],
+      [
+        "라떼",
+        5500,
+        false
+      ],
+      [
+        "플랫화이트",
+        5500,
+        false
+      ],
+      [
+        "바닐라빈라떼",
+        6500,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "닭꼬얌",
+    "id": 1784424945383,
+    "kakaoId": "27459445",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/27459445",
+    "expectedAddress": "서울 마포구 와우산로18길 29",
+    "kakaoName": "닭꼬얌",
+    "kakaoAddress": "text: 서울 마포구 와우산로18길 29 지하1층 (우)04067",
+    "naverAddress": "button \"서울 마포구 와우산로18길 29 Terra빌딩 지층닭꼬얌\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/37521193/home",
+    "naverName": "닭꼬얌",
+    "kakaoSchedule": {
+      "화": [
+        "10:30 ~ 24:00"
+      ],
+      "수": [
+        "10:30 ~ 24:00"
+      ],
+      "목": [
+        "10:30 ~ 24:00"
+      ],
+      "금": [
+        "10:30 ~ 24:00"
+      ],
+      "토": [
+        "10:30 ~ 24:00"
+      ],
+      "일": [
+        "휴무일"
+      ],
+      "월": [
+        "10:30 ~ 24:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "10:30 - 24:00"
+      ],
+      "수": [
+        "10:30 - 24:00"
+      ],
+      "목": [
+        "10:30 - 24:00"
+      ],
+      "금": [
+        "10:30 - 24:00"
+      ],
+      "토": [
+        "10:30 - 24:00"
+      ],
+      "일": [
+        "정기휴무 (매주 일요일)"
+      ],
+      "월": [
+        "10:30 - 24:00"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "닭쌈밥",
+        9000,
+        false
+      ],
+      [
+        "불고기닭쌈밥",
+        9000,
+        false
+      ],
+      [
+        "닭쌈 (2인분)",
+        22000,
+        false
+      ],
+      [
+        "불고기닭쌈 (2인분)",
+        22000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "타오마라탕 홍대점",
+    "id": 1784424959902,
+    "kakaoId": "2088827518",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/2088827518",
+    "expectedAddress": "서울 마포구 와우산로21길 28",
+    "kakaoName": "타오마라탕 홍대점",
+    "kakaoAddress": "text: 서울 마포구 와우산로21길 28 2층 (우)04040",
+    "naverAddress": "button \"서울 마포구 와우산로21길 28 2층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1777629862/home",
+    "naverName": "타오마라탕 홍대점",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "수": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "토": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "월": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "수": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "토": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "월": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "마라샹궈(100g)",
+        3300,
+        false
+      ],
+      [
+        "마라탕(100g)",
+        2400,
+        false
+      ],
+      [
+        "꿔바로우(대)",
+        20000,
+        false
+      ],
+      [
+        "꿔바로우(소)",
+        11000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "타오마라탕 신촌점",
+    "id": 1784424967756,
+    "kakaoId": "2027326489",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/2027326489",
+    "expectedAddress": "서울 서대문구 연세로5나길 6",
+    "kakaoName": "타오마라탕 신촌점",
+    "kakaoAddress": "text: 서울 서대문구 연세로5나길 6 1층 (우)03789",
+    "naverAddress": "button \"서울 서대문구 연세로5나길 6 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1153861853/home",
+    "naverName": "타오마라탕 신촌점",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "수": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "토": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ],
+      "월": [
+        "11:30 ~ 21:00",
+        "20:30 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "수": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "목": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "금": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "토": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "일": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ],
+      "월": [
+        "11:30 - 21:00",
+        "20:30 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "마라탕",
+        2400,
+        false
+      ],
+      [
+        "마라샹궈",
+        3300,
+        false
+      ],
+      [
+        "토마탕",
+        2400,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "타오마라탕 합정본점",
+    "id": 1784424974838,
+    "kakaoId": "92793209",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/92793209",
+    "expectedAddress": "서울 마포구 양화로6길 19",
+    "kakaoName": "타오마라탕 합정본점",
+    "kakaoAddress": "text: 서울 마포구 양화로6길 19 2층 (우)04044",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 21:00"
+      ],
+      "수": [
+        "11:30 ~ 21:00"
+      ],
+      "목": [
+        "11:30 ~ 21:00"
+      ],
+      "금": [
+        "11:30 ~ 21:00"
+      ],
+      "토": [
+        "11:30 ~ 21:00"
+      ],
+      "일": [
+        "11:30 ~ 21:00"
+      ],
+      "월": [
+        "11:30 ~ 21:00"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "위미라",
+        7000,
+        false
+      ],
+      [
+        "마라탕",
+        2400,
+        false
+      ],
+      [
+        "TAO 마라샹궈 (100g)",
+        3300,
+        false
+      ],
+      [
+        "궈바로우 (소)",
+        10000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "땡스네이쳐카페",
+    "id": 1785290141872,
+    "kakaoId": "10368349",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/10368349",
+    "expectedAddress": "서울 마포구 홍익로 10",
+    "kakaoName": "땡스네이쳐카페",
+    "kakaoAddress": "text: 서울 마포구 홍익로 10 푸르지오상가 지하1층 121호 (우)04055",
+    "naverAddress": "button \"서울 마포구 홍익로 10 서교푸르지오상가 지하121호\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/13156164/home",
+    "naverName": "땡스네이쳐카페",
+    "kakaoSchedule": {
+      "화": [
+        "11:00 ~ 20:00",
+        "19:30 라스트오더"
+      ],
+      "수": [
+        "11:00 ~ 20:00",
+        "19:30 라스트오더"
+      ],
+      "목": [
+        "11:00 ~ 20:00",
+        "19:30 라스트오더"
+      ],
+      "금": [
+        "11:00 ~ 20:00",
+        "19:30 라스트오더"
+      ],
+      "토": [
+        "11:00 ~ 20:00",
+        "19:30 라스트오더"
+      ],
+      "일": [
+        "12:00 ~ 20:00",
+        "19:30 라스트오더"
+      ],
+      "월": [
+        "11:00 ~ 20:00",
+        "19:30 라스트오더"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:00 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "수": [
+        "11:00 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "목": [
+        "11:00 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "금": [
+        "11:00 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "토": [
+        "11:00 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "일": [
+        "12:00 - 20:00",
+        "19:30 라스트오더"
+      ],
+      "월": [
+        "11:00 - 20:00",
+        "19:30 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "아메리카노",
+        4400,
+        false
+      ],
+      [
+        "카페라떼",
+        5400,
+        false
+      ],
+      [
+        "바닐라라떼",
+        5900,
+        false
+      ],
+      [
+        "카페모카",
+        5900,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "피자네버슬립스 합정상수점",
+    "id": 1785290557176,
+    "kakaoId": "977993220",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/977993220",
+    "expectedAddress": "서울 마포구 양화로6길 73",
+    "kakaoName": "피자네버슬립스 합정상수점",
+    "kakaoAddress": "text: 서울 마포구 양화로6길 73 4층 (우)04047",
+    "naverAddress": "button \"서울 마포구 양화로6길 73\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1554706925/home",
+    "naverName": "피자네버슬립스 합정상수점",
+    "kakaoSchedule": {
+      "화": [
+        "12:00 ~ 23:00"
+      ],
+      "수": [
+        "12:00 ~ 23:00"
+      ],
+      "목": [
+        "12:00 ~ 23:00"
+      ],
+      "금": [
+        "12:00 ~ 24:00"
+      ],
+      "토": [
+        "12:00 ~ 24:00"
+      ],
+      "일": [
+        "12:00 ~ 23:00"
+      ],
+      "월": [
+        "12:00 ~ 23:00"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "12:00 - 23:00"
+      ],
+      "수": [
+        "12:00 - 23:00"
+      ],
+      "목": [
+        "12:00 - 23:00"
+      ],
+      "금": [
+        "12:00 - 24:00"
+      ],
+      "토": [
+        "12:00 - 24:00"
+      ],
+      "일": [
+        "12:00 - 23:00"
+      ],
+      "월": [
+        "12:00 - 23:00"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "BEEF NEVER SLEEPS(R)",
+        32000,
+        false
+      ],
+      [
+        "CHICKEN NEVER SLEEPS(R)",
+        28500,
+        false
+      ],
+      [
+        "MINARI GOCHUJANG PORK BELLY(R)",
+        30000,
+        false
+      ],
+      [
+        "CORN BROWN(R)",
+        28000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "콜린",
+    "id": 1785290565094,
+    "kakaoId": "26966842",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/26966842",
+    "expectedAddress": "서울 마포구 어울마당로 45",
+    "kakaoName": "콜린",
+    "kakaoAddress": "text: 서울 마포구 어울마당로 45 1-2층 (우)04048",
+    "kakaoSchedule": {
+      "화": [
+        "10:30 ~ 23:00"
+      ],
+      "수": [
+        "10:30 ~ 23:00"
+      ],
+      "목": [
+        "10:30 ~ 23:00"
+      ],
+      "금": [
+        "10:30 ~ 24:00"
+      ],
+      "토": [
+        "10:30 ~ 24:00"
+      ],
+      "일": [
+        "10:30 ~ 23:00"
+      ],
+      "월": [
+        "10:30 ~ 23:00"
+      ]
+    },
+    "naverSchedule": {},
+    "decision": "single-source",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "홍시빙수",
+        9000,
+        false
+      ],
+      [
+        "아메리카노",
+        5500,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "푸글렌 서울",
+    "id": 1785290613070,
+    "kakaoId": "1626505090",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/1626505090",
+    "expectedAddress": "서울 마포구 와우산로 43",
+    "kakaoName": "푸글렌 서울",
+    "kakaoAddress": "text: 서울 마포구 와우산로 43 1층 (우)04049",
+    "naverAddress": "button \"서울 마포구 와우산로 43\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1796133699/home",
+    "naverName": "푸글렌 서울",
+    "kakaoSchedule": {
+      "화": [
+        "08:00 ~ 23:30"
+      ],
+      "수": [
+        "08:00 ~ 01:00"
+      ],
+      "목": [
+        "08:00 ~ 01:00"
+      ],
+      "금": [
+        "08:00 ~ 01:00"
+      ],
+      "토": [
+        "08:00 ~ 01:00"
+      ],
+      "일": [
+        "08:00 ~ 01:00"
+      ],
+      "월": [
+        "08:00 ~ 23:30",
+        "\"바 영업시간: 18:00 / Coffee Stand : 11:00~20:00\""
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "08:00 - 23:30"
+      ],
+      "수": [
+        "08:00 - 다음 날 01:00"
+      ],
+      "목": [
+        "08:00 - 다음 날 01:00"
+      ],
+      "금": [
+        "한글날08:00 - 다음 날 01:00"
+      ],
+      "토": [
+        "08:00 - 다음 날 01:00"
+      ],
+      "일": [
+        "08:00 - 다음 날 01:00"
+      ],
+      "월": [
+        "08:00 - 23:30"
+      ]
+    },
+    "decision": "partial",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {
+      "2026-10-09": "08:00~01:00"
+    },
+    "menu": [
+      [
+        "푸글렌아이스커피",
+        6800,
+        false
+      ],
+      [
+        "오늘의커피",
+        5000,
+        false
+      ],
+      [
+        "카푸치노",
+        5400,
+        false
+      ],
+      [
+        "샤케라토 라떼",
+        7000,
+        false
+      ]
+    ],
+    "operatingNote": null
+  },
+  {
+    "name": "더리얼치즈버거",
+    "id": 1785290922135,
+    "kakaoId": "895704994",
+    "checkedAt": "2026-10-06",
+    "kakaoUrl": "http://place.map.kakao.com/895704994",
+    "expectedAddress": "서울 마포구 와우산로29길 48-29",
+    "kakaoName": "더리얼치즈버거",
+    "kakaoAddress": "text: 서울 마포구 와우산로29길 48-29 1층 (우)04052",
+    "naverAddress": "button \"서울 마포구 와우산로29길 48-29 1층\":",
+    "naverUrl": "https://pcmap.place.naver.com/restaurant/1274730025/home",
+    "naverName": "더리얼치즈버거",
+    "kakaoSchedule": {
+      "화": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 16:30 브레이크타임"
+      ],
+      "수": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 16:30 브레이크타임"
+      ],
+      "목": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 16:30 브레이크타임"
+      ],
+      "금": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 16:30 브레이크타임"
+      ],
+      "토": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 16:30 브레이크타임"
+      ],
+      "일": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 16:30 브레이크타임"
+      ],
+      "월": [
+        "11:30 ~ 20:30",
+        "15:00 ~ 16:30 브레이크타임"
+      ]
+    },
+    "naverSchedule": {
+      "화": [
+        "11:30 - 20:30",
+        "15:00 - 16:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "수": [
+        "11:30 - 20:30",
+        "15:00 - 16:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "목": [
+        "11:30 - 20:30",
+        "15:00 - 16:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "금": [
+        "11:30 - 20:30",
+        "15:00 - 16:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "토": [
+        "11:30 - 20:30",
+        "15:00 - 16:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "일": [
+        "11:30 - 20:30",
+        "15:00 - 16:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ],
+      "월": [
+        "11:30 - 20:30",
+        "15:00 - 16:30 브레이크타임",
+        "14:30, 20:00 라스트오더"
+      ]
+    },
+    "decision": "matched",
+    "locationNeedsCheck": false,
+    "temporaryExceptions": {},
+    "menu": [
+      [
+        "더블버거",
+        11500,
+        false
+      ],
+      [
+        "오리지날버거",
+        7900,
+        false
+      ],
+      [
+        "베이컨버거",
+        8900,
+        false
+      ],
+      [
+        "디럭스버거",
+        8500,
+        false
+      ]
+    ],
+    "operatingNote": null
+  }
+]

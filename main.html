@@ -3421,6 +3421,9 @@ function getFilteredStores() {
   const isDetailFiltersMode = currentFilter === 'detailFilters';
 
   return stores.filter(s => {
+    const area=window.HongdaeSelectedNeighbourhood;
+    if(area && !isBookmarkMode && !isGoneMode && (s.neighbourhood||s.dong)!==area)return false;
+    if(s.temporarilyClosed && !isBookmarkMode)return false;
     // '이 지역에서 검색'으로 지도 화면을 좁혀뒀다면, 그 화면 밖 매장은 어떤 모드든 제외
     if (boundsFilter && !boundsFilter.contain(new kakao.maps.LatLng(s.lat, s.lng))) return false;
     // 로컬 인디 레이어가 켜져 있으면 대형 프랜차이즈는 어떤 필터에서든 공통으로 숨김
@@ -3447,7 +3450,7 @@ function getFilteredStores() {
       || (isBookmarkMode && bookmarks[s.id])
       || s.type === currentFilter
       || (currentFilter === 'closed' && s.status === 'closed')
-      || (isDongFilter && s.dong === currentFilter);
+      || (isDongFilter && (s.neighbourhood || s.dong) === currentFilter);
     return matchFilter && s.name.includes(searchText);
   });
 }
@@ -3947,6 +3950,7 @@ function toggleCuisineFilter(value, btn) {
   applyDetailFilterState();
 }
 function applyDetailFilterState() {
+  if ([...activeDetailFilters].some(k => k.startsWith('dong:'))) window.HongdaeSelectedNeighbourhood = null;
   // 다중 필터를 하나라도 켜면 "detailFilters" 모드로, 다 끄면 전체 보기로 돌아감
   currentFilter = activeDetailFilters.size > 0 ? 'detailFilters' : 'all';
   boundsFilter = null; // 이전에 '이 지역에서 검색'으로 좁혀둔 범위가 남아있으면 여기서도 매장이 안 보이므로 초기화
@@ -3959,6 +3963,7 @@ function applyDetailFilterState() {
     if (allBtn) allBtn.classList.add('on');
   }
   renderList();
+  window.HongdaeUI?.openResults();
 }
 function clearDetailFilters(btn) {
   activeDetailFilters.clear();
@@ -3990,7 +3995,7 @@ function matchesDetailFilter(s, key) {
   }
   if (kind === 'cafeSub') return s.type === 'cafe' && cafeSubType(s) === value;
   if (kind === 'barSub') return s.type === 'bar' && barSubType(s) === value;
-  if (kind === 'dong') return s.dong === value;
+  if (kind === 'dong') return (s.neighbourhood || s.dong) === value;
   if (kind === 'type') return s.type === value;
   if (kind === 'cert') {
     if (value === 'hallOfFame') return (s.certifications || []).includes('홍대생 명예학식');
@@ -4052,6 +4057,7 @@ function selectCategoryBar(key, btn) {
     currentFilter = key; // 'all' | 'restaurant' | 'cafe' | 'bar'
   }
   renderList();
+  window.HongdaeUI?.openResults();
 }
 
 function setFilter(type, btn) {
@@ -4060,8 +4066,8 @@ function setFilter(type, btn) {
   boundsFilter = null; // 카테고리를 새로 고르면 '이 지역에서 검색'으로 좁혀둔 범위는 초기화
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
   btn.classList.add('on');
-  // 카테고리를 고르면 곧장 리스트를 열지 않고, "가게 N곳 보기" 버튼으로 몇 개인지부터 보여준다.
   renderList();
+  window.HongdaeUI?.openResults();
 }
 function filterList() {
   searchText = document.getElementById('search-input').value.trim();
@@ -5162,6 +5168,10 @@ function addStore() {
   <script src="local-map-maintenance.js?v=20261006"></script>
   <script src="managed-places.js?v=20261006-music2"></script>
   <script src="survey-menu-ui.js?v=20261006-copy"></script>
+  <script src="neighbourhood-research-data.js?v=20261006"></script>
+  <script src="neighbourhood-research.js?v=20261006"></script>
+  <script src="existing-research-data.js?v=20261006"></script>
+  <script src="existing-research.js?v=20261006"></script>
   <script src="meal-picker.js?v=20261006-stepflow"></script>
   <script src="music-venues.js?v=20261006-music2"></script>
 <script src="feedback-ui.js"></script>

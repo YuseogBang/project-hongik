@@ -28,7 +28,7 @@
   }
   const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
   const visitedIds = () => { try { return new Set(JSON.parse(localStorage.getItem(VISITED_KEY) || '[]').map(Number)); } catch { return new Set(); } };
-  const passportPlaces = () => stores.filter((place) => place.status !== 'closed' && (place.tags || []).includes('홍대병'));
+  const passportPlaces = () => stores.filter((place) => place.status !== 'closed' && !place.temporarilyClosed && !place.locationNeedsCheck && (place.tags || []).includes('홍대병'));
   // Kakao category refresh can change type; keep passport chapters based on stable place identity and labels.
   const chapterPlaces = (chapter) => passportPlaces().filter((place) => {
     const label = `${place.name} ${place.category || ''}`;
@@ -137,7 +137,7 @@
   const themeMatches = place => (routeAnswers.theme==='geek' && (place.tags||[]).includes('덕후')) || !routeThemes[routeAnswers.theme]?.pattern || routeThemes[routeAnswers.theme].pattern.test(`${place.name} ${(place.tags||[]).join(' ')} ${place.insight||''} ${/^기타/.test(place.category||'')?'':place.category||''}`);
   function buildRoute(mode) {
     const visited = visitedIds();
-    const candidates = stores.filter(place => (!window.HongdaeRecommendations || window.HongdaeRecommendations.eligible(place)) && place.status !== 'closed' && Number.isFinite(place.lat) && Number.isFinite(place.lng) && !isFranchise(place) && (!routeAnswers.newOnly || !visited.has(place.id)) && (mode !== 'student' || !visited.has(place.id)) && (themeMatches(place) || (routeAnswers.food && place.type === 'restaurant')));
+    const candidates = stores.filter(place => (!window.HongdaeRecommendations || window.HongdaeRecommendations.eligible(place)) && place.status !== 'closed' && !place.temporarilyClosed && !place.locationNeedsCheck && Number.isFinite(place.lat) && Number.isFinite(place.lng) && !isFranchise(place) && (!routeAnswers.newOnly || !visited.has(place.id)) && (mode !== 'student' || !visited.has(place.id)) && (themeMatches(place) || (routeAnswers.food && place.type === 'restaurant')));
     const route = [], start = {lat:37.556670,lng:126.923610};
     for (let step=0;step<routeAnswers.stops;step++) {
       const anchor=route.at(-1)||start;

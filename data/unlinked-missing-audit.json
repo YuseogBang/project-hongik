@@ -1,0 +1,63 @@
+[
+  {
+    "name": "홍대캔들공방 (청년공방)",
+    "query": "청년공방 홍대",
+    "id": 1786000000023,
+    "naverLookup": "no-search-result"
+  },
+  {
+    "name": "메타코미디클럽 홍대",
+    "query": "메타코미디클럽 홍대",
+    "id": 1786000000069,
+    "naverLookup": "no-search-result"
+  },
+  {
+    "name": "테이블에이",
+    "query": "테이블에이 홍대",
+    "id": 1786000000070,
+    "candidates": [
+      {
+        "name": "테이블에이",
+        "params": "{\"item_type\":\"place_type\",\"item_name\":\"place\",\"place_id\":\"20510565\",\"rank\":1}"
+      },
+      {
+        "name": "테이블에이 고양이카페",
+        "params": "{\"item_type\":\"place_type\",\"item_name\":\"place\",\"place_id\":\"1095300503\",\"rank\":2}"
+      },
+      {
+        "name": "우아 구슬아이스크림 연남 & 카페 어테이블 커피 디저트",
+        "params": "{\"item_type\":\"place_type\",\"item_name\":\"place\",\"place_id\":\"1477675151\",\"rank\":3}"
+      },
+      {
+        "name": "맹호수제돈까스 홍대",
+        "params": "{\"item_type\":\"place_type\",\"item_name\":\"place\",\"place_id\":\"1373573660\",\"rank\":4}"
+      },
+      {
+        "name": "에이카페",
+        "params": "{\"item_type\":\"place_type\",\"item_name\":\"place\",\"place_id\":\"36652330\",\"rank\":5}"
+      },
+      {
+        "params": "{\"item_type\":\"place_type\",\"item_name\":\"place\",\"place_id\":\"1534247529\",\"rank\":7}"
+      }
+    ],
+    "naverUrl": "https://pcmap.place.naver.com/place/20510565/home",
+    "naverHours": "\n  - button \"운영 전 12시 0분에 운영 시작 매일 12:00 - 21:00 접기\" [expanded] [active]:\n    - emphasis: 운영 전\n    - time: 12:00에 운영 시작\n    - generic: 12시 0분에 운영 시작\n    - generic: 매일\n    - generic: 12:00 - 21:00\n    - generic: 접기\n  - button \"영업시간 수정 제안하기\"\n  - strong:\n    - ",
+    "naverAddress": "button \"서울 마포구 와우산로 146 지하1층,1층,2층,3층,4층, 5층\":",
+    "addressMatched": true,
+    "jibun": "서울 마포구 창전동 6",
+    "verifiedMenu": [
+      [
+        "1인 입장료 (동물원+고양이카페)",
+        18000,
+        false
+      ]
+    ],
+    "checkedAt": "2026-10-06"
+  },
+  {
+    "name": "초심 홍대상수점",
+    "query": "초심 홍대상수점",
+    "id": 1786000000072,
+    "naverLookup": "no-search-result"
+  }
+]

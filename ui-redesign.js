@@ -30,15 +30,15 @@
     closeSurface();
     const filtered = getFilteredStores();
     if (currentFilter === 'taste') filtered.sort((a, b) => matchScore(b) - matchScore(a));
-    const items = filtered.slice(0, 12);
+    const items = filtered;
     const sheet = document.querySelector('.map-result-sheet');
-    const title = currentFilter === 'taste' ? '내 취향 순위' : currentFilter === 'bookmarks' ? '저장한 가게' : '지금 볼 만한 가게';
+    const title = currentFilter === 'taste' ? '내 취향 순위' : currentFilter === 'bookmarks' ? '저장한 가게' : `${window.HongdaeSelectedNeighbourhood||'홍대'} · ${TYPES[currentFilter]||'동네 가게'}`;
     sheet.querySelector('.map-result-title').textContent = title;
-    sheet.querySelector('.map-result-sub').textContent = `${items.length}곳 · 지도를 움직이지 않고 둘러보세요`;
+    sheet.querySelector('.map-result-sub').textContent = `${items.length}곳 · 옆으로 넘겨보세요`;
     sheet.querySelector('.result-carousel').innerHTML = items.length ? items.map((store) => {
       const tags = (store.tags || []).slice(0, 3).map((tag) => `<span>#${escapeHtml(tag)}</span>`).join('');
       const score = typeof matchPercent === 'function' && userTastes.length ? `<span class="result-match">취향 ${matchPercent(store)}%</span>` : '';
-      return `<button class="result-card" data-store-id="${store.id}"><div class="result-card-name"><span>${escapeHtml(store.name)}</span>${score}</div><div class="result-card-meta">${escapeHtml(store.category || TYPES[store.type] || '홍대 가게')} · ${escapeHtml(store.dong || '홍대')}</div><div class="result-card-tags">${tags || '<span>정보 업데이트 중</span>'}</div></button>`;
+      return `<button class="result-card" data-store-id="${store.id}"><div class="result-card-name"><span>${escapeHtml(store.name)}</span>${score}</div><div class="result-card-meta">${escapeHtml(store.category || TYPES[store.type] || '홍대 가게')} · ${escapeHtml(store.neighbourhoodResearch?.neighbourhoodLabel || store.dong || '홍대')}</div><div class="result-card-tags">${tags || '<span>정보 업데이트 중</span>'}</div></button>`;
     }).join('') : '<div style="color:var(--muted);padding:18px">조건에 맞는 가게가 없어요. 필터를 조금 넓혀보세요.</div>';
     sheet.querySelectorAll('[data-store-id]').forEach((card) => card.addEventListener('click', () => {
       const id = Number(card.dataset.storeId);
@@ -48,6 +48,7 @@
       if (store && map && window.kakao) map.panTo(new kakao.maps.LatLng(store.lat, store.lng));
     }));
     sheet.classList.add('open');
+    sheet.querySelector('.result-carousel').scrollLeft=0;
     document.body.classList.add('map-results-open');
     setActive('map');
   }
@@ -67,7 +68,8 @@
     if (document.querySelector('.map-result-sheet')) return;
     const results = document.createElement('section');
     results.className = 'map-result-sheet';
-    results.innerHTML = '<div class="map-result-head"><strong class="map-result-title">지금 볼 만한 가게</strong><span class="map-result-sub"></span><button class="sheet-close" aria-label="결과 닫기">✕</button></div><div class="result-carousel"></div>';
+    results.innerHTML = '<div class="map-result-head"><strong class="map-result-title">지금 볼 만한 가게</strong><span class="map-result-sub"></span><button class="result-step" data-direction="-1" aria-label="앞 업체 보기">←</button><button class="result-step" data-direction="1" aria-label="다음 업체 보기">→</button><button class="sheet-close" aria-label="결과 닫기">✕</button></div><div class="result-carousel" aria-label="업체 가로 목록"></div>';
+    results.querySelectorAll('.result-step').forEach(button=>button.addEventListener('click',()=>{const rail=results.querySelector('.result-carousel');rail.scrollBy({left:Number(button.dataset.direction)*292,behavior:'smooth'});}));
     results.querySelector('.sheet-close').addEventListener('click', closeSurface);
     document.body.append(results);
     const profile = document.createElement('section');
