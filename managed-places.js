@@ -5,8 +5,8 @@
     let changed=0;
     for(const row of rows){
       if(!Number.isSafeInteger(Number(row.id)) || !row.name || window.HongdaeExcludedPlaceIds?.has(Number(row.id)))continue;
-      let store=target.find(s=>s.id===Number(row.id));
       const source=row.source||{};
+      let store=target.find(s=>s.id===Number(row.id) || (source.kakaoId && String(s.kakaoId)===String(source.kakaoId)));
       if(store && !source.editorial)continue;
       if(!store){if(!inArea(row))continue;store={id:Number(row.id),rating:null,reviews:null,months:null,rent:null,score:null,certifications:[]};target.push(store);}
       for(const key of ['name','type','status','address','category'])if(row[key]!=null)store[key]=row[key];
@@ -20,6 +20,8 @@
       window.HongdaeMusic?.enrich(store);
       changed++;
     }
+    window.HongdaeNeighbourhoodResearch?.enrich(target);
+    window.HongdaeExistingResearch?.enrich(target);
     return changed;
   }
   async function load(){

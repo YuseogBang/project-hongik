@@ -9,7 +9,7 @@
   const tastes=()=>{try{return typeof userTastes!=='undefined'?userTastes:JSON.parse(localStorage.getItem('userTastes')||'[]')}catch{return []}};
   function profile(){return {...read(),tags:tastes()}}
   const meals=s=>(s.surveyMenu?.menu||[]).filter(([n,p])=>Number.isFinite(p)&&p>0&&p<=10000&&/라멘|우동|국수|냉면|덮밥|볶음밥|비빔밥|국밥|곰탕|설렁탕|찌개|백반|정식|돈까스|돈카츠|버거|샌드위치|오니기리|주먹밥|김밥|카레|소바|짜장|짬뽕|토스트/.test(n)&&!/추가|공기밥|사이드|감자튀김|음료|2인|3인|4인|인 이상|미니|고기\s*마요|곁들임/.test(n));
-  function eligible(s){return s.status!=='closed' && (profile().budget!=='10000'||!['restaurant','food'].includes(s.type)||meals(s).length>0)}
+  function eligible(s){return s.status!=='closed' && !s.temporarilyClosed && !s.locationNeedsCheck && (profile().budget!=='10000'||!['restaurant','food'].includes(s.type)||meals(s).length>0)}
   function explain(s){const p=profile(),tags=s.tags||[];const reasons=p.tags.filter(t=>tags.includes(t)).map(t=>'#'+t);
     if(p.budget==='10000'&&meals(s).length)reasons.push('등록 메뉴 중 만원 이하 한 끼');
     if(p.explore==='local'&&tags.some(t=>['로컬단골','노포','홍대병'].includes(t)))reasons.push('로컬 취향 탐색');

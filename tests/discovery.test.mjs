@@ -114,3 +114,17 @@ test('Excluded affiliate services cannot return through managed places',()=>{
  const ctx={window:{HongdaeExcludedPlaceIds:new Set([1786000000055])},document:{addEventListener(){}}};vm.createContext(ctx);vm.runInContext(fs.readFileSync('managed-places.js','utf8'),ctx);const places=[];
  ctx.window.HongdaeManagedPlaces.merge([{id:1786000000055,name:'로얄짐 1호점',lat:37.55,lng:126.92,source:{editorial:true}}],places);assert.equal(places.length,0);
 });
+
+test('Map research applies records without Kakao IDs and retains separate menu sources',()=>{
+ const ctx={window:{},stores:[{id:1786000000070},{id:1,kakaoId:'77',lat:37.55}]};vm.createContext(ctx);
+ ctx.window.HONGDAE_EXISTING_RESEARCH=[{id:1786000000070,kakaoId:null,hours:'매일 12:00~21:00',hoursState:'single-source',naverUrl:'https://naver.test',menu:[['입장료',18000,false]],menuSource:'https://naver.test/menu'},{id:1,kakaoId:'77',hoursState:'conflict',hours:'영업시간 확인 필요',menuSource:'https://kakao.test/menu'}];
+ vm.runInContext(fs.readFileSync('existing-research.js','utf8'),ctx);
+ assert.equal(ctx.stores[0].hours,'매일 12:00~21:00');assert.equal(ctx.stores[0].surveyMenu.menuSource,'https://naver.test/menu');assert.equal(ctx.stores[1].lat,37.55);assert.equal(ctx.stores[1].hoursState,'conflict');
+});
+test('Neighbourhood imports are idempotent and preserve saved IDs and verified coordinates',()=>{
+ const ctx={window:{},stores:[{id:8,kakaoId:'27114079',lat:37.5,lng:126.9,tags:[]}]};vm.createContext(ctx);
+ vm.runInContext(fs.readFileSync('neighbourhood-research-data.js','utf8'),ctx);vm.runInContext(fs.readFileSync('neighbourhood-research.js','utf8'),ctx);ctx.window.HongdaeNeighbourhoodResearch.enrich(ctx.stores);
+ assert.equal(ctx.stores.length,30);assert.equal(ctx.stores[0].id,8);assert.equal(ctx.stores[0].lat,37.5);
+ const adjacent=ctx.stores.find(s=>s.name==='아치서재');assert.equal(adjacent.neighbourhood,'망원동');assert.equal(adjacent.dong,'성산동');
+ assert.equal(ctx.stores.filter(s=>s.tags.includes('혼술')).length,1);assert.ok(ctx.stores.every(s=>s.isFranchise===undefined));
+});

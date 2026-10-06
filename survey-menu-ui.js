@@ -47,10 +47,14 @@
   function hours(store) {
     const record = store.surveyMenu;
     const raw=record?.hours||store.hours;
+    const today=new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Seoul'}).format(new Date());
+    const exception=store.hoursExceptions?.[today];
+    const temporary=(store.operatingNote?`<p class="survey-meta">${escapeHtml(store.operatingNote)}</p>`:'')+(exception?`<div class="hours-closed"><b>오늘 운영</b><span>${escapeHtml(exception)}</span></div>`:'');
+    if(['conflict','needs-check'].includes(store.hoursState))return `<section class="survey-hours"><div class="survey-eyebrow">영업 안내</div>${temporary}<p class="survey-meta">영업시간 확인 필요${store.hoursState==='conflict'?' · 안내된 시간이 서로 달라요.':''}</p><p class="survey-meta">${store.kakaoUrl?`<a href="${escapeHtml(store.kakaoUrl)}" target="_blank" rel="noopener noreferrer">카카오맵 확인 ↗</a>`:''}${store.naverUrl?` · <a href="${escapeHtml(store.naverUrl)}" target="_blank" rel="noopener noreferrer">네이버맵 확인 ↗</a>`:''}</p></section>`;
     const rows=raw?splitHours(raw):[];
     const table=rows.map(r=>r.closed?`<div class="hours-closed"><b>${escapeHtml(r.day)}</b><span>휴무</span></div>`:r.note?`<p class="survey-meta">${escapeHtml(r.note)}</p>`:`<div class="hours-group"><h5>${escapeHtml(r.day)}</h5><dl><div><dt>영업시간</dt><dd>${escapeHtml(r.open)}</dd></div><div><dt>브레이크타임</dt><dd>${escapeHtml(r.break||'정보 확인 필요')}</dd></div><div><dt>라스트오더</dt><dd>${escapeHtml(r.last||'정보 확인 필요')}</dd></div></dl></div>`).join('');
     const source=record?.source||store.kakaoUrl;
-    return `<section class="survey-hours"><div class="survey-eyebrow">영업 안내</div>${raw?table:'<p class="survey-meta">영업시간 정보 확인 필요 · 방문 전 매장에 확인해 주세요.</p>'}<p class="survey-meta">${source?`<a href="${escapeHtml(source)}" target="_blank" rel="noopener noreferrer">현재 정보 확인 ↗</a>`:''}</p></section>`;
+    return `<section class="survey-hours"><div class="survey-eyebrow">영업 안내</div>${temporary}${raw?table:'<p class="survey-meta">영업시간 정보 확인 필요 · 방문 전 매장에 확인해 주세요.</p>'}<p class="survey-meta">${source?`<a href="${escapeHtml(source)}" target="_blank" rel="noopener noreferrer">현재 정보 확인 ↗</a>`:''}${['partial','single-source'].includes(store.hoursState)?' · 지도 안내 기준':''}</p></section>`;
   }
 
   function rows(menu) {
@@ -64,7 +68,7 @@
       return `<section class="survey-board" data-place-menu><div class="survey-eyebrow">MENU BOARD</div><div class="survey-board-head"><strong>메뉴판</strong></div>${research.menu ? `<div class="survey-row"><span>${escapeHtml(research.menu)}</span></div>` : ''}${research.price ? `<div class="survey-row"><span>${escapeHtml(research.price)}</span></div>` : ''}<p class="survey-meta">가격·영업 여부는 방문 전에 확인해 주세요.</p></section>`;
     }
     const count = record.menu.length;
-    return `<section class="survey-board" data-place-menu><div class="survey-eyebrow">MENU BOARD</div><div class="survey-board-head"><strong>메뉴판</strong></div>${rows(record.menu.slice(0, 6))}${count > 6 ? `<button type="button" class="survey-more" onclick="openFullMenu(${store.id})">전체 메뉴 보기 →</button>` : ''}<p class="survey-meta">가격·품절 여부는 방문 전에 확인해 주세요. <a href="${escapeHtml(record.source)}" target="_blank" rel="noopener noreferrer">현재 메뉴 확인 ↗</a></p></section>`;
+    return `<section class="survey-board" data-place-menu><div class="survey-eyebrow">MENU BOARD</div><div class="survey-board-head"><strong>메뉴판</strong></div>${rows(record.menu.slice(0, 6))}${count > 6 ? `<button type="button" class="survey-more" onclick="openFullMenu(${store.id})">전체 메뉴 보기 →</button>` : ''}<p class="survey-meta">가격·품절 여부는 방문 전에 확인해 주세요. <a href="${escapeHtml(record.menuSource||record.source)}" target="_blank" rel="noopener noreferrer">현재 메뉴 확인 ↗</a></p></section>`;
   }
   function open(store) {
     const record = store.surveyMenu;
@@ -76,7 +80,7 @@
     modal.setAttribute('role', 'dialog');
     modal.setAttribute('aria-modal', 'true');
     modal.setAttribute('aria-label', `${store.name} 메뉴판`);
-    modal.innerHTML = `<section class="survey-modal-panel"><div class="survey-modal-head"><div><div class="survey-eyebrow">MENU BOARD</div><h2>${escapeHtml(store.name)}</h2></div><button type="button" data-close aria-label="닫기">✕</button></div><p class="survey-meta">가격과 품절 여부는 방문 전 확인해 주세요.</p>${rows(record.menu)}<p class="survey-meta"><a href="${escapeHtml(record.source)}" target="_blank" rel="noopener noreferrer">카카오맵에서 현재 메뉴 확인 ↗</a></p></section>`;
+    modal.innerHTML = `<section class="survey-modal-panel"><div class="survey-modal-head"><div><div class="survey-eyebrow">MENU BOARD</div><h2>${escapeHtml(store.name)}</h2></div><button type="button" data-close aria-label="닫기">✕</button></div><p class="survey-meta">가격과 품절 여부는 방문 전 확인해 주세요.</p>${rows(record.menu)}<p class="survey-meta"><a href="${escapeHtml(record.menuSource||record.source)}" target="_blank" rel="noopener noreferrer">현재 메뉴 확인 ↗</a></p></section>`;
     modal.addEventListener('click', (event) => { if (event.target === modal) modal.remove(); });
     modal.querySelector('[data-close]').onclick = () => modal.remove();
     document.body.append(modal);
