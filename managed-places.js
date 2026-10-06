@@ -4,7 +4,7 @@
   function merge(rows, target) {
     let changed=0;
     for(const row of rows){
-      if(!Number.isSafeInteger(Number(row.id)) || !row.name)continue;
+      if(!Number.isSafeInteger(Number(row.id)) || !row.name || window.HongdaeExcludedPlaceIds?.has(Number(row.id)))continue;
       let store=target.find(s=>s.id===Number(row.id));
       const source=row.source||{};
       if(store && !source.editorial)continue;

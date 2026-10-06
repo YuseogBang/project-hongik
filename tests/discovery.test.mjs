@@ -99,3 +99,18 @@ test('Music enrichment corrects venue classification without inventing DJ sessio
  assert.equal(music.card({id:1784182411172,status:'closed'}),'');
  music.enrich(evans);assert.equal(evans.tags.filter(t=>t==='재즈').length,1);
 });
+
+test('Late night hours exclude break times, midnight closure and closed places',()=>{
+ const ctx={window:{},document:{addEventListener(){}}};vm.createContext(ctx);vm.runInContext(fs.readFileSync('local-map-maintenance.js','utf8'),ctx);const late=ctx.window.HongdaeHoursFilter.isLate;
+ assert.equal(late({hours:'월화 18:00~02:00 / 수 휴무'}),true);
+ assert.equal(late({hours:'매일 11:00~24:00'}),false);
+ assert.equal(late({hours:'매일 11:00~23:00 · 휴게 01:00~02:00'}),false);
+ assert.equal(late({hours:'매일 00:30~06:00'}),true);
+ assert.equal(late({hours:'24시간',status:'closed'}),false);
+ assert.equal(late({hours:'영업시간 확인 필요'}),false);
+ assert.equal(late({hours:'11:00~23:00',services:['lateNight']}),false);
+});
+test('Excluded affiliate services cannot return through managed places',()=>{
+ const ctx={window:{HongdaeExcludedPlaceIds:new Set([1786000000055])},document:{addEventListener(){}}};vm.createContext(ctx);vm.runInContext(fs.readFileSync('managed-places.js','utf8'),ctx);const places=[];
+ ctx.window.HongdaeManagedPlaces.merge([{id:1786000000055,name:'로얄짐 1호점',lat:37.55,lng:126.92,source:{editorial:true}}],places);assert.equal(places.length,0);
+});
