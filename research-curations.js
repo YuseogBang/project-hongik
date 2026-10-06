@@ -131,5 +131,10 @@
   }
   document.addEventListener('DOMContentLoaded', () => document.body.append(root));
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
-  window.HongdaeResearch = { renderEntry, open, close };
+  async function ensureArea(kind){
+    const collection=collections[kind];if(!collection)return;
+    for(const item of collection.places){const result=await searchKakao(item[0],item[1]);if(result.place)addToMap(result.place,item,kind,collection);}
+    if(typeof renderAll==='function')renderAll();
+  }
+  window.HongdaeResearch = { renderEntry, open, close, ensureArea };
 })();

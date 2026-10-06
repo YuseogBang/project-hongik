@@ -9,11 +9,22 @@
   function open(){
     window.HongdaeDiscovery?.close?.();
     const existing=stores.filter(s=>s.status==='closed');
-    root.innerHTML=`<section class="hr-panel"><div class="hr-head"><h2>🪦 사라진 가게</h2><button type="button" class="hr-close">닫기 ✕</button></div><p class="hr-note">영업 종료·이전한 공간의 추억 기록입니다. 현재 방문 추천에 포함하지 않아요. 새 역사 기록은 옛 위치가 확인되지 않아 지도 핀과 길찾기를 제공하지 않습니다.</p>${history.map(p=>`<article class="hr-place"><h3 style="margin:0">${escape(p.name)}</h3><small>${escape(p.year)} · 홍대 공간 영업 종료</small><p class="hr-note">${escape(p.note)}</p><a class="hr-source" href="${p.source}" target="_blank" rel="noopener noreferrer">종료 기록 출처 ↗</a></article>`).join('')}<p class="hr-note">기존 추억·제보 ${existing.length}곳 · 확인 상태는 각 기록 참고</p>${existing.map(s=>`<button type="button" class="hr-place" data-archive-store="${s.id}">${escape(s.name)}<small>${escape(s.insight||s.memory)} · 기존 기록 보기 →</small></button>`).join('')}</section>`;
+    const card=(p,store)=>`<article class="place-identity-card archive-identity archive-list-card"><div class="place-identity-hero"><span class="place-identity-icon">${store?menuEmoji(store):'🎵'}</span><span class="place-kind">이곳의 기억</span><span class="place-kicker">HONGDAE ARCHIVE</span></div><div class="place-identity-content"><h3>${escape(p.name)}</h3><div class="place-feature-tags"><span>${escape(store?.dong||'홍대')}</span><span>옛 공간 기록</span></div><p class="place-description">${escape(p.note||store?.memory||store?.insight)}</p>${store?`<button type="button" class="map-btn" data-archive-store="${store.id}">이곳의 기억 보기 →</button><button type="button" class="map-btn" data-archive-location="${store.id}">추정 옛 위치 보기 →</button>`:`<a class="map-btn" href="${escape(p.source)}" target="_blank" rel="noopener noreferrer">종료 기록 출처 ↗</a><p class="archive-location-note">옛 위치 확인 필요</p>`}</div></article>`;
+    root.innerHTML=`<section class="hr-panel"><div class="hr-head"><h2>사라진 장소</h2><button type="button" class="hr-close">닫기 ✕</button></div><p class="hr-note">영업 종료·이전한 공간에 남은 기억을 모아요. 위치 표시는 기존 기록의 추정 옛 위치이며 현재 방문 장소가 아닙니다.</p><button type="button" class="hr-close archive-map-action" data-archive-map>추정 옛 위치 지도에서 보기 →</button>${history.map(p=>card(p)).join('')}${existing.map(s=>card({name:s.name},s)).join('')}</section>`;
     root.querySelector('.hr-close').onclick=close;
+    root.querySelector('[data-archive-map]').onclick=()=>showLocation();
+    root.querySelectorAll('[data-archive-location]').forEach(b=>b.onclick=()=>showLocation(Number(b.dataset.archiveLocation)));
     root.querySelectorAll('[data-archive-store]').forEach(b=>b.onclick=()=>{close();selectStore(Number(b.dataset.archiveStore))});
     root.classList.add('open');root.querySelector('.hr-close').focus();
   }
   root.addEventListener('click',e=>{if(e.target===root)close()});document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});document.addEventListener('DOMContentLoaded',()=>document.body.append(root));
-  window.HongdaeArchive={open,close};
+  function showLocation(id){
+    close();currentFilter='gone';activeDetailFilters.clear();searchQuery='';showMarkers=true;renderList();
+    const places=stores.filter(s=>s.status==='closed'&&Number.isFinite(s.lat)&&Number.isFinite(s.lng));
+    const place=id?places.find(s=>s.id===id):places[0];
+    if(place&&map){map.panTo(new kakao.maps.LatLng(place.lat,place.lng));map.setLevel(id?3:5);}
+    if(id && typeof closeDetail==='function')closeDetail();
+    showToast('사라진 가게의 추정 옛 위치 · 현재 영업 장소가 아닙니다');
+  }
+  window.HongdaeArchive={open,close,showLocation};
 })();
